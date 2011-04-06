@@ -2,8 +2,12 @@
     PyHIS
     ~~~~~~~
 
-    PyHIS is a python library for querying CUAHSI-HIS web services
+    PyHIS is a python library for querying CUAHSI*-HIS** web
+    services.
 
+    * CUAHSI is the Consortium of Universities for the
+    Advancement of Hydrologic Science, Inc.
+    ** HIS stands for Hydrlogic Information System
 """
 import shapely
 import suds
