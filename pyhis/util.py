@@ -15,8 +15,8 @@ def _get_shapely_from_geolocation(geolocation):
     """returns a shapely object given a suds WaterML geolocation element"""
 
     if geolocation.geogLocation.__class__.__name__ == 'LatLonPointType':
-        return Point(geolocation.geogLocation.latitude,
-                     geolocation.geogLocation.longitude)
+        return Point(geolocation.geogLocation.longitude,
+                     geolocation.geogLocation.latitude)
 
     else:
         raise NotImplementedError("Don't know how to convert location "
