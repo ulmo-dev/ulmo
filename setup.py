@@ -19,7 +19,7 @@ setup(
     license='BSD',
     author='Andy Wilson',
     author_email='wilson.andrew.j+pyhis@gmail.com',
-    description='a python library for querying data via CUAHSI-HIS'
+    description='a python library for querying data via CUAHSI-HIS '
                 'web services',
     long_description=__doc__,
     keywords='his pyhis water waterml cuahsi wateroneflow',
