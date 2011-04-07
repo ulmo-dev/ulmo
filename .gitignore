@@ -1,0 +1,5 @@
+# ignore egginfo file
+PyHIS.egg-info/
+
+# ignore compiled python files
+*.pyc
