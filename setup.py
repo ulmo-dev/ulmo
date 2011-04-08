@@ -28,6 +28,7 @@ setup(
     install_requires=[
         'suds>=0.4',
         'shapely>=1.2',
+        'quantities',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',

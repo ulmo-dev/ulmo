@@ -12,7 +12,20 @@
 import shapely
 import suds
 
+import quantities as pq
+from sonde import quantities as sq
 import util
+
+
+#: mapping of variable codes to quantities they represent
+variable_quantities = {
+    '48' : sq.ftH2O,
+    '96' : pq.degC,
+    '137' : pq.dimensionless,
+    '199' : sq.mgl,
+    '269' : sq.mScm,
+    '306' : sq.ppt,
+    }
 
 
 class Site(object):
@@ -20,17 +33,27 @@ class Site(object):
     Contains information about a site
     """
 
-    _series = None
+    _data = None
+    _series_list = None
     _site_info = None
+    _client = None
 
     def __init__(self, name=None, code=None, id=None, network=None,
-                 location=None, suds_client=None):
+                 location=None, client=None):
         self.name = name
         self.code = code
         self.id = id
         self.network = network
-        self.location = util._get_shapely_from_geolocation(location)
-        self.suds_client = suds_client
+        self.location = util._create_geometry_from_geolocation(location)
+        self._client = client
+
+    @property
+    def data(self):
+        if not self._series_list:
+            self._update_site_info()
+        if not self._data:
+            self._update_data()
+        return self._data
 
     @property
     def site_info(self):
@@ -40,13 +63,13 @@ class Site(object):
 
     @property
     def variables(self):
-        if not self._series:
+        if not self._series_list:
             self._update_site_info()
-        return [series.variable for series in self._series]
+        return [series.variable for series in self._series_list]
 
     def _update_site_info(self):
         """makes a GetSiteInfo updates site info and series information"""
-        self._site_info = self.suds_client.service.GetSiteInfoObject(
+        self._site_info = self._client.suds_client.service.GetSiteInfoObject(
             '%s:%s' % (self.network, self.code))
 
         if len(self._site_info.site) > 1 or \
@@ -56,11 +79,11 @@ class Site(object):
                 "currently supported")
 
         series_list = self._site_info.site[0].seriesCatalog[0].series
-        self._series = [util._get_series_from_waterml(series)
+        self._series_list = [util._create_series_from_waterml(series, self)
                         for series in series_list]
 
     def __repr__(self):
-        return "<Site: %s [%s]>" % (self.name, self.code)
+        return '<Site: %s [%s]>' % (self.name, self.code)
 
 
 class Series(object):
@@ -68,15 +91,46 @@ class Series(object):
     Contains information about a time series
     """
 
+    site = None
+    _data = ()
+    _dates = ()
+
     def __init__(self, variable=None, count=None, method=None,
                  quality_control_level=None, begin_datetime=None,
-                 end_datetime=None):
+                 end_datetime=None, site=None):
         self.variable = variable
         self.count = count
         self.method = method
         self.quality_control_level = quality_control_level
         self.begin_datetime = begin_datetime
         self.end_datetime = end_datetime
+        self.site = site
+
+    @property
+    def dates(self):
+        if not len(self._dates):
+            self._update_dates_and_data()
+        return self._dates
+
+    @property
+    def data(self):
+        if not len(self._data):
+            self._update_dates_and_data()
+        return self._data
+
+    def _update_dates_and_data(self):
+        suds_client = self.site._client.suds_client
+        timeseries_resp = suds_client.service.GetValuesObject(
+            '%s:%s' % (self.site.network, self.site.code),
+            '%s:%s' % (self.variable.vocabulary, self.variable.code),
+            self.begin_datetime.strftime('%Y-%m-%d'),
+            self.end_datetime.strftime('%Y-%m-%d'))
+        self._dates, self._data = \
+                     util._create_series_tuple_from_waterml(timeseries_resp)
+
+    def __repr__(self):
+        return "<Series: %s (%s - %s)>" % (
+            self.variable.name, self.begin_datetime, self.end_datetime)
 
 
 class Variable(object):
@@ -84,14 +138,17 @@ class Variable(object):
     Contains information about a variable
     """
 
+    _series = None
+
     def __init__(self, name=None, code=None, id=None, vocabulary=None,
-                 units=None, no_data_value=None):
+                 units=None, no_data_value=None, series=None):
         self.name = name
         self.code = code
         self.id = id
         self.vocabulary = vocabulary
         self.units = units
         self.no_data_value = no_data_value
+        self._series = None
 
     def __repr__(self):
         return "<Variable: %s [%s]>" % (self.name, self.code)
@@ -117,5 +174,5 @@ class Client(object):
         self.suds_client = suds.client.Client(wsdl_url)
 
         get_all_sites_query = self.suds_client.service.GetSites('')
-        self.sites = [util._get_site_from_site_info(site, self.suds_client)
+        self.sites = [util._create_site_from_waterml(site, self)
                       for site in get_all_sites_query.site]
