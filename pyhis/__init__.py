@@ -87,6 +87,12 @@ class Site(object):
             self._update_site_info()
         return [series.variable for series in self._timeseries_list]
 
+    @property
+    def variables(self):
+        if not self._timeseries_list:
+            self._update_site_info()
+        return [series.variable for series in self._timeseries_list]
+
     def _update_dataframe(self):
         ts_dict = dict((ts.variable.code, ts.series)
                        for ts in self._timeseries_list)
