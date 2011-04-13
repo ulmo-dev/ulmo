@@ -3,28 +3,31 @@
     ~~~~~~~
 
     PyHIS is a python library for querying CUAHSI*-HIS** web
-    services.
+    services. It helps you get water data from unwieldy sources.
 
     * CUAHSI is the Consortium of Universities for the
     Advancement of Hydrologic Science, Inc.
     ** HIS stands for Hydrlogic Information System
 """
+import itertools
+
+import numpy as np
+import pandas
+import quantities as pq
 import shapely
+from sonde import quantities as sq
 import suds
 
-import quantities as pq
-from sonde import quantities as sq
 import util
-
 
 #: mapping of variable codes to quantities they represent
 variable_quantities = {
-    '48' : sq.ftH2O,
-    '96' : pq.degC,
-    '137' : pq.dimensionless,
-    '199' : sq.mgl,
-    '269' : sq.mScm,
-    '306' : sq.ppt,
+    '48': sq.ftH2O,
+    '96': pq.degC,
+    '137': pq.dimensionless,
+    '199': sq.mgl,
+    '269': sq.mScm,
+    '306': sq.ppt,
     }
 
 
@@ -32,9 +35,8 @@ class Site(object):
     """
     Contains information about a site
     """
-
-    _data = None
-    _series_list = None
+    _timeseries_list = None
+    _dataframe = None
     _site_info = None
     _client = None
 
@@ -44,16 +46,34 @@ class Site(object):
         self.code = code
         self.id = id
         self.network = network
-        self.location = util._create_geometry_from_geolocation(location)
+        self.location = util._shapely_geometry_from_geolocation(location)
         self._client = client
 
     @property
-    def data(self):
-        if not self._series_list:
+    def dataframe(self):
+        if not self._timeseries_list:
             self._update_site_info()
-        if not self._data:
-            self._update_data()
-        return self._data
+        if not self._dataframe:
+            self._update_dataframe()
+        return self._dataframe
+
+    # @property
+    # def data(self):
+    #     if not self._timeseries_list:
+    #         self._update_site_info()
+    #     if not self._dataframe:
+    #         self._update_dataframe()
+    #     return self._dataframe
+
+    # @property
+    # def dates(self):
+    #     """"""
+
+    #     if not self._timeseries_list:
+    #         self._update_site_info()
+    #     if not self._dataframe:
+    #         self._update_dataframe()
+    #     return 0
 
     @property
     def site_info(self):
@@ -63,9 +83,14 @@ class Site(object):
 
     @property
     def variables(self):
-        if not self._series_list:
+        if not self._timeseries_list:
             self._update_site_info()
-        return [series.variable for series in self._series_list]
+        return [series.variable for series in self._timeseries_list]
+
+    def _update_dataframe(self):
+        ts_dict = dict((ts.variable.code, ts.series)
+                       for ts in self._timeseries_list)
+        self._dataframe = pandas.DataFrame(ts_dict)
 
     def _update_site_info(self):
         """makes a GetSiteInfo updates site info and series information"""
@@ -79,21 +104,22 @@ class Site(object):
                 "currently supported")
 
         series_list = self._site_info.site[0].seriesCatalog[0].series
-        self._series_list = [util._create_series_from_waterml(series, self)
-                        for series in series_list]
+        self._timeseries_list = [util._timeseries_from_wml_series(series,
+                                                                      self)
+                                 for series in series_list]
 
     def __repr__(self):
         return '<Site: %s [%s]>' % (self.name, self.code)
 
 
-class Series(object):
+class TimeSeries(object):
     """
     Contains information about a time series
     """
 
     site = None
-    _data = ()
-    _dates = ()
+    _series = ()
+    _quantity = None
 
     def __init__(self, variable=None, count=None, method=None,
                  quality_control_level=None, begin_datetime=None,
@@ -107,29 +133,29 @@ class Series(object):
         self.site = site
 
     @property
-    def dates(self):
-        if not len(self._dates):
-            self._update_dates_and_data()
-        return self._dates
+    def series(self):
+        if not len(self._series):
+            self._update_series()
+        return self._series
 
     @property
-    def data(self):
-        if not len(self._data):
-            self._update_dates_and_data()
-        return self._data
+    def quantity(self):
+        if not self._quantity:
+            self._update_series()
+        return self._quantity
 
-    def _update_dates_and_data(self):
+    def _update_series(self):
         suds_client = self.site._client.suds_client
         timeseries_resp = suds_client.service.GetValuesObject(
             '%s:%s' % (self.site.network, self.site.code),
             '%s:%s' % (self.variable.vocabulary, self.variable.code),
             self.begin_datetime.strftime('%Y-%m-%d'),
             self.end_datetime.strftime('%Y-%m-%d'))
-        self._dates, self._data = \
-                     util._create_series_tuple_from_waterml(timeseries_resp)
+        self._series, self._quantity = \
+                     util._pandas_series_from_wml_TimeSeriesResponseType(timeseries_resp)
 
     def __repr__(self):
-        return "<Series: %s (%s - %s)>" % (
+        return "<TimeSeries: %s (%s - %s)>" % (
             self.variable.name, self.begin_datetime, self.end_datetime)
 
 
@@ -174,5 +200,5 @@ class Client(object):
         self.suds_client = suds.client.Client(wsdl_url)
 
         get_all_sites_query = self.suds_client.service.GetSites('')
-        self.sites = [util._create_site_from_waterml(site, self)
+        self.sites = [util._site_from_wml_siteInfo(site, self)
                       for site in get_all_sites_query.site]

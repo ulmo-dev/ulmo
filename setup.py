@@ -26,9 +26,11 @@ setup(
     packages=find_packages(),
     platforms='any',
     install_requires=[
+        'numpy>=1.4.0',
+        'pandas>=0.3.0',
+        'quantities',
         'suds>=0.4',
         'shapely>=1.2',
-        'quantities',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
