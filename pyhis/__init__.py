@@ -191,9 +191,8 @@ class Units(object):
         self.code = code
 
 
-class Client(object):
-    """Main client object"""
-
+class Source(object):
+    """Represents a water data source"""
     suds_client = None
 
     def __init__(self, wsdl_url):
