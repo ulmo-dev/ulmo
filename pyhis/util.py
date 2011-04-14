@@ -5,6 +5,7 @@
     Set of utility functions that help pyhis do its thing.
 """
 from datetime import datetime
+import warnings
 
 import numpy as np
 import pandas
@@ -80,7 +81,13 @@ def _pandas_series_from_wml_TimeSeriesResponseType(timeseries_response):
     a suds WaterML TimeSeriesResponseType object.
     """
     unit_code = timeseries_response.timeSeries.variable.units._unitsCode
-    quantity = pyhis.variable_quantities[unit_code]
+    try:
+        quantity = pyhis.variable_quantities[unit_code]
+    except KeyError:
+        quantity = timeseries_response.timeSeries.variable.units.value
+        variable_code = timeseries_response.timeSeries.variable.variableCode[0].value
+        warnings.warn("Unit conversion not available for %s: %s [%s]"
+                      (variable_code, quantity, unit_code))
 
     values = timeseries_response.timeSeries.values.value
     dates = np.array([value._dateTime for value in values])
