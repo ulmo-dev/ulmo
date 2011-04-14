@@ -108,12 +108,13 @@ class Site(object):
                                  for series in series_list]
 
     def __repr__(self):
-        return '<Site: %s [%s]>' % (self.name, self.code)
+        return "<Site: %s [%s]>" % (self.name, self.code)
 
 
 class Source(object):
     """Represents a water data source"""
     suds_client = None
+    sites = ()
 
     def __init__(self, wsdl_url):
         self.suds_client = suds.client.Client(wsdl_url)
