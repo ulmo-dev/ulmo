@@ -18,6 +18,7 @@ import quantities as pq
 #: mapping of variable codes to quantities they represent
 variable_quantities = {
     '48': sq.ftH2O,
+    '52': sq.mH2O,
     '96': pq.degC,
     '137': pq.dimensionless,
     '199': sq.mgl,
