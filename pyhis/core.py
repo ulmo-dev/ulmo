@@ -122,6 +122,9 @@ class Source(object):
         self.sites = [util._site_from_wml_siteInfo(site, self)
                       for site in get_all_sites_query.site]
 
+    def __len__(self):
+        len(sites)
+
 
 class TimeSeries(object):
     """
