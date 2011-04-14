@@ -37,9 +37,9 @@ def _site_from_wml_siteInfo(site, client):
     return pyhis.Site(
         name=site.siteInfo.siteName,
         code=site_code.value,
-        id=site_code._siteID,
+        id=getattr(site_code, '_siteID', None),
         network=site_code._network,
-        location=site.siteInfo.geoLocation,
+        location=getattr(site.siteInfo, 'geoLocation', None),
         client=client)
 
 
