@@ -26,13 +26,20 @@ class Site(object):
     _site_info = None
     _client = None
 
+    name = None
+    code = None
+    id = None
+    network = None
+    location = None
+
     def __init__(self, name=None, code=None, id=None, network=None,
                  location=None, client=None):
         self.name = name
         self.code = code
         self.id = id
         self.network = network
-        self.location = util._shapely_geometry_from_geolocation(location)
+        if location:
+            self.location = util._shapely_geometry_from_geolocation(location)
         self._client = client
 
     @property
