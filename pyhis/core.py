@@ -203,3 +203,6 @@ class Units(object):
         self.name = name
         self.abbreviation = abbreviation
         self.code = code
+
+    def __repr__(self):
+        return "<Units: %s [%s]>" % (self.name, self.abbreviation)
