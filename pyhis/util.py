@@ -86,7 +86,7 @@ def _pandas_series_from_wml_TimeSeriesResponseType(timeseries_response):
     except KeyError:
         quantity = timeseries_response.timeSeries.variable.units.value
         variable_code = timeseries_response.timeSeries.variable.variableCode[0].value
-        warnings.warn("Unit conversion not available for %s: %s [%s]"
+        warnings.warn("Unit conversion not available for %s: %s [%s]" %
                       (variable_code, quantity, unit_code))
 
     values = timeseries_response.timeSeries.values.value
