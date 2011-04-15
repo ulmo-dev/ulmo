@@ -35,13 +35,15 @@ def _site_from_wml_siteInfo(site, client):
 
     site_code = site.siteInfo.siteCode[0]
 
-    return pyhis.Site(
-        name=site.siteInfo.siteName,
-        code=site_code.value,
-        id=getattr(site_code, '_siteID', None),
-        network=site_code._network,
-        location=getattr(site.siteInfo, 'geoLocation', None),
-        client=client)
+    return (site_code.value,
+            pyhis.Site(
+                name=site.siteInfo.siteName,
+                code=site_code.value,
+                id=getattr(site_code, '_siteID', None),
+                network=site_code._network,
+                location=getattr(site.siteInfo, 'geoLocation', None),
+                client=client)
+            )
 
 
 def _variable_from_wml_variableInfo(variable_info):
