@@ -12,7 +12,15 @@ import pandas
 import shapely
 import suds
 
-import util
+import pyhis
+from . import util
+
+try:
+    from . import cache
+    if not cache.use_cache:
+        cache = None
+except ImportError:
+    cache = None
 
 __all__ = ['Site', 'Source', 'TimeSeries', 'Variable', 'Units']
 
@@ -32,15 +40,22 @@ class Site(object):
     network = None
     location = None
 
-    def __init__(self, name=None, code=None, id=None, network=None,
-                 location=None, client=None):
-        self.name = name
+    def __init__(self, code=None, name=None, id=None, network=None,
+                 latitude=None, longitude=None, client=None):
         self.code = code
+        self.name = name
         self.id = id
         self.network = network
-        if location:
-            self.location = util._shapely_geometry_from_geolocation(location)
+        self.location = shapely.geometry.Point(longitude, latitude)
         self._client = client
+
+    @property
+    def latitude(self):
+        return self.location.y
+
+    @property
+    def longitude(self):
+        return self.location.x
 
     @property
     def dataframe(self):
@@ -117,13 +132,12 @@ class Source(object):
     """Represents a water data source"""
     suds_client = None
     sites = ()
+    url = None
 
     def __init__(self, wsdl_url):
+        self.url = wsdl_url
         self.suds_client = suds.client.Client(wsdl_url)
-
-        get_all_sites_query = self.suds_client.service.GetSites('')
-        self.sites = [util._site_from_wml_siteInfo(site, self)
-                      for site in get_all_sites_query.site]
+        self.sites = util._get_all_sites_for_source(self)
 
     def __len__(self):
         len(sites)

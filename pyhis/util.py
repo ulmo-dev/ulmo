@@ -2,7 +2,7 @@
     pyhis.util
     ~~~~~~~
 
-    Set of utility functions that help pyhis do its thing.
+    Set of utility functions that help pyhis do its thing
 """
 from datetime import datetime
 import warnings
@@ -12,14 +12,35 @@ import pandas
 from shapely.geometry import Point, Polygon
 
 import pyhis
+try:
+    from . import cache
+    if not cache.use_cache:
+        cache = None
+except ImportError:
+    cache = None
 
 
-def _shapely_geometry_from_geolocation(geolocation):
-    """returns a shapely object given a suds WaterML geolocation element"""
+def _get_all_sites_for_source(source, use_cache=True):
+    """returns all the sites for a given source"""
+    if cache and len(cache._get_cached_sites_for_source(source)):
+        sites = cache._get_cached_sites_for_source(source)
+        if len(sites):
+            return sites
 
+    get_all_sites_query = source.suds_client.service.GetSites('')
+    sites = [_site_from_wml_siteInfo(site, source)
+             for site in get_all_sites_query.site]
+    if cache:
+        cache._update_cache_sites(sites, source)
+
+    return sites
+
+
+def _lat_long_from_geolocation(geolocation):
+    """returns a tuple (lat, long) given a suds WaterML geolocation element"""
     if geolocation.geogLocation.__class__.__name__ == 'LatLonPointType':
-        return Point(geolocation.geogLocation.longitude,
-                     geolocation.geogLocation.latitude)
+        return (geolocation.geogLocation.latitude,
+                geolocation.geogLocation.longitude)
 
     else:
         raise NotImplementedError(
@@ -34,13 +55,17 @@ def _site_from_wml_siteInfo(site, client):
             "Multiple site codes not currently supported")
 
     site_code = site.siteInfo.siteCode[0]
+    geolocation = getattr(site.siteInfo, 'geoLocation', None)
+    if geolocation:
+        latitude, longitude = _lat_long_from_geolocation(geolocation)
 
     return pyhis.Site(
         name=site.siteInfo.siteName,
         code=site_code.value,
         id=getattr(site_code, '_siteID', None),
         network=site_code._network,
-        location=getattr(site.siteInfo, 'geoLocation', None),
+        latitude=latitude,
+        longitude=longitude,
         client=client)
 
 
