@@ -67,7 +67,7 @@ class CacheSite(Base):
     __tablename__ = 'site'
 
     id = Column(Integer, primary_key=True)
-    site_id=Column(String)
+    site_id = Column(String)
     name = Column(String)
     code = Column(String)
     network = Column(String)
@@ -88,7 +88,6 @@ class CacheSite(Base):
     #   source = CacheSource
 
 GeometryDDL(CacheSite.__table__)
-
 
 
 
