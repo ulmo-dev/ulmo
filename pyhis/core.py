@@ -137,8 +137,7 @@ class Source(object):
     @property
     def sites(self):
         if not self._sites:
-            self._sites = util._get_all_sites_for_source(
-                self, use_cache=self._use_cache)
+            self._sites = util._get_all_sites_for_source(self)
 
         return self._sites
 

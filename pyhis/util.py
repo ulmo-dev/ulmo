@@ -20,8 +20,9 @@ except ImportError:
     cache = None
 
 
-def _get_all_sites_for_source(source, use_cache=True):
+def _get_all_sites_for_source(source):
     """returns all the sites for a given source"""
+    use_cache = source._use_cache
     if use_cache and cache:
         cached_sites = cache._get_cached_sites_for_source(source)
         if len(cached_sites):
