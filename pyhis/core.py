@@ -95,12 +95,6 @@ class Site(object):
             self._update_site_info()
         return [series.variable for series in self._timeseries_list]
 
-    @property
-    def variables(self):
-        if not self._timeseries_list:
-            self._update_site_info()
-        return [series.variable for series in self._timeseries_list]
-
     def _update_dataframe(self):
         if not self._timeseries_list:
             self._update_site_info()
