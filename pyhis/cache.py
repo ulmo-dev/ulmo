@@ -20,22 +20,23 @@ import pyhis
 
 
 CACHE_DATABASE_URI = 'sqlite:////tmp/pyhis_cache.db'
+ECHO_SQLALCHEMY = True
+
+#XXX: this should be programmatically generated in some clever way
+#     (e.g. based on some config)
+USE_CACHE = True
+
+
+# to use geoalchemy with spatialite, the libspatialite library has to
+# be loaded as an extension
+engine = create_engine(CACHE_DATABASE_URI, convert_unicode=True,
+                       module=sqlite, echo=ECHO_SQLALCHEMY)
 
 if "ARCH" in platform.uname()[2]:
     LIBSPATIALITE_LOCATION="select load_extension('/usr/lib/libspatialite.so.1')"
 else:
     LIBSPATIALITE_LOCATION="select load_extension('/usr/lib/libspatialite.so.2')"
 
-
-#XXX: this should be programmatically generated in some clever way
-#     (e.g. based on some config)
-use_cache = True
-
-
-# to use geoalchemy with spatialite, the libspatialite library has to
-# be loaded as an extension
-engine = create_engine(CACHE_DATABASE_URI, convert_unicode=True,
-                       module=sqlite, echo=True)
 
 if 'sqlite' in CACHE_DATABASE_URI:
     connection = engine.raw_connection().connection

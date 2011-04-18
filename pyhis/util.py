@@ -14,7 +14,7 @@ from shapely.geometry import Point, Polygon
 import pyhis
 try:
     from . import cache
-    if not cache.use_cache:
+    if not cache.USE_CACHE:
         cache = None
 except ImportError:
     cache = None
