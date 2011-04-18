@@ -104,18 +104,18 @@ def _get_cached_sites_for_source(source):
         return []
 
     return dict([(cached_site.code,
-                  _get_site_from_cached_site(cached_site, source.suds_client))
+                  _get_site_from_cached_site(cached_site, source))
                  for cached_site in cache_source.sites])
 
 
-def _get_site_from_cached_site(cached_site, suds_client):
+def _get_site_from_cached_site(cached_site, source):
     return pyhis.Site(code=cached_site.code,
                       name=cached_site.name,
                       id=cached_site.site_id,
                       network=cached_site.network,
                       latitude=db_session.scalar(cached_site.geom.y),
                       longitude=db_session.scalar(cached_site.geom.x),
-                      client=suds_client)
+                      source=source)
 
 
 def _update_cache_sites(sites, source):

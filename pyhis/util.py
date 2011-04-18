@@ -22,10 +22,10 @@ except ImportError:
 
 def _get_all_sites_for_source(source, use_cache=True):
     """returns all the sites for a given source"""
-    if use_cache and cache and len(cache._get_cached_sites_for_source(source)):
-        sites = cache._get_cached_sites_for_source(source)
-        if len(sites):
-            return sites
+    if use_cache and cache:
+        cached_sites = cache._get_cached_sites_for_source(source)
+        if len(cached_sites):
+            return cached_sites
 
     get_all_sites_query = source.suds_client.service.GetSites('')
     site_list = [_site_from_wml_siteInfo(site, source)
@@ -51,7 +51,7 @@ def _lat_long_from_geolocation(geolocation):
             geolocation.geogLocation.__class__.__name__)
 
 
-def _site_from_wml_siteInfo(site, client):
+def _site_from_wml_siteInfo(site, source):
     """returns a PyHIS Site instance from a suds WaterML siteInfo element"""
     if len(site.siteInfo.siteCode) > 1:
         raise NotImplementedError(
@@ -69,7 +69,7 @@ def _site_from_wml_siteInfo(site, client):
         network=site_code._network,
         latitude=latitude,
         longitude=longitude,
-        client=client)
+        source=source)
 
 
 def _variable_from_wml_variableInfo(variable_info):

@@ -32,7 +32,7 @@ class Site(object):
     _timeseries_list = None
     _dataframe = None
     _site_info = None
-    _client = None
+    source = None
 
     name = None
     code = None
@@ -41,13 +41,13 @@ class Site(object):
     location = None
 
     def __init__(self, code=None, name=None, id=None, network=None,
-                 latitude=None, longitude=None, client=None):
+                 latitude=None, longitude=None, source=None):
         self.code = code
         self.name = name
         self.id = id
         self.network = network
         self.location = shapely.geometry.Point(longitude, latitude)
-        self._client = client
+        self.source = source
 
     @property
     def latitude(self):
@@ -110,7 +110,7 @@ class Site(object):
 
     def _update_site_info(self):
         """makes a GetSiteInfo updates site info and series information"""
-        self._site_info = self._client.suds_client.service.GetSiteInfoObject(
+        self._site_info = self.source.suds_client.service.GetSiteInfoObject(
             '%s:%s' % (self.network, self.code))
 
         if len(self._site_info.site) > 1 or \
@@ -185,7 +185,7 @@ class TimeSeries(object):
         return self._quantity
 
     def _update_series(self):
-        suds_client = self.site._client.suds_client
+        suds_client = self.site.source.suds_client
         timeseries_resp = suds_client.service.GetValuesObject(
             '%s:%s' % (self.site.network, self.site.code),
             '%s:%s' % (self.variable.vocabulary, self.variable.code),
