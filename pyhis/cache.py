@@ -102,8 +102,9 @@ def _get_cached_sites_for_source(source):
     except NoResultFound:
         return []
 
-    return [_get_site_from_cached_site(cached_site, source.suds_client)
-            for cached_site in cache_source.sites]
+    return dict([(cached_site.code,
+                  _get_site_from_cached_site(cached_site, source.suds_client))
+                 for cached_site in cache_source.sites])
 
 
 def _get_site_from_cached_site(cached_site, suds_client):

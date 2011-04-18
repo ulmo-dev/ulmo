@@ -28,10 +28,13 @@ def _get_all_sites_for_source(source, use_cache=True):
             return sites
 
     get_all_sites_query = source.suds_client.service.GetSites('')
-    sites = [_site_from_wml_siteInfo(site, source)
-             for site in get_all_sites_query.site]
+    site_list = [_site_from_wml_siteInfo(site, source)
+                 for site in get_all_sites_query.site]
+
     if cache:
-        cache._update_cache_sites(sites, source)
+        cache._update_cache_sites(site_list, source)
+
+    sites = dict([(site.code, site) for site in site_list])
 
     return sites
 

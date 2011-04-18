@@ -131,16 +131,21 @@ class Site(object):
 class Source(object):
     """Represents a water data source"""
     suds_client = None
-    sites = ()
     url = None
+    _sites = {}
 
-    def __init__(self, wsdl_url):
+    def __init__(self, wsdl_url, use_cache=True):
         self.url = wsdl_url
         self.suds_client = suds.client.Client(wsdl_url)
-        self.sites = util._get_all_sites_for_source(self)
+
+    @property
+    def sites(self):
+        if not self._sites:
+            self._sites = util._get_all_sites_for_source(self)
+        return self._sites
 
     def __len__(self):
-        len(sites)
+        len(self._sites)
 
 
 class TimeSeries(object):
