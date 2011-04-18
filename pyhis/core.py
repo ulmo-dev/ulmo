@@ -133,15 +133,19 @@ class Source(object):
     suds_client = None
     url = None
     _sites = {}
+    _use_cache = None
 
     def __init__(self, wsdl_url, use_cache=True):
         self.url = wsdl_url
         self.suds_client = suds.client.Client(wsdl_url)
+        self._use_cache = use_cache
 
     @property
     def sites(self):
         if not self._sites:
-            self._sites = util._get_all_sites_for_source(self)
+            self._sites = util._get_all_sites_for_source(
+                self, use_cache=self._use_cache)
+
         return self._sites
 
     def __len__(self):

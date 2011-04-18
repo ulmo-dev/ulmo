@@ -22,7 +22,7 @@ except ImportError:
 
 def _get_all_sites_for_source(source, use_cache=True):
     """returns all the sites for a given source"""
-    if cache and len(cache._get_cached_sites_for_source(source)):
+    if use_cache and cache and len(cache._get_cached_sites_for_source(source)):
         sites = cache._get_cached_sites_for_source(source)
         if len(sites):
             return sites
@@ -31,7 +31,7 @@ def _get_all_sites_for_source(source, use_cache=True):
     site_list = [_site_from_wml_siteInfo(site, source)
                  for site in get_all_sites_query.site]
 
-    if cache:
+    if use_cache and cache:
         cache._update_cache_sites(site_list, source)
 
     sites = dict([(site.code, site) for site in site_list])
