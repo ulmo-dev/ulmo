@@ -1,3 +1,5 @@
+import os
+
 from attest import Assert, Tests, TestBase, test
 
 import pyhis
@@ -18,6 +20,21 @@ class TWDBTestBase(TestBase):
     def check_dataframe(self):
         df = self.source.sites['Aransas95_D1'].dataframe
         assert Assert(len(df['SAL001'])) == 706
+
+
+class TWDBFreshCacheTests(TWDBTestBase):
+    """
+    Run tests with cache backend
+    """
+
+    def __context__(self):
+        if os.path.exists(pyhis.cache.CACHE_DATABASE_FILE):
+            os.remove(pyhis.cache.CACHE_DATABASE_FILE)
+        self.source = pyhis.Source(
+            'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL',
+            use_cache=True)
+        yield
+        del self.source
 
 
 class TWDBCacheTests(TWDBTestBase):
@@ -47,5 +64,7 @@ class TWDBNoCacheTests(TWDBTestBase):
 
 
 if __name__ == '__main__':
-    suite = Tests([TWDBCacheTests(), TWDBNoCacheTests()])
+    suite = Tests([TWDBFreshCacheTests(),
+                   TWDBCacheTests(),
+                   TWDBNoCacheTests()])
     suite.run()
