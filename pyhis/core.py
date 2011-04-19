@@ -137,9 +137,26 @@ class Source(object):
     @property
     def sites(self):
         if not self._sites:
-            self._sites = util._get_all_sites_for_source(self)
-
+            self._update_sites()
         return self._sites
+
+    def _update_sites(self):
+        """update the self._sites dict"""
+        cache_enabled = self._use_cache and cache
+        if cache_enabled:
+            cached_sites = cache._get_cached_sites_for_source(self)
+            if len(cached_sites):
+                self._sites = cached_sites
+                return  # we have sites, we're done
+
+        get_all_sites_query = self.suds_client.service.GetSites('')
+        site_list = [util._site_from_wml_siteInfo(site, self)
+                     for site in get_all_sites_query.site]
+        self._sites = dict([(site.code, site) for site in site_list])
+
+        if cache_enabled:
+            # update cache for later
+            cache._update_cache_sites(site_list, self)
 
     def __len__(self):
         len(self._sites)

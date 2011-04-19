@@ -20,26 +20,6 @@ except ImportError:
     cache = None
 
 
-def _get_all_sites_for_source(source):
-    """returns all the sites for a given source"""
-    use_cache = source._use_cache
-    if use_cache and cache:
-        cached_sites = cache._get_cached_sites_for_source(source)
-        if len(cached_sites):
-            return cached_sites
-
-    get_all_sites_query = source.suds_client.service.GetSites('')
-    site_list = [_site_from_wml_siteInfo(site, source)
-                 for site in get_all_sites_query.site]
-
-    if use_cache and cache:
-        cache._update_cache_sites(site_list, source)
-
-    sites = dict([(site.code, site) for site in site_list])
-
-    return sites
-
-
 def _lat_long_from_geolocation(geolocation):
     """returns a tuple (lat, long) given a suds WaterML geolocation element"""
     if geolocation.geogLocation.__class__.__name__ == 'LatLonPointType':
