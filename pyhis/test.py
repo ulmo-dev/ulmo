@@ -15,11 +15,15 @@ class TWDBTestBase(TestBase):
     @test
     def check_variables(self):
         assert Assert(len(self.source.sites['Aransas95_D1'].variables)) == 5
+        assert Assert(len(self.source.sites['ULM95_3C'].variables)) == 5
 
     @test
     def check_dataframe(self):
         df = self.source.sites['Aransas95_D1'].dataframe
         assert Assert(len(df['SAL001'])) == 706
+        df2 = self.source.sites['ULM95_3C'].dataframe
+        assert Assert(len(df['SAL001'])) == 706
+
 
 
 class TWDBFreshCacheTests(TWDBTestBase):
