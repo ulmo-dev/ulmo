@@ -50,7 +50,8 @@ def _site_from_wml_siteInfo(site, source):
         network=site_code._network,
         latitude=latitude,
         longitude=longitude,
-        source=source)
+        source=source,
+        use_cache=source._use_cache)
 
 
 def _variable_from_wml_variableInfo(variable_info):
@@ -90,17 +91,33 @@ def _pandas_series_from_wml_TimeSeriesResponseType(timeseries_response):
     a suds WaterML TimeSeriesResponseType object.
     """
     unit_code = timeseries_response.timeSeries.variable.units._unitsCode
+    variable_code = timeseries_response.timeSeries.variable.variableCode[0].value
     try:
         quantity = pyhis.variable_quantities[unit_code]
     except KeyError:
         quantity = timeseries_response.timeSeries.variable.units.value
-        variable_code = timeseries_response.timeSeries.variable.variableCode[0].value
         warnings.warn("Unit conversion not available for %s: %s [%s]" %
                       (variable_code, quantity, unit_code))
 
     values = timeseries_response.timeSeries.values.value
     dates = np.array([value._dateTime for value in values])
     data = np.array([float(value.value) for value in values])
+
+    if len(dates) != len(data):
+        raise ValueError("Number of dates does not match number of "
+                         "data points.")
+
+    if len(dates) != len(np.unique(dates)):
+        unique_dates, unique_date_indices = np.unique(dates, return_index=True)
+        duplicate_date_indices = np.setdiff1d(np.arange(len(dates)),
+                                              unique_date_indices)
+        duplicate_dates = dates[duplicate_date_indices]
+        warnings.warn("Duplicate data found for variable '%s', only "
+                      "the first value will be used. Date(s): %s" %
+                      (variable_code, str(duplicate_dates)))
+        dates = unique_dates
+        data = data[unique_date_indices]
+
 
     series = pandas.Series(data, index=dates)
     return series, quantity

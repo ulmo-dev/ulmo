@@ -29,9 +29,10 @@ class Site(object):
     """
     Contains information about a site
     """
-    _timeseries_list = None
+    _timeseries_list = ()
     _dataframe = None
     _site_info = None
+    _use_cache = None
     source = None
 
     name = None
@@ -41,13 +42,14 @@ class Site(object):
     location = None
 
     def __init__(self, code=None, name=None, id=None, network=None,
-                 latitude=None, longitude=None, source=None):
+                 latitude=None, longitude=None, source=None, use_cache=True):
         self.code = code
         self.name = name
         self.id = id
         self.network = network
         self.location = shapely.geometry.Point(longitude, latitude)
         self.source = source
+        self._use_cache = use_cache
 
     @property
     def latitude(self):
@@ -65,24 +67,6 @@ class Site(object):
             self._update_dataframe()
         return self._dataframe
 
-    # @property
-    # def data(self):
-    #     if not self._timeseries_list:
-    #         self._update_site_info()
-    #     if not self._dataframe:
-    #         self._update_dataframe()
-    #     return self._dataframe
-
-    # @property
-    # def dates(self):
-    #     """"""
-
-    #     if not self._timeseries_list:
-    #         self._update_site_info()
-    #     if not self._dataframe:
-    #         self._update_dataframe()
-    #     return 0
-
     @property
     def site_info(self):
         if not self._site_info:
@@ -90,16 +74,18 @@ class Site(object):
         return self._site_info
 
     @property
+    def timeseries_list(self):
+        if not len(self._timeseries_list):
+            self._update_timeseries_list()
+        return self._timeseries_list
+
+    @property
     def variables(self):
-        if not self._timeseries_list:
-            self._update_site_info()
-        return [series.variable for series in self._timeseries_list]
+        return [series.variable for series in self.timeseries_list]
 
     def _update_dataframe(self):
-        if not self._timeseries_list:
-            self._update_site_info()
         ts_dict = dict((ts.variable.code, ts.series)
-                       for ts in self._timeseries_list)
+                       for ts in self.timeseries_list)
         self._dataframe = pandas.DataFrame(ts_dict)
 
     def _update_site_info(self):
@@ -113,10 +99,22 @@ class Site(object):
                 "Multiple site instances or multiple seriesCatalogs not "
                 "currently supported")
 
-        series_list = self._site_info.site[0].seriesCatalog[0].series
+    def _update_timeseries_list(self):
+        """updates the time series list"""
+        cache_enabled = self._use_cache and cache
+
+        if cache_enabled:
+            cached_timeseries_list = cache._get_cached_timeseries_list(self)
+            if len(cached_timeseries_list):
+                self._timeseries_list = cached_timeseries_list
+                return
+
+        series_list = self.site_info.site[0].seriesCatalog[0].series
         self._timeseries_list = [util._timeseries_from_wml_series(series,
-                                                                      self)
+                                                                  self)
                                  for series in series_list]
+        if cache_enabled:
+            cache._update_cache_timeseries(self)
 
     def __repr__(self):
         return "<Site: %s [%s]>" % (self.name, self.code)
@@ -144,7 +142,7 @@ class Source(object):
         """update the self._sites dict"""
         cache_enabled = self._use_cache and cache
         if cache_enabled:
-            cached_sites = cache._get_cached_sites_for_source(self)
+            cached_sites = cache._get_cached_sites(self)
             if len(cached_sites):
                 self._sites = cached_sites
                 return  # we have sites, we're done
@@ -202,32 +200,11 @@ class TimeSeries(object):
             self.begin_datetime.strftime('%Y-%m-%d'),
             self.end_datetime.strftime('%Y-%m-%d'))
         self._series, self._quantity = \
-                     util._pandas_series_from_wml_TimeSeriesResponseType(timeseries_resp)
+                      util._pandas_series_from_wml_TimeSeriesResponseType(timeseries_resp)
 
     def __repr__(self):
         return "<TimeSeries: %s (%s - %s)>" % (
             self.variable.name, self.begin_datetime, self.end_datetime)
-
-
-class Variable(object):
-    """
-    Contains information about a variable
-    """
-
-    _series = None
-
-    def __init__(self, name=None, code=None, id=None, vocabulary=None,
-                 units=None, no_data_value=None, series=None):
-        self.name = name
-        self.code = code
-        self.id = id
-        self.vocabulary = vocabulary
-        self.units = units
-        self.no_data_value = no_data_value
-        self._series = None
-
-    def __repr__(self):
-        return "<Variable: %s [%s]>" % (self.name, self.code)
 
 
 class Units(object):
@@ -242,3 +219,21 @@ class Units(object):
 
     def __repr__(self):
         return "<Units: %s [%s]>" % (self.name, self.abbreviation)
+
+
+class Variable(object):
+    """
+    Contains information about a variable
+    """
+
+    def __init__(self, name=None, code=None, id=None, vocabulary=None,
+                 units=None, no_data_value=None):
+        self.name = name
+        self.code = code
+        self.id = id
+        self.vocabulary = vocabulary
+        self.units = units
+        self.no_data_value = no_data_value
+
+    def __repr__(self):
+        return "<Variable: %s [%s]>" % (self.name, self.code)
