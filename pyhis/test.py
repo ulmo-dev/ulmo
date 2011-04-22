@@ -34,6 +34,8 @@ class TWDBFreshCacheTests(TWDBTestBase):
     def __context__(self):
         if os.path.exists(pyhis.cache.CACHE_DATABASE_FILE):
             os.remove(pyhis.cache.CACHE_DATABASE_FILE)
+        import cache
+        cache.init()
         self.source = pyhis.Source(
             'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL',
             use_cache=True)
