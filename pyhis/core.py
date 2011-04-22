@@ -13,7 +13,7 @@ import shapely
 import suds
 
 import pyhis
-from . import util
+from . import waterml
 
 try:
     from . import cache
@@ -34,7 +34,6 @@ class Site(object):
     _site_info = None
     _use_cache = None
     source = None
-
     name = None
     code = None
     id = None
@@ -104,17 +103,9 @@ class Site(object):
         cache_enabled = self._use_cache and cache
 
         if cache_enabled:
-            cached_timeseries_list = cache._get_cached_timeseries_list(self)
-            if len(cached_timeseries_list):
-                self._timeseries_list = cached_timeseries_list
-                return
-
-        series_list = self.site_info.site[0].seriesCatalog[0].series
-        self._timeseries_list = [util._timeseries_from_wml_series(series,
-                                                                  self)
-                                 for series in series_list]
-        if cache_enabled:
-            cache._update_cache_timeseries(self)
+            self._timeseries_list = cache.get_timeseries_list_for_site(self)
+        else:
+            self._timeseries_list = waterml.get_timeseries_list_for_site(self)
 
     def __repr__(self):
         return "<Site: %s [%s]>" % (self.name, self.code)
@@ -128,8 +119,8 @@ class Source(object):
     _use_cache = None
 
     def __init__(self, wsdl_url, use_cache=True):
-        self.url = wsdl_url
         self.suds_client = suds.client.Client(wsdl_url)
+        self.url = wsdl_url
         self._use_cache = use_cache
 
     @property
@@ -141,20 +132,11 @@ class Source(object):
     def _update_sites(self):
         """update the self._sites dict"""
         cache_enabled = self._use_cache and cache
-        if cache_enabled:
-            cached_sites = cache._get_cached_sites(self)
-            if len(cached_sites):
-                self._sites = cached_sites
-                return  # we have sites, we're done
-
-        get_all_sites_query = self.suds_client.service.GetSites('')
-        site_list = [util._site_from_wml_siteInfo(site, self)
-                     for site in get_all_sites_query.site]
-        self._sites = dict([(site.code, site) for site in site_list])
 
         if cache_enabled:
-            # update cache for later
-            cache._update_cache_sites(site_list, self)
+            self._sites = cache.get_sites_for_source(self)
+        else:
+            self._sites = waterml.get_sites_for_source(self)
 
     def __len__(self):
         len(self._sites)
@@ -166,12 +148,19 @@ class TimeSeries(object):
     """
 
     site = None
+    variable = None
+    count = None
+    method = None
+    quality_control_level = None
+    begin_datetime = None
+    end_datetime = None
     _series = ()
     _quantity = None
+    _use_cache = None
 
     def __init__(self, variable=None, count=None, method=None,
                  quality_control_level=None, begin_datetime=None,
-                 end_datetime=None, site=None):
+                 end_datetime=None, site=None, use_cache=True):
         self.variable = variable
         self.count = count
         self.method = method
@@ -179,6 +168,7 @@ class TimeSeries(object):
         self.begin_datetime = begin_datetime
         self.end_datetime = end_datetime
         self.site = site
+        self._use_cache = use_cache
 
     @property
     def series(self):
@@ -193,14 +183,13 @@ class TimeSeries(object):
         return self._quantity
 
     def _update_series(self):
-        suds_client = self.site.source.suds_client
-        timeseries_resp = suds_client.service.GetValuesObject(
-            '%s:%s' % (self.site.network, self.site.code),
-            '%s:%s' % (self.variable.vocabulary, self.variable.code),
-            self.begin_datetime.strftime('%Y-%m-%d'),
-            self.end_datetime.strftime('%Y-%m-%d'))
-        self._series, self._quantity = \
-                      util._pandas_series_from_wml_TimeSeriesResponseType(timeseries_resp)
+        cache_enabled = self._use_cache and cache
+        if cache_enabled:
+            self._series, self._quantity = \
+                          cache.get_series_and_quantity_for_timeseries(self)
+        else:
+            self._series, self._quantity = \
+                          waterml.get_series_and_quantity_for_timeseries(self)
 
     def __repr__(self):
         return "<TimeSeries: %s (%s - %s)>" % (
@@ -211,6 +200,10 @@ class Units(object):
     """
     Contains information about units of measurement
     """
+
+    name = None
+    abbreviation = None
+    code = None
 
     def __init__(self, name=None, abbreviation=None, code=None):
         self.name = name
@@ -225,6 +218,13 @@ class Variable(object):
     """
     Contains information about a variable
     """
+
+    name = None
+    code = None
+    id = None
+    vocabulary = None
+    units = None
+    no_data_value = None
 
     def __init__(self, name=None, code=None, id=None, vocabulary=None,
                  units=None, no_data_value=None):

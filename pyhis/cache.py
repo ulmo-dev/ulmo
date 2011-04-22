@@ -4,8 +4,15 @@
 
     SQLAlchemy-based caching support
 """
+#----------------------------------------------------------------------------
+# cache should work like this:
+#  1. check in-memory cache, if found return the obj
+#  2. check database, if found return the obj and update in-memory cache
+#  3. make new network request, update database with results
+#----------------------------------------------------------------------------
 import platform
 
+import pandas
 from sqlalchemy import create_engine, Table
 from sqlalchemy.schema import UniqueConstraint, ForeignKey
 from sqlalchemy import (Column, Boolean, Integer, Text, String, Float,
@@ -15,7 +22,7 @@ from sqlalchemy.orm import relationship, backref, sessionmaker, synonym
 from sqlalchemy.orm.exc import NoResultFound
 
 import pyhis
-
+from pyhis import waterml
 
 CACHE_DATABASE_FILE = "/tmp/pyhis_cache.db"
 CACHE_DATABASE_URI = 'sqlite:///' + CACHE_DATABASE_FILE
@@ -60,11 +67,11 @@ Base = declarative_base(bind=engine)
 # in-memory cache dict that will keep us from creating multiple cache
 # objects that represent the same DB objects
 _cache = {
-    'source': {},
-    'site': {},
-    'timeseries': {},
-    'variable': {},
-    'units': {},
+    'source': {},       # key: url
+    'site': {},         # key: (source_url, network, site_code)
+    'timeseries': {},   # key: (source_url, network, site_code, variable_code)
+    'variable': {},     # key: (vocabulary, variable_code)
+    'units': {},        # key: (name, code)
     }
 
 
@@ -74,7 +81,12 @@ _cache = {
 
 def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
     """
-    Create a cache object - this saves some boilerplate
+    Create a cache object that searches the in-memory cache dict for
+    the key returned by calling lookup_key_func. If no object is found
+    matching this key, then call db_lookup_func to search the
+    database. If no result is found in the database, then create a new
+    database object, save it to the database and return the new
+    object.
     """
 
     class CacheObj(object):
@@ -87,6 +99,8 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
                 db_instance = db_lookup_func(*args, **kwargs)
             except NoResultFound:
                 db_instance = db_model(*args, **kwargs)
+                db_session.add(db_instance)
+                db_session.commit()
 
             _cache[cache_key][lookup_key] = db_instance
             return db_instance
@@ -103,11 +117,11 @@ class DBSource(Base):
 
     def __init__(self, source=None, url=None):
         if not source is None:
-            self._create_from_pyhis(source)
+            self._from_pyhis(source)
         else:
             self.url = url
 
-    def _create_from_pyhis(self, pyhis_source):
+    def _from_pyhis(self, pyhis_source):
         self.url = pyhis_source.url
 
     def to_pyhis(self):
@@ -151,13 +165,13 @@ class DBSiteMixin(object):
         return Column(Integer, ForeignKey('source.id'), nullable=False)
 
     @declared_attr
-    def timeseries(cls):
+    def timeseries_list(cls):
         return relationship('DBTimeSeries', backref='site')
 
     # populated by backref:
     #   source = DBSource
 
-    def _create_from_pyhis(self, pyhis_site):
+    def _from_pyhis(self, pyhis_site):
         self.site_id = pyhis_site.id
         self.name = pyhis_site.name
         self.code = pyhis_site.code
@@ -192,7 +206,7 @@ if USE_SPATIAL:
         def __init__(self, site=None, site_id=None, name=None, code=None,
                      network=None, source=None, latitude=None, longitude=None):
             if site:
-                self._create_from_pyhis(site)
+                self._from_pyhis(site)
             else:
                 self.site_id = site_id
                 self.name = name
@@ -232,7 +246,7 @@ else:
         def __init__(self, site=None, site_id=None, name=None, code=None,
                      network=None, source=None, latitude=None, longitude=None):
             if site:
-                self._create_from_pyhis(site)
+                self._from_pyhis(site)
             else:
                 self.site_id = site_id
                 self.name = name
@@ -273,7 +287,7 @@ class DBTimeSeries(Base):
     method = Column(String)
     quality_control_level = Column(String)
     site_id = Column(Integer, ForeignKey('site.id'), nullable=False)
-    variable_id = Column(Integer, ForeignKey('variable.id'), nullable=False)
+    variable_id = Column(Integer, ForeignKey('variable.id'))
 
     variable = relationship('DBVariable')
     values = relationship('DBValue', order_by="DBValue.timestamp")
@@ -285,7 +299,7 @@ class DBTimeSeries(Base):
                  end_datetime=None, method=None, quality_control_level=None,
                  site=None, variable=None):
         if timeseries:
-            self._create_from_pyhis(timeseries)
+            self._from_pyhis(timeseries)
         else:
             self.begin_datetime = begin_datetime
             self.end_datetime = end_datetime
@@ -294,7 +308,7 @@ class DBTimeSeries(Base):
             self.site = site
             self.variable = variable
 
-    def _create_from_pyhis(self, pyhis_timeseries):
+    def _from_pyhis(self, pyhis_timeseries):
         self.method = pyhis_timeseries.method
         self.begin_datetime = pyhis_timeseries.begin_datetime
         self.end_datetime = pyhis_timeseries.end_datetime
@@ -367,13 +381,13 @@ class DBUnits(Base):
 
     def __init__(self, units=None, name=None, abbreviation=None, code=None):
         if units:
-            self._create_from_pyhis(units)
+            self._from_pyhis(units)
         else:
             self.name = name
             self.abbreviation = abbreviation
             self.code = code
 
-    def _create_from_pyhis(self, pyhis_units):
+    def _from_pyhis(self, pyhis_units):
         self.name = pyhis_units.name
         self.abbreviation = pyhis_units.abbreviation
         self.code = pyhis_units.code
@@ -404,7 +418,6 @@ CacheUnits = create_cache_obj(DBUnits, 'units', _units_lookup_key_func,
                               _units_db_lookup_func)
 
 
-# note: value shouldn't need a cache object
 class DBValue(Base):
     __tablename__ = 'value'
 
@@ -413,8 +426,9 @@ class DBValue(Base):
     timestamp = Column(DateTime)
     timeseries_id = Column(Integer, ForeignKey('timeseries.id'),
                            nullable=False)
+    timeseries = relationship('DBTimeSeries')
 
-    def __init__(self, value=None, time=None, timeseries=None):
+    def __init__(self, value=None, timestamp=None, timeseries=None):
         self.value = value
         self.timestamp = timestamp
         self.timeseries = timeseries
@@ -436,8 +450,8 @@ class DBVariable(Base):
     def __init__(self, variable=None, name=None, code=None, variable_id=None,
                  vocabulary=None, no_data_value=None, site_id=None,
                  units=None):
-        if variable:
-            self._create_from_pyhis(variable)
+        if not variable is None:
+            self._from_pyhis(variable)
         else:
             self.name = name
             self.code = code
@@ -446,7 +460,7 @@ class DBVariable(Base):
             self.no_data_value = no_data_value
             self.units = units
 
-    def _create_from_pyhis(self, pyhis_variable):
+    def _from_pyhis(self, pyhis_variable):
         self.name = pyhis_variable.name
         self.code = pyhis_variable.code
         self.variable_id = pyhis_variable.id
@@ -484,99 +498,112 @@ CacheVariable = create_cache_obj(DBVariable, 'variable',
 
 
 # run create_all to make sure the database tables are all there
-Base.metadata.create_all()
+def init():
+    Base.metadata.create_all()
+
+init()
 
 
 #----------------------------------------------------------------------------
 # cache functions
 #----------------------------------------------------------------------------
-def _get_cached_sites(source):
-    """returns a list of sites for a given pyhis.core.Source object"""
-    try:
-        cached_source = db_session.query(DBSource).\
-                        filter_by(url=source.url).one()
-    except NoResultFound:
-        return []
+def get_sites_for_source(source):
+    """
+    return a dict of pyhis.Site objects for a given source.  The
+    source can be either a string representing the url or a
+    pyhis.Source object
+    """
+    cached_source = CacheSource(source)
+
+    if len(cached_source.sites) == 0:
+        site_list = waterml.get_sites_for_source(cached_source.to_pyhis())
+
+        for site in site_list.values():
+            # since the sites don't exist in the db yet, just
+            # instantiating them via the CacheSite constructor will
+            # save them to the db and (update them in the in-memory
+            # cache)
+            CacheSite(site)
 
     return dict([(cached_site.code,
                   cached_site.to_pyhis(source))
                  for cached_site in cached_source.sites])
 
 
-def _update_cache_sites(sites, source):
-    try:
-        cached_source = db_session.query(DBSource).\
-                       filter_by(url=source.url).one()
-    except NoResultFound:
-        cached_source = CacheSource(url=source.url)
-        db_session.add(cached_source)
+def get_site(source, network, site_code):
+    """
+    return a pyhis.Site for a given source, network and site_code. The
+    source can be either a string representing the url or a
+    pyhis.Source object
+    """
+    cache_source = CacheSource(source)
+
+    cache_site = CacheSite(network=network, code=code)
+    return cache_site.to_pyhis()
+
+
+def get_timeseries_list_for_site(site):
+    """
+    returns a list of pyhis.TimeSeries objects for a given site and
+    variable_code
+    """
+    cached_site = CacheSite(site)
+
+    if len(cached_site.timeseries_list) == 0:
+        timeseries_list = waterml.\
+                          get_timeseries_list_for_site(cached_site.to_pyhis())
+
+        for timeseries in timeseries_list:
+            # since the timeseries don't exist in the db yet, just
+            # instantiating them via the CacheSite constructor will
+            # save them to the db and (update them in the in-memory
+            # cache)
+            CacheTimeSeries(timeseries)
+
+        return timeseries_list
+
+    # else:
+    return [cached_timeseries.to_pyhis()
+            for cached_timeseries in cached_site.timeseries_list]
+
+
+def get_series_and_quantity_for_timeseries(timeseries):
+    """returns a tuple where the first element is a pandas.Series
+    containing the timeseries data for the timeseries and the second
+    element is the python quantity that corresponds the unit for the
+    variable. Takes a suds WaterML TimeSeriesResponseType object.
+    """
+    cached_timeseries = CacheTimeSeries(timeseries)
+
+    if len(cached_timeseries.values) == 0:
+        series, quantity = \
+                waterml.get_series_and_quantity_for_timeseries(timeseries)
+
+        # cache all the values; we do this "manually" because
+        # there isn't much point in caching values; it's just
+        # wasteful memory-wise
+        db_values = [DBValue(value=value, timestamp=timestamp,
+                             timeseries=cached_timeseries)
+                     for timestamp, value in series.iteritems()]
+        db_session.add_all(db_values)
         db_session.commit()
 
+        return series, quantity
 
-    for site in sites:
-        cache_site = CacheSite(site=site)
-        db_session.add(cache_site)
+    # else:
+    series_dict = dict([(cached_value.timestamp, cached_value.value)
+                        for cached_value in cached_timeseries.values])
+    series = pandas.Series(series_dict)
 
-    db_session.commit()
-
-
-def _get_cached_timeseries_list(site):
-    """
-    returns a list of timeseries objects for a given pyhis.core.Site
-    object
-    """
+    # look for the unit code in the unit_quantities dict, if it's not
+    # there just use the unit name
+    unit_code = cached_timeseries.variable.units.code
     try:
-        cached_site = db_session.query(DBSite).\
-                      filter_by(code=site.code).one()
-        cached_timeseries_list = db_session.query(DBTimeSeries).\
-                                 filter_by(site=cached_site)
-    except NoResultFound:
-        return []
+        quantity = pyhis.unit_quantities[unit_code]
+    except KeyError:
+        quantity = cached_timeseries.variable.units.name
+        variable_code = cached_timeseries.variable.code
+        warnings.warn("Unit conversion not available for %s: %s [%s]" %
+                      (variable_code, quantity, unit_code))
 
-    return [cached_timeseries.to_pyhis(site)
-            for cached_timeseries in cached_timeseries_list]
-
-
-def _update_cache_timeseries(site):
-    try:
-        cached_site = db_session.query(DBSite).\
-                      filter_by(code=site.code).one()
-    except NoResultFound:
-        cached_site = CacheSite(site)
-        db_session.add(cached_site)
-        db_session.commit()
-
-    for timeseries in site.timeseries_list:
-        try:
-            cached_variable = db_session.query(DBVariable).\
-                              filter_by(code=timeseries.variable.code,
-                                        vocabulary=timeseries.variable.vocabulary).one()
-        except NoResultFound:
-            cached_variable = CacheVariable(timeseries.variable)
-            db_session.add(cached_variable)
-            db_session.commit()
-
-        cache_timeseries = CacheTimeSeries(
-            timeseries=timeseries)
-        db_session.add(cache_timeseries)
-
-    db_session.commit()
-
-
-def get_db_obj(DBModel, filter_by_dict, update=True):
-    """
-    Either get an instance from DBModel or, if it doesn't exist,
-    then update the cache.
-    """
-    try:
-        cache_obj = db_session.query(DBModel).\
-                    filter_by(**filter_by_dict).one()
-    except NoResultFound:
-        if update:
-            cache_obj = DBModel(cache_obj)
-            db_session.add(cache_obj)
-            db_session.commit()
-        else:
-            return False
-
-    return cache_obj
+    return series, quantity
