@@ -12,7 +12,15 @@ import pandas
 import shapely
 import suds
 
-import util
+import pyhis
+from . import waterml
+
+try:
+    from . import cache
+    if not cache.USE_CACHE:
+        cache = None
+except ImportError:
+    cache = None
 
 __all__ = ['Site', 'Source', 'TimeSeries', 'Variable', 'Units']
 
@@ -21,26 +29,34 @@ class Site(object):
     """
     Contains information about a site
     """
-    _timeseries_list = None
+    _timeseries_list = ()
     _dataframe = None
     _site_info = None
-    _client = None
-
+    _use_cache = None
+    source = None
     name = None
     code = None
     id = None
     network = None
     location = None
 
-    def __init__(self, name=None, code=None, id=None, network=None,
-                 location=None, client=None):
-        self.name = name
+    def __init__(self, code=None, name=None, id=None, network=None,
+                 latitude=None, longitude=None, source=None, use_cache=True):
         self.code = code
+        self.name = name
         self.id = id
         self.network = network
-        if location:
-            self.location = util._shapely_geometry_from_geolocation(location)
-        self._client = client
+        self.location = shapely.geometry.Point(longitude, latitude)
+        self.source = source
+        self._use_cache = use_cache
+
+    @property
+    def latitude(self):
+        return self.location.y
+
+    @property
+    def longitude(self):
+        return self.location.x
 
     @property
     def dataframe(self):
@@ -50,24 +66,6 @@ class Site(object):
             self._update_dataframe()
         return self._dataframe
 
-    # @property
-    # def data(self):
-    #     if not self._timeseries_list:
-    #         self._update_site_info()
-    #     if not self._dataframe:
-    #         self._update_dataframe()
-    #     return self._dataframe
-
-    # @property
-    # def dates(self):
-    #     """"""
-
-    #     if not self._timeseries_list:
-    #         self._update_site_info()
-    #     if not self._dataframe:
-    #         self._update_dataframe()
-    #     return 0
-
     @property
     def site_info(self):
         if not self._site_info:
@@ -75,27 +73,23 @@ class Site(object):
         return self._site_info
 
     @property
-    def variables(self):
-        if not self._timeseries_list:
-            self._update_site_info()
-        return [series.variable for series in self._timeseries_list]
+    def timeseries_list(self):
+        if not len(self._timeseries_list):
+            self._update_timeseries_list()
+        return self._timeseries_list
 
     @property
     def variables(self):
-        if not self._timeseries_list:
-            self._update_site_info()
-        return [series.variable for series in self._timeseries_list]
+        return [series.variable for series in self.timeseries_list]
 
     def _update_dataframe(self):
-        if not self._timeseries_list:
-            self._update_site_info()
         ts_dict = dict((ts.variable.code, ts.series)
-                       for ts in self._timeseries_list)
+                       for ts in self.timeseries_list)
         self._dataframe = pandas.DataFrame(ts_dict)
 
     def _update_site_info(self):
         """makes a GetSiteInfo updates site info and series information"""
-        self._site_info = self._client.suds_client.service.GetSiteInfoObject(
+        self._site_info = self.source.suds_client.service.GetSiteInfoObject(
             '%s:%s' % (self.network, self.code))
 
         if len(self._site_info.site) > 1 or \
@@ -104,10 +98,14 @@ class Site(object):
                 "Multiple site instances or multiple seriesCatalogs not "
                 "currently supported")
 
-        series_list = self._site_info.site[0].seriesCatalog[0].series
-        self._timeseries_list = [util._timeseries_from_wml_series(series,
-                                                                      self)
-                                 for series in series_list]
+    def _update_timeseries_list(self):
+        """updates the time series list"""
+        cache_enabled = self._use_cache and cache
+
+        if cache_enabled:
+            self._timeseries_list = cache.get_timeseries_list_for_site(self)
+        else:
+            self._timeseries_list = waterml.get_timeseries_list_for_site(self)
 
     def __repr__(self):
         return "<Site: %s [%s]>" % (self.name, self.code)
@@ -116,32 +114,32 @@ class Site(object):
 class Source(object):
     """Represents a water data source"""
     suds_client = None
-    _sites = dict()
+    url = None
+    _sites = {}
+    _use_cache = None
 
-    def __init__(self, wsdl_url):
+    def __init__(self, wsdl_url, use_cache=True):
         self.suds_client = suds.client.Client(wsdl_url)
-
+        self.url = wsdl_url
+        self._use_cache = use_cache
 
     @property
     def sites(self):
-        if len(self._sites)==0:
-            get_all_sites_query = self.suds_client.service.GetSites('')
-            self._sites = dict([util._site_from_wml_siteInfo(site, self)
-                           for site in get_all_sites_query.site])
-
+        if not self._sites:
+            self._update_sites()
         return self._sites
 
-    @property(site_code)
-    def sites(self):
-        if site_code not in self._sites.keys():
-            get_all_sites_query = self.suds_client.service.GetSites(site_code)
-            self._sites[site_code] = [util._site_from_wml_siteInfo(site, self)[1]
-                           for site in get_all_sites_query.site]
+    def _update_sites(self):
+        """update the self._sites dict"""
+        cache_enabled = self._use_cache and cache
 
-        return self._sites
+        if cache_enabled:
+            self._sites = cache.get_sites_for_source(self)
+        else:
+            self._sites = waterml.get_sites_for_source(self)
 
     def __len__(self):
-        len(sites)
+        len(self._sites)
 
 
 class TimeSeries(object):
@@ -150,12 +148,19 @@ class TimeSeries(object):
     """
 
     site = None
+    variable = None
+    count = None
+    method = None
+    quality_control_level = None
+    begin_datetime = None
+    end_datetime = None
     _series = ()
     _quantity = None
+    _use_cache = None
 
     def __init__(self, variable=None, count=None, method=None,
                  quality_control_level=None, begin_datetime=None,
-                 end_datetime=None, site=None):
+                 end_datetime=None, site=None, use_cache=True):
         self.variable = variable
         self.count = count
         self.method = method
@@ -163,6 +168,7 @@ class TimeSeries(object):
         self.begin_datetime = begin_datetime
         self.end_datetime = end_datetime
         self.site = site
+        self._use_cache = use_cache
 
     @property
     def series(self):
@@ -177,45 +183,27 @@ class TimeSeries(object):
         return self._quantity
 
     def _update_series(self):
-        suds_client = self.site._client.suds_client
-        timeseries_resp = suds_client.service.GetValuesObject(
-            '%s:%s' % (self.site.network, self.site.code),
-            '%s:%s' % (self.variable.vocabulary, self.variable.code),
-            self.begin_datetime.strftime('%Y-%m-%d'),
-            self.end_datetime.strftime('%Y-%m-%d'))
-        self._series, self._quantity = \
-                     util._pandas_series_from_wml_TimeSeriesResponseType(timeseries_resp)
+        cache_enabled = self._use_cache and cache
+        if cache_enabled:
+            self._series, self._quantity = \
+                          cache.get_series_and_quantity_for_timeseries(self)
+        else:
+            self._series, self._quantity = \
+                          waterml.get_series_and_quantity_for_timeseries(self)
 
     def __repr__(self):
         return "<TimeSeries: %s (%s - %s)>" % (
             self.variable.name, self.begin_datetime, self.end_datetime)
 
 
-class Variable(object):
-    """
-    Contains information about a variable
-    """
-
-    _series = None
-
-    def __init__(self, name=None, code=None, id=None, vocabulary=None,
-                 units=None, no_data_value=None, series=None):
-        self.name = name
-        self.code = code
-        self.id = id
-        self.vocabulary = vocabulary
-        self.units = units
-        self.no_data_value = no_data_value
-        self._series = None
-
-    def __repr__(self):
-        return "<Variable: %s [%s]>" % (self.name, self.code)
-
-
 class Units(object):
     """
     Contains information about units of measurement
     """
+
+    name = None
+    abbreviation = None
+    code = None
 
     def __init__(self, name=None, abbreviation=None, code=None):
         self.name = name
@@ -224,3 +212,28 @@ class Units(object):
 
     def __repr__(self):
         return "<Units: %s [%s]>" % (self.name, self.abbreviation)
+
+
+class Variable(object):
+    """
+    Contains information about a variable
+    """
+
+    name = None
+    code = None
+    id = None
+    vocabulary = None
+    units = None
+    no_data_value = None
+
+    def __init__(self, name=None, code=None, id=None, vocabulary=None,
+                 units=None, no_data_value=None):
+        self.name = name
+        self.code = code
+        self.id = id
+        self.vocabulary = vocabulary
+        self.units = units
+        self.no_data_value = no_data_value
+
+    def __repr__(self):
+        return "<Variable: %s [%s]>" % (self.name, self.code)

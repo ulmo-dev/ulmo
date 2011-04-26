@@ -16,7 +16,7 @@ from sonde import quantities as sq
 import quantities as pq
 
 #: mapping of variable codes to quantities they represent
-variable_quantities = {
+unit_quantities = {
     '48': sq.ftH2O,
     '52': sq.mH2O,
     '96': pq.degC,

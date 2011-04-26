@@ -1,58 +1,76 @@
-from attest import Assert, Tests
+import os
+
+from attest import Assert, Tests, TestBase, test
 
 import pyhis
 
 
-twdb = Tests()
-tceq = Tests()
-tpwd = Tests()
+class TWDBTestBase(TestBase):
+    """Base class for using TWDB dataset as a source"""
+
+    @test
+    def check_sites(self):
+        assert Assert(len(self.source.sites)) == 74
+
+    @test
+    def check_variables(self):
+        assert Assert(len(self.source.sites['Aransas95_D1'].variables)) == 5
+        assert Assert(len(self.source.sites['ULM95_3C'].variables)) == 5
+
+    @test
+    def check_dataframe(self):
+        df = self.source.sites['Aransas95_D1'].dataframe
+        assert Assert(len(df['SAL001'])) == 706
+        df2 = self.source.sites['ULM95_3C'].dataframe
+        assert Assert(len(df['SAL001'])) == 706
 
 
-@twdb.context
-def get_twdb_client():
-    source = pyhis.Source(
-        'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL')
-    yield source
+
+class TWDBFreshCacheTests(TWDBTestBase):
+    """
+    Run tests with cache backend
+    """
+
+    def __context__(self):
+        if os.path.exists(pyhis.cache.CACHE_DATABASE_FILE):
+            os.remove(pyhis.cache.CACHE_DATABASE_FILE)
+        import cache
+        cache.init()
+        self.source = pyhis.Source(
+            'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL',
+            use_cache=True)
+        yield
+        del self.source
 
 
-@twdb.test
-def check_sites(source):
-    assert Assert(len(source.sites)) == 74
+class TWDBCacheTests(TWDBTestBase):
+    """
+    Run tests with cache backend
+    """
+
+    def __context__(self):
+        self.source = pyhis.Source(
+            'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL',
+            use_cache=True)
+        yield
+        del self.source
 
 
-@twdb.test
-def check_variables(source):
-    assert Assert(len(source.sites[0].variables)) == 5
+class TWDBNoCacheTests(TWDBTestBase):
+    """
+    Run tests without cache backend
+    """
 
-
-@twdb.test
-def check_dataframe(source):
-    df = source.sites[0].dataframe
-    assert Assert(len(df['SAL001'])) == 706
-
-
-@twdb.test
-def check_dataframe2(source):
-    df = source.sites[0].dataframe
-    assert Assert(len(df['SAL001'])) == 706
-
-
-@tceq.context
-def get_tceq_client():
-    source = pyhis.Source(
-        'http://www.twdb.state.tx.us/appws/histceqswqmis/cuahsi_1_0.asmx?WSDL')
-    yield source
-
-
-@tceq.test
-def check_sites(source):
-    assert Assert(len(source.sites)) == 8960
-
-
-@tceq.test
-def get_dataframe(source):
-    df = source.sites[0].dataframe
+    def __context__(self):
+        self.source = pyhis.Source(
+            'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL',
+            use_cache=False)
+        yield
+        del self.source
 
 
 if __name__ == '__main__':
-    twdb.main()
+    suite = Tests([TWDBFreshCacheTests(),
+                   TWDBCacheTests(),
+                   TWDBNoCacheTests()])
+    suite.run()
