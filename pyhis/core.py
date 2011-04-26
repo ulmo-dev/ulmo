@@ -116,7 +116,7 @@ class Site(object):
 class Source(object):
     """Represents a water data source"""
     suds_client = None
-    _sites = None
+    _sites = dict()
 
     def __init__(self, wsdl_url):
         self.suds_client = suds.client.Client(wsdl_url)
@@ -124,10 +124,20 @@ class Source(object):
 
     @property
     def sites(self):
-        if not self._sites:
+        if len(self._sites)==0:
             get_all_sites_query = self.suds_client.service.GetSites('')
             self._sites = dict([util._site_from_wml_siteInfo(site, self)
                            for site in get_all_sites_query.site])
+
+        return self._sites
+
+    @property(site_code)
+    def sites(self):
+        if site_code not in self._sites.keys():
+            get_all_sites_query = self.suds_client.service.GetSites(site_code)
+            self._sites[site_code] = [util._site_from_wml_siteInfo(site, self)[1]
+                           for site in get_all_sites_query.site]
+
         return self._sites
 
     def __len__(self):
