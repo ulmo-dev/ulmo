@@ -46,7 +46,7 @@ class Site(object):
         self.name = name
         self.id = id
         self.network = network
-        self.location = shapely.geometry.Point(longitude, latitude)
+        self.location = shapely.geometry.Point(float(longitude), float(latitude))
         self.source = source
         self._use_cache = use_cache
 
