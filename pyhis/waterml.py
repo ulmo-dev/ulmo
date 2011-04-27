@@ -9,7 +9,6 @@ import warnings
 
 import numpy as np
 import pandas
-from shapely.geometry import Point, Polygon
 
 import pyhis
 

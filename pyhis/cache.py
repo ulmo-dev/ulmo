@@ -176,8 +176,8 @@ class DBSiteMixin(object):
         self.name = pyhis_site.name
         self.code = pyhis_site.code
         self.network = pyhis_site.network
-        self.latitude = pyhis_site.location.y
-        self.longitude = pyhis_site.location.x
+        self.latitude = pyhis_site.latitude
+        self.longitude = pyhis_site.longitude
         self.source = CacheSource(pyhis_site.source)
 
     def to_pyhis(self, source=None):

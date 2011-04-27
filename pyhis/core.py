@@ -9,7 +9,6 @@ import itertools
 
 import numpy as np
 import pandas
-import shapely
 import suds
 
 import pyhis
@@ -38,7 +37,8 @@ class Site(object):
     code = None
     id = None
     network = None
-    location = None
+    latitude = None
+    longitude = None
 
     def __init__(self, code=None, name=None, id=None, network=None,
                  latitude=None, longitude=None, source=None, use_cache=True):
@@ -46,17 +46,10 @@ class Site(object):
         self.name = name
         self.id = id
         self.network = network
-        self.location = shapely.geometry.Point(longitude, latitude)
+        self.latitude = latitude
+        self.longitude = longitude
         self.source = source
         self._use_cache = use_cache
-
-    @property
-    def latitude(self):
-        return self.location.y
-
-    @property
-    def longitude(self):
-        return self.location.x
 
     @property
     def dataframe(self):
