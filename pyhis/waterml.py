@@ -15,7 +15,7 @@ import pyhis
 
 LOG_FORMAT = '%(message)s'
 logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 #------------------------------------------------------------------------------
@@ -27,10 +27,10 @@ def get_sites_for_source(source):
     either a string representing the url or a pyhis.Source object
     """
 
-    logger.info('making GetSites query...')
+    log.info('making GetSites query...')
     get_sites_response = source.suds_client.service.GetSites('')
 
-    logger.info('processing %s sites...' % len(get_sites_response.site))
+    log.info('processing %s sites...' % len(get_sites_response.site))
     site_list = [_site_from_wml_siteInfo(site, source)
                  for site in get_sites_response.site]
 
@@ -56,7 +56,7 @@ def get_series_and_quantity_for_timeseries(timeseries):
     variable. Takes a suds WaterML TimeSeriesResponseType object.
     """
     suds_client = timeseries.site.source.suds_client
-    logger.info('making timeseries request for "%s:%s:%s"...' %
+    log.info('making timeseries request for "%s:%s:%s"...' %
                 (timeseries.site.network, timeseries.site.code,
                  timeseries.variable.code))
     timeseries_response = suds_client.service.GetValuesObject(
@@ -65,7 +65,7 @@ def get_series_and_quantity_for_timeseries(timeseries):
         timeseries.begin_datetime.strftime('%Y-%m-%d'),
         timeseries.end_datetime.strftime('%Y-%m-%d'))
 
-    logger.info('processing timeseries request for "%s:%s:%s"...' %
+    log.info('processing timeseries request for "%s:%s:%s"...' %
                 (timeseries.site.network, timeseries.site.code,
                  timeseries.variable.code))
 
@@ -103,6 +103,17 @@ def get_series_and_quantity_for_timeseries(timeseries):
     series = pandas.Series(data, index=dates)
     return series, quantity
 
+
+
+#------------------------------------------------------------------------------
+# progress bar decorator
+#------------------------------------------------------------------------------
+def update_progress_bar(func):
+    def wrapper(*args, **kwargs):
+        if current_progress_bar and not current_progress_bar.finished:
+            current_progress_bar.update(current_progress_bar.currval+1)
+        return func(*args, **kwargs)
+    return wrapper
 
 
 #------------------------------------------------------------------------------
