@@ -6,6 +6,7 @@
 """
 
 import itertools
+import logging
 
 import numpy as np
 import pandas
@@ -22,6 +23,12 @@ except ImportError:
     cache = None
 
 __all__ = ['Site', 'Source', 'TimeSeries', 'Variable', 'Units']
+
+
+# fancy this up a bit sometime
+LOG_FORMAT = '%(message)s'
+logging.basicConfig(format=LOG_FORMAT)
+logger = logging.getLogger(__name__)
 
 
 class Site(object):

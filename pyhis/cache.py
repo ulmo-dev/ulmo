@@ -10,6 +10,7 @@
 #  2. check database, if found return the obj and update in-memory cache
 #  3. make new network request, update database with results
 #----------------------------------------------------------------------------
+import logging
 import platform
 
 import pandas
@@ -73,6 +74,12 @@ _cache = {
     'variable': {},     # key: (vocabulary, variable_code)
     'units': {},        # key: (name, code)
     }
+
+
+# configure logging
+LOG_FORMAT = '%(message)s'
+logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
+log = logging.getLogger(__name__)
 
 
 #----------------------------------------------------------------------------
