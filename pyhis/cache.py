@@ -520,6 +520,18 @@ init()
 #----------------------------------------------------------------------------
 # cache functions
 #----------------------------------------------------------------------------
+def cache_all(source_url):
+    """
+    Cache all available data for a source
+    """
+    source = pyhis.Source(source_url)
+
+    for site in source.sites.values():
+        # this could be improved by not having to create the
+        # dataframe object
+        df = site.dataframe
+
+
 def get_sites_for_source(source):
     """
     return a dict of pyhis.Site objects for a given source.  The
