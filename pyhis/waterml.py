@@ -18,9 +18,13 @@ logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
+
+
 #------------------------------------------------------------------------------
 # waterml functions
 #------------------------------------------------------------------------------
+
+
 def get_sites_for_source(source):
     """
     return a sites dict for for a given source.  The source can be
@@ -109,20 +113,28 @@ def get_series_and_quantity_for_timeseries(timeseries):
 
 
 
+
 #------------------------------------------------------------------------------
 # progress bar decorator
 #------------------------------------------------------------------------------
+
+
 def update_progress_bar(func):
+
     def wrapper(*args, **kwargs):
         if current_progress_bar and not current_progress_bar.finished:
-            current_progress_bar.update(current_progress_bar.currval+1)
+            current_progress_bar.update(current_progress_bar.currval + 1)
         return func(*args, **kwargs)
     return wrapper
+
+
 
 
 #------------------------------------------------------------------------------
 # helper functions for parsing waterml responses into pyhis objects
 #------------------------------------------------------------------------------
+
+
 def _lat_long_from_geolocation(geolocation):
     """returns a tuple (lat, long) given a suds WaterML geolocation element"""
     if geolocation.geogLocation.__class__.__name__ == 'LatLonPointType':
@@ -167,12 +179,12 @@ def _variable_from_wml_variableInfo(variable_info):
         id = variable_info.variableCode[0]._variableID
     except:
         id = None
-        
+
     try:
         no_data_value = variable_info.NoDataValue
     except:
         no_data_value = None
-        
+
     return pyhis.Variable(
         name=variable_info.variableName,
         code=variable_info.variableCode[0].value,
@@ -194,7 +206,7 @@ def _timeseries_from_wml_series(series, site):
         quality_control_level = series.QualityControlLevel._QualityControlLevelID
     except:
         quality_control_level = None
-        
+
     return pyhis.TimeSeries(
         variable=_variable_from_wml_variableInfo(series.variable),
         count=series.valueCount,
