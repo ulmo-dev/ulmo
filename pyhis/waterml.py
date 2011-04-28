@@ -5,12 +5,17 @@
     Extract data from waterml
 """
 from datetime import datetime
+import logging
 import warnings
 
 import numpy as np
 import pandas
 
 import pyhis
+
+LOG_FORMAT = '%(message)s'
+logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 #------------------------------------------------------------------------------
@@ -21,9 +26,15 @@ def get_sites_for_source(source):
     return a sites dict for for a given source.  The source can be
     either a string representing the url or a pyhis.Source object
     """
-    get_all_sites_query = source.suds_client.service.GetSites('')
+
+    logger.info('making GetSites query...')
+    get_sites_response = source.suds_client.service.GetSites('')
+
+    logger.info('processing %s sites...' % len(get_sites_response.site))
     site_list = [_site_from_wml_siteInfo(site, source)
-                 for site in get_all_sites_query.site]
+                 for site in get_sites_response.site]
+
+
     return dict([(site.code, site) for site in site_list])
 
 
@@ -45,11 +56,18 @@ def get_series_and_quantity_for_timeseries(timeseries):
     variable. Takes a suds WaterML TimeSeriesResponseType object.
     """
     suds_client = timeseries.site.source.suds_client
+    logger.info('making timeseries request for "%s:%s:%s"...' %
+                (timeseries.site.network, timeseries.site.code,
+                 timeseries.variable.code))
     timeseries_response = suds_client.service.GetValuesObject(
         '%s:%s' % (timeseries.site.network, timeseries.site.code),
         '%s:%s' % (timeseries.variable.vocabulary, timeseries.variable.code),
         timeseries.begin_datetime.strftime('%Y-%m-%d'),
         timeseries.end_datetime.strftime('%Y-%m-%d'))
+
+    logger.info('processing timeseries request for "%s:%s:%s"...' %
+                (timeseries.site.network, timeseries.site.code,
+                 timeseries.variable.code))
 
     unit_code = timeseries_response.timeSeries.variable.units._unitsCode
     variable_code = timeseries_response.timeSeries.variable.variableCode[0].value
