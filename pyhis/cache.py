@@ -98,6 +98,11 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
 
     class CacheObj(object):
         def __new__(cls, *args, **kwargs):
+            #: add a check for an auto_commit kwarg that determines
+            #: whether or not to automatically commit an obj to the db
+            #: cache (if it doesn't already exist in db)
+            auto_commit = kwargs.pop('auto_commit', True)
+
             lookup_key = lookup_key_func(*args, **kwargs)
             if lookup_key in _cache[cache_key]:
                 return _cache[cache_key][lookup_key]
@@ -107,7 +112,8 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
             except NoResultFound:
                 db_instance = db_model(*args, **kwargs)
                 db_session.add(db_instance)
-                db_session.commit()
+                if auto_commit:
+                    db_session.commit()
 
             _cache[cache_key][lookup_key] = db_instance
             return db_instance
@@ -528,9 +534,12 @@ def get_sites_for_source(source):
         for site in site_list.values():
             # since the sites don't exist in the db yet, just
             # instantiating them via the CacheSite constructor will
-            # save them to the db and (update them in the in-memory
-            # cache)
-            CacheSite(site)
+            # queue them to be saved to the db and (update them in the
+            # in-memory cache)
+            CacheSite(site, auto_commit=False)
+
+        # commit queued sites to cache
+        db_session.commit()
 
     return dict([(cached_site.code,
                   cached_site.to_pyhis(source))
