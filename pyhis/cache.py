@@ -18,7 +18,8 @@ from sqlalchemy import create_engine, Table
 from sqlalchemy.schema import UniqueConstraint, ForeignKey
 from sqlalchemy import (Column, Boolean, Integer, Text, String, Float,
                         DateTime, Enum)
-from sqlalchemy.ext.declarative import declarative_base, declared_attr, synonym_for
+from sqlalchemy.ext.declarative import (declarative_base, declared_attr,
+                                        synonym_for)
 from sqlalchemy.orm import relationship, backref, sessionmaker, synonym
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -27,7 +28,7 @@ from pyhis import waterml
 
 CACHE_DATABASE_FILE = "/tmp/pyhis_cache.db"
 CACHE_DATABASE_URI = 'sqlite:///' + CACHE_DATABASE_FILE
-ECHO_SQLALCHEMY = True
+ECHO_SQLALCHEMY = False
 
 #XXX: this should be programmatically generated in some clever way
 #     (e.g. based on some config)
@@ -35,7 +36,8 @@ USE_CACHE = True
 USE_SPATIAL = False
 
 try:
-    from geoalchemy import GeometryColumn, GeometryDDL, Point, WKTSpatialElement
+    from geoalchemy import (GeometryColumn, GeometryDDL, Point,
+                            WKTSpatialElement)
     from pysqlite2 import dbapi2 as sqlite
 except ImportError:
     from sqlite3 import dbapi2 as sqlite
@@ -82,9 +84,12 @@ logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
+
+
 #----------------------------------------------------------------------------
 # cache SQLAlchemy models
 #----------------------------------------------------------------------------
+
 
 def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
     """
@@ -253,6 +258,7 @@ if USE_SPATIAL:
 
 else:
     class DBSite(Base, DBSiteMixin):
+
         latitude = Column(Float)
         longitude = Column(Float)
 
@@ -270,7 +276,6 @@ else:
                 self.longitude = longitude
 
 
-
 def _site_lookup_key_func(site=None, network=None, code=None):
     if site:
         return (site.network, site.code)
@@ -281,7 +286,7 @@ def _site_lookup_key_func(site=None, network=None, code=None):
 
 def _site_db_lookup_func(site=None, network=None, code=None):
     if site:
-        network  = site.network
+        network = site.network
         code = site.code
 
     return db_session.query(DBSite).filter_by(network=network,
@@ -329,7 +334,6 @@ class DBTimeSeries(Base):
         self.site = CacheSite(pyhis_timeseries.site)
         self.variable = CacheVariable(pyhis_timeseries.variable)
 
-
     def to_pyhis(self, site=None, variable=None):
         # as with DBSite.to_pyhis()...
         # because every timeseries needs a reference to a site and a
@@ -366,7 +370,7 @@ def _timeseries_lookup_key_func(timeseries=None, network=None, site_code=None,
 def _timeseries_db_lookup_func(timeseries=None, network=None, site_code=None,
                                 variable=None):
     if timeseries:
-        network  = timeseries.site.network
+        network = timeseries.site.network
         site_code = timeseries.site.code
         variable = db_session.query(DBVariable).filter_by(
             code=timeseries.variable.code).one()
@@ -517,9 +521,12 @@ def init():
 init()
 
 
+
 #----------------------------------------------------------------------------
 # cache functions
 #----------------------------------------------------------------------------
+
+
 def cache_all(source_url):
     """
     Cache all available data for a source
