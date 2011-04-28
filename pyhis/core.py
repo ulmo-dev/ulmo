@@ -141,6 +141,9 @@ class Source(object):
     def __len__(self):
         len(self._sites)
 
+    def __repr__(self):
+        return "<Source: %s>" % (self.url)
+
 
 class TimeSeries(object):
     """
