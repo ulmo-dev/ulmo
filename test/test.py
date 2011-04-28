@@ -5,6 +5,12 @@ from attest import Assert, Tests, TestBase, test
 import pyhis
 
 
+#TWDB_WSDL_URL = 'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL'
+
+TWDB_WSDL_URL = 'file://' + os.path.abspath('./twdb_wsdl.xml')
+USGS_WSDL_URL = 'file://' + os.path.abspath('./usgs_wsdl.xml')
+
+
 class TWDBTestBase(TestBase):
     """Base class for using TWDB dataset as a source"""
 
@@ -25,7 +31,6 @@ class TWDBTestBase(TestBase):
         assert Assert(len(df['SAL001'])) == 706
 
 
-
 class TWDBFreshCacheTests(TWDBTestBase):
     """
     Run tests with cache backend
@@ -34,10 +39,9 @@ class TWDBFreshCacheTests(TWDBTestBase):
     def __context__(self):
         if os.path.exists(pyhis.cache.CACHE_DATABASE_FILE):
             os.remove(pyhis.cache.CACHE_DATABASE_FILE)
-        import cache
-        cache.init()
+        pyhis.cache.init()
         self.source = pyhis.Source(
-            'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL',
+            TWDB_WSDL_URL,
             use_cache=True)
         yield
         del self.source
@@ -50,7 +54,7 @@ class TWDBCacheTests(TWDBTestBase):
 
     def __context__(self):
         self.source = pyhis.Source(
-            'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL',
+            TWDB_WSDL_URL,
             use_cache=True)
         yield
         del self.source
@@ -63,14 +67,20 @@ class TWDBNoCacheTests(TWDBTestBase):
 
     def __context__(self):
         self.source = pyhis.Source(
-            'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL',
+            TWDB_WSDL_URL,
             use_cache=False)
         yield
         del self.source
 
 
 if __name__ == '__main__':
-    suite = Tests([TWDBFreshCacheTests(),
-                   TWDBCacheTests(),
-                   TWDBNoCacheTests()])
+    # suite = Tests([TWDBFreshCacheTests(),
+    #                TWDBCacheTests(),
+    #                TWDBNoCacheTests()])
+    suite = Tests([
+        TWDBFreshCacheTests(),
+        TWDBCacheTests(),
+        TWDBNoCacheTests(),
+        ])
+
     suite.run()

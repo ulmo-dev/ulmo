@@ -1,0 +1,1024 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.cuahsi.org/his/1.0/ws/" xmlns:s1="http://www.cuahsi.org/waterML/1.0/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.cuahsi.org/his/1.0/ws/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">&lt;div&gt;&lt;strong&gt;Developmental service. This service is internal CUAHSI use, and evaluation.&lt;/strong&gt;&lt;/div&gt;</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.cuahsi.org/his/1.0/ws/">
+      <s:import namespace="http://www.cuahsi.org/waterML/1.0/" />
+      <s:element name="GetSitesXml">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="site" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetSitesXmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSitesXmlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSiteInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="site" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSiteInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSiteInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVariableInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="variable" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVariableInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetVariableInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSites">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="site" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSitesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:sitesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSiteInfoObject">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="site" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSiteInfoObjectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:sitesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVariableInfoObject">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="variable" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVariableInfoObjectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:variablesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetValues">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="location" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="variable" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="startDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="endDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetValuesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetValuesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetValuesObject">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="location" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="variable" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="startDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="endDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetValuesObjectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:timeSeriesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.cuahsi.org/waterML/1.0/">
+      <s:element name="sitesResponse" type="s1:SiteInfoResponseType" />
+      <s:complexType name="SiteInfoResponseType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="queryInfo" type="s1:QueryInfoType" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="site">
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="1" name="siteInfo" type="s1:SiteInfoType" />
+                <s:element minOccurs="0" maxOccurs="unbounded" name="seriesCatalog" type="s1:seriesCatalogType" />
+                <s:element minOccurs="0" maxOccurs="1" name="extension" />
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="QueryInfoType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="creationTime" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="queryURL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="querySQL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="criteria">
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="1" name="locationParam" type="s:string" />
+                <s:element minOccurs="0" maxOccurs="1" name="variableParam" type="s:string" />
+                <s:element minOccurs="0" maxOccurs="1" name="timeParam">
+                  <s:complexType>
+                    <s:sequence>
+                      <s:element minOccurs="0" maxOccurs="1" name="beginDateTime" type="s:string" />
+                      <s:element minOccurs="0" maxOccurs="1" name="endDateTime" type="s:string" />
+                    </s:sequence>
+                  </s:complexType>
+                </s:element>
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="note">
+            <s:complexType>
+              <s:simpleContent>
+                <s:extension base="s:string">
+                  <s:attribute name="type" type="s:string" />
+                  <s:attribute name="href" type="s:string" />
+                  <s:attribute name="title" type="s:string" />
+                  <s:attribute name="show" type="s:string" />
+                </s:extension>
+              </s:simpleContent>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="extension" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SiteInfoType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:SourceInfoType">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="siteName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="unbounded" name="siteCode">
+                <s:complexType>
+                  <s:simpleContent>
+                    <s:extension base="s:string">
+                      <s:attribute name="defaultId" type="s:boolean" />
+                      <s:attribute name="network" type="s:normalizedString" />
+                      <s:attribute name="siteID" type="s:normalizedString" />
+                      <s:attribute name="agencyCode" type="s:normalizedString" />
+                      <s:attribute name="agencyName" type="s:normalizedString" />
+                    </s:extension>
+                  </s:simpleContent>
+                </s:complexType>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="timeZoneInfo">
+                <s:complexType>
+                  <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="defaultTimeZone">
+                      <s:complexType>
+                        <s:attribute name="ZoneAbbreviation" type="s:normalizedString" />
+                        <s:attribute name="ZoneOffset" type="s:string" />
+                      </s:complexType>
+                    </s:element>
+                    <s:element minOccurs="0" maxOccurs="1" name="daylightSavingsTimeZone">
+                      <s:complexType>
+                        <s:attribute name="ZoneAbbreviation" type="s:normalizedString" />
+                        <s:attribute name="ZoneOffset" type="s:string" />
+                      </s:complexType>
+                    </s:element>
+                  </s:sequence>
+                </s:complexType>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="geoLocation">
+                <s:complexType>
+                  <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="geogLocation" type="s1:GeogLocationType" />
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="localSiteXY">
+                      <s:complexType>
+                        <s:sequence>
+                          <s:element minOccurs="1" maxOccurs="1" name="X" type="s:double" />
+                          <s:element minOccurs="1" maxOccurs="1" name="Y" type="s:double" />
+                          <s:element minOccurs="0" maxOccurs="1" name="Z" type="s:double" />
+                          <s:element minOccurs="0" maxOccurs="unbounded" name="note">
+                            <s:complexType>
+                              <s:simpleContent>
+                                <s:extension base="s:string">
+                                  <s:attribute name="type" type="s:string" />
+                                  <s:attribute name="href" type="s:string" />
+                                  <s:attribute name="title" type="s:string" />
+                                  <s:attribute name="show" type="s:string" />
+                                </s:extension>
+                              </s:simpleContent>
+                            </s:complexType>
+                          </s:element>
+                        </s:sequence>
+                        <s:attribute name="projectionInformation" type="s:string" />
+                      </s:complexType>
+                    </s:element>
+                  </s:sequence>
+                </s:complexType>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="elevation_m" type="s:double" />
+              <s:element minOccurs="0" maxOccurs="1" name="verticalDatum" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="unbounded" name="note">
+                <s:complexType>
+                  <s:simpleContent>
+                    <s:extension base="s:string">
+                      <s:attribute name="type" type="s:string" />
+                      <s:attribute name="href" type="s:string" />
+                      <s:attribute name="title" type="s:string" />
+                      <s:attribute name="show" type="s:string" />
+                    </s:extension>
+                  </s:simpleContent>
+                </s:complexType>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="extension" />
+              <s:element minOccurs="0" maxOccurs="1" name="altname" />
+            </s:sequence>
+            <s:attribute name="oid" type="s:normalizedString" />
+            <s:attribute name="metadataDateTime" type="s:dateTime" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="SourceInfoType" />
+      <s:complexType name="DataSetInfoType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:SourceInfoType">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="dataSetIdentifier" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="timeZoneInfo">
+                <s:complexType>
+                  <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="defaultTimeZone">
+                      <s:complexType>
+                        <s:attribute name="ZoneAbbreviation" type="s:normalizedString" />
+                        <s:attribute name="ZoneOffset" type="s:string" />
+                      </s:complexType>
+                    </s:element>
+                    <s:element minOccurs="0" maxOccurs="1" name="daylightSavingsTimeZone">
+                      <s:complexType>
+                        <s:attribute name="ZoneAbbreviation" type="s:normalizedString" />
+                        <s:attribute name="ZoneOffset" type="s:string" />
+                      </s:complexType>
+                    </s:element>
+                  </s:sequence>
+                </s:complexType>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="dataSetDescription" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="unbounded" name="note">
+                <s:complexType>
+                  <s:simpleContent>
+                    <s:extension base="s:string">
+                      <s:attribute name="type" type="s:string" />
+                      <s:attribute name="href" type="s:string" />
+                      <s:attribute name="title" type="s:string" />
+                      <s:attribute name="show" type="s:string" />
+                    </s:extension>
+                  </s:simpleContent>
+                </s:complexType>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="dataSetLocation" type="s1:GeogLocationType" />
+              <s:element minOccurs="0" maxOccurs="1" name="extension" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GeogLocationType">
+        <s:attribute default="EPSG:4326" name="srs" type="s:string" />
+      </s:complexType>
+      <s:complexType name="LatLonBoxType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:GeogLocationType">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="south" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="west" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="north" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="east" type="s:double" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="LatLonPointType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:GeogLocationType">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="latitude" type="s:double" />
+              <s:element minOccurs="1" maxOccurs="1" name="longitude" type="s:double" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="seriesCatalogType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="note">
+            <s:complexType>
+              <s:simpleContent>
+                <s:extension base="s:string">
+                  <s:attribute name="type" type="s:string" />
+                  <s:attribute name="href" type="s:string" />
+                  <s:attribute name="title" type="s:string" />
+                  <s:attribute name="show" type="s:string" />
+                </s:extension>
+              </s:simpleContent>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="series">
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="1" name="dataType" type="s1:dataTypeEnum" />
+                <s:element minOccurs="0" maxOccurs="1" name="variable" type="s1:VariableInfoType" />
+                <s:element minOccurs="0" maxOccurs="1" name="valueCount">
+                  <s:complexType>
+                    <s:simpleContent>
+                      <s:extension base="s:int">
+                        <s:attribute name="countIsEstimated" type="s:boolean" />
+                      </s:extension>
+                    </s:simpleContent>
+                  </s:complexType>
+                </s:element>
+                <s:element minOccurs="0" maxOccurs="1" name="variableTimeInterval" type="s1:TimePeriodType" />
+                <s:element minOccurs="0" maxOccurs="1" name="valueType" type="s1:valueTypeEnum" />
+                <s:element minOccurs="0" maxOccurs="1" name="generalCategory" type="s1:generalCategoryEnum" />
+                <s:element minOccurs="0" maxOccurs="1" name="sampleMedium" type="s1:SampleMediumEnum" />
+                <s:element minOccurs="0" maxOccurs="1" name="Method" type="s1:MethodType" />
+                <s:element minOccurs="0" maxOccurs="1" name="Source" type="s1:SourceType" />
+                <s:element minOccurs="0" maxOccurs="1" name="QualityControlLevel" type="s1:QualityControlLevelType" />
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+        <s:attribute name="menuGroupName" type="s:string" />
+        <s:attribute name="serviceWsdl" type="s:anyURI" />
+      </s:complexType>
+      <s:simpleType name="dataTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Continuous" />
+          <s:enumeration value="Instantaneous" />
+          <s:enumeration value="Cumulative" />
+          <s:enumeration value="Incremental" />
+          <s:enumeration value="Average" />
+          <s:enumeration value="Maximum" />
+          <s:enumeration value="Minimum" />
+          <s:enumeration value="Constant Over Interval" />
+          <s:enumeration value="Categorical" />
+          <s:enumeration value="Best Easy Systematic Estimator " />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Variance" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="VariableInfoType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="valueType" type="s1:valueTypeEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="sampleMedium" type="s1:SampleMediumEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="dataType" type="s1:dataTypeEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="generalCategory" type="s1:generalCategoryEnum" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="variableCode">
+            <s:complexType>
+              <s:simpleContent>
+                <s:extension base="s:token">
+                  <s:attribute name="network" type="s:string" />
+                  <s:attribute name="vocabulary" type="s:string" />
+                  <s:attribute name="default" type="s:boolean" />
+                  <s:attribute name="variableID" type="s:integer" />
+                </s:extension>
+              </s:simpleContent>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="variableName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="variableDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="units">
+            <s:complexType>
+              <s:simpleContent>
+                <s:extension base="s:string">
+                  <s:attribute name="unitsType" type="s1:UnitsTypeEnum" />
+                  <s:attribute name="unitsAbbreviation" type="s:normalizedString" />
+                  <s:attribute name="unitsCode" type="s:token" />
+                </s:extension>
+              </s:simpleContent>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="options" type="s1:ArrayOfOption" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="note">
+            <s:complexType>
+              <s:simpleContent>
+                <s:extension base="s:string">
+                  <s:attribute name="type" type="s:string" />
+                  <s:attribute name="href" type="s:string" />
+                  <s:attribute name="title" type="s:string" />
+                  <s:attribute name="show" type="s:string" />
+                </s:extension>
+              </s:simpleContent>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="related">
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="unbounded" name="parentID">
+                  <s:complexType>
+                    <s:simpleContent>
+                      <s:extension base="s:string">
+                        <s:attribute name="network" type="s:string" />
+                        <s:attribute name="vocabulary" type="s:string" />
+                        <s:attribute name="default" type="s:boolean" />
+                      </s:extension>
+                    </s:simpleContent>
+                  </s:complexType>
+                </s:element>
+                <s:element minOccurs="0" maxOccurs="unbounded" name="relatedID">
+                  <s:complexType>
+                    <s:simpleContent>
+                      <s:extension base="s:string">
+                        <s:attribute name="network" type="s:string" />
+                        <s:attribute name="vocabulary" type="s:string" />
+                        <s:attribute name="default" type="s:boolean" />
+                      </s:extension>
+                    </s:simpleContent>
+                  </s:complexType>
+                </s:element>
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="extension" />
+          <s:element minOccurs="0" maxOccurs="1" name="NoDataValue" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="timeSupport">
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="1" name="unit" type="s1:UnitsType" />
+                <s:element minOccurs="0" maxOccurs="1" name="timeInterval" type="s:int" />
+              </s:sequence>
+              <s:attribute name="isRegular" type="s:boolean" />
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+        <s:attribute name="oid" type="s:normalizedString" />
+        <s:attribute name="metadataDateTime" type="s:dateTime" />
+      </s:complexType>
+      <s:simpleType name="valueTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Field Observation" />
+          <s:enumeration value="Sample" />
+          <s:enumeration value="Model Simulation Result" />
+          <s:enumeration value="Derived Value" />
+          <s:enumeration value="Unknown" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="SampleMediumEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Surface Water" />
+          <s:enumeration value="Ground Water" />
+          <s:enumeration value="Sediment" />
+          <s:enumeration value="Soil" />
+          <s:enumeration value="Air" />
+          <s:enumeration value="Tissue" />
+          <s:enumeration value="Precipitation" />
+          <s:enumeration value="Unknown" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="generalCategoryEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Water Quality" />
+          <s:enumeration value="Climate" />
+          <s:enumeration value="Hydrology" />
+          <s:enumeration value="Geology" />
+          <s:enumeration value="Biota" />
+          <s:enumeration value="Unknown" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="UnitsTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Angle" />
+          <s:enumeration value="Area" />
+          <s:enumeration value="Dimensionless" />
+          <s:enumeration value="Energy" />
+          <s:enumeration value="Energy Flux" />
+          <s:enumeration value="Flow" />
+          <s:enumeration value="Force" />
+          <s:enumeration value="Frequency" />
+          <s:enumeration value="Length" />
+          <s:enumeration value="Light" />
+          <s:enumeration value="Mass" />
+          <s:enumeration value="Permeability" />
+          <s:enumeration value="Power" />
+          <s:enumeration value="Pressure/Stress" />
+          <s:enumeration value="Resolution" />
+          <s:enumeration value="Scale" />
+          <s:enumeration value="Temperature" />
+          <s:enumeration value="Time" />
+          <s:enumeration value="Velocity" />
+          <s:enumeration value="Volume" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfOption">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="option">
+            <s:complexType>
+              <s:simpleContent>
+                <s:extension base="s:string">
+                  <s:attribute name="name" type="s:normalizedString" />
+                  <s:attribute name="optionID" type="s:integer" />
+                  <s:attribute name="optionCode" type="s:token" />
+                </s:extension>
+              </s:simpleContent>
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UnitsType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UnitName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UnitDescription" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="UnitType" type="s1:UnitsTypeEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="UnitAbbreviation" type="s:string" />
+        </s:sequence>
+        <s:attribute name="UnitID" type="s:int" />
+      </s:complexType>
+      <s:complexType name="TimePeriodType" />
+      <s:complexType name="TimeIntervalType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:TimePeriodType">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="beginDateTime" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="endDateTime" type="s:dateTime" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="TimeSingleType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:TimePeriodType">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="timeSingle" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="beginDateTime" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="endDateTime" type="s:dateTime" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="TimePeriodRealTimeType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:TimePeriodType">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="realTimeDataPeriod" type="s:duration" />
+              <s:element minOccurs="1" maxOccurs="1" name="beginDateTime" type="s:dateTime" />
+              <s:element minOccurs="1" maxOccurs="1" name="endDateTime" type="s:dateTime" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="MethodType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="MethodDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MethodLink" type="s:string" />
+        </s:sequence>
+        <s:attribute name="methodID" type="s:int" />
+      </s:complexType>
+      <s:complexType name="SourceType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Organization" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SourceDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Metadata" type="s1:MetaDataType" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContactInformation" type="s1:ContactInformationType" />
+          <s:element minOccurs="0" maxOccurs="1" name="SourceLink" type="s:anyURI" />
+        </s:sequence>
+        <s:attribute name="sourceID" type="s:int" />
+      </s:complexType>
+      <s:complexType name="MetaDataType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TopicCategory" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Abstract" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProfileVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MetadataLink" type="s:anyURI" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ContactInformationType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ContactName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TypeOfContact" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="QualityControlLevelType">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="QualityControlLevelID" type="s:int" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="VariablesResponseType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="variables" type="s1:ArrayOfVariableInfoType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfVariableInfoType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="variable" type="s1:VariableInfoType" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="variablesResponse" type="s1:VariablesResponseType" />
+      <s:complexType name="TimeSeriesResponseType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="queryInfo" type="s1:QueryInfoType" />
+          <s:element minOccurs="0" maxOccurs="1" name="timeSeries" type="s1:TimeSeriesType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TimeSeriesType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="sourceInfo" type="s1:SourceInfoType" />
+          <s:element minOccurs="0" maxOccurs="1" name="variable" type="s1:VariableInfoType" />
+          <s:element minOccurs="0" maxOccurs="1" name="values" type="s1:TsValuesSingleVariableType" />
+        </s:sequence>
+        <s:attribute name="name" type="s:string" />
+      </s:complexType>
+      <s:complexType name="TsValuesSingleVariableType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="value" type="s1:ValueSingleVariable" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="qualifier">
+            <s:complexType>
+              <s:simpleContent>
+                <s:extension base="s:string">
+                  <s:attribute name="qualifierCode" type="s:token" />
+                  <s:attribute name="qualifierID" type="s:integer" />
+                  <s:attribute name="oid" type="s:normalizedString" />
+                  <s:attribute name="metadataDateTime" type="s:dateTime" />
+                  <s:attribute name="network" type="s:string" />
+                  <s:attribute name="vocabulary" type="s:string" />
+                  <s:attribute name="default" type="s:boolean" />
+                </s:extension>
+              </s:simpleContent>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="qualityControlLevel">
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="1" name="qualityControlLevelID" type="s:normalizedString" />
+              </s:sequence>
+              <s:attribute name="qualityControlLevelCode" type="s:string" />
+              <s:attribute name="oid" type="s:normalizedString" />
+              <s:attribute name="metadataDateTime" type="s:dateTime" />
+              <s:attribute name="network" type="s:string" />
+              <s:attribute name="vocabulary" type="s:string" />
+              <s:attribute name="default" type="s:boolean" />
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="method" type="s1:MethodType" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="source" type="s1:SourceType" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="offset" type="s1:OffsetType" />
+        </s:sequence>
+        <s:attribute name="timeZoneShiftApplied" type="s:boolean" />
+        <s:attribute name="unitsAbbreviation" type="s:normalizedString" />
+        <s:attribute name="unitsCode" type="s:token" />
+        <s:attribute name="unitsType" type="s1:UnitsTypeEnum" />
+        <s:attribute name="count" type="s:nonNegativeInteger" />
+        <s:attribute default="false" name="unitsAreConverted" type="s:boolean" />
+      </s:complexType>
+      <s:complexType name="ValueSingleVariable">
+        <s:simpleContent>
+          <s:extension base="s:decimal">
+            <s:attribute name="qualifiers" type="s:string" />
+            <s:attribute name="censorCode" type="s1:CensorCodeEnum" />
+            <s:attribute name="dateTime" type="s:dateTime" />
+            <s:attribute name="qualityControlLevel" type="s1:QualityControlLevelEnum" />
+            <s:attribute name="methodID" type="s:string" />
+            <s:attribute name="sourceID" type="s:string" />
+            <s:attribute name="accuracyStdDev" type="s:double" />
+            <s:attribute name="codedVocabulary" type="s:boolean" />
+            <s:attribute name="codedVocabularyTerm" type="s:string" />
+            <s:attribute name="sampleID" type="s:string" />
+            <s:attribute name="offsetValue" type="s:double" />
+            <s:attribute name="offsetTypeID" type="s:int" />
+            <s:attribute name="offsetDescription" type="s:string" />
+            <s:attribute name="offsetUnitsAbbreviation" type="s:string" />
+            <s:attribute name="offsetUnitsCode" type="s:string" />
+            <s:attribute name="oid" type="s:normalizedString" />
+            <s:attribute name="metadataDateTime" type="s:dateTime" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:simpleType name="CensorCodeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="lt" />
+          <s:enumeration value="gt" />
+          <s:enumeration value="nc" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="QualityControlLevelEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Raw data" />
+          <s:enumeration value="Quality controlled data" />
+          <s:enumeration value="Derived products" />
+          <s:enumeration value="Interpreted products" />
+          <s:enumeration value="Knowledge products" />
+          <s:enumeration value="Unknown" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="OffsetType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="offsetValue" type="s:float" />
+          <s:element minOccurs="0" maxOccurs="1" name="offsetDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="units">
+            <s:complexType>
+              <s:simpleContent>
+                <s:extension base="s:string">
+                  <s:attribute name="unitsType" type="s1:UnitsTypeEnum" />
+                  <s:attribute name="unitsAbbreviation" type="s:normalizedString" />
+                  <s:attribute name="unitsCode" type="s:token" />
+                </s:extension>
+              </s:simpleContent>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" default="true" name="offsetIsVertical" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="offsetHorizDirectionDegrees" type="s:int" />
+        </s:sequence>
+        <s:attribute name="offsetTypeID" type="s:int" />
+      </s:complexType>
+      <s:element name="timeSeriesResponse" type="s1:TimeSeriesResponseType" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetSitesXmlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSitesXml" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesXmlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSitesXmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSiteInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSiteInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSiteInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSiteInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVariableInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetVariableInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetVariableInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetVariableInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSites" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSitesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSiteInfoObjectSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSiteInfoObject" />
+  </wsdl:message>
+  <wsdl:message name="GetSiteInfoObjectSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSiteInfoObjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVariableInfoObjectSoapIn">
+    <wsdl:part name="parameters" element="tns:GetVariableInfoObject" />
+  </wsdl:message>
+  <wsdl:message name="GetVariableInfoObjectSoapOut">
+    <wsdl:part name="parameters" element="tns:GetVariableInfoObjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetValuesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetValues" />
+  </wsdl:message>
+  <wsdl:message name="GetValuesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetValuesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetValuesObjectSoapIn">
+    <wsdl:part name="parameters" element="tns:GetValuesObject" />
+  </wsdl:message>
+  <wsdl:message name="GetValuesObjectSoapOut">
+    <wsdl:part name="parameters" element="tns:GetValuesObjectResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WaterOneFlow">
+    <wsdl:operation name="GetSitesXml">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given an array of site numbers, this method returns the site metadata for each one. Send the array of site codes in this format: 'NetworkName:SiteCode'</wsdl:documentation>
+      <wsdl:input message="tns:GetSitesXmlSoapIn" />
+      <wsdl:output message="tns:GetSitesXmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a site number, this method returns the site's metadata. Send the site code in this format: 'NetworkName:SiteCode'</wsdl:documentation>
+      <wsdl:input message="tns:GetSiteInfoSoapIn" />
+      <wsdl:output message="tns:GetSiteInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a variable code, this method returns the variable's name. Pass in the variable in this format: 'NetworkName:Variable'</wsdl:documentation>
+      <wsdl:input message="tns:GetVariableInfoSoapIn" />
+      <wsdl:output message="tns:GetVariableInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given an array of site numbers, this method returns the site metadata for each one. Send the array of site codes in this format: 'NetworkName:SiteCode'</wsdl:documentation>
+      <wsdl:input message="tns:GetSitesSoapIn" />
+      <wsdl:output message="tns:GetSitesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfoObject">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a site number, this method returns the site's metadata. Send the site code in this format: 'NetworkName:SiteCode'</wsdl:documentation>
+      <wsdl:input message="tns:GetSiteInfoObjectSoapIn" />
+      <wsdl:output message="tns:GetSiteInfoObjectSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfoObject">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a variable code, this method returns the variable's siteName. Pass in the variable in this format: 'NetworkName:Variable'</wsdl:documentation>
+      <wsdl:input message="tns:GetVariableInfoObjectSoapIn" />
+      <wsdl:output message="tns:GetVariableInfoObjectSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValues">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a site number, a variable, a start date, and an end date, this method returns a time series. Pass in the sitecode and variable in this format: 'NetworkName:SiteCode' and 'NetworkName:Variable'</wsdl:documentation>
+      <wsdl:input message="tns:GetValuesSoapIn" />
+      <wsdl:output message="tns:GetValuesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValuesObject">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a site number, a variable, a start date, and an end date, this method returns a time series. Pass in the sitecode and variable in this format: 'NetworkName:SiteCode' and 'NetworkName:Variable'</wsdl:documentation>
+      <wsdl:input message="tns:GetValuesObjectSoapIn" />
+      <wsdl:output message="tns:GetValuesObjectSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WaterOneFlow" type="tns:WaterOneFlow">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetSitesXml">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSitesXml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfo">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSiteInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfo">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetVariableInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSites" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfoObject">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSiteInfoObject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfoObject">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetVariableInfoObject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValues">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetValues" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValuesObject">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetValuesObject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WaterOneFlow1" type="tns:WaterOneFlow">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetSitesXml">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSitesXml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfo">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSiteInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfo">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetVariableInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSites" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfoObject">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSiteInfoObject" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfoObject">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetVariableInfoObject" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValues">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetValues" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValuesObject">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetValuesObject" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WaterOneFlow">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">&lt;div&gt;&lt;strong&gt;Developmental service. This service is internal CUAHSI use, and evaluation.&lt;/strong&gt;&lt;/div&gt;</wsdl:documentation>
+    <wsdl:port name="WaterOneFlow" binding="tns:WaterOneFlow">
+      <soap:address location="http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WaterOneFlow1" binding="tns:WaterOneFlow1">
+      <soap12:address location="http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
