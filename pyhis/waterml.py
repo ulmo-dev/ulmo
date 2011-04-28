@@ -69,7 +69,11 @@ def get_series_and_quantity_for_timeseries(timeseries):
                 (timeseries.site.network, timeseries.site.code,
                  timeseries.variable.code))
 
-    unit_code = timeseries_response.timeSeries.variable.units._unitsCode
+    try:
+        unit_code = timeseries_response.timeSeries.variable.units._unitsCode
+    except:
+        unit_code = None
+
     variable_code = timeseries_response.timeSeries.variable.variableCode[0].value
 
     # if unit code not in unit_quantities dict, then just use the value string
@@ -159,25 +163,43 @@ def _variable_from_wml_variableInfo(variable_info):
     if len(variable_info.variableCode) > 1:
         raise NotImplementedError(
             "Multiple variable codes not currently supported")
-
+    try:
+        id = variable_info.variableCode[0]._variableID
+    except:
+        id = None
+        
+    try:
+        no_data_value = variable_info.NoDataValue
+    except:
+        no_data_value = None
+        
     return pyhis.Variable(
         name=variable_info.variableName,
         code=variable_info.variableCode[0].value,
-        id=variable_info.variableCode[0]._variableID,
+        id=id,
         vocabulary=variable_info.variableCode[0]._vocabulary,
         units=_units_from_wml_units(variable_info.units),
-        no_data_value=variable_info.NoDataValue)
+        no_data_value=no_data_value)
 
 
 def _timeseries_from_wml_series(series, site):
     """returns a PyHIS series instance from a suds WaterML series element"""
     datetime_fmt = "%Y-%d-%m %H:%M:%S"
+    try:
+        method = series.Method.MethodDescription
+    except:
+        method = None
 
+    try:
+        quality_control_level = series.QualityControlLevel._QualityControlLevelID
+    except:
+        quality_control_level = None
+        
     return pyhis.TimeSeries(
         variable=_variable_from_wml_variableInfo(series.variable),
         count=series.valueCount,
-        method=series.Method.MethodDescription,
-        quality_control_level=series.QualityControlLevel._QualityControlLevelID,
+        method=method,
+        quality_control_level=quality_control_level,
         begin_datetime=series.variableTimeInterval.beginDateTime,
         end_datetime=series.variableTimeInterval.endDateTime,
         site=site,
