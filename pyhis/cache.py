@@ -12,9 +12,10 @@
 #----------------------------------------------------------------------------
 import logging
 import platform
+import warnings
 
 import pandas
-from sqlalchemy import create_engine, Table
+from sqlalchemy import create_engine, func, Table
 from sqlalchemy.schema import UniqueConstraint, ForeignKey
 from sqlalchemy import (Column, Boolean, Integer, Text, String, Float,
                         DateTime, Enum)
@@ -126,6 +127,14 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
     return CacheObj
 
 
+class DBCacheDatesMixin(object):
+    """
+    Mixin class for keeping track of cache times
+    """
+    last_refreshed = Column(DateTime, default=func.now(),
+                            onupdate=func.now())
+
+
 class DBSource(Base):
     __tablename__ = 'source'
 
@@ -218,7 +227,7 @@ class DBSiteMixin(object):
 
 
 if USE_SPATIAL:
-    class DBSite(Base, DBSiteMixin):
+    class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
         geom = GeometryColumn(Point(2))
 
         def __init__(self, site=None, site_id=None, name=None, code=None,
@@ -257,7 +266,7 @@ if USE_SPATIAL:
     GeometryDDL(DBSite.__table__)
 
 else:
-    class DBSite(Base, DBSiteMixin):
+    class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
 
         latitude = Column(Float)
         longitude = Column(Float)
@@ -296,7 +305,7 @@ CacheSite = create_cache_obj(DBSite, 'site', _site_lookup_key_func,
                              _site_db_lookup_func)
 
 
-class DBTimeSeries(Base):
+class DBTimeSeries(Base, DBCacheDatesMixin):
     __tablename__ = 'timeseries'
 
     id = Column(Integer, primary_key=True)
@@ -388,7 +397,7 @@ CacheTimeSeries = create_cache_obj(DBTimeSeries, 'timeseries',
                                    _timeseries_db_lookup_func)
 
 
-class DBUnits(Base):
+class DBUnits(Base, DBCacheDatesMixin):
     __tablename__ = 'units'
 
     id = Column(Integer, primary_key=True)
@@ -435,7 +444,7 @@ CacheUnits = create_cache_obj(DBUnits, 'units', _units_lookup_key_func,
                               _units_db_lookup_func)
 
 
-class DBValue(Base):
+class DBValue(Base, DBCacheDatesMixin):
     __tablename__ = 'value'
 
     id = Column(Integer, primary_key=True)
@@ -451,7 +460,7 @@ class DBValue(Base):
         self.timeseries = timeseries
 
 
-class DBVariable(Base):
+class DBVariable(Base, DBCacheDatesMixin):
     __tablename__ = 'variable'
 
     id = Column(Integer, primary_key=True)
