@@ -545,7 +545,11 @@ def cache_all(source_url):
     for site in source.sites.values():
         # this could be improved by not having to create the
         # dataframe object
-        df = site.dataframe
+        try:
+            df = site.dataframe
+        except:
+            warnings.warn("There was a problem getting values for "
+                          "%s, skipping..." % (site))
 
 
 def get_sites_for_source(source):
