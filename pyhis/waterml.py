@@ -24,10 +24,9 @@ log = logging.getLogger(__name__)
 # waterml functions
 #------------------------------------------------------------------------------
 
-
 def get_sites_for_source(source):
     """
-    return a sites dict for for a given source.  The source can be
+    return a sites dict for for a given source. The source can be
     either a string representing the url or a pyhis.Source object
     """
 
@@ -40,6 +39,28 @@ def get_sites_for_source(source):
 
 
     return dict([(site.code, site) for site in site_list])
+
+
+def get_description_for_source(source):
+    """
+    return string containg the source description for a given source.
+    The source can be either a string representing the url or a
+    pyhis.Source object
+    """
+    # Note: A source description isn't returned with the GetSites
+    # response but rather is attached only to siteInfo responses and
+    # timeseries responses...
+
+    source_description = None
+
+    log.info('looking up source description...')
+    try:
+        site_info = source.sites.values()[0]
+        source_description = site_info.site[0].seriesCatalog[0].series[0].Source.SourceDescription
+    except KeyError:
+        warnings.warn('unable to determine source description')
+
+    return source_description
 
 
 def get_timeseries_list_for_site(site):

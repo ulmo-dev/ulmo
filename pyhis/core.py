@@ -115,6 +115,7 @@ class Source(object):
     """Represents a water data source"""
     suds_client = None
     url = None
+    _description = None
     _sites = {}
     _use_cache = None
 
@@ -128,6 +129,21 @@ class Source(object):
         if not self._sites:
             self._update_sites()
         return self._sites
+
+    @property
+    def description(self):
+        if not self._description:
+            self._update_description()
+        return self._description
+
+    def _update_description(self):
+        """update self._description"""
+        cache_enabled = self._use_cache and cache
+
+        if cache_enabled:
+            self._description = cache.get_description_for_source(self)
+        else:
+            self._description = waterml.get_description_for_source(self)
 
     def _update_sites(self):
         """update the self._sites dict"""
