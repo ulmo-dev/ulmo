@@ -14,6 +14,7 @@ import suds
 
 import pyhis
 from . import waterml
+from . import shapefile
 
 try:
     from . import cache
@@ -141,6 +142,11 @@ class Source(object):
     def __len__(self):
         len(self._sites)
 
+    def within_shapefile(self, file_name, ):
+        
+
+    def within_polygon(self):
+        
 
 class TimeSeries(object):
     """
