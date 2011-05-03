@@ -6,10 +6,10 @@
 """
 
 import itertools
+import logging
 
 import numpy as np
 import pandas
-import shapely
 import suds
 
 import pyhis
@@ -26,6 +26,12 @@ except ImportError:
 __all__ = ['Site', 'Source', 'TimeSeries', 'Variable', 'Units']
 
 
+# fancy this up a bit sometime
+LOG_FORMAT = '%(message)s'
+logging.basicConfig(format=LOG_FORMAT)
+logger = logging.getLogger(__name__)
+
+
 class Site(object):
     """
     Contains information about a site
@@ -39,7 +45,8 @@ class Site(object):
     code = None
     id = None
     network = None
-    location = None
+    latitude = None
+    longitude = None
 
     def __init__(self, code=None, name=None, id=None, network=None,
                  latitude=None, longitude=None, source=None, use_cache=True):
@@ -47,17 +54,10 @@ class Site(object):
         self.name = name
         self.id = id
         self.network = network
-        self.location = shapely.geometry.Point(float(longitude), float(latitude))
+        self.latitude = latitude
+        self.longitude = longitude
         self.source = source
         self._use_cache = use_cache
-
-    @property
-    def latitude(self):
-        return self.location.y
-
-    @property
-    def longitude(self):
-        return self.location.x
 
     @property
     def dataframe(self):
@@ -116,6 +116,7 @@ class Source(object):
     """Represents a water data source"""
     suds_client = None
     url = None
+    _description = None
     _sites = {}
     _use_cache = None
 
@@ -130,6 +131,21 @@ class Source(object):
             self._update_sites()
         return self._sites
 
+    @property
+    def description(self):
+        if not self._description:
+            self._update_description()
+        return self._description
+
+    def _update_description(self):
+        """update self._description"""
+        cache_enabled = self._use_cache and cache
+
+        if cache_enabled:
+            self._description = cache.get_description_for_source(self)
+        else:
+            self._description = waterml.get_description_for_source(self)
+
     def _update_sites(self):
         """update the self._sites dict"""
         cache_enabled = self._use_cache and cache
@@ -143,10 +159,14 @@ class Source(object):
         len(self._sites)
 
     def within_shapefile(self, file_name, ):
-        
+        pass
 
     def within_polygon(self):
-        
+        pass
+
+    def __repr__(self):
+        return "<Source: %s>" % (self.url)
+
 
 class TimeSeries(object):
     """

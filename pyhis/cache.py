@@ -10,14 +10,17 @@
 #  2. check database, if found return the obj and update in-memory cache
 #  3. make new network request, update database with results
 #----------------------------------------------------------------------------
+import logging
 import platform
+import warnings
 
 import pandas
-from sqlalchemy import create_engine, Table
+from sqlalchemy import create_engine, func, Table
 from sqlalchemy.schema import UniqueConstraint, ForeignKey
 from sqlalchemy import (Column, Boolean, Integer, Text, String, Float,
                         DateTime, Enum)
-from sqlalchemy.ext.declarative import declarative_base, declared_attr, synonym_for
+from sqlalchemy.ext.declarative import (declarative_base, declared_attr,
+                                        synonym_for)
 from sqlalchemy.orm import relationship, backref, sessionmaker, synonym
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -26,7 +29,7 @@ from pyhis import waterml
 
 CACHE_DATABASE_FILE = "/tmp/pyhis_cache.db"
 CACHE_DATABASE_URI = 'sqlite:///' + CACHE_DATABASE_FILE
-ECHO_SQLALCHEMY = True
+ECHO_SQLALCHEMY = False
 
 #XXX: this should be programmatically generated in some clever way
 #     (e.g. based on some config)
@@ -34,7 +37,8 @@ USE_CACHE = True
 USE_SPATIAL = False
 
 try:
-    from geoalchemy import GeometryColumn, GeometryDDL, Point, WKTSpatialElement
+    from geoalchemy import (GeometryColumn, GeometryDDL, Point,
+                            WKTSpatialElement)
     from pysqlite2 import dbapi2 as sqlite
 except ImportError:
     from sqlite3 import dbapi2 as sqlite
@@ -75,9 +79,18 @@ _cache = {
     }
 
 
+# configure logging
+LOG_FORMAT = '%(message)s'
+logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
+log = logging.getLogger(__name__)
+
+
+
+
 #----------------------------------------------------------------------------
 # cache SQLAlchemy models
 #----------------------------------------------------------------------------
+
 
 def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
     """
@@ -91,6 +104,11 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
 
     class CacheObj(object):
         def __new__(cls, *args, **kwargs):
+            #: add a check for an auto_commit kwarg that determines
+            #: whether or not to automatically commit an obj to the db
+            #: cache (if it doesn't already exist in db)
+            auto_commit = kwargs.pop('auto_commit', True)
+
             lookup_key = lookup_key_func(*args, **kwargs)
             if lookup_key in _cache[cache_key]:
                 return _cache[cache_key][lookup_key]
@@ -100,12 +118,21 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
             except NoResultFound:
                 db_instance = db_model(*args, **kwargs)
                 db_session.add(db_instance)
-                db_session.commit()
+                if auto_commit:
+                    db_session.commit()
 
             _cache[cache_key][lookup_key] = db_instance
             return db_instance
 
     return CacheObj
+
+
+class DBCacheDatesMixin(object):
+    """
+    Mixin class for keeping track of cache times
+    """
+    last_refreshed = Column(DateTime, default=func.now(),
+                            onupdate=func.now())
 
 
 class DBSource(Base):
@@ -176,8 +203,8 @@ class DBSiteMixin(object):
         self.name = pyhis_site.name
         self.code = pyhis_site.code
         self.network = pyhis_site.network
-        self.latitude = pyhis_site.location.y
-        self.longitude = pyhis_site.location.x
+        self.latitude = pyhis_site.latitude
+        self.longitude = pyhis_site.longitude
         self.source = CacheSource(pyhis_site.source)
 
     def to_pyhis(self, source=None):
@@ -200,7 +227,7 @@ class DBSiteMixin(object):
 
 
 if USE_SPATIAL:
-    class DBSite(Base, DBSiteMixin):
+    class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
         geom = GeometryColumn(Point(2))
 
         def __init__(self, site=None, site_id=None, name=None, code=None,
@@ -239,7 +266,8 @@ if USE_SPATIAL:
     GeometryDDL(DBSite.__table__)
 
 else:
-    class DBSite(Base, DBSiteMixin):
+    class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
+
         latitude = Column(Float)
         longitude = Column(Float)
 
@@ -257,7 +285,6 @@ else:
                 self.longitude = longitude
 
 
-
 def _site_lookup_key_func(site=None, network=None, code=None):
     if site:
         return (site.network, site.code)
@@ -268,7 +295,7 @@ def _site_lookup_key_func(site=None, network=None, code=None):
 
 def _site_db_lookup_func(site=None, network=None, code=None):
     if site:
-        network  = site.network
+        network = site.network
         code = site.code
 
     return db_session.query(DBSite).filter_by(network=network,
@@ -278,7 +305,7 @@ CacheSite = create_cache_obj(DBSite, 'site', _site_lookup_key_func,
                              _site_db_lookup_func)
 
 
-class DBTimeSeries(Base):
+class DBTimeSeries(Base, DBCacheDatesMixin):
     __tablename__ = 'timeseries'
 
     id = Column(Integer, primary_key=True)
@@ -316,7 +343,6 @@ class DBTimeSeries(Base):
         self.site = CacheSite(pyhis_timeseries.site)
         self.variable = CacheVariable(pyhis_timeseries.variable)
 
-
     def to_pyhis(self, site=None, variable=None):
         # as with DBSite.to_pyhis()...
         # because every timeseries needs a reference to a site and a
@@ -353,7 +379,7 @@ def _timeseries_lookup_key_func(timeseries=None, network=None, site_code=None,
 def _timeseries_db_lookup_func(timeseries=None, network=None, site_code=None,
                                 variable=None):
     if timeseries:
-        network  = timeseries.site.network
+        network = timeseries.site.network
         site_code = timeseries.site.code
         variable = db_session.query(DBVariable).filter_by(
             code=timeseries.variable.code).one()
@@ -371,7 +397,7 @@ CacheTimeSeries = create_cache_obj(DBTimeSeries, 'timeseries',
                                    _timeseries_db_lookup_func)
 
 
-class DBUnits(Base):
+class DBUnits(Base, DBCacheDatesMixin):
     __tablename__ = 'units'
 
     id = Column(Integer, primary_key=True)
@@ -418,7 +444,7 @@ CacheUnits = create_cache_obj(DBUnits, 'units', _units_lookup_key_func,
                               _units_db_lookup_func)
 
 
-class DBValue(Base):
+class DBValue(Base, DBCacheDatesMixin):
     __tablename__ = 'value'
 
     id = Column(Integer, primary_key=True)
@@ -434,7 +460,7 @@ class DBValue(Base):
         self.timeseries = timeseries
 
 
-class DBVariable(Base):
+class DBVariable(Base, DBCacheDatesMixin):
     __tablename__ = 'variable'
 
     id = Column(Integer, primary_key=True)
@@ -504,9 +530,28 @@ def init():
 init()
 
 
+
 #----------------------------------------------------------------------------
 # cache functions
 #----------------------------------------------------------------------------
+
+
+def cache_all(source_url):
+    """
+    Cache all available data for a source
+    """
+    source = pyhis.Source(source_url)
+
+    for site in source.sites.values():
+        # this could be improved by not having to create the
+        # dataframe object
+        try:
+            df = site.dataframe
+        except:
+            warnings.warn("There was a problem getting values for "
+                          "%s, skipping..." % (site))
+
+
 def get_sites_for_source(source):
     """
     return a dict of pyhis.Site objects for a given source.  The
@@ -521,9 +566,12 @@ def get_sites_for_source(source):
         for site in site_list.values():
             # since the sites don't exist in the db yet, just
             # instantiating them via the CacheSite constructor will
-            # save them to the db and (update them in the in-memory
-            # cache)
-            CacheSite(site)
+            # queue them to be saved to the db and (update them in the
+            # in-memory cache)
+            CacheSite(site, auto_commit=False)
+
+        # commit queued sites to cache
+        db_session.commit()
 
     return dict([(cached_site.code,
                   cached_site.to_pyhis(source))

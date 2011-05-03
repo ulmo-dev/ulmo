@@ -5,27 +5,62 @@
     Extract data from waterml
 """
 from datetime import datetime
+import logging
 import warnings
 
 import numpy as np
 import pandas
-from shapely.geometry import Point, Polygon
 
 import pyhis
+
+LOG_FORMAT = '%(message)s'
+logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
+log = logging.getLogger(__name__)
+
+
 
 
 #------------------------------------------------------------------------------
 # waterml functions
 #------------------------------------------------------------------------------
+
 def get_sites_for_source(source):
     """
-    return a sites dict for for a given source.  The source can be
+    return a sites dict for for a given source. The source can be
     either a string representing the url or a pyhis.Source object
     """
-    get_all_sites_query = source.suds_client.service.GetSites('')
+
+    log.info('making GetSites query...')
+    get_sites_response = source.suds_client.service.GetSites('')
+
+    log.info('processing %s sites...' % len(get_sites_response.site))
     site_list = [_site_from_wml_siteInfo(site, source)
-                 for site in get_all_sites_query.site]
+                 for site in get_sites_response.site]
+
+
     return dict([(site.code, site) for site in site_list])
+
+
+def get_description_for_source(source):
+    """
+    return string containg the source description for a given source.
+    The source can be either a string representing the url or a
+    pyhis.Source object
+    """
+    # Note: A source description isn't returned with the GetSites
+    # response but rather is attached only to siteInfo responses and
+    # timeseries responses...
+
+    source_description = None
+
+    log.info('looking up source description...')
+    try:
+        site_info = source.sites.values()[0]
+        source_description = site_info.site[0].seriesCatalog[0].series[0].Source.SourceDescription
+    except KeyError:
+        warnings.warn('unable to determine source description')
+
+    return source_description
 
 
 def get_timeseries_list_for_site(site):
@@ -46,11 +81,18 @@ def get_series_and_quantity_for_timeseries(timeseries):
     variable. Takes a suds WaterML TimeSeriesResponseType object.
     """
     suds_client = timeseries.site.source.suds_client
+    log.info('making timeseries request for "%s:%s:%s"...' %
+                (timeseries.site.network, timeseries.site.code,
+                 timeseries.variable.code))
     timeseries_response = suds_client.service.GetValuesObject(
         '%s:%s' % (timeseries.site.network, timeseries.site.code),
         '%s:%s' % (timeseries.variable.vocabulary, timeseries.variable.code),
         timeseries.begin_datetime.strftime('%Y-%m-%d'),
         timeseries.end_datetime.strftime('%Y-%m-%d'))
+
+    log.info('processing timeseries request for "%s:%s:%s"...' %
+                (timeseries.site.network, timeseries.site.code,
+                 timeseries.variable.code))
 
     try:
         unit_code = timeseries_response.timeSeries.variable.units._unitsCode
@@ -92,9 +134,28 @@ def get_series_and_quantity_for_timeseries(timeseries):
 
 
 
+
+#------------------------------------------------------------------------------
+# progress bar decorator
+#------------------------------------------------------------------------------
+
+
+def update_progress_bar(func):
+
+    def wrapper(*args, **kwargs):
+        if current_progress_bar and not current_progress_bar.finished:
+            current_progress_bar.update(current_progress_bar.currval + 1)
+        return func(*args, **kwargs)
+    return wrapper
+
+
+
+
 #------------------------------------------------------------------------------
 # helper functions for parsing waterml responses into pyhis objects
 #------------------------------------------------------------------------------
+
+
 def _lat_long_from_geolocation(geolocation):
     """returns a tuple (lat, long) given a suds WaterML geolocation element"""
     if geolocation.geogLocation.__class__.__name__ == 'LatLonPointType':
@@ -139,12 +200,12 @@ def _variable_from_wml_variableInfo(variable_info):
         id = variable_info.variableCode[0]._variableID
     except:
         id = None
-        
+
     try:
         no_data_value = variable_info.NoDataValue
     except:
         no_data_value = None
-        
+
     return pyhis.Variable(
         name=variable_info.variableName,
         code=variable_info.variableCode[0].value,
@@ -166,7 +227,7 @@ def _timeseries_from_wml_series(series, site):
         quality_control_level = series.QualityControlLevel._QualityControlLevelID
     except:
         quality_control_level = None
-        
+
     return pyhis.TimeSeries(
         variable=_variable_from_wml_variableInfo(series.variable),
         count=series.valueCount,

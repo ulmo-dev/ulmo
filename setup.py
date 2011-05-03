@@ -30,7 +30,6 @@ setup(
         'pandas>=0.3.0',
         'quantities',
         'suds>=0.4',
-        'shapely>=1.2',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
