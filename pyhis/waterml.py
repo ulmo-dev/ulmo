@@ -30,14 +30,12 @@ def get_sites_for_source(source):
     return a sites dict for for a given source. The source can be
     either a string representing the url or a pyhis.Source object
     """
-
     log.info('making GetSites query...')
     get_sites_response = source.suds_client.service.GetSites('')
 
     log.info('processing %s sites...' % len(get_sites_response.site))
-    site_list = [_site_from_wml_siteInfo(site, source)
+    site_list = [_site_from_wml_siteInfo(site.siteInfo, source)
                  for site in get_sites_response.site]
-
 
     return dict([(site.code, site) for site in site_list])
 
@@ -69,7 +67,7 @@ def get_timeseries_list_for_site(site):
     returns a list of pyhis.TimeSeries objects for a given site and
     variable_code
     """
-    series_response_list = site.site_info.site[0].seriesCatalog[0].series
+    series_response_list = site.site_info_response.site[0].seriesCatalog[0].series
     timeseries_list = [_timeseries_from_wml_series(series, site)
                        for series in series_response_list]
     return timeseries_list
@@ -176,19 +174,23 @@ def _lat_long_from_geolocation(geolocation):
             geolocation.geogLocation.__class__.__name__)
 
 
-def _site_from_wml_siteInfo(site, source):
+def _site_from_wml_siteInfo(siteInfo, source):
     """returns a PyHIS Site instance from a suds WaterML siteInfo element"""
-    if len(site.siteInfo.siteCode) > 1:
+    if not getattr(siteInfo, 'siteCode', None):
+        # if siteInfo doesn't have a siteCode something is horribly wrong...
+        import pdb; pdb.set_trace()
+
+    if len(siteInfo.siteCode) > 1:
         raise NotImplementedError(
             "Multiple site codes not currently supported")
 
-    site_code = site.siteInfo.siteCode[0]
-    geolocation = getattr(site.siteInfo, 'geoLocation', None)
+    site_code = siteInfo.siteCode[0]
+    geolocation = getattr(siteInfo, 'geoLocation', None)
     if geolocation:
         latitude, longitude = _lat_long_from_geolocation(geolocation)
 
     return pyhis.Site(
-        name=site.siteInfo.siteName,
+        name=siteInfo.siteName,
         code=site_code.value,
         id=getattr(site_code, '_siteID', None),
         network=site_code._network,

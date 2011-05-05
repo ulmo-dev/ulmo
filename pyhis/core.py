@@ -37,7 +37,7 @@ class Site(object):
     """
     _timeseries_list = ()
     _dataframe = None
-    _site_info = None
+    _site_info_response = None
     _use_cache = None
     source = None
     name = None
@@ -58,19 +58,37 @@ class Site(object):
         self.source = source
         self._use_cache = use_cache
 
+        if not name or not id or not latitude or not longitude:
+            self._update_site_info_response()
+
+            site_info = self._site_info_response.site[0].siteInfo
+
+            if not self.name:
+                self.name = site_info.siteName
+            if not self.id:
+                try:
+                    self.id = site_info.siteName.siteCode[0]._siteID
+                except AttributeError, KeyError:
+                    # siteID is optional
+                    pass
+            if not self.latitude:
+                self.latitude = site_info.geolocation.geogLocation.latitude
+            if not self.longitude:
+                self.longitude = site_info.geolocation.geogLocation.longitude
+
     @property
     def dataframe(self):
         if not self._timeseries_list:
-            self._update_site_info()
+            self._update_site_info_response()
         if not self._dataframe:
             self._update_dataframe()
         return self._dataframe
 
     @property
-    def site_info(self):
-        if not self._site_info:
-            self._update_site_info()
-        return self._site_info
+    def site_info_response(self):
+        if not self._site_info_response:
+            self._update_site_info_response()
+        return self._site_info_response
 
     @property
     def timeseries_list(self):
@@ -87,16 +105,17 @@ class Site(object):
                        for ts in self.timeseries_list)
         self._dataframe = pandas.DataFrame(ts_dict)
 
-    def _update_site_info(self):
+    def _update_site_info_response(self):
         """makes a GetSiteInfo updates site info and series information"""
-        self._site_info = self.source.suds_client.service.GetSiteInfoObject(
+        self._site_info_response = self.source.suds_client.service.GetSiteInfoObject(
             '%s:%s' % (self.network, self.code))
 
-        if len(self._site_info.site) > 1 or \
-               len(self._site_info.site[0].seriesCatalog) > 1:
+        if len(self._site_info_response.site) > 1 or \
+               len(self._site_info_response.site[0].seriesCatalog) > 1:
             raise NotImplementedError(
                 "Multiple site instances or multiple seriesCatalogs not "
                 "currently supported")
+
 
     def _update_timeseries_list(self):
         """updates the time series list"""
