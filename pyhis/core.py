@@ -14,6 +14,7 @@ import suds
 
 import pyhis
 from . import waterml
+from . import shapefile
 
 try:
     from . import cache
@@ -191,6 +192,12 @@ class Source(object):
 
     def __len__(self):
         len(self._sites)
+
+    def within_shapefile(self, file_name, ):
+        pass
+
+    def within_polygon(self):
+        pass
 
     def __repr__(self):
         return "<Source: %s>" % (self.url)
