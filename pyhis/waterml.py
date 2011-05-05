@@ -93,11 +93,8 @@ def get_series_and_quantity_for_timeseries(timeseries):
                 (timeseries.site.network, timeseries.site.code,
                  timeseries.variable.code))
 
-    try:
-        unit_code = timeseries_response.timeSeries.variable.units._unitsCode
-    except:
-        unit_code = None
-
+    unit_code = getattr(timeseries_response.timeSeries.variable.units,
+                        '_unitsCode', None)
     variable_code = timeseries_response.timeSeries.variable.variableCode[0].value
 
     # if unit code not in unit_quantities dict, then just use the value string
@@ -206,15 +203,9 @@ def _variable_from_wml_variableInfo(variable_info):
     if len(variable_info.variableCode) > 1:
         raise NotImplementedError(
             "Multiple variable codes not currently supported")
-    try:
-        id = variable_info.variableCode[0]._variableID
-    except:
-        id = None
 
-    try:
-        no_data_value = variable_info.NoDataValue
-    except:
-        no_data_value = None
+    id = getattr(variable_info.variableCode[0], '_variableID', None)
+    no_data_value = getattr(variable_info, 'NoDataValue', None)
 
     return pyhis.Variable(
         name=variable_info.variableName,
@@ -228,15 +219,10 @@ def _variable_from_wml_variableInfo(variable_info):
 def _timeseries_from_wml_series(series, site):
     """returns a PyHIS series instance from a suds WaterML series element"""
     datetime_fmt = "%Y-%d-%m %H:%M:%S"
-    try:
-        method = series.Method.MethodDescription
-    except:
-        method = None
 
-    try:
-        quality_control_level = series.QualityControlLevel._QualityControlLevelID
-    except:
-        quality_control_level = None
+    method = getattr(series.Method, 'MethodDescription', None)
+    quality_control_level = getattr(series.QualityControlLevel,
+                                    '_QualityControlLevelID', None)
 
     return pyhis.TimeSeries(
         variable=_variable_from_wml_variableInfo(series.variable),
