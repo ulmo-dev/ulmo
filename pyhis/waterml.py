@@ -24,6 +24,7 @@ log = logging.getLogger(__name__)
 # waterml functions
 #------------------------------------------------------------------------------
 
+
 def get_sites_for_source(source):
     """
     return a sites dict for for a given source. The source can be
@@ -109,9 +110,16 @@ def get_series_and_quantity_for_timeseries(timeseries):
         warnings.warn("Unit conversion not available for %s: %s [%s]" %
                       (variable_code, quantity, unit_code))
 
-    values = timeseries_response.timeSeries.values.value
-    dates = np.array([value._dateTime for value in values])
-    data = np.array([float(value.value) for value in values])
+    try:
+        values = timeseries_response.timeSeries.values.value
+        dates = np.array([value._dateTime for value in values])
+        data = np.array([float(value.value) for value in values])
+    except AttributeError:
+        warnings.warn('No data values returned by service for "%s:%s:%s". This'
+                      'is not valid in waterml, so the service is probably '
+                      'misconfigured or broken.' %
+                      (timeseries.site.network, timeseries.site.code,
+                       timeseries.variable.code))
 
     if len(dates) != len(data):
         raise ValueError("Number of dates does not match number of "

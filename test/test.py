@@ -5,10 +5,12 @@ from attest import Assert, Tests, TestBase, test
 import pyhis
 
 
-#TWDB_WSDL_URL = 'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL'
+TWDB_WSDL_URL = 'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL'
 
-TWDB_WSDL_URL = 'file://' + os.path.abspath('./twdb_wsdl.xml')
+#TWDB_WSDL_URL = 'file://' + os.path.abspath('./twdb_wsdl.xml')
 USGS_WSDL_URL = 'file://' + os.path.abspath('./usgs_wsdl.xml')
+
+TEST_CACHE_DATABASE_PATH = '/tmp/pyhis_test_cache.db'
 
 
 class TWDBTestBase(TestBase):
@@ -37,9 +39,10 @@ class TWDBFreshCacheTests(TWDBTestBase):
     """
 
     def __context__(self):
-        if os.path.exists(pyhis.cache.CACHE_DATABASE_FILE):
-            os.remove(pyhis.cache.CACHE_DATABASE_FILE)
-        pyhis.cache.init()
+        if os.path.exists(TEST_CACHE_DATABASE_PATH):
+            os.remove(TEST_CACHE_DATABASE_PATH)
+        pyhis.cache.init_cache(TEST_CACHE_DATABASE_PATH)
+
         self.source = pyhis.Source(
             TWDB_WSDL_URL,
             use_cache=True)
@@ -53,6 +56,7 @@ class TWDBCacheTests(TWDBTestBase):
     """
 
     def __context__(self):
+        pyhis.cache.init_cache(TEST_CACHE_DATABASE_PATH)
         self.source = pyhis.Source(
             TWDB_WSDL_URL,
             use_cache=True)

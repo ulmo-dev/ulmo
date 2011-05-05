@@ -28,13 +28,18 @@ import pyhis
 from pyhis import waterml
 
 CACHE_DATABASE_FILE = "/tmp/pyhis_cache.db"
-CACHE_DATABASE_URI = 'sqlite:///' + CACHE_DATABASE_FILE
 ECHO_SQLALCHEMY = False
 
 #XXX: this should be programmatically generated in some clever way
 #     (e.g. based on some config)
 USE_CACHE = True
 USE_SPATIAL = False
+
+# configure logging
+LOG_FORMAT = '%(message)s'
+logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
+log = logging.getLogger(__name__)
+
 
 try:
     from geoalchemy import (GeometryColumn, GeometryDDL, Point,
@@ -44,47 +49,59 @@ except ImportError:
     from sqlite3 import dbapi2 as sqlite
     USE_SPATIAL = False
 
-
-# to use geoalchemy with spatialite, the libspatialite library has to
-# be loaded as an extension
-engine = create_engine(CACHE_DATABASE_URI, convert_unicode=True,
-                       module=sqlite, echo=ECHO_SQLALCHEMY)
-
-if USE_SPATIAL:
-    if "ARCH" in platform.uname()[2]:
-        LIBSPATIALITE_LOCATION="select load_extension('/usr/lib/libspatialite.so.1')"
-    else:
-        LIBSPATIALITE_LOCATION="select load_extension('/usr/lib/libspatialite.so.2')"
-
-    if 'sqlite' in CACHE_DATABASE_URI:
-        connection = engine.raw_connection().connection
-        connection.enable_load_extension(True)
-        engine.execute(LIBSPATIALITE_LOCATION)
+Session = sessionmaker(autocommit=False, autoflush=False)
+Base = declarative_base()
 
 
-Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-db_session = Session()
+def init_cache(cache_database_file=CACHE_DATABASE_FILE):
+    global engine
+    global db_session
+    global _cache
 
-Base = declarative_base(bind=engine)
+    cache_database_uri = 'sqlite:///' + cache_database_file
+
+    # to use geoalchemy with spatialite, the libspatialite library has to
+    # be loaded as an extension
+    engine = create_engine(cache_database_uri, convert_unicode=True,
+                           module=sqlite, echo=ECHO_SQLALCHEMY)
+
+    if USE_SPATIAL:
+        if "ARCH" in platform.uname()[2]:
+            LIBSPATIALITE_LOCATION="select load_extension('/usr/lib/libspatialite.so.1')"
+        else:
+            LIBSPATIALITE_LOCATION="select load_extension('/usr/lib/libspatialite.so.2')"
+
+        if 'sqlite' in cache_database_uri:
+            connection = engine.raw_connection().connection
+            connection.enable_load_extension(True)
+            engine.execute(LIBSPATIALITE_LOCATION)
+
+    # bind new engine to the db_session and Base metadata objects
+    db_session = Session(bind=engine)
+    Base.metadata.bind = engine
+
+    # in-memory cache dict that will keep us from creating multiple cache
+    # objects that represent the same DB objects
+    _cache = {
+        'source': {},       # key: url
+        'site': {},         # key: (source_url, network, site_code)
+        'timeseries': {},   # key: (source_url, network, site_code, variable_code)
+        'variable': {},     # key: (vocabulary, variable_code)
+        'units': {},        # key: (name, code)
+        }
 
 
-# in-memory cache dict that will keep us from creating multiple cache
-# objects that represent the same DB objects
-_cache = {
-    'source': {},       # key: url
-    'site': {},         # key: (source_url, network, site_code)
-    'timeseries': {},   # key: (source_url, network, site_code, variable_code)
-    'variable': {},     # key: (vocabulary, variable_code)
-    'units': {},        # key: (name, code)
-    }
+    # there is probably a cleaner way to do this, but the idea is to
+    # try to run create_all_tables; this won't work if the DB objects
+    # haven't been initialized (i.e. on import), but if init_cache is
+    # called post-import (meaning the database file is changed), then
+    # the tables need to be created
+    try:
+        create_all_tables()
+    except NameError:
+        pass
 
-
-# configure logging
-LOG_FORMAT = '%(message)s'
-logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
-log = logging.getLogger(__name__)
-
-
+init_cache()
 
 
 #----------------------------------------------------------------------------
@@ -524,10 +541,10 @@ CacheVariable = create_cache_obj(DBVariable, 'variable',
 
 
 # run create_all to make sure the database tables are all there
-def init():
+def create_all_tables():
     Base.metadata.create_all()
 
-init()
+create_all_tables()
 
 
 
