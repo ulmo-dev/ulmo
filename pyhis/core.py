@@ -135,6 +135,7 @@ class Source(object):
     suds_client = None
     url = None
     _description = None
+    _all_sites = False
     _sites = {}
     _use_cache = None
 
@@ -145,15 +146,30 @@ class Source(object):
 
     @property
     def sites(self):
-        if not self._sites:
-            self._update_sites()
-        return self._sites
+        return self.get_all_sites()
 
     @property
     def description(self):
         if not self._description:
             self._update_description()
         return self._description
+
+    def get_all_sites(self):
+        """returns all the sites available for a given source"""
+        if not self._all_sites:
+            self._update_all_sites()
+        return self._sites
+
+    def get_site(self, network, site_code):
+        """returns a single site"""
+        if (network, site_code) in _sites:
+            return _sites[(network, site_code)]
+
+        cache_enabled = self._use_cache and cache
+        if cache_enabled:
+            return cache.get_site(self, network, site_code)
+        else:
+            return Site(self, network=network, site_code=site_code)
 
     def _update_description(self):
         """update self._description"""
@@ -164,14 +180,14 @@ class Source(object):
         else:
             self._description = waterml.get_description_for_source(self)
 
-    def _update_sites(self):
+    def _update_all_sites(self):
         """update the self._sites dict"""
         cache_enabled = self._use_cache and cache
-
         if cache_enabled:
             self._sites = cache.get_sites_for_source(self)
         else:
             self._sites = waterml.get_sites_for_source(self)
+        self._all_sites = True
 
     def __len__(self):
         len(self._sites)
