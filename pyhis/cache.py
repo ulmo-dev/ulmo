@@ -398,6 +398,7 @@ def _timeseries_db_lookup_func(timeseries=None, network=None, site_code=None,
         network = timeseries.site.network
         site_code = timeseries.site.code
         variable = db_session.query(DBVariable).filter_by(
+            vocabulary=timeseries.variable.vocabulary,
             code=timeseries.variable.code).one()
 
     if network and site_code and variable:
