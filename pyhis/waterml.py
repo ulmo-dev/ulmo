@@ -115,7 +115,7 @@ def get_series_and_quantity_for_timeseries(timeseries):
         values = timeseries_response.timeSeries.values.value
         dates = np.array([value._dateTime for value in values])
         data = np.array([float(value.value) for value in values])
-    except AttributeError, KeyError:
+    except AttributeError:
         warnings.warn('No data values returned by service for "%s:%s:%s". This'
                       'is not valid in waterml, so the service is probably '
                       'misconfigured or broken.' %
