@@ -14,7 +14,7 @@ import suds
 
 import pyhis
 from . import waterml
-from . import shapefile
+#from . import shapefile
 
 try:
     from . import cache
