@@ -62,7 +62,7 @@ def get_description_for_source(source):
     return source_description
 
 
-def get_timeseries_list_for_site(site):
+def get_timeseries_dict_for_site(site):
     """
     returns a list of pyhis.TimeSeries objects for a given site and
     variable_code
@@ -70,7 +70,8 @@ def get_timeseries_list_for_site(site):
     series_response_list = site.site_info_response.site[0].seriesCatalog[0].series
     timeseries_list = [_timeseries_from_wml_series(series, site)
                        for series in series_response_list]
-    return timeseries_list
+    return dict([(timeseries.variable.code, timeseries)
+                 for timeseries in timeseries_list])
 
 
 def get_series_and_quantity_for_timeseries(timeseries):

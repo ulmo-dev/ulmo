@@ -36,7 +36,7 @@ class Site(object):
     """
     Contains information about a site
     """
-    _timeseries_list = ()
+    _timeseries_dict = {}
     _dataframe = None
     _site_info_response = None
     _use_cache = None
@@ -79,7 +79,7 @@ class Site(object):
 
     @property
     def dataframe(self):
-        if not self._timeseries_list:
+        if not self._timeseries_dict:
             self._update_site_info_response()
         if not self._dataframe:
             self._update_dataframe()
@@ -92,19 +92,15 @@ class Site(object):
         return self._site_info_response
 
     @property
-    def timeseries_list(self):
-        if not len(self._timeseries_list):
-            self._update_timeseries_list()
-        return self._timeseries_list
-
-    @property
-    def variables(self):
-        return [series.variable for series in self.timeseries_list]
+    def timeseries(self):
+        if not len(self._timeseries_dict):
+            self._update_timeseries_dict()
+        return self._timeseries_dict
 
     def _update_dataframe(self):
-        ts_dict = dict((ts.variable.code, ts.series)
-                       for ts in self.timeseries_list)
-        self._dataframe = pandas.DataFrame(ts_dict)
+        series_dict = dict((ts.variable.code, ts.series)
+                       for ts in self.timeseries.values())
+        self._dataframe = pandas.DataFrame(series_dict)
 
     def _update_site_info_response(self):
         """makes a GetSiteInfo updates site info and series information"""
@@ -117,15 +113,14 @@ class Site(object):
                 "Multiple site instances or multiple seriesCatalogs not "
                 "currently supported")
 
-
-    def _update_timeseries_list(self):
-        """updates the time series list"""
+    def _update_timeseries_dict(self):
+        """updates the time series dict"""
         cache_enabled = self._use_cache and cache
 
         if cache_enabled:
-            self._timeseries_list = cache.get_timeseries_list_for_site(self)
+            self._timeseries_dict = cache.get_timeseries_dict_for_site(self)
         else:
-            self._timeseries_list = waterml.get_timeseries_list_for_site(self)
+            self._timeseries_dict = waterml.get_timeseries_dict_for_site(self)
 
     def __repr__(self):
         return "<Site: %s [%s]>" % (self.name, self.code)

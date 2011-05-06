@@ -595,41 +595,46 @@ def get_sites_for_source(source):
                  for cached_site in cached_source.sites])
 
 
-def get_site(source, network, site_code):
+def get_site(source, network, code):
     """
     return a pyhis.Site for a given source, network and site_code. The
     source can be either a string representing the url or a
     pyhis.Source object
     """
-    cache_source = CacheSource(source)
+    cached_source = CacheSource(source)
 
-    cache_site = CacheSite(network=network, code=code)
-    return cache_site.to_pyhis()
+    try:
+        db_session.query(DBSite).filter_by(source=cached_source,
+                                           network=network, code=code).one()
+    except NoResultFound:
+        pass
+    cached_site = CacheSite(network=network, code=code)
+    return cached_site.to_pyhis()
 
 
-def get_timeseries_list_for_site(site):
+def get_timeseries_dict_for_site(site):
     """
-    returns a list of pyhis.TimeSeries objects for a given site and
-    variable_code
+    returns a dict of pyhis.TimeSeries objects with the variable code
+    as keys for a given site and variable_code
     """
     cached_site = CacheSite(site)
 
     if len(cached_site.timeseries_list) == 0:
-        timeseries_list = waterml.\
-                          get_timeseries_list_for_site(cached_site.to_pyhis())
-
-        for timeseries in timeseries_list:
+        timeseries_dict = waterml.\
+                          get_timeseries_dict_for_site(cached_site.to_pyhis())
+        for timeseries in timeseries_dict.values():
             # since the timeseries don't exist in the db yet, just
             # instantiating them via the CacheSite constructor will
             # save them to the db and (update them in the in-memory
             # cache)
             CacheTimeSeries(timeseries)
-
-        return timeseries_list
+        return timeseries_dict
 
     # else:
-    return [cached_timeseries.to_pyhis()
-            for cached_timeseries in cached_site.timeseries_list]
+    timeseries_list = [cached_timeseries.to_pyhis()
+                       for cached_timeseries in cached_site.timeseries_list]
+    return dict([(timeseries.variable.code, timeseries)
+                 for timeseries in timeseries_list])
 
 
 def get_series_and_quantity_for_timeseries(timeseries):
