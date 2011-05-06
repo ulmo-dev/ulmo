@@ -90,6 +90,7 @@ def init_cache(cache_database_file=CACHE_DATABASE_FILE):
         'units': {},        # key: (name, code)
         }
 
+    log.info('cache initialized with database: %s' % cache_database_uri)
 
     # there is probably a cleaner way to do this, but the idea is to
     # try to run create_all_tables; this won't work if the DB objects

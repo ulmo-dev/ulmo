@@ -16,20 +16,22 @@ import pyhis
 from . import waterml
 #from . import shapefile
 
-try:
-    from . import cache
-    if not cache.USE_CACHE:
-        cache = None
-except ImportError:
-    cache = None
-
-__all__ = ['Site', 'Source', 'TimeSeries', 'Variable', 'Units']
-
 
 # fancy this up a bit sometime
 LOG_FORMAT = '%(message)s'
 logging.basicConfig(format=LOG_FORMAT)
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
+
+try:
+    from . import cache
+    if not cache.USE_CACHE:
+        log.info('cache has been disabled, so it will not be available')
+        cache = None
+except ImportError as error:
+    log.info('cache not available due to import error:\n%s' % error)
+    cache = None
+
+__all__ = ['Site', 'Source', 'TimeSeries', 'Variable', 'Units']
 
 
 class Site(object):
