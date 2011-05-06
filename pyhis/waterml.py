@@ -67,7 +67,13 @@ def get_timeseries_dict_for_site(site):
     returns a list of pyhis.TimeSeries objects for a given site and
     variable_code
     """
-    series_response_list = site.site_info_response.site[0].seriesCatalog[0].series
+    try:
+        series_response_list = site.site_info_response.site[0].seriesCatalog[0].series
+    except AttributeError:
+        #XXX: if seriesCatalog doesn't have any series... is this a
+        #     bug?
+        return {}
+
     timeseries_list = [_timeseries_from_wml_series(series, site)
                        for series in series_response_list]
     return dict([(timeseries.variable.code, timeseries)
