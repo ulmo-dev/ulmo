@@ -4,7 +4,7 @@
 
     Extract data from waterml
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 import warnings
 
