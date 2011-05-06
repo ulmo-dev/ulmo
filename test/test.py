@@ -17,20 +17,29 @@ class TWDBTestBase(TestBase):
     """Base class for using TWDB dataset as a source"""
 
     @test
+    def get_site(self):
+        site = self.source.get_site('TWDBSondes', 'Aransas95_D1')
+        assert Assert(site.latitude) == 28.06666667
+        assert Assert(site.longitude) == -97.20333333
+        assert Assert(site.description) == 'Upper Copano Bay'
+        assert Assert(site.source.url) == TWDB_WSDL_URL
+
+    @test
     def check_sites(self):
+        assert Assert(len(self.source.get_all_sites())) == 74
         assert Assert(len(self.source.sites)) == 74
 
     @test
     def check_variables(self):
-        assert Assert(len(self.source.sites['Aransas95_D1'].variables)) == 5
-        assert Assert(len(self.source.sites['ULM95_3C'].variables)) == 5
+        assert Assert(len(self.source.sites['Aransas95_D1'].timeseries)) == 5
+        assert Assert(len(self.source.sites['ULM95_3C'].timeseries)) == 5
 
     @test
     def check_dataframe(self):
         df = self.source.sites['Aransas95_D1'].dataframe
-        assert Assert(len(df['SAL001'])) == 706
+        assert Assert(len(df['SAL001'])) == 725
         df2 = self.source.sites['ULM95_3C'].dataframe
-        assert Assert(len(df['SAL001'])) == 706
+        assert Assert(len(df['SAL001'])) == 725
 
 
 class TWDBFreshCacheTests(TWDBTestBase):
