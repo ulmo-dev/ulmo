@@ -181,7 +181,8 @@ def _site_from_wml_siteInfo(siteInfo, source):
     """returns a PyHIS Site instance from a suds WaterML siteInfo element"""
     if not getattr(siteInfo, 'siteCode', None):
         # if siteInfo doesn't have a siteCode something is horribly wrong...
-        import pdb; pdb.set_trace()
+        raise ('siteInfo response does not contain a siteCode')
+
 
     if len(siteInfo.siteCode) > 1:
         raise NotImplementedError(
