@@ -305,8 +305,7 @@ else:
 def _site_lookup_key_func(site=None, network=None, code=None):
     if site:
         return (site.network, site.code)
-
-    if name and network:
+    if network and code:
         return (network, code)
 
 
