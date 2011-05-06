@@ -48,21 +48,21 @@ class Site(object):
     latitude = None
     longitude = None
 
-    def __init__(self, code=None, name=None, id=None, network=None,
+    def __init__(self, network=None, code=None, name=None, id=None,
                  latitude=None, longitude=None, source=None, use_cache=True):
+        self.network = network
         self.code = code
         self.name = name
         self.id = id
-        self.network = network
         self.latitude = latitude
         self.longitude = longitude
         self.source = source
         self._use_cache = use_cache
 
+        # if we don't have all the info, make a GetSiteInfo request
+        # and update site attributes with that information
         if not name or not id or not latitude or not longitude:
-            self._update_site_info_response()
-
-            site_info = self._site_info_response.site[0].siteInfo
+            site_info = self.site_info_response.site[0].siteInfo
 
             if not self.name:
                 self.name = site_info.siteName
