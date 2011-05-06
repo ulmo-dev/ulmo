@@ -84,11 +84,16 @@ def get_series_and_quantity_for_timeseries(timeseries):
     log.info('making timeseries request for "%s:%s:%s"...' %
                 (timeseries.site.network, timeseries.site.code,
                  timeseries.variable.code))
+
+    begin_date_str = timeseries.begin_datetime.strftime('%Y-%m-%d')
+    end_date_str = (timeseries.end_datetime + timedelta(days=1))\
+                   .strftime('%Y-%m-%d')
+
     timeseries_response = suds_client.service.GetValuesObject(
         '%s:%s' % (timeseries.site.network, timeseries.site.code),
         '%s:%s' % (timeseries.variable.vocabulary, timeseries.variable.code),
-        timeseries.begin_datetime.strftime('%Y-%m-%d'),
-        timeseries.end_datetime.strftime('%Y-%m-%d'))
+        begin_date_str,
+        end_date_str)
 
     log.info('processing timeseries request for "%s:%s:%s"...' %
                 (timeseries.site.network, timeseries.site.code,
