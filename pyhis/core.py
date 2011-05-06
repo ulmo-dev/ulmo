@@ -158,14 +158,14 @@ class Source(object):
 
     def get_site(self, network, site_code):
         """returns a single site"""
-        if (network, site_code) in _sites:
+        if (network, site_code) in self._sites:
             return _sites[(network, site_code)]
 
         cache_enabled = self._use_cache and cache
         if cache_enabled:
             return cache.get_site(self, network, site_code)
         else:
-            return Site(self, network=network, site_code=site_code)
+            return Site(self, network=network, code=site_code)
 
     def _update_description(self):
         """update self._description"""
