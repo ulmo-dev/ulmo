@@ -364,7 +364,7 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
     def to_pyhis(self, site=None, variable=None):
         # as with DBSite.to_pyhis()...
         # because every timeseries needs a reference to a site and a
-        # varaible, these objects *should* be passed to this method to
+        # variable, these objects *should* be passed to this method to
         # avoid extra objects being created. Some proxy voodoo could
         # that could go on here to prevent this. For now, assume that
         # if we didn't get a reference to an existing object, then
