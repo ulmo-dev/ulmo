@@ -211,7 +211,7 @@ class DBSiteMixin(object):
 
     @declared_attr
     def timeseries_list(cls):
-        return relationship('DBTimeSeries', backref='site')
+        return relationship('DBTimeSeries', backref='site', lazy='subquery')
 
     # populated by backref:
     #   source = DBSource
@@ -331,10 +331,11 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
     method = Column(String)
     quality_control_level = Column(String)
     site_id = Column(Integer, ForeignKey('site.id'), nullable=False)
-    variable_id = Column(Integer, ForeignKey('variable.id'))
+    variable_id = Column(Integer, ForeignKey('variable.id'), nullable=False)
 
-    variable = relationship('DBVariable')
-    values = relationship('DBValue', order_by="DBValue.timestamp")
+    variable = relationship('DBVariable', lazy='subquery')
+    values = relationship('DBValue', order_by="DBValue.timestamp",
+                          lazy='subquery')
 
     # populated by backref:
     #   site = DBSite
@@ -363,7 +364,7 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
     def to_pyhis(self, site=None, variable=None):
         # as with DBSite.to_pyhis()...
         # because every timeseries needs a reference to a site and a
-        # varaible, these objects *should* be passed to this method to
+        # variable, these objects *should* be passed to this method to
         # avoid extra objects being created. Some proxy voodoo could
         # that could go on here to prevent this. For now, assume that
         # if we didn't get a reference to an existing object, then
@@ -470,7 +471,7 @@ class DBValue(Base, DBCacheDatesMixin):
     timestamp = Column(DateTime)
     timeseries_id = Column(Integer, ForeignKey('timeseries.id'),
                            nullable=False)
-    timeseries = relationship('DBTimeSeries')
+    timeseries = relationship('DBTimeSeries', lazy='subquery')
 
     def __init__(self, value=None, timestamp=None, timeseries=None):
         self.value = value
@@ -489,7 +490,7 @@ class DBVariable(Base, DBCacheDatesMixin):
     no_data_value = Column(String)
     units_id = Column(Integer, ForeignKey('units.id'), nullable=False)
 
-    units = relationship('DBUnits')
+    units = relationship('DBUnits', lazy='subquery')
 
     def __init__(self, variable=None, name=None, code=None, variable_id=None,
                  vocabulary=None, no_data_value=None, site_id=None,
@@ -623,16 +624,20 @@ def get_timeseries_dict_for_site(site):
     if len(cached_site.timeseries_list) == 0:
         timeseries_dict = waterml.\
                           get_timeseries_dict_for_site(cached_site.to_pyhis())
-        for timeseries in timeseries_dict.values():
-            # since the timeseries don't exist in the db yet, just
-            # instantiating them via the CacheSite constructor will
-            # save them to the db and (update them in the in-memory
-            # cache)
-            CacheTimeSeries(timeseries)
+        # Since the timeseries don't exist in the db yet, just
+        # instantiating them via the CacheSite constructor will save
+        # them to the db and (update them in the in-memory
+        # cache). This can be expensive if there are a lot of
+        # timeseries objects, so we defer commits until they have all
+        # been instantiated and can be commited at once.
+        timeseries_list = [CacheTimeSeries(timeseries, auto_commit=False)
+                           for timeseries in timeseries_dict.values()]
+        db_session.commit()
+
         return timeseries_dict
 
     # else:
-    timeseries_list = [cached_timeseries.to_pyhis()
+    timeseries_list = [cached_timeseries.to_pyhis(site=site)
                        for cached_timeseries in cached_site.timeseries_list]
     return dict([(timeseries.variable.code, timeseries)
                  for timeseries in timeseries_list])
