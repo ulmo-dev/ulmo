@@ -578,8 +578,9 @@ def cache_all(source_url):
         try:
             df = site.dataframe
 
-            # delete dataframe object and site timeseries dict objects
-            # to free up some memory
+            # delete dataframe object and site timeseries dict
+            # (TimeSeries objects each have a series object) to free
+            # up some memory
             del df
             del site._dataframe
             del site._timeseries_dict
