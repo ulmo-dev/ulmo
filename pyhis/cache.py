@@ -395,13 +395,13 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
             value_count=self.value_count)
 
 
-def _timeseries_lookup_key_func(timeseries=None, network=None, site_code=None,
-                                variable=None):
+def _timeseries_lookup_key_func(timeseries=None, url=None, network=None,
+                                site_code=None, variable=None):
     if timeseries:
-        return (timeseries.site.network, timeseries.site.code,
-                timeseries.variable.code)
-    if network and site_code and variable:
-        return (network, site_code, variable)
+        return (timeseries.site.source.url, timeseries.site.network,
+                timeseries.site.code, timeseries.variable.code)
+    if url and network and site_code and variable:
+        return (url, network, site_code, variable)
 
 
 def _timeseries_db_lookup_func(timeseries=None, network=None, site_code=None,
