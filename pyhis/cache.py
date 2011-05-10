@@ -387,7 +387,6 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
 
         return pyhis.TimeSeries(
             variable=variable,
-            count=len(self.values),
             method=self.method,
             quality_control_level=self.quality_control_level,
             begin_datetime=self.begin_datetime,
