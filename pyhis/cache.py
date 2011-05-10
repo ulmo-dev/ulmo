@@ -697,7 +697,6 @@ def get_series_and_quantity_for_timeseries(timeseries,
 
         if not defer_commit:
             db_session.commit()
-        db_session.commit()
 
         return series, quantity
 
