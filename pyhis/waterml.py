@@ -239,7 +239,7 @@ def _timeseries_from_wml_series(series, site):
 
     return pyhis.TimeSeries(
         variable=_variable_from_wml_variableInfo(series.variable),
-        count=series.valueCount,
+        value_count=series.valueCount,
         method=method,
         quality_control_level=quality_control_level,
         begin_datetime=series.variableTimeInterval.beginDateTime,

@@ -207,7 +207,7 @@ class TimeSeries(object):
 
     site = None
     variable = None
-    count = None
+    value_count = None
     method = None
     quality_control_level = None
     begin_datetime = None
@@ -216,11 +216,11 @@ class TimeSeries(object):
     _quantity = None
     _use_cache = None
 
-    def __init__(self, variable=None, count=None, method=None,
+    def __init__(self, variable=None, value_count=None, method=None,
                  quality_control_level=None, begin_datetime=None,
                  end_datetime=None, site=None, use_cache=True):
         self.variable = variable
-        self.count = count
+        self.value_count = value_count
         self.method = method
         self.quality_control_level = quality_control_level
         self.begin_datetime = begin_datetime

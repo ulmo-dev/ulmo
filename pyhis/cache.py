@@ -339,6 +339,7 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
     quality_control_level = Column(String)
     site_id = Column(Integer, ForeignKey('site.id'), nullable=False)
     variable_id = Column(Integer, ForeignKey('variable.id'), nullable=False)
+    value_count = Column(Integer)
 
     variable = relationship('DBVariable', lazy='subquery')
     values = relationship('DBValue', order_by="DBValue.timestamp",
@@ -349,7 +350,7 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
 
     def __init__(self, timeseries=None, begin_datetime=None,
                  end_datetime=None, method=None, quality_control_level=None,
-                 site=None, variable=None):
+                 site=None, variable=None, value_count=None):
         if timeseries:
             self._from_pyhis(timeseries)
         else:
@@ -359,14 +360,16 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
             self.quality_control_level = quality_control_level
             self.site = site
             self.variable = variable
+            self.value_count = value_count
 
     def _from_pyhis(self, pyhis_timeseries):
         self.method = pyhis_timeseries.method
         self.begin_datetime = pyhis_timeseries.begin_datetime
         self.end_datetime = pyhis_timeseries.end_datetime
         self.quality_control_level = pyhis_timeseries.quality_control_level
-        self.site = CacheSite(pyhis_timeseries.site)
         self.variable = CacheVariable(pyhis_timeseries.variable)
+        self.site = CacheSite(pyhis_timeseries.site, auto_commit=False)
+        self.value_count = pyhis_timeseries.value_count
 
     def to_pyhis(self, site=None, variable=None):
         # as with DBSite.to_pyhis()...
@@ -389,7 +392,8 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
             quality_control_level=self.quality_control_level,
             begin_datetime=self.begin_datetime,
             end_datetime=self.end_datetime,
-            site=site)
+            site=site,
+            value_count=self.value_count)
 
 
 def _timeseries_lookup_key_func(timeseries=None, network=None, site_code=None,
