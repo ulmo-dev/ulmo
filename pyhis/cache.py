@@ -687,10 +687,13 @@ def get_series_and_quantity_for_timeseries(timeseries,
                              timeseries=cached_timeseries)
                      for timestamp, value in series.iteritems()]
 
-        if not len(cached_timeseries.values):
-            db_session.add_all(db_values)
-        else:
-            cached_timeseries.values = db_values
+        if len(db_values) != cached_timeseries.value_count:
+            warnings.warn("value_count (%s) doesn't match number of values (%s) for %s:%s" %
+                          (len(db_values), cached_timeseries.value_count,
+                           cached_timeseries.site.name,
+                           cached_timeseries.variable.code))
+
+        cached_timeseries.values = db_values
 
         if not defer_commit:
             db_session.commit()
