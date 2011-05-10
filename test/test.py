@@ -72,6 +72,41 @@ class TWDBCacheTests(TWDBTestBase):
         yield
         del self.source
 
+    @test
+    def get_timeseries_dict_check_for_updates(self):
+        """
+        tests that cache.get_timeseries_dict_for_site()
+        actually checks for updates when check_for_updates=True
+        """
+        from pyhis import cache
+        cache_dict = cache._cache
+
+        # query timseries so that it gets set up in the cache
+        cached_ts = cache.CacheTimeSeries(
+            self.source.sites['Aransas95_D1'].timeseries['CON001'])
+
+        cached_ts.values = cached_ts.values[:4]
+        cache.db_session.commit()
+
+        # test that the db has been altered
+        del cache._cache['timeseries'][(TWDB_WSDL_URL, 'TWDBSondes',
+                                              'Aransas95_D1', 'CON001')]
+
+        # query timseries so that it gets set up in the cache
+        cached_ts = cache.CacheTimeSeries(
+            self.source.sites['Aransas95_D1'].timeseries['CON001'])
+        assert Assert(len(cached_ts.values)) == 4
+
+        # test that check_for_updates sucessfully updates the
+        # timeseries values
+        del cache._cache['timeseries'][(TWDB_WSDL_URL, 'TWDBSondes',
+                                        'Aransas95_D1', 'CON001')]
+
+        test_ts = self.source.sites['Aransas95_D1'].timeseries['CON001']
+        series, quantity = cache.get_series_and_quantity_for_timeseries(
+            test_ts, check_for_updates=True)
+        assert Assert(len(series)) == 725
+
 
 class TWDBNoCacheTests(TWDBTestBase):
     """

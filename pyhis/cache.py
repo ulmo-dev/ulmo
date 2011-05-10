@@ -663,15 +663,19 @@ def get_timeseries_dict_for_site(site):
                  for timeseries in timeseries_list])
 
 
-def get_series_and_quantity_for_timeseries(timeseries):
-    """returns a tuple where the first element is a pandas.Series
+def get_series_and_quantity_for_timeseries(timeseries,
+                                           check_for_updates=False,
+                                           defer_commit=False):
+    """
+    returns a tuple where the first element is a pandas.Series
     containing the timeseries data for the timeseries and the second
     element is the python quantity that corresponds the unit for the
     variable. Takes a suds WaterML TimeSeriesResponseType object.
     """
     cached_timeseries = CacheTimeSeries(timeseries)
 
-    if len(cached_timeseries.values) == 0:
+    if check_for_updates or \
+           _need_to_update_timeseries(cached_timeseries, timeseries):
         series, quantity = \
                 waterml.get_series_and_quantity_for_timeseries(timeseries)
 
@@ -681,12 +685,19 @@ def get_series_and_quantity_for_timeseries(timeseries):
         db_values = [DBValue(value=value, timestamp=timestamp,
                              timeseries=cached_timeseries)
                      for timestamp, value in series.iteritems()]
-        db_session.add_all(db_values)
+
+        if not len(cached_timeseries.values):
+            db_session.add_all(db_values)
+        else:
+            cached_timeseries.values = db_values
+
+        if not defer_commit:
+            db_session.commit()
         db_session.commit()
 
         return series, quantity
 
-    # else:
+
     series_dict = dict([(cached_value.timestamp, cached_value.value)
                         for cached_value in cached_timeseries.values])
     series = pandas.Series(series_dict)
@@ -703,3 +714,18 @@ def get_series_and_quantity_for_timeseries(timeseries):
                       (variable_code, quantity, unit_code))
 
     return series, quantity
+
+
+def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
+    number_of_cached_values = len(cached_timeseries.values)
+    if number_of_cached_values != pyhis_timeseries.value_count:
+        return True
+
+    try:
+        if cached_timeseries.values[0].timestamp != pyhis_timeseries.begin_datetime \
+           or cached_timeseries.values[-1].timestamp != pyhis_timeseries.end_datetime:
+            return True
+    except KeyError:
+        return True
+
+    return False
