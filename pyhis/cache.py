@@ -499,7 +499,7 @@ class DBVariable(Base, DBCacheDatesMixin):
     variable_id = Column(String)
     vocabulary = Column(String)
     no_data_value = Column(String)
-    units_id = Column(Integer, ForeignKey('units.id'), nullable=False)
+    units_id = Column(Integer, ForeignKey('units.id'))
 
     units = relationship('DBUnits', lazy='subquery')
 
