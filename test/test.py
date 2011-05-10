@@ -21,7 +21,7 @@ class TWDBTestBase(TestBase):
         site = self.source.get_site('TWDBSondes', 'Aransas95_D1')
         assert Assert(site.latitude) == 28.06666667
         assert Assert(site.longitude) == -97.20333333
-        assert Assert(site.description) == 'Upper Copano Bay'
+        assert Assert(site.name) == 'Upper Copano Bay'
         assert Assert(site.source.url) == TWDB_WSDL_URL
 
     @test
@@ -73,7 +73,7 @@ class TWDBCacheTests(TWDBTestBase):
         del self.source
 
     @test
-    def get_timeseries_dict_check_for_updates(self):
+    def get_series_and_quantity_check_for_updates(self):
         """
         tests that cache.get_timeseries_dict_for_site()
         actually checks for updates when check_for_updates=True
