@@ -343,6 +343,7 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
 
     variable = relationship('DBVariable', lazy='subquery')
     values = relationship('DBValue', order_by="DBValue.timestamp",
+                          cascade='save-update, merge, delete, delete-orphan',
                           lazy='subquery')
 
     # populated by backref:
