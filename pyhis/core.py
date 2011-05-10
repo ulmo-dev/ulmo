@@ -139,9 +139,10 @@ class Source(object):
     _sites = {}
     _use_cache = None
 
-    def __init__(self, wsdl_url, use_cache=True):
+    def __init__(self, wsdl_url, description=None, use_cache=True):
         self.suds_client = suds.client.Client(wsdl_url)
         self.url = wsdl_url
+        self._description = description
         self._use_cache = use_cache
 
     @property
@@ -171,14 +172,9 @@ class Source(object):
         else:
             return Site(self, network=network, code=site_code)
 
-    def _update_description(self):
+    def _update_description(self, force_waterml=False):
         """update self._description"""
-        cache_enabled = self._use_cache and cache
-
-        if cache_enabled:
-            self._description = cache.get_description_for_source(self)
-        else:
-            self._description = waterml.get_description_for_source(self)
+        self._description = waterml.get_description_for_source(self)
 
     def _update_all_sites(self):
         """update the self._sites dict"""
