@@ -16,7 +16,7 @@ from pyhis import cache
 CACHE_DATABASE_FILE = "/tmp/pyhis_cache.db"
 CACHE_DATABASE_URI = 'sqlite:///' + CACHE_DATABASE_FILE
 
-GEMS_DATABASE_FILE = "/home/wilsaj/pyhis/export/gems_export.db"
+GEMS_DATABASE_FILE = "/home/wilsaj/pyhis/export/gems_database.db"
 GEMS_DATABASE_URI = 'sqlite:///' + GEMS_DATABASE_FILE
 
 ECHO_SQLALCHEMY = True
@@ -43,7 +43,8 @@ Base = declarative_base(bind=gems_engine)
 class GEMSSite(Base):
     __tablename__ = 'tbl_TexasHIS_Vector_TWDB_ODM_Sites'
 
-    ODM_SQL_SiteID = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
+    ODM_SQL_SiteID = Column(Integer)
     ODM_Network = Column(String)
     ODM_URL = Column(String)
     ODM_Site_Code = Column(String)
@@ -74,7 +75,7 @@ class GEMSData(Base):
     __tablename__ = 'tbl_TexasHIS_Vector_TWDB_ODM_Data'
 
     ODM_SQL_ID = Column(Integer, primary_key=True)
-    ODM_SQL_SiteID = Column(Integer)
+    ODM_SQL_SiteID = Column(Integer, ForeignKey('tbl_TexasHIS_Vector_TWDB_ODM_Sites.ODM_SQL_SiteID'))
     ODM_TWDB_Param = Column(String)
     ODM_TWDB_Param_Name = Column(String)
     ODM_TWDB_Param_Desc = Column(String)
@@ -127,7 +128,8 @@ def export_source(source):
             ODM_URL=source.url,
             ODM_Site_Code=site.code,
             ODM_Site_Name=site.name,
-            ODM_Source_Desc=source.description,
+            # ODM_Source_Desc=source.description,
+            ODM_Source_Desc='',
             latitude=site.latitude,
             longitude=site.longitude,
             ODM_Param_FromDate=None,
