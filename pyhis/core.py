@@ -106,6 +106,8 @@ class Site(object):
 
     def _update_site_info_response(self):
         """makes a GetSiteInfo updates site info and series information"""
+        log.info('making GetSiteInfo request for "%s:%s"...' %
+                 (self.network, self.code))
         self._site_info_response = self.source.suds_client.service.GetSiteInfoObject(
             '%s:%s' % (self.network, self.code))
 
