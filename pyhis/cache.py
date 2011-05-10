@@ -573,7 +573,13 @@ def cache_all(source_url):
         # dataframe object
         try:
             df = site.dataframe
-        except:
+
+            # delete dataframe object and site timeseries dict objects
+            # to free up some memory
+            del df
+            del site._dataframe
+            del site._timeseries_dict
+        except Exception as e:
             warnings.warn("There was a problem getting values for "
                           "%s, skipping..." % (site))
 
