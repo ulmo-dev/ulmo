@@ -126,18 +126,25 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
             #: whether or not to automatically commit an obj to the db
             #: cache (if it doesn't already exist in db)
             auto_commit = kwargs.pop('auto_commit', True)
+            skip_db_lookup = kwargs.pop('skip_db_lookup', False)
 
             lookup_key = lookup_key_func(*args, **kwargs)
             if lookup_key in _cache[cache_key]:
                 return _cache[cache_key][lookup_key]
 
-            try:
-                db_instance = db_lookup_func(*args, **kwargs)
-            except NoResultFound:
+            if skip_db_lookup:
                 db_instance = db_model(*args, **kwargs)
-                db_session.add(db_instance)
                 if auto_commit:
+                    db_session.add(db_instance)
                     db_session.commit()
+            else:
+                try:
+                    db_instance = db_lookup_func(*args, **kwargs)
+                except NoResultFound, SkipDBLookup:
+                    db_instance = db_model(*args, **kwargs)
+                    if auto_commit:
+                        db_session.add(db_instance)
+                        db_session.commit()
 
             _cache[cache_key][lookup_key] = db_instance
             return db_instance
@@ -582,14 +589,15 @@ def get_sites_for_source(source):
     if len(cached_source.sites) == 0:
         site_list = waterml.get_sites_for_source(cached_source.to_pyhis())
 
-        for site in site_list.values():
-            # since the sites don't exist in the db yet, just
-            # instantiating them via the CacheSite constructor will
-            # queue them to be saved to the db and (update them in the
-            # in-memory cache)
-            CacheSite(site, auto_commit=False)
+        # since the sites don't exist in the db yet, just
+        # instantiating them via the CacheSite constructor will
+        # queue them to be saved to the db and (update them in the
+        # in-memory cache)
+        cache_sites = [CacheSite(site, auto_commit=False, skip_db_lookup=True)
+                       for site in site_list.values()]
 
         # commit queued sites to cache
+        db_session.add_all(cache_sites)
         db_session.commit()
 
     return dict([(cached_site.code,
@@ -630,8 +638,10 @@ def get_timeseries_dict_for_site(site):
         # cache). This can be expensive if there are a lot of
         # timeseries objects, so we defer commits until they have all
         # been instantiated and can be commited at once.
-        timeseries_list = [CacheTimeSeries(timeseries, auto_commit=False)
+        timeseries_list = [CacheTimeSeries(timeseries, auto_commit=False,
+                                           skip_db_lookup=True)
                            for timeseries in timeseries_dict.values()]
+        db_session.add_all(timeseries_list)
         db_session.commit()
 
         return timeseries_dict
