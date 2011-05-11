@@ -571,11 +571,14 @@ def cache_all(source_url):
     Cache all available data for a source
     """
     source = pyhis.Source(source_url)
+    total_sites = len(source.sites.values())
 
-    for site in source.sites.values():
+    for i, site in enumerate(source.sites.values(), 1):
         # this could be improved by not having to create the
         # dataframe object
         try:
+            log.info('caching values for site %s/%s: %s' %
+                     i, total_sites, site.name)
             df = site.dataframe
 
             # delete dataframe object and site timeseries dict
