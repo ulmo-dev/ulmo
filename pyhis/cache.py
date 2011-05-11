@@ -594,9 +594,9 @@ def cache_all(source_url):
 
 def get_sites_for_source(source):
     """
-    return a dict of pyhis.Site objects for a given source.  The
-    source can be either a string representing the url or a
-    pyhis.Source object
+    return a dict of pyhis.Site objects for a given source. The source
+    can be either a string representing the url or a pyhis.Source
+    object
     """
     cached_source = CacheSource(source)
 
