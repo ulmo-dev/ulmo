@@ -667,9 +667,8 @@ def get_timeseries_dict_for_site(site):
                  for timeseries in timeseries_list])
 
 
-def get_series_and_quantity_for_timeseries(timeseries,
-                                           check_for_updates=False,
-                                           defer_commit=False):
+def get_series_and_quantity_for_timeseries(
+    timeseries, check_for_updates=False, defer_commit=False):
     """
     returns a tuple where the first element is a pandas.Series
     containing the timeseries data for the timeseries and the second
