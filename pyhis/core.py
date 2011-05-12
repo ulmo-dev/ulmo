@@ -224,10 +224,8 @@ class Source(object):
 
     def get_sites_within_polygon(self, verts):
         """ returns dict of sites within polygon defined by verts"""
-        idx = points_inside_poly(zip(self.sites_array['longitude'],
-                                     self.sites_array['latitude'])
-                                 ,verts)
-
+        points = np.vstack((self.sites_array['latitude'],self.sites_array['longitude'])).T       
+        idx = points_inside_poly(points, verts)
         return dict([(sitecode,self.sites[sitecode])
                      for sitecode in self.sites_array['sitecode'][idx]])
 
