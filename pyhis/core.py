@@ -173,9 +173,9 @@ class Source(object):
                                                                  ('latitude','>f8')])
             idx = 0
             for code,site in self.sites.iteritems():
-                self._sites_array['sitecode'] = code
-                self._sites_array['latitude'] = site.latitude
-                self._sites_array['longitude'] = site.longitude
+                self._sites_array['sitecode'][idx] = code
+                self._sites_array['latitude'][idx] = site.latitude
+                self._sites_array['longitude'][idx] = site.longitude
                 idx += 1
 
         return self._sites_array
@@ -224,7 +224,7 @@ class Source(object):
 
     def get_sites_within_polygon(self, verts):
         """ returns dict of sites within polygon defined by verts"""
-        points = np.vstack((self.sites_array['latitude'],self.sites_array['longitude'])).T       
+        points = np.vstack((self.sites_array['longitude'],self.sites_array['latitude'])).T       
         idx = points_inside_poly(points, verts)
         return dict([(sitecode,self.sites[sitecode])
                      for sitecode in self.sites_array['sitecode'][idx]])
