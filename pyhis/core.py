@@ -64,7 +64,7 @@ class Site(object):
 
         # if we don't have all the info, make a GetSiteInfo request
         # and update site attributes with that information
-        if not name or not id or not latitude or not longitude:
+        if not name or not latitude or not longitude:
             site_info = self.site_info_response.site[0].siteInfo
 
             if not self.name:
