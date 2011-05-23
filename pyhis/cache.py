@@ -647,11 +647,13 @@ def get_site(source, network, code):
     cached_source = CacheSource(source)
 
     try:
-        db_session.query(DBSite).filter_by(source=cached_source,
-                                           network=network, code=code).one()
+        cached_site = db_session.query(DBSite).filter_by(
+            source=cached_source, network=network, code=code).one()
     except NoResultFound:
-        pass
-    cached_site = CacheSite(network=network, code=code)
+        site = pyhis.core.Site(network=network, code=code, source=source)
+
+        # create a CacheSite so the site gets cached
+        cached_site = CacheSite(site)
     return cached_site.to_pyhis()
 
 
