@@ -166,6 +166,7 @@ class DBSource(Base):
     id = Column(Integer, primary_key=True)
     url = Column(String, unique=True)
     sites = relationship('DBSite', backref='source')
+    last_get_sites = Column(DateTime)
 
     def __init__(self, source=None, url=None):
         if not source is None:
@@ -610,18 +611,26 @@ def get_sites_for_source(source):
     """
     cached_source = CacheSource(source)
 
-    if len(cached_source.sites) == 0:
+    if not cached_source.last_get_sites:
         site_list = waterml.get_sites_for_source(cached_source.to_pyhis())
 
         # since the sites don't exist in the db yet, just
         # instantiating them via the CacheSite constructor will
         # queue them to be saved to the db and (update them in the
         # in-memory cache)
-        cache_sites = [CacheSite(site, auto_commit=False, skip_db_lookup=True)
+
+        skip_db_lookup = bool(len(cached_source.sites) == 0)
+        cache_sites = [CacheSite(site, auto_commit=False,
+                                 skip_db_lookup=skip_db_lookup)
                        for site in site_list.values()]
 
-        # commit queued sites to cache
+        # add queued sites to cache
         db_session.add_all(cache_sites)
+
+        # update cached_source.last_get_sites
+        cached_source.last_get_sites = func.now()
+
+        # commit
         db_session.commit()
 
     return dict([(cached_site.code,
