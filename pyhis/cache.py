@@ -230,7 +230,6 @@ class DBSiteMixin(object):
             {}
             )
 
-
     # populated by backref:
     #   source = DBSource
 
@@ -321,14 +320,14 @@ else:
                 self.longitude = longitude
 
 
-def _site_lookup_key_func(site=None, network=None, code=None):
+def _site_lookup_key_func(site=None, network=None, code=None, **kwargs):
     if site:
         return (site.network, site.code)
     if network and code:
         return (network, code)
 
 
-def _site_db_lookup_func(site=None, network=None, code=None):
+def _site_db_lookup_func(site=None, network=None, code=None, **kwargs):
     if site:
         network = site.network
         code = site.code
@@ -647,14 +646,13 @@ def get_site(source, network, code):
     cached_source = CacheSource(source)
 
     try:
-        cached_site = db_session.query(DBSite).filter_by(
-            source=cached_source, network=network, code=code).one()
+        cached_site = _site_db_lookup_func(network=network, code=code)
+        return cached_site.to_pyhis()
     except NoResultFound:
-        site = pyhis.core.Site(network=network, code=code, source=source)
-
-        # create a CacheSite so the site gets cached
-        cached_site = CacheSite(site)
-    return cached_site.to_pyhis()
+        pyhis_site = pyhis.core.Site(network=network, code=code,
+                                     source=cached_source.to_pyhis())
+        CacheSite(site=pyhis_site)
+        return pyhis_site
 
 
 def get_timeseries_dict_for_site(site):
