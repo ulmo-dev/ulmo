@@ -76,9 +76,9 @@ class Site(object):
                     # siteID is optional
                     pass
             if not self.latitude:
-                self.latitude = site_info.geolocation.geogLocation.latitude
+                self.latitude = site_info.geoLocation.geogLocation.latitude
             if not self.longitude:
-                self.longitude = site_info.geolocation.geogLocation.longitude
+                self.longitude = site_info.geoLocation.geogLocation.longitude
 
     @property
     def dataframe(self):
