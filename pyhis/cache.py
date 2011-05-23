@@ -16,7 +16,7 @@ import warnings
 
 import pandas
 from sqlalchemy import create_engine, func, Table
-from sqlalchemy.schema import UniqueConstraint, ForeignKey
+from sqlalchemy.schema import ForeignKey, Index, UniqueConstraint
 from sqlalchemy import (Column, Boolean, Integer, Text, String, Float,
                         DateTime, Enum)
 from sqlalchemy.ext.declarative import (declarative_base, declared_attr,
@@ -219,6 +219,16 @@ class DBSiteMixin(object):
     @declared_attr
     def timeseries_list(cls):
         return relationship('DBTimeSeries', backref='site', lazy='subquery')
+
+    @declared_attr
+    def __table_args__(cls):
+        return (
+            UniqueConstraint('network', 'code'),
+#            Index('idx_%s_network_code' % cls.__tablename__,
+#                  'network', 'code'),
+            {}
+            )
+
 
     # populated by backref:
     #   source = DBSource
