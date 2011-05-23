@@ -171,11 +171,12 @@ class Source(object):
         """generates numpy array of locations of all sites
         for convenient spatial queries"""
         if not len(self._sites_array):
-            self._sites_array = np.zeros(len(self.sites), dtype=[('sitecode','|S100'),
-                                                                 ('longitude','>f8'),
-                                                                 ('latitude','>f8')])
+            self._sites_array = np.zeros(
+                len(self.sites), dtype=[('sitecode', '|S100'),
+                                        ('longitude', '>f8'),
+                                        ('latitude', '>f8')])
             idx = 0
-            for code,site in self.sites.iteritems():
+            for code, site in self.sites.iteritems():
                 self._sites_array['sitecode'][idx] = code
                 self._sites_array['latitude'][idx] = site.latitude
                 self._sites_array['longitude'][idx] = site.longitude
@@ -215,16 +216,18 @@ class Source(object):
         to get_sites_within_polygon, returns subset of sites"""
         print 'not implemented'
 
-    def get_sites_within_radius_r(self, latitude, longitude, radius, npoints = 100):
+    def get_sites_within_radius_r(self, latitude, longitude,
+                                  radius, npoints=100):
         """ Generates circular poly, sends vertices to
         get_sites_within_polygon, returns subset of sites"""
         print 'not implemented'
 
     def get_sites_within_polygon(self, verts):
         """ returns dict of sites within polygon defined by verts"""
-        points = np.vstack((self.sites_array['longitude'],self.sites_array['latitude'])).T       
+        points = np.vstack((self.sites_array['longitude'],
+                            self.sites_array['latitude'])).T
         idx = points_inside_poly(points, verts)
-        return dict([(sitecode,self.sites[sitecode])
+        return dict([(sitecode, self.sites[sitecode])
                      for sitecode in self.sites_array['sitecode'][idx]])
 
     def __repr__(self):
