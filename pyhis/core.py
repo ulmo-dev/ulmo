@@ -71,7 +71,7 @@ class Site(object):
                 self.name = site_info.siteName
             if not self.id:
                 try:
-                    self.id = site_info.siteName.siteCode[0]._siteID
+                    self.id = site_info.siteCode[0]._siteID
                 except AttributeError, KeyError:
                     # siteID is optional
                     pass
