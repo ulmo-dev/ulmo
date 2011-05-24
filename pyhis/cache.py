@@ -408,16 +408,19 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
 
 
 def _timeseries_lookup_key_func(timeseries=None, url=None, network=None,
-                                site_code=None, variable=None):
+                                site_code=None, variable=None, site=None,
+                                *args, **kwargs):
     if timeseries:
         return (timeseries.site.source.url, timeseries.site.network,
                 timeseries.site.code, timeseries.variable.code)
+    if site and variable:
+        return (site.source.url, site.network, site.code, variable.code)
     if url and network and site_code and variable:
-        return (url, network, site_code, variable)
+        return (url, network, site_code, variable.code)
 
 
 def _timeseries_db_lookup_func(timeseries=None, network=None, site_code=None,
-                                variable=None):
+                                variable=None, *args, **kwargs):
     if timeseries:
         network = timeseries.site.network
         site_code = timeseries.site.code
@@ -544,14 +547,16 @@ class DBVariable(Base, DBCacheDatesMixin):
             units=self.units.to_pyhis())
 
 
-def _variable_lookup_key_func(variable=None, vocabulary=None, code=None):
+def _variable_lookup_key_func(variable=None, vocabulary=None, code=None,
+                              *args, **kwargs):
     if variable:
         return (variable.vocabulary, variable.code)
     if vocabulary and code:
         return (vocabulary, code)
 
 
-def _variable_db_lookup_func(variable=None, vocabulary=None, code=None):
+def _variable_db_lookup_func(variable=None, vocabulary=None, code=None,
+                             *args, **kwargs):
     if variable:
         vocabulary = variable.vocabulary
         code = variable.code
