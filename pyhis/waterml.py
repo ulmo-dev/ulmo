@@ -232,7 +232,9 @@ def _timeseries_from_wml_series(series, site):
     """returns a PyHIS series instance from a suds WaterML series element"""
     datetime_fmt = "%Y-%d-%m %H:%M:%S"
 
-    method = getattr(series.Method, 'MethodDescription', None)
+    # try to get series.Method.MethodDescription
+    method = getattr(getattr(series, 'Method', None),
+                     'MethodDescription', None)
     quality_control_level = getattr(series.QualityControlLevel,
                                     '_QualityControlLevelID', None)
 
