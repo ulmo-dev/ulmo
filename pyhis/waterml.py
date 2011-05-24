@@ -18,12 +18,9 @@ logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
-
 #------------------------------------------------------------------------------
 # waterml functions
 #------------------------------------------------------------------------------
-
-
 def get_sites_for_source(source):
     """
     return a sites dict for for a given source. The source can be
@@ -142,18 +139,13 @@ def get_series_and_quantity_for_timeseries(timeseries):
         dates = unique_dates
         data = data[unique_date_indices]
 
-
     series = pandas.Series(data, index=dates)
     return series, quantity
-
-
 
 
 #------------------------------------------------------------------------------
 # progress bar decorator
 #------------------------------------------------------------------------------
-
-
 def update_progress_bar(func):
 
     def wrapper(*args, **kwargs):
@@ -163,13 +155,9 @@ def update_progress_bar(func):
     return wrapper
 
 
-
-
 #------------------------------------------------------------------------------
 # helper functions for parsing waterml responses into pyhis objects
 #------------------------------------------------------------------------------
-
-
 def _lat_long_from_geolocation(geolocation):
     """returns a tuple (lat, long) given a suds WaterML geolocation element"""
     if geolocation.geogLocation.__class__.__name__ == 'LatLonPointType':
@@ -187,7 +175,6 @@ def _site_from_wml_siteInfo(siteInfo, source):
     if not getattr(siteInfo, 'siteCode', None):
         # if siteInfo doesn't have a siteCode something is horribly wrong...
         raise ('siteInfo response does not contain a siteCode')
-
 
     if len(siteInfo.siteCode) > 1:
         raise NotImplementedError(
