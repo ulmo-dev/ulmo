@@ -53,7 +53,8 @@ Session = sessionmaker(autocommit=False, autoflush=False)
 Base = declarative_base()
 
 
-def init_cache(cache_database_file=CACHE_DATABASE_FILE):
+def init_cache(cache_database_file=CACHE_DATABASE_FILE,
+               echo=ECHO_SQLALCHEMY):
     global engine
     global db_session
     global _cache
@@ -63,7 +64,7 @@ def init_cache(cache_database_file=CACHE_DATABASE_FILE):
     # to use geoalchemy with spatialite, the libspatialite library has to
     # be loaded as an extension
     engine = create_engine(cache_database_uri, convert_unicode=True,
-                           module=sqlite, echo=ECHO_SQLALCHEMY)
+                           module=sqlite, echo=echo)
 
     if USE_SPATIAL:
         if "ARCH" in platform.uname()[2]:
