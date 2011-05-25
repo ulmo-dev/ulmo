@@ -594,7 +594,7 @@ def cache_all(source_url):
         # dataframe object
         try:
             log.info('caching values for site %s/%s: %s' %
-                     i, total_sites, site.name)
+                     (i, total_sites, site.name))
             df = site.dataframe
 
             # delete dataframe object and site timeseries dict
