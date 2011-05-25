@@ -127,6 +127,7 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
             #: whether or not to automatically commit an obj to the db
             #: cache (if it doesn't already exist in db)
             auto_commit = kwargs.pop('auto_commit', True)
+            auto_add = kwargs.pop('auto_add', auto_commit)
             skip_db_lookup = kwargs.pop('skip_db_lookup', False)
 
             lookup_key = lookup_key_func(*args, **kwargs)
@@ -135,16 +136,18 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
 
             if skip_db_lookup:
                 db_instance = db_model(*args, **kwargs)
-                if auto_commit:
+                if auto_add:
                     db_session.add(db_instance)
+                if auto_commit:
                     db_session.commit()
             else:
                 try:
                     db_instance = db_lookup_func(*args, **kwargs)
                 except NoResultFound, SkipDBLookup:
                     db_instance = db_model(*args, **kwargs)
-                    if auto_commit:
+                    if auto_add:
                         db_session.add(db_instance)
+                    if auto_commit:
                         db_session.commit()
 
             _cache[cache_key][lookup_key] = db_instance
