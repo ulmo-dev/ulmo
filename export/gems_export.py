@@ -133,8 +133,7 @@ def export_source(source):
             latitude=site.latitude,
             longitude=site.longitude,
             ODM_Param_FromDate=None,
-            ODM_Param_ToDate=None,
-            )
+            ODM_Param_ToDate=None)
 
         gems_session.add(gems_site)
 
@@ -142,6 +141,7 @@ def export_source(source):
             export_timeseries(timeseries)
 
     gems_session.commit()
+
 
 def export_timeseries(timeseries):
     for value in timeseries.values:
@@ -160,8 +160,6 @@ def export_timeseries(timeseries):
             )
 
         gems_session.add(data)
-
-
 
 
 if __name__ == '__main__':
