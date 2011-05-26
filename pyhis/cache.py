@@ -109,8 +109,6 @@ init_cache()
 #----------------------------------------------------------------------------
 # cache SQLAlchemy models
 #----------------------------------------------------------------------------
-
-
 def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
     """
     Create a cache object that searches the in-memory cache dict for
@@ -223,7 +221,7 @@ class DBSiteMixin(object):
 
     @declared_attr
     def timeseries_list(cls):
-        return relationship('DBTimeSeries', backref='site', lazy='subquery')
+        return relationship('DBTimeSeries', backref='site', lazy='dynamic')
 
     @declared_attr
     def __table_args__(cls):
@@ -355,10 +353,10 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
     variable_id = Column(Integer, ForeignKey('variable.id'), nullable=False)
     value_count = Column(Integer)
 
-    variable = relationship('DBVariable', lazy='subquery')
+    variable = relationship('DBVariable')
     values = relationship('DBValue', order_by="DBValue.timestamp",
                           cascade='save-update, merge, delete, delete-orphan',
-                          lazy='subquery')
+                          lazy='dynamic', backref='timeseries')
 
     # populated by backref:
     #   site = DBSite
@@ -499,7 +497,6 @@ class DBValue(Base, DBCacheDatesMixin):
     timestamp = Column(DateTime)
     timeseries_id = Column(Integer, ForeignKey('timeseries.id'),
                            nullable=False)
-    timeseries = relationship('DBTimeSeries', lazy='subquery')
 
     def __init__(self, value=None, timestamp=None, timeseries=None):
         self.value = value
@@ -518,11 +515,10 @@ class DBVariable(Base, DBCacheDatesMixin):
     no_data_value = Column(String)
     units_id = Column(Integer, ForeignKey('units.id'))
 
-    units = relationship('DBUnits', lazy='subquery')
+    units = relationship('DBUnits', lazy='dynamic')
 
     def __init__(self, variable=None, name=None, code=None, variable_id=None,
-                 vocabulary=None, no_data_value=None, site_id=None,
-                 units=None):
+                 vocabulary=None, no_data_value=None, units=None):
         if not variable is None:
             self._from_pyhis(variable)
         else:
@@ -579,12 +575,9 @@ def create_all_tables():
 create_all_tables()
 
 
-
 #----------------------------------------------------------------------------
 # cache functions
 #----------------------------------------------------------------------------
-
-
 def cache_all(source_url):
     """
     Cache all available data for a source
