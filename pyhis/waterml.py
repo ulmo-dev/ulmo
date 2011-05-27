@@ -109,7 +109,10 @@ def get_series_and_quantity_for_timeseries(timeseries):
     try:
         quantity = pyhis.unit_quantities[unit_code]
     except KeyError:
-        quantity = timeseries_response.timeSeries.variable.units.value
+        try:
+            quantity = timeseries_response.timeSeries.variable.units.value
+        except:
+            quantity = 'UNKNOWN'
         warnings.warn("Unit conversion not available for %s: %s [%s]" %
                       (variable_code, quantity, unit_code))
 
@@ -241,9 +244,8 @@ def _units_from_wml_units(units):
     try:
         abbreviation=units._unitsAbbreviation
     except:
-        abbreviation=None
+        abbreviation=''
     return pyhis.Units(
         name=units.value,
         abbreviation=abbreviation,
         code=units._unitsCode)
-
