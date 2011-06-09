@@ -167,7 +167,7 @@ class DBSource(Base):
 
     id = Column(Integer, primary_key=True)
     url = Column(String, unique=True)
-    sites = relationship('DBSite', backref='source')
+    sites = relationship('DBSite', backref='source', lazy='dynamic')
     last_get_sites = Column(DateTime)
 
     def __init__(self, source=None, url=None):
