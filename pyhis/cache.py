@@ -15,7 +15,8 @@ import platform
 import warnings
 
 import pandas
-from sqlalchemy import create_engine, func, Table
+
+import sqlalchemy as sa
 from sqlalchemy.schema import ForeignKey, Index, UniqueConstraint
 from sqlalchemy import (Column, Boolean, Integer, Text, String, Float,
                         DateTime, Enum)
@@ -63,8 +64,8 @@ def init_cache(cache_database_file=CACHE_DATABASE_FILE,
 
     # to use geoalchemy with spatialite, the libspatialite library has to
     # be loaded as an extension
-    engine = create_engine(cache_database_uri, convert_unicode=True,
-                           module=sqlite, echo=echo)
+    engine = sa.create_engine(cache_database_uri, convert_unicode=True,
+                              module=sqlite, echo=echo)
 
     if USE_SPATIAL:
         if "ARCH" in platform.uname()[2]:
@@ -158,8 +159,8 @@ class DBCacheDatesMixin(object):
     """
     Mixin class for keeping track of cache times
     """
-    last_refreshed = Column(DateTime, default=func.now(),
-                            onupdate=func.now())
+    last_refreshed = Column(DateTime, default=sa.func.now(),
+                            onupdate=sa.func.now())
 
 
 class DBSource(Base):
@@ -629,7 +630,7 @@ def get_sites_for_source(source):
         db_session.add_all(cache_sites)
 
         # update cached_source.last_get_sites
-        cached_source.last_get_sites = func.now()
+        cached_source.last_get_sites = sa.func.now()
 
         # commit
         db_session.commit()
