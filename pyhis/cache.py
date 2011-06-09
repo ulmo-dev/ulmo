@@ -411,7 +411,7 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
 
 def _timeseries_lookup_key_func(timeseries=None, url=None, network=None,
                                 site_code=None, variable=None, site=None,
-                                *args, **kwargs):
+                                **kwargs):
     if timeseries:
         return (timeseries.site.source.url, timeseries.site.network,
                 timeseries.site.code, timeseries.variable.code)
@@ -422,7 +422,7 @@ def _timeseries_lookup_key_func(timeseries=None, url=None, network=None,
 
 
 def _timeseries_db_lookup_func(timeseries=None, network=None, site_code=None,
-                                variable=None, *args, **kwargs):
+                                variable=None, site=None, **kwargs):
     if timeseries:
         network = timeseries.site.network
         site_code = timeseries.site.code
@@ -548,7 +548,7 @@ class DBVariable(Base, DBCacheDatesMixin):
 
 
 def _variable_lookup_key_func(variable=None, vocabulary=None, code=None,
-                              *args, **kwargs):
+                              **kwargs):
     if variable:
         return (variable.vocabulary, variable.code)
     if vocabulary and code:
@@ -556,7 +556,7 @@ def _variable_lookup_key_func(variable=None, vocabulary=None, code=None,
 
 
 def _variable_db_lookup_func(variable=None, vocabulary=None, code=None,
-                             *args, **kwargs):
+                             **kwargs):
     if variable:
         vocabulary = variable.vocabulary
         code = variable.code
