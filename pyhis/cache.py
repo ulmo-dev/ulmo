@@ -355,7 +355,7 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
     value_count = Column(Integer)
 
     variable = relationship('DBVariable')
-    values = relationship('DBValue', order_by="DBValue.timestamp",
+    values = relationship('DBValue',
                           cascade='save-update, merge, delete, delete-orphan',
                           lazy='dynamic', backref='timeseries')
 
