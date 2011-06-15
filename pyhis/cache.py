@@ -114,7 +114,24 @@ def init_cache(cache_database_file=CACHE_DATABASE_FILE,
     except NameError:
         pass
 
+
 init_cache()
+
+
+def clear_memory_cache():
+    """
+    Clean out the in-memory cache dict. This is useful for
+    large/long-running programs that might be using up all available
+    memory.
+    """
+    global _cache
+    _cache = {
+        'source': {},       # key: url
+        'site': {},         # key: (source_url, network, site_code)
+        'timeseries': {},   # key: (source_url, network, site_code, variable_code)
+        'variable': {},     # key: (vocabulary, variable_code)
+        'units': {},        # key: (name, code)
+        }
 
 
 #----------------------------------------------------------------------------
