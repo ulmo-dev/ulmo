@@ -621,7 +621,7 @@ def get_sites_for_source(source):
         # queue them to be saved to the db and (update them in the
         # in-memory cache)
 
-        skip_db_lookup = bool(len(cached_source.sites) == 0)
+        skip_db_lookup = bool(cached_source.sites.count() == 0)
         cache_sites = [CacheSite(site, auto_commit=False,
                                  skip_db_lookup=skip_db_lookup)
                        for site in site_list.values()]
@@ -665,7 +665,7 @@ def get_timeseries_dict_for_site(site):
     """
     cached_site = CacheSite(site)
 
-    if len(cached_site.timeseries_list) == 0:
+    if cached_site.timeseries_list.count() == 0:
         timeseries_dict = waterml.\
                           get_timeseries_dict_for_site(cached_site.to_pyhis())
         # Since the timeseries don't exist in the db yet, just
@@ -744,7 +744,7 @@ def get_series_and_quantity_for_timeseries(
 
 
 def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
-    number_of_cached_values = len(cached_timeseries.values)
+    number_of_cached_values = cached_timeseries.values.count()
     if number_of_cached_values != pyhis_timeseries.value_count:
         return True
 
