@@ -433,8 +433,9 @@ def _timeseries_db_lookup_func(timeseries=None, network=None, site_code=None,
     if network and site_code and variable:
         variable_code = variable.code
 
-    site = db_session.query(DBSite).filter_by(network=network,
-                                              code=site_code).one()
+    if not site:
+        site = db_session.query(DBSite).filter_by(network=network,
+                                                  code=site_code).one()
     return db_session.query(DBTimeSeries).filter_by(site=site,
                                                     variable=variable).one()
 
