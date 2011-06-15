@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 from attest import Assert, Tests, TestBase, test
 
@@ -10,7 +11,8 @@ TWDB_WSDL_URL = 'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL'
 #TWDB_WSDL_URL = 'file://' + os.path.abspath('./twdb_wsdl.xml')
 USGS_WSDL_URL = 'file://' + os.path.abspath('./usgs_wsdl.xml')
 
-TEST_CACHE_DATABASE_PATH = '/tmp/pyhis_test_cache.db'
+TEST_CACHE_DATABASE_PATH = os.path.join(tempfile.gettempdir(),
+                                        'pyhis_test_cache.db')
 
 
 class TWDBTestBase(TestBase):

@@ -11,7 +11,9 @@
 #  3. make new network request, update database with results
 #----------------------------------------------------------------------------
 import logging
+import os
 import platform
+import tempfile
 import warnings
 
 import pandas
@@ -28,7 +30,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import pyhis
 from pyhis import waterml
 
-CACHE_DATABASE_FILE = "/tmp/pyhis_cache.db"
+CACHE_DATABASE_FILE = os.path.join(tempfile.gettempdir(), "pyhis_cache.db")
 ECHO_SQLALCHEMY = False
 
 #XXX: this should be programmatically generated in some clever way
