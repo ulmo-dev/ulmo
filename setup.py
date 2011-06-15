@@ -7,7 +7,7 @@ PyHIS is a python library for querying CUAHSI*-HIS** web services.
 
 * CUAHSI is the Consortium of Universities for the
   Advancement of Hydrologic Science, Inc.
-** HIS stands for Hydrlogic Information System
+** HIS stands for Hydrologic Information System
 
 """
 
@@ -28,7 +28,6 @@ setup(
     install_requires=[
         'numpy>=1.4.0',
         'pandas>=0.3.0',
-        'quantities',
         'suds>=0.4',
     ],
     classifiers=[

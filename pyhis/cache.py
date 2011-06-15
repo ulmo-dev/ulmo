@@ -15,7 +15,8 @@ import platform
 import warnings
 
 import pandas
-from sqlalchemy import create_engine, func, Table
+
+import sqlalchemy as sa
 from sqlalchemy.schema import ForeignKey, Index, UniqueConstraint
 from sqlalchemy import (Column, Boolean, Integer, Text, String, Float,
                         DateTime, Enum)
@@ -49,8 +50,13 @@ except ImportError:
     from sqlite3 import dbapi2 as sqlite
     USE_SPATIAL = False
 
+
 Session = sessionmaker(autocommit=False, autoflush=False)
 Base = declarative_base()
+
+# initialize db_session to None so we can easily test for its
+# existence and close it if necessary
+db_session = None
 
 
 def init_cache(cache_database_file=CACHE_DATABASE_FILE,
@@ -63,8 +69,8 @@ def init_cache(cache_database_file=CACHE_DATABASE_FILE,
 
     # to use geoalchemy with spatialite, the libspatialite library has to
     # be loaded as an extension
-    engine = create_engine(cache_database_uri, convert_unicode=True,
-                           module=sqlite, echo=echo)
+    engine = sa.create_engine(cache_database_uri, convert_unicode=True,
+                              module=sqlite, echo=echo)
 
     if USE_SPATIAL:
         if "ARCH" in platform.uname()[2]:
@@ -76,6 +82,11 @@ def init_cache(cache_database_file=CACHE_DATABASE_FILE,
             connection = engine.raw_connection().connection
             connection.enable_load_extension(True)
             engine.execute(LIBSPATIALITE_LOCATION)
+
+    # if we are reinitializing cache, close the old session
+    if db_session:
+        db_session.commit()
+        db_session.close()
 
     # bind new engine to the db_session and Base metadata objects
     db_session = Session(bind=engine)
@@ -103,14 +114,29 @@ def init_cache(cache_database_file=CACHE_DATABASE_FILE,
     except NameError:
         pass
 
+
 init_cache()
+
+
+def clear_memory_cache():
+    """
+    Clean out the in-memory cache dict. This is useful for
+    large/long-running programs that might be using up all available
+    memory.
+    """
+    global _cache
+    _cache = {
+        'source': {},       # key: url
+        'site': {},         # key: (source_url, network, site_code)
+        'timeseries': {},   # key: (source_url, network, site_code, variable_code)
+        'variable': {},     # key: (vocabulary, variable_code)
+        'units': {},        # key: (name, code)
+        }
 
 
 #----------------------------------------------------------------------------
 # cache SQLAlchemy models
 #----------------------------------------------------------------------------
-
-
 def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
     """
     Create a cache object that searches the in-memory cache dict for
@@ -160,8 +186,8 @@ class DBCacheDatesMixin(object):
     """
     Mixin class for keeping track of cache times
     """
-    last_refreshed = Column(DateTime, default=func.now(),
-                            onupdate=func.now())
+    last_refreshed = Column(DateTime, default=sa.func.now(),
+                            onupdate=sa.func.now())
 
 
 class DBSource(Base):
@@ -169,7 +195,7 @@ class DBSource(Base):
 
     id = Column(Integer, primary_key=True)
     url = Column(String, unique=True)
-    sites = relationship('DBSite', backref='source')
+    sites = relationship('DBSite', backref='source', lazy='dynamic')
     last_get_sites = Column(DateTime)
 
     def __init__(self, source=None, url=None):
@@ -223,7 +249,7 @@ class DBSiteMixin(object):
 
     @declared_attr
     def timeseries_list(cls):
-        return relationship('DBTimeSeries', backref='site', lazy='subquery')
+        return relationship('DBTimeSeries', backref='site', lazy='dynamic')
 
     @declared_attr
     def __table_args__(cls):
@@ -355,10 +381,10 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
     variable_id = Column(Integer, ForeignKey('variable.id'), nullable=False)
     value_count = Column(Integer)
 
-    variable = relationship('DBVariable', lazy='subquery')
-    values = relationship('DBValue', order_by="DBValue.timestamp",
+    variable = relationship('DBVariable')
+    values = relationship('DBValue',
                           cascade='save-update, merge, delete, delete-orphan',
-                          lazy='subquery')
+                          lazy='dynamic', backref='timeseries')
 
     # populated by backref:
     #   site = DBSite
@@ -412,7 +438,7 @@ class DBTimeSeries(Base, DBCacheDatesMixin):
 
 def _timeseries_lookup_key_func(timeseries=None, url=None, network=None,
                                 site_code=None, variable=None, site=None,
-                                *args, **kwargs):
+                                **kwargs):
     if timeseries:
         return (timeseries.site.source.url, timeseries.site.network,
                 timeseries.site.code, timeseries.variable.code)
@@ -423,7 +449,7 @@ def _timeseries_lookup_key_func(timeseries=None, url=None, network=None,
 
 
 def _timeseries_db_lookup_func(timeseries=None, network=None, site_code=None,
-                                variable=None, *args, **kwargs):
+                                variable=None, site=None, **kwargs):
     if timeseries:
         network = timeseries.site.network
         site_code = timeseries.site.code
@@ -434,8 +460,9 @@ def _timeseries_db_lookup_func(timeseries=None, network=None, site_code=None,
     if network and site_code and variable:
         variable_code = variable.code
 
-    site = db_session.query(DBSite).filter_by(network=network,
-                                              code=site_code).one()
+    if not site:
+        site = db_session.query(DBSite).filter_by(network=network,
+                                                  code=site_code).one()
     return db_session.query(DBTimeSeries).filter_by(site=site,
                                                     variable=variable).one()
 
@@ -499,7 +526,6 @@ class DBValue(Base, DBCacheDatesMixin):
     timestamp = Column(DateTime)
     timeseries_id = Column(Integer, ForeignKey('timeseries.id'),
                            nullable=False)
-    timeseries = relationship('DBTimeSeries', lazy='subquery')
 
     def __init__(self, value=None, timestamp=None, timeseries=None):
         self.value = value
@@ -518,11 +544,10 @@ class DBVariable(Base, DBCacheDatesMixin):
     no_data_value = Column(String)
     units_id = Column(Integer, ForeignKey('units.id'))
 
-    units = relationship('DBUnits', lazy='subquery')
+    units = relationship('DBUnits')
 
     def __init__(self, variable=None, name=None, code=None, variable_id=None,
-                 vocabulary=None, no_data_value=None, site_id=None,
-                 units=None):
+                 vocabulary=None, no_data_value=None, units=None):
         if not variable is None:
             self._from_pyhis(variable)
         else:
@@ -551,7 +576,7 @@ class DBVariable(Base, DBCacheDatesMixin):
 
 
 def _variable_lookup_key_func(variable=None, vocabulary=None, code=None,
-                              *args, **kwargs):
+                              **kwargs):
     if variable:
         return (variable.vocabulary, variable.code)
     if vocabulary and code:
@@ -559,7 +584,7 @@ def _variable_lookup_key_func(variable=None, vocabulary=None, code=None,
 
 
 def _variable_db_lookup_func(variable=None, vocabulary=None, code=None,
-                             *args, **kwargs):
+                             **kwargs):
     if variable:
         vocabulary = variable.vocabulary
         code = variable.code
@@ -579,12 +604,9 @@ def create_all_tables():
 create_all_tables()
 
 
-
 #----------------------------------------------------------------------------
 # cache functions
 #----------------------------------------------------------------------------
-
-
 def cache_all(source_url):
     """
     Cache all available data for a source
@@ -627,7 +649,7 @@ def get_sites_for_source(source):
         # queue them to be saved to the db and (update them in the
         # in-memory cache)
 
-        skip_db_lookup = bool(len(cached_source.sites) == 0)
+        skip_db_lookup = bool(cached_source.sites.count() == 0)
         cache_sites = [CacheSite(site, auto_commit=False,
                                  skip_db_lookup=skip_db_lookup)
                        for site in site_list.values()]
@@ -636,7 +658,7 @@ def get_sites_for_source(source):
         db_session.add_all(cache_sites)
 
         # update cached_source.last_get_sites
-        cached_source.last_get_sites = func.now()
+        cached_source.last_get_sites = sa.func.now()
 
         # commit
         db_session.commit()
@@ -671,7 +693,7 @@ def get_timeseries_dict_for_site(site):
     """
     cached_site = CacheSite(site)
 
-    if len(cached_site.timeseries_list) == 0:
+    if cached_site.timeseries_list.count() == 0:
         timeseries_dict = waterml.\
                           get_timeseries_dict_for_site(cached_site.to_pyhis())
         # Since the timeseries don't exist in the db yet, just
@@ -750,7 +772,7 @@ def get_series_and_quantity_for_timeseries(
 
 
 def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
-    number_of_cached_values = len(cached_timeseries.values)
+    number_of_cached_values = cached_timeseries.values.count()
     if number_of_cached_values != pyhis_timeseries.value_count:
         return True
 

@@ -95,7 +95,7 @@ class TWDBCacheTests(TWDBTestBase):
         # query timseries so that it gets set up in the cache
         cached_ts = cache.CacheTimeSeries(
             self.source.sites['Aransas95_D1'].timeseries['CON001'])
-        assert Assert(len(cached_ts.values)) == 4
+        assert Assert(cached_ts.values.count()) == 4
 
         # test that check_for_updates sucessfully updates the
         # timeseries values
