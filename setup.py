@@ -28,7 +28,6 @@ setup(
     install_requires=[
         'numpy>=1.4.0',
         'pandas>=0.3.0',
-        'quantities',
         'suds>=0.4',
     ],
     classifiers=[
