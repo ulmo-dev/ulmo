@@ -516,7 +516,7 @@ class DBVariable(Base, DBCacheDatesMixin):
     no_data_value = Column(String)
     units_id = Column(Integer, ForeignKey('units.id'))
 
-    units = relationship('DBUnits', lazy='dynamic')
+    units = relationship('DBUnits')
 
     def __init__(self, variable=None, name=None, code=None, variable_id=None,
                  vocabulary=None, no_data_value=None, units=None):
