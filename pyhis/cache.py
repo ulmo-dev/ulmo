@@ -50,8 +50,13 @@ except ImportError:
     from sqlite3 import dbapi2 as sqlite
     USE_SPATIAL = False
 
+
 Session = sessionmaker(autocommit=False, autoflush=False)
 Base = declarative_base()
+
+# initialize db_session to None so we can easily test for its
+# existence and close it if necessary
+db_session = None
 
 
 def init_cache(cache_database_file=CACHE_DATABASE_FILE,
@@ -77,6 +82,11 @@ def init_cache(cache_database_file=CACHE_DATABASE_FILE,
             connection = engine.raw_connection().connection
             connection.enable_load_extension(True)
             engine.execute(LIBSPATIALITE_LOCATION)
+
+    # if we are reinitializing cache, close the old session
+    if db_session:
+        db_session.commit()
+        db_session.close()
 
     # bind new engine to the db_session and Base metadata objects
     db_session = Session(bind=engine)
