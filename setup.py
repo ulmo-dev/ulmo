@@ -29,6 +29,7 @@ setup(
         'numpy>=1.4.0',
         'pandas>=0.3.0',
         'suds>=0.4',
+        'quantities>=0.9.0',
         'sqlalchemy>=0.7.1'
     ],
     classifiers=[
