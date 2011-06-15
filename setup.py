@@ -29,6 +29,7 @@ setup(
         'numpy>=1.4.0',
         'pandas>=0.3.0',
         'suds>=0.4',
+        'sqlalchemy>=0.7.1'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
