@@ -30,7 +30,8 @@ setup(
         'pandas>=0.3.0',
         'suds>=0.4',
         'quantities>=0.9.0',
-        'sqlalchemy>=0.7.1'
+        'sqlalchemy>=0.7.1',
+        'attest>=0.5.0'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
