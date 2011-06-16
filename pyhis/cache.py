@@ -7,8 +7,9 @@
 #----------------------------------------------------------------------------
 # cache should work like this:
 #  1. check in-memory cache, if found return the obj
-#  2. check database, if found return the obj and update in-memory cache
-#  3. make new network request, update database with results
+#  2. if not check database, if found return the obj and update in-memory cache
+#  3. if not in database, make new network request, update database
+#     with results and update the in-memory cache
 #----------------------------------------------------------------------------
 import logging
 import os
