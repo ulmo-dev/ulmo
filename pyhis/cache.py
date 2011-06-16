@@ -11,6 +11,7 @@
 #  3. if not in database, make new network request, update database
 #     with results and update the in-memory cache
 #----------------------------------------------------------------------------
+from datetime import datetime, timedelta
 import logging
 import os
 import platform
@@ -37,6 +38,8 @@ ECHO_SQLALCHEMY = False
 #XXX: this should be programmatically generated in some clever way
 #     (e.g. based on some config)
 USE_CACHE = True
+
+CACHE_GET_SITES_TIMEOUT = timedelta(days=7)
 
 # configure logging
 LOG_FORMAT = '%(message)s'
@@ -581,14 +584,14 @@ def get_sites_for_source(source):
     """
     cached_source = CacheSource(source)
 
-    if not cached_source.last_get_sites:
+    if not cached_source.last_get_sites or \
+           _need_to_update_source(cached_source):
         site_list = waterml.get_sites_for_source(cached_source.to_pyhis())
 
         # since the sites don't exist in the db yet, just
         # instantiating them via the CacheSite constructor will
         # queue them to be saved to the db and (update them in the
         # in-memory cache)
-
         skip_db_lookup = bool(cached_source.sites.count() == 0)
         cache_sites = [CacheSite(site, auto_commit=False,
                                  skip_db_lookup=skip_db_lookup)
@@ -692,7 +695,6 @@ def get_series_and_quantity_for_timeseries(
 
         return series, quantity
 
-
     series_dict = dict([(cached_value.timestamp, cached_value.value)
                         for cached_value in cached_timeseries.values])
     series = pandas.Series(series_dict)
@@ -709,6 +711,11 @@ def get_series_and_quantity_for_timeseries(
                       (variable_code, quantity, unit_code))
 
     return series, quantity
+
+
+def _need_to_update_source(cached_source):
+    time_since_last_cached = datetime.now() - cached_source.last_get_sites
+    return bool(time_since_last_cached > CACHE_GET_SITES_TIMEOUT)
 
 
 def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
