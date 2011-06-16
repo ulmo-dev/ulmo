@@ -82,8 +82,6 @@ class Site(object):
 
     @property
     def dataframe(self):
-        if not self._timeseries_dict:
-            self._update_site_info_response()
         if not self._dataframe:
             self._update_dataframe()
         return self._dataframe
