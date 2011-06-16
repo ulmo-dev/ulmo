@@ -501,14 +501,14 @@ class DBUnits(Base, DBCacheDatesMixin):
             code=self.code)
 
 
-def _units_lookup_key_func(units=None, name=None, code=None):
+def _units_lookup_key_func(units=None, name=None, code=None, **kwargs):
     if units:
         return (units.name, units.code)
     if name and code:
         return (name, code)
 
 
-def _units_db_lookup_func(units=None, name=None, code=None):
+def _units_db_lookup_func(units=None, name=None, code=None, **kwargs):
     if units:
         name = units.name
         code = units.code
