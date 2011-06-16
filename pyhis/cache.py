@@ -14,11 +14,11 @@
 import logging
 import os
 import platform
+from sqlite3 import dbapi2 as sqlite
 import tempfile
 import warnings
 
 import pandas
-
 import sqlalchemy as sa
 from sqlalchemy.schema import ForeignKey, Index, UniqueConstraint
 from sqlalchemy import (Column, Boolean, Integer, Text, String, Float,
@@ -37,21 +37,11 @@ ECHO_SQLALCHEMY = False
 #XXX: this should be programmatically generated in some clever way
 #     (e.g. based on some config)
 USE_CACHE = True
-USE_SPATIAL = False
 
 # configure logging
 LOG_FORMAT = '%(message)s'
 logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
 log = logging.getLogger(__name__)
-
-
-try:
-    from geoalchemy import (GeometryColumn, GeometryDDL, Point,
-                            WKTSpatialElement)
-    from pysqlite2 import dbapi2 as sqlite
-except ImportError:
-    from sqlite3 import dbapi2 as sqlite
-    USE_SPATIAL = False
 
 
 Session = sessionmaker(autocommit=False, autoflush=False)
@@ -70,21 +60,8 @@ def init_cache(cache_database_file=CACHE_DATABASE_FILE,
 
     cache_database_uri = 'sqlite:///' + cache_database_file
 
-    # to use geoalchemy with spatialite, the libspatialite library has to
-    # be loaded as an extension
     engine = sa.create_engine(cache_database_uri, convert_unicode=True,
                               module=sqlite, echo=echo)
-
-    if USE_SPATIAL:
-        if "ARCH" in platform.uname()[2]:
-            LIBSPATIALITE_LOCATION="select load_extension('/usr/lib/libspatialite.so.1')"
-        else:
-            LIBSPATIALITE_LOCATION="select load_extension('/usr/lib/libspatialite.so.2')"
-
-        if 'sqlite' in cache_database_uri:
-            connection = engine.raw_connection().connection
-            connection.enable_load_extension(True)
-            engine.execute(LIBSPATIALITE_LOCATION)
 
     # if we are reinitializing cache, close the old session
     if db_session:
@@ -294,63 +271,23 @@ class DBSiteMixin(object):
             source=source)
 
 
-if USE_SPATIAL:
-    class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
-        geom = GeometryColumn(Point(2))
+class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
 
-        def __init__(self, site=None, site_id=None, name=None, code=None,
-                     network=None, source=None, latitude=None, longitude=None):
-            if site:
-                self._from_pyhis(site)
-            else:
-                self.site_id = site_id
-                self.name = name
-                self.code = code
-                self.network = network
-                self.source = source
-                self.latitude = latitude
-                self.longitude = longitude
+    latitude = Column(Float)
+    longitude = Column(Float)
 
-        @property
-        def latitude(self):
-            x, y = self.geom.coords(db_session)
-            return y
-
-        @latitude.setter
-        def latitude(self, latitude):
-            wkt_point = "POINT(%f %f)" % (self.longitude, latitude)
-            self.geom = WKTSpatialElement(wkt_point)
-
-        @property
-        def longitude(self):
-            x, y = self.geom.coords(db_session)
-            return x
-
-        @longitude.setter
-        def longitude(self, longitude):
-            wkt_point = "POINT(%f %f)" % (longitude, self.latitude)
-            self.geom = WKTSpatialElement(wkt_point)
-
-    GeometryDDL(DBSite.__table__)
-
-else:
-    class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
-
-        latitude = Column(Float)
-        longitude = Column(Float)
-
-        def __init__(self, site=None, site_id=None, name=None, code=None,
-                     network=None, source=None, latitude=None, longitude=None):
-            if site:
-                self._from_pyhis(site)
-            else:
-                self.site_id = site_id
-                self.name = name
-                self.code = code
-                self.network = network
-                self.source = source
-                self.latitude = latitude
-                self.longitude = longitude
+    def __init__(self, site=None, site_id=None, name=None, code=None,
+                 network=None, source=None, latitude=None, longitude=None):
+        if site:
+            self._from_pyhis(site)
+        else:
+            self.site_id = site_id
+            self.name = name
+            self.code = code
+            self.network = network
+            self.source = source
+            self.latitude = latitude
+            self.longitude = longitude
 
 
 def _site_lookup_key_func(site=None, network=None, code=None, **kwargs):
