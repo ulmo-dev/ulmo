@@ -14,6 +14,7 @@ import pandas
 import pyhis
 
 LOG_FORMAT = '%(message)s'
+DISREGARD_TIMESERIES_DATE = True
 logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
 log = logging.getLogger(__name__)
 
@@ -87,7 +88,14 @@ def get_series_and_quantity_for_timeseries(timeseries):
                 (timeseries.site.network, timeseries.site.code,
                  timeseries.variable.code))
 
-    begin_date_str = timeseries.begin_datetime.strftime('%Y-%m-%d')
+    # workaround for USGS waterml reflection service hosted at sdsc is
+    # returning timeseries begin date that is just a 31 days prior,
+    # but USGS data goes back 120 days. Here we must disregard
+    # timeseries date, acquire more data
+    if DISREGARD_TIMESERIES_DATE:
+        begin_date_str = '1800-01-01'
+    else:
+        begin_date_str = timeseries.begin_datetime.strftime('%Y-%m-%d')
     end_date_str = (timeseries.end_datetime + timedelta(days=1))\
                    .strftime('%Y-%m-%d')
 
