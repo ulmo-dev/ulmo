@@ -55,13 +55,14 @@ Base = declarative_base()
 db_session = None
 
 
-def init_cache(cache_database_file=CACHE_DATABASE_FILE,
+def init_cache(cache_database_uri=CACHE_DATABASE_FILE,
                echo=ECHO_SQLALCHEMY):
     global engine
     global db_session
     global _cache
 
-    cache_database_uri = 'sqlite:///' + cache_database_file
+    if not cache_database_uri.startswith('sqlite://'):
+        cache_database_uri = 'sqlite:///' + cache_database_uri
 
     engine = sa.create_engine(cache_database_uri, convert_unicode=True,
                               module=sqlite, echo=echo)
