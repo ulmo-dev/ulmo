@@ -1,5 +1,8 @@
 # ignore egginfo file
 PyHIS.egg-info/
 
+# ignore dist dir
+dist/
+
 # ignore compiled python files
 *.pyc
