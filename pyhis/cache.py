@@ -39,7 +39,11 @@ ECHO_SQLALCHEMY = False
 #     (e.g. based on some config)
 USE_CACHE = True
 
+# If the difference between now and the last time a these parts of the
+# cache were last refreshed, then make a new request and update the
+# cache
 CACHE_GET_SITES_TIMEOUT = timedelta(days=7)
+CACHE_TIMESERIES_CACHE_TIMEOUT = timedelta(days=7)
 
 # configure logging
 LOG_FORMAT = '%(message)s'
@@ -719,13 +723,15 @@ def _need_to_update_source(cached_source):
 def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
     number_of_cached_values = cached_timeseries.values.count()
     if number_of_cached_values != pyhis_timeseries.value_count:
-        return True
-
+        # it seems that value_count is not very reliable - lots of
+        # services get it wrong, so we only update if value_count is
+        # off and we are outside of our pre-determined cache window
+        time_since_last_cached = datetime.now() - cached_timeseries.last_refreshed
+        return bool(time_since_last_cached > CACHE_TIMESERIES_CACHE_TIMEOUT)
     try:
         if cached_timeseries.values[0].timestamp != pyhis_timeseries.begin_datetime \
            or cached_timeseries.values[-1].timestamp != pyhis_timeseries.end_datetime:
             return True
     except KeyError:
         return True
-
     return False
