@@ -42,8 +42,10 @@ USE_CACHE = True
 # If the difference between now and the last time a these parts of the
 # cache were last refreshed, then make a new request and update the
 # cache
-CACHE_GET_SITES_TIMEOUT = timedelta(days=7)
-CACHE_TIMESERIES_CACHE_TIMEOUT = timedelta(days=7)
+CACHE_EXPIRES = {
+    'get_sites': timedelta(days=7),
+    'timeseries': timedelta(days=7)
+    }
 
 # configure logging
 LOG_FORMAT = '%(message)s'
@@ -717,7 +719,7 @@ def get_series_and_quantity_for_timeseries(
 
 def _need_to_update_source(cached_source):
     time_since_last_cached = datetime.now() - cached_source.last_get_sites
-    return bool(time_since_last_cached > CACHE_GET_SITES_TIMEOUT)
+    return bool(time_since_last_cached > CACHE_EXPIRES['get_sites'])
 
 
 def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
@@ -727,7 +729,7 @@ def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
         # services get it wrong, so we only update if value_count is
         # off and we are outside of our pre-determined cache window
         time_since_last_cached = datetime.now() - cached_timeseries.last_refreshed
-        return bool(time_since_last_cached > CACHE_TIMESERIES_CACHE_TIMEOUT)
+        return bool(time_since_last_cached > CACHE_EXPIRES['timeseries'])
     try:
         if cached_timeseries.values[0].timestamp != pyhis_timeseries.begin_datetime \
            or cached_timeseries.values[-1].timestamp != pyhis_timeseries.end_datetime:
