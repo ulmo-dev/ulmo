@@ -564,13 +564,10 @@ def cache_all(source_url):
         try:
             log.info('caching values for site %s/%s: %s' %
                      (i, total_sites, site.name))
-            df = site.dataframe
 
-            # delete dataframe object and site timeseries dict
-            # (TimeSeries objects each have a series object) to free
-            # up some memory
-            del df
-            del site._dataframe
+            # update the timeseries dict, which will automatically
+            # cache the values then delete it to free up the memory
+            site._update_timeseries_dict()
             del site._timeseries_dict
         except Exception as e:
             warnings.warn("There was a problem getting values for "
