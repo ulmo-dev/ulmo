@@ -574,10 +574,46 @@ def cache_all(source_url):
             # update the timeseries dict, which will automatically
             # cache the values then delete it to free up the memory
             site._update_timeseries_dict()
-            del site._timeseries_dict
+            _clear_site_from_memory_cache(site)
         except Exception as e:
             warnings.warn("There was a problem getting values for "
                           "%s, skipping..." % (site))
+
+
+def _clear_site_from_memory_cache(site):
+    """
+    clears the potentially weighty parts of a cached site from
+    in-memory cache (like site response and Timeseries objects). This
+    can keep the memory footprint of long running scripts from
+    ballooning, but it means that you won't have the performance
+    advantage of having these objects in the in-memory cache after
+    this function is called. Note: these objects won't be gc'd if
+    there are references to them somewhere else (e.g. a source object
+    that still holds a reference to the site object in its sites
+    dict).
+    """
+    for timeseries in site._timeseries_dict.values():
+        try:
+            timeseries_cache_key = _timeseries_lookup_key_func(timeseries)
+            del _cache['timeseries'][timeseries_cache_key]
+        except KeyError:
+            pass
+
+    site_vars_to_delete = (
+        '_timeseries_dict',
+        '_site_info_response')
+
+    for site_var in site_vars_to_delete:
+        try:
+            delattr(site, site_var)
+        except AttributeError:
+            pass
+
+    try:
+        site_cache_key = _site_lookup_key_func(site)
+        del _cache['site'][site_cache_key]
+    except KeyError:
+        pass
 
 
 def get_sites_for_source(source):
