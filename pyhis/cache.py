@@ -764,16 +764,22 @@ def _need_to_update_source(cached_source):
 
 def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
     number_of_cached_values = cached_timeseries.values.count()
+
+    if number_of_cached_values == 0:
+        return True
+
     if number_of_cached_values != pyhis_timeseries.value_count:
         # it seems that value_count is not very reliable - lots of
         # services get it wrong, so we only update if value_count is
         # off and we are outside of our pre-determined cache window
-        time_since_last_cached = datetime.now() - cached_timeseries.last_refreshed
+        time_since_last_cached = datetime.utcnow() - cached_timeseries.last_refreshed
         return bool(time_since_last_cached > CACHE_EXPIRES['timeseries'])
+
     try:
-        if cached_timeseries.values[0].timestamp != pyhis_timeseries.begin_datetime \
-           or cached_timeseries.values[-1].timestamp != pyhis_timeseries.end_datetime:
-            return True
+        if cached_timeseries.values[0].timestamp == pyhis_timeseries.begin_datetime \
+            and cached_timeseries.values[-1].timestamp == pyhis_timeseries.end_datetime:
+            return False
     except KeyError:
         return True
-    return False
+
+    return True
