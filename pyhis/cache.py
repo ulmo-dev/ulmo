@@ -28,6 +28,7 @@ from sqlalchemy.ext.declarative import (declarative_base, declared_attr,
                                         synonym_for)
 from sqlalchemy.orm import relationship, backref, sessionmaker, synonym
 from sqlalchemy.orm.exc import NoResultFound
+import suds
 
 import pyhis
 from pyhis import waterml
@@ -573,7 +574,8 @@ def cache_all(source_url):
 
             # update the timeseries dict, which will automatically
             # cache the values then delete it to free up the memory
-            site._update_timeseries_dict()
+            for timeseries in site.timeseries.values():
+                timeseries._update_series()
             _clear_site_from_memory_cache(site)
         except Exception as e:
             warnings.warn("There was a problem getting values for "
