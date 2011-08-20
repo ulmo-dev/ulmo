@@ -563,9 +563,16 @@ def cache_all(source_url):
     Cache all available data for a source
     """
     source = pyhis.Source(source_url)
-    total_sites = len(source.sites.values())
+    cache_sites(source.sites.values())
 
-    for i, site in enumerate(source.sites.values(), 1):
+
+def cache_sites(sites):
+    """
+    Cache all available data for a collection of sites
+    """
+    total_sites = len(sites)
+
+    for i, site in enumerate(sites, 1):
         # this could be improved by not having to create the
         # dataframe object
         try:
