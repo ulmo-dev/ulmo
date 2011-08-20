@@ -577,6 +577,8 @@ def cache_all(source_url):
             for timeseries in site.timeseries.values():
                 timeseries._update_series()
             _clear_site_from_memory_cache(site)
+        except suds.WebFault as fault:
+            warnings.warn("There was a problem getting values for %s:\n%s " % (site, fault))
         except Exception as e:
             warnings.warn("There was a problem getting values for "
                           "%s, skipping..." % (site))
