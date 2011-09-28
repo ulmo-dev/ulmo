@@ -17,6 +17,8 @@ import pyhis
 from . import waterml
 from . import shapefile
 
+# default timeout for http requests in seconds
+SUDS_TIMEOUT = 600  # 5 minutes
 
 # fancy this up a bit sometime
 LOG_FORMAT = '%(message)s'
@@ -140,7 +142,7 @@ class Source(object):
     _use_cache = None
 
     def __init__(self, wsdl_url, description=None, use_cache=True):
-        self.suds_client = suds.client.Client(wsdl_url)
+        self.suds_client = suds.client.Client(wsdl_url, timeout=SUDS_TIMEOUT)
         self.url = wsdl_url
         self._description = description
         self._use_cache = use_cache
