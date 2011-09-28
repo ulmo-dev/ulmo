@@ -214,7 +214,7 @@ class Source(object):
     def __len__(self):
         len(self._sites)
 
-    def get_sites_within_shapefile(self, file_name):
+    def get_sites_within_shapefile(self, filename):
         """ Reads polygon from shapefile, sends vertices
         to get_sites_within_polygon, returns subset of sites"""
         print 'not implemented'
