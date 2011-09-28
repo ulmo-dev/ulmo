@@ -609,8 +609,7 @@ def _clear_site_from_memory_cache(site):
     """
     for timeseries in site._timeseries_dict.values():
         try:
-            timeseries_cache_key = _timeseries_lookup_key_func(timeseries)
-            del _cache['timeseries'][timeseries_cache_key]
+            _clear_timeseries_from_memory_cache(timeseries)
         except KeyError:
             pass
 
@@ -629,6 +628,14 @@ def _clear_site_from_memory_cache(site):
         del _cache['site'][site_cache_key]
     except KeyError:
         pass
+
+
+def _clear_timeseries_from_memory_cache(timeseries):
+    """
+    clears a timeseries from the in-memory cache
+    """
+    timeseries_cache_key = _timeseries_lookup_key_func(timeseries)
+    del _cache['timeseries'][timeseries_cache_key]
 
 
 def get_sites_for_source(source):
