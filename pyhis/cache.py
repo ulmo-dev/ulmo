@@ -575,20 +575,24 @@ def cache_sites(sites):
     for i, site in enumerate(sites, 1):
         # this could be improved by not having to create the
         # dataframe object
-        try:
-            log.info('caching values for site %s/%s: %s' %
-                     (i, total_sites, site.name))
+        # try:
+        log.info('caching values for site %s/%s: %s' %
+                 (i, total_sites, site.name))
 
-            # update the timeseries dict, which will automatically
-            # cache the values then delete it to free up the memory
-            for timeseries in site.timeseries.values():
+        # update the timeseries dict, which will automatically
+        # cache the values then delete it to free up the memory
+        for timeseries in site.timeseries.values():
+            try:
                 timeseries._update_series()
-            _clear_site_from_memory_cache(site)
-        except suds.WebFault as fault:
-            warnings.warn("There was a problem getting values for %s:\n%s " % (site, fault))
-        except Exception as e:
-            warnings.warn("There was a problem getting values for "
-                          "%s, skipping..." % (site))
+            except suds.WebFault as fault:
+                warnings.warn("There was a problem getting values for %s:%s\n%s " % (site, timeseries, fault))
+            _clear_timeseries_from_memory_cache(timeseries)
+
+        _clear_site_from_memory_cache(site)
+        # except Exception as e:
+        #     import pdb; pdb.set_trace()
+        #     warnings.warn("There was a problem getting values for "
+        #                   "%s, skipping..." % (site))
 
 
 def _clear_site_from_memory_cache(site):
