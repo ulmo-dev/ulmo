@@ -20,11 +20,12 @@ import warnings
 
 import pandas
 import sqlalchemy as sa
-from sqlalchemy.schema import ForeignKey, Index, UniqueConstraint
 from sqlalchemy import (Column, Integer, String, Float, DateTime)
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.schema import ForeignKey, Index, UniqueConstraint
+from sqlalchemy.sql.expression import desc
 import suds
 
 import pyhis
@@ -568,15 +569,15 @@ create_all_tables()
 #----------------------------------------------------------------------------
 # cache functions
 #----------------------------------------------------------------------------
-def cache_all(source_url):
+def cache_all(source_url, update_values=None):
     """
     Cache all available data for a source
     """
     source = pyhis.Source(source_url)
-    cache_sites(source.sites.values())
+    cache_sites(source.sites.values(), update_values=update_values)
 
 
-def cache_sites(sites):
+def cache_sites(sites, update_values=None):
     """
     Cache all available data for a collection of sites
     """
@@ -802,13 +803,33 @@ def cache_timeseries(timeseries, force_intervals=False,
     update ALL records in the database.
     """
     cached_timeseries = CacheTimeSeries(timeseries)
+
+    if update_values == True:
+        start_time = timeseries.begin_datetime
+    elif update_values == None or update_values == False:
+        last_value = cached_timeseries.values.order_by(
+            desc(DBValue.timestamp)).first()
+        start_time = last_value.timestamp
+    elif type(update_values) == datetime:
+        start_time = update_values
+    elif type(update_values) == timedelta:
+        last_value = cached_timeseries.values.order_by(
+            desc(DBValue.timestamp)).first()
+        start_time = last_value.timestamp - timedelta
+    else:
+        raise TypeError("update_values must be either: None, False, True, a datetime.datetime object, or a datetime.timedelta object")
+
+    if start_time >= cached_timeseries.end_datetime:
+        return
     if timeseries.value_count < MAX_VALUE_COUNT and force_intervals == False:
         series, quantity = \
-                waterml.get_series_and_quantity_for_timeseries(timeseries)
-        _cache_series_values(series, cached_timeseries, update_values=update_values)
+                waterml.get_series_and_quantity_for_timeseries(
+            timeseries,
+            begin_date_str=start_time.strftime('%Y-%m-%d'))
+        _cache_series_values(series, cached_timeseries,
+                             update_values=update_values)
     else:
         request_interval = DEFAULT_SMALL_REQUEST_INTERVAL
-        start_time = timeseries.begin_datetime
         end_time = start_time + request_interval
         while end_time < timeseries.end_datetime:
             series, quantity = \
@@ -816,7 +837,8 @@ def cache_timeseries(timeseries, force_intervals=False,
                 timeseries,
                 begin_date_str=start_time.strftime('%Y-%m-%d'),
                 end_date_str=end_time.strftime('%Y-%m-%d'))
-            _cache_series_values(series, cached_timeseries, update_values=update_values)
+            _cache_series_values(series, cached_timeseries,
+                                 update_values=update_values)
             start_time = end_time
             end_time = start_time + request_interval
 
