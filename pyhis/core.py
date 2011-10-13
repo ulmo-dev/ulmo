@@ -4,8 +4,6 @@
 
     Core data models for PyHIS
 """
-
-import itertools
 import logging
 
 import numpy as np
@@ -13,7 +11,6 @@ from matplotlib.nxutils import points_inside_poly
 import pandas
 import suds
 
-import pyhis
 from . import waterml
 from . import shapefile
 
