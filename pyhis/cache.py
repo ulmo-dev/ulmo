@@ -29,6 +29,7 @@ import suds
 
 import pyhis
 from pyhis import waterml
+from pyhis.exceptions import NoDataError
 
 CACHE_DATABASE_FILE = os.path.join(tempfile.gettempdir(), "pyhis_cache.db")
 ECHO_SQLALCHEMY = False
@@ -582,7 +583,11 @@ def cache_sites(sites):
             try:
                 timeseries._update_series()
             except suds.WebFault as fault:
-                warnings.warn("There was a problem getting values for %s:%s\n%s " % (site, timeseries, fault))
+                warnings.warn(
+                    "There was a problem getting values for %s:%s\n%s " % (
+                        site, timeseries, fault))
+            except NoDataError as e:
+                warnings.warn(str(e))
             _clear_timeseries_from_memory_cache(timeseries)
 
         _clear_site_from_memory_cache(site)
