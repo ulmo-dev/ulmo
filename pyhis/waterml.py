@@ -12,6 +12,7 @@ import numpy as np
 import pandas
 
 import pyhis
+from pyhis.exceptions import NoDataError
 
 LOG_FORMAT = '%(message)s'
 DISREGARD_TIMESERIES_DATE = True
@@ -129,11 +130,12 @@ def get_series_and_quantity_for_timeseries(timeseries):
         dates = np.array([value._dateTime for value in values])
         data = np.array([float(value.value) for value in values])
     except AttributeError:
-        warnings.warn('No data values returned by service for "%s:%s:%s". This'
-                      'is not valid in waterml, so the service is probably '
-                      'misconfigured or broken.' %
-                      (timeseries.site.network, timeseries.site.code,
-                       timeseries.variable.code))
+        raise NoDataError(
+            'No data values returned by service for "%s:%s:%s". This '
+            'is not valid in waterml, so the service is probably '
+            'misconfigured or broken.' %
+            (timeseries.site.network, timeseries.site.code,
+             timeseries.variable.code))
 
     if len(dates) != len(data):
         raise ValueError("Number of dates does not match number of "
