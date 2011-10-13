@@ -59,6 +59,8 @@ Base = declarative_base()
 # existence and close it if necessary
 db_session = None
 
+_cache = {}
+
 
 def init_cache(cache_database_uri=CACHE_DATABASE_FILE,
                echo=ECHO_SQLALCHEMY):
