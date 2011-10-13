@@ -14,7 +14,6 @@
 from datetime import datetime, timedelta
 import logging
 import os
-import platform
 from sqlite3 import dbapi2 as sqlite
 import tempfile
 import warnings
@@ -22,11 +21,9 @@ import warnings
 import pandas
 import sqlalchemy as sa
 from sqlalchemy.schema import ForeignKey, Index, UniqueConstraint
-from sqlalchemy import (Column, Boolean, Integer, Text, String, Float,
-                        DateTime, Enum)
-from sqlalchemy.ext.declarative import (declarative_base, declared_attr,
-                                        synonym_for)
-from sqlalchemy.orm import relationship, backref, sessionmaker, synonym
+from sqlalchemy import (Column, Integer, String, Float, DateTime)
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 import suds
 
