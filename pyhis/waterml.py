@@ -78,27 +78,31 @@ def get_timeseries_dict_for_site(site):
                  for timeseries in timeseries_list])
 
 
-def get_series_and_quantity_for_timeseries(timeseries):
+def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
+                                           end_date_str=None):
     """returns a tuple where the first element is a pandas.Series
     containing the timeseries data for the timeseries and the second
     element is the python quantity that corresponds the unit for the
     variable. Takes a suds WaterML TimeSeriesResponseType object.
     """
     suds_client = timeseries.site.source.suds_client
-    log.info('making timeseries request for "%s:%s:%s"...' %
+    log.info('making timeseries request for "%s:%s:%s (%s - %s)"...' %
                 (timeseries.site.network, timeseries.site.code,
-                 timeseries.variable.code))
+                 timeseries.variable.code,
+                 begin_date_str, end_date_str))
 
     # workaround for USGS waterml reflection service hosted at sdsc is
     # returning timeseries begin date that is just a 31 days prior,
     # but USGS data goes back 120 days. Here we must disregard
     # timeseries date, acquire more data
-    if DISREGARD_TIMESERIES_DATE:
-        begin_date_str = '1800-01-01'
-    else:
-        begin_date_str = timeseries.begin_datetime.strftime('%Y-%m-%d')
-    end_date_str = (timeseries.end_datetime + timedelta(days=1))\
-                   .strftime('%Y-%m-%d')
+    if not begin_date_str:
+        if DISREGARD_TIMESERIES_DATE:
+            begin_date_str = '1800-01-01'
+        else:
+            begin_date_str = timeseries.begin_datetime.strftime('%Y-%m-%d')
+    if not end_date_str:
+        end_date_str = (timeseries.end_datetime + timedelta(days=1))\
+                       .strftime('%Y-%m-%d')
 
     timeseries_response = suds_client.service.GetValuesObject(
         '%s:%s' % (timeseries.site.network, timeseries.site.code),
@@ -106,9 +110,10 @@ def get_series_and_quantity_for_timeseries(timeseries):
         begin_date_str,
         end_date_str)
 
-    log.info('processing timeseries request for "%s:%s:%s"...' %
+    log.info('processing timeseries request for "%s:%s:%s (%s - %s)"...' %
                 (timeseries.site.network, timeseries.site.code,
-                 timeseries.variable.code))
+                 timeseries.variable.code,
+                 begin_date_str, end_date_str))
 
     unit_code = getattr(timeseries_response.timeSeries.variable.units,
                         '_unitsCode', None)
