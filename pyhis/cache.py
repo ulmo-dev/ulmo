@@ -46,6 +46,13 @@ CACHE_EXPIRES = {
     'timeseries': timedelta(days=7)
     }
 
+# If there are more than these values in a value count, break the
+# request into a set of smaller requests - this is important for
+# services which can return huge amounts of data which can swamp
+# memory
+MAX_VALUE_COUNT = 50000
+DEFAULT_SMALL_REQUEST_INTERVAL = timedelta(days=180)
+
 # configure logging
 LOG_FORMAT = '%(message)s'
 logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
@@ -583,7 +590,7 @@ def cache_sites(sites):
         # cache the values then delete it to free up the memory
         for timeseries in site.timeseries.values():
             try:
-                timeseries._update_series()
+                cache_timeseries(timeseries, update_values=update_values)
             except suds.WebFault as fault:
                 warnings.warn(
                     "There was a problem getting values for %s:%s\n%s " % (
@@ -741,23 +748,14 @@ def get_series_and_quantity_for_timeseries(
         series, quantity = \
                 waterml.get_series_and_quantity_for_timeseries(timeseries)
 
-        # cache all the values; we do this "manually" because
-        # there isn't much point in caching values; it's just
-        # wasteful memory-wise
-        db_values = [DBValue(value=value, timestamp=timestamp,
-                             timeseries=cached_timeseries)
-                     for timestamp, value in series.iteritems()]
-
-        if len(db_values) != cached_timeseries.value_count:
+        _cache_series_values(series, cached_timeseries,
+                             defer_commit=defer_commit)
+        num_db_values = cached_timeseries.values.count()
+        if num_db_values != cached_timeseries.value_count:
             warnings.warn("value_count (%s) doesn't match number of values (%s) for %s:%s" %
-                          (len(db_values), cached_timeseries.value_count,
+                          (cached_timeseries.value_count, num_db_values,
                            cached_timeseries.site.name,
                            cached_timeseries.variable.code))
-
-        cached_timeseries.values = db_values
-
-        if not defer_commit:
-            db_session.commit()
 
         return series, quantity
 
@@ -777,6 +775,80 @@ def get_series_and_quantity_for_timeseries(
                       (variable_code, quantity, unit_code))
 
     return series, quantity
+
+
+def cache_timeseries(timeseries, force_intervals=False,
+                     small_request_interval=None, update_values=None):
+    """
+    cache all values for a timeseries
+
+    update_values can be one of several types of values: If
+    update_values is None or False, then it will only add new
+    records, and further more it will only add records AFTER the
+    latest timestamp for a particular timeseries. This can be much
+    faster if you know the source you're hitting won't be updating
+    old data. In this case, you will only be requesting new data. If
+    update_values is a datetime, it will force an update of values
+    after that date. If update_values is a datetime.timedelta
+    object, then it will force an update of values of since the
+    timedelta amount of time since the last record in the
+    database. This is a good choice for services which provide
+    provisional data that may be qa/qc'd or changed after for a
+    short period of time, but then it becomes more or less
+    permanent. If update_values is True, then it will request and
+    update ALL records in the database.
+    """
+    cached_timeseries = CacheTimeSeries(timeseries)
+    if timeseries.value_count < MAX_VALUE_COUNT and force_intervals == False:
+        series, quantity = \
+                waterml.get_series_and_quantity_for_timeseries(timeseries)
+        _cache_series_values(series, cached_timeseries, update_values=update_values)
+    else:
+        request_interval = DEFAULT_SMALL_REQUEST_INTERVAL
+        start_time = timeseries.begin_datetime
+        end_time = start_time + request_interval
+        while end_time < timeseries.end_datetime:
+            series, quantity = \
+                    waterml.get_series_and_quantity_for_timeseries(
+                timeseries,
+                begin_date_str=start_time.strftime('%Y-%m-%d'),
+                end_date_str=end_time.strftime('%Y-%m-%d'))
+            _cache_series_values(series, cached_timeseries, update_values=update_values)
+            start_time = end_time
+            end_time = start_time + request_interval
+
+
+def _cache_series_values(series, cached_timeseries, defer_commit=False,
+                         update_values=None):
+    """
+    Adds all the values in a pandas series to the database cache,
+    associating them with the DBTimeSeries object cached_timeseries.
+    """
+
+    # quit early if the series is empty
+    if not len(series):
+        return None
+
+    start_time = series.keys()[0]
+    end_time = series.keys()[-1]
+
+    db_values = cached_timeseries.values.filter(
+        DBValue.timestamp.between(start_time, end_time)).all()
+
+    for timestamp, value in series.iteritems():
+        match_values = filter(
+            lambda db_value: db_value.timestamp == timestamp,
+            db_values)
+        if len(match_values):
+            match_value = match_values[0]
+            match_value.value = value
+        else:
+            cached_timeseries.values.append(
+                DBValue(value=value, timestamp=timestamp,
+                        timeseries=cached_timeseries))
+
+    if not defer_commit:
+        db_session.commit()
 
 
 def _need_to_update_source(cached_source):
