@@ -478,6 +478,9 @@ CacheUnits = create_cache_obj(DBUnits, 'units', _units_lookup_key_func,
 
 class DBValue(Base, DBCacheDatesMixin):
     __tablename__ = 'value'
+    __table_args__ = (
+        Index('idx_value_timestamp_timeseries_id',
+              'timestamp', 'timeseries_id'),)
 
     id = Column(Integer, primary_key=True)
     value = Column(Float)
