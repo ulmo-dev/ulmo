@@ -312,31 +312,31 @@ class DBSiteMixin(object):
 if USE_SPATIAL:
     class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
         #: geom column to hold lat/long
-        geom = GeometryColumn(Point(2))
+        the_geom = GeometryColumn(Point(2))
 
         @property
         def latitude(self):
-            x, y = self.geom.coords(db_session)
+            x, y = self.the_geom.coords(db_session)
             return y
 
         @latitude.setter
         def latitude(self, latitude):
-            wkt_point = "POINT(%f %f)" % (self.longitude, latitude)
-            self.geom = WKTSpatialElement(wkt_point)
+            wkt_point = "POINT(%f %f)" % (self.longitude, float(latitude))
+            self.the_geom = WKTSpatialElement(wkt_point)
 
         @property
         def longitude(self):
-            x, y = self.geom.coords(db_session)
+            x, y = self.the_geom.coords(db_session)
             return x
 
         @longitude.setter
         def longitude(self, longitude):
-            wkt_point = "POINT(%f %f)" % (longitude, self.latitude)
-            self.geom = WKTSpatialElement(wkt_point)
-
+            wkt_point = "POINT(%f %f)" % (float(longitude), self.latitude)
+            self.the_geom = WKTSpatialElement(wkt_point)
 
         def __init__(self, site=None, site_id=None, name=None, code=None,
-                     network=None, source=None, latitude=None, longitude=None):
+                     network=None, source=None, latitude=0, longitude=0):
+            self.the_geom = WKTSpatialElement("POINT(%f %f)" % (latitude, longitude))
             if site:
                 self._from_pyhis(site)
             else:
@@ -345,7 +345,6 @@ if USE_SPATIAL:
                 self.code = code
                 self.network = network
                 self.source = source
-                self.geom = WKTSpatialElement("POINT(%f %f)" % (latitude, longitude))
 
     GeometryDDL(DBSite.__table__)
 
