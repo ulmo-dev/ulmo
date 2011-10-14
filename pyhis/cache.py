@@ -20,7 +20,8 @@ import warnings
 import pandas
 import sqlalchemy as sa
 from sqlalchemy import (Column, Integer, String, Float, DateTime)
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.ext.declarative import (declarative_base, declared_attr,
+                                        DeclarativeMeta)
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.schema import ForeignKey, Index, UniqueConstraint
@@ -75,13 +76,16 @@ _cache = {}
 
 
 def init_cache(cache_database_uri=CACHE_DATABASE_FILE,
-               echo=ECHO_SQLALCHEMY, use_spatial=False):
+               echo=ECHO_SQLALCHEMY, use_spatial=False, schema=None):
     global engine
     global db_session
     global _cache
     global USE_SPATIAL
 
     USE_SPATIAL = use_spatial
+
+    if schema:
+        update_models_schema(schema)
 
     if not '://' in cache_database_uri:
         cache_database_uri = 'sqlite:///' + cache_database_uri
@@ -606,9 +610,18 @@ CacheVariable = create_cache_obj(DBVariable, 'variable',
                                  _variable_db_lookup_func)
 
 
-# run create_all to make sure the database tables are all there
+
 def create_all_tables():
+    """run create_all to make sure the database tables are all there"""
     Base.metadata.create_all()
+
+def update_models_schema(schema):
+    def is_a_pyhis_cache_model(x):
+        return getattr(x, '__module__', None) == 'pyhis.cache' and isinstance(x, DeclarativeMeta)
+
+    pyhis_cache_models = filter(is_a_pyhis_cache_model, globals().values())
+    for model in pyhis_cache_models:
+        model.__table__.schema = schema
 
 create_all_tables()
 
