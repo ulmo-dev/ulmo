@@ -14,7 +14,6 @@
 from datetime import datetime, timedelta
 import logging
 import os
-from sqlite3 import dbapi2 as sqlite
 import tempfile
 import warnings
 
@@ -31,6 +30,11 @@ import suds
 import pyhis
 from pyhis import waterml
 from pyhis.exceptions import NoDataError
+
+USE_SPATIAL = False
+if USE_SPATIAL:
+    from geoalchemy import (GeometryColumn, GeometryDDL, Point,
+                            WKTSpatialElement)
 
 CACHE_DATABASE_FILE = os.path.join(tempfile.gettempdir(), "pyhis_cache.db")
 ECHO_SQLALCHEMY = False
@@ -71,16 +75,19 @@ _cache = {}
 
 
 def init_cache(cache_database_uri=CACHE_DATABASE_FILE,
-               echo=ECHO_SQLALCHEMY):
+               echo=ECHO_SQLALCHEMY, use_spatial=False):
     global engine
     global db_session
     global _cache
+    global USE_SPATIAL
 
-    if not cache_database_uri.startswith('sqlite://'):
+    USE_SPATIAL = use_spatial
+
+    if not '://' in cache_database_uri:
         cache_database_uri = 'sqlite:///' + cache_database_uri
 
     engine = sa.create_engine(cache_database_uri, convert_unicode=True,
-                              module=sqlite, echo=echo)
+                              echo=echo)
 
     # if we are reinitializing cache, close the old session
     if db_session:
@@ -289,24 +296,64 @@ class DBSiteMixin(object):
             longitude=self.longitude,
             source=source)
 
+if USE_SPATIAL:
+    class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
+        #: geom column to hold lat/long
+        geom = GeometryColumn(Point(2))
 
-class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
+        @property
+        def latitude(self):
+            x, y = self.geom.coords(db_session)
+            return y
 
-    latitude = Column(Float)
-    longitude = Column(Float)
+        @latitude.setter
+        def latitude(self, latitude):
+            wkt_point = "POINT(%f %f)" % (self.longitude, latitude)
+            self.geom = WKTSpatialElement(wkt_point)
 
-    def __init__(self, site=None, site_id=None, name=None, code=None,
-                 network=None, source=None, latitude=None, longitude=None):
-        if site:
-            self._from_pyhis(site)
-        else:
-            self.site_id = site_id
-            self.name = name
-            self.code = code
-            self.network = network
-            self.source = source
-            self.latitude = latitude
-            self.longitude = longitude
+        @property
+        def longitude(self):
+            x, y = self.geom.coords(db_session)
+            return x
+
+        @longitude.setter
+        def longitude(self, longitude):
+            wkt_point = "POINT(%f %f)" % (longitude, self.latitude)
+            self.geom = WKTSpatialElement(wkt_point)
+
+
+        def __init__(self, site=None, site_id=None, name=None, code=None,
+                     network=None, source=None, latitude=None, longitude=None):
+            if site:
+                self._from_pyhis(site)
+            else:
+                self.site_id = site_id
+                self.name = name
+                self.code = code
+                self.network = network
+                self.source = source
+                self.geom = WKTSpatialElement("POINT(%f %f)" % (latitude, longitude))
+
+    GeometryDDL(DBSite.__table__)
+
+else:
+    class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
+
+        latitude = Column(Float)
+        longitude = Column(Float)
+
+        def __init__(self, site=None, site_id=None, name=None, code=None,
+                     network=None, source=None, latitude=None, longitude=None):
+            if site:
+                self._from_pyhis(site)
+            else:
+                self.site_id = site_id
+                self.name = name
+                self.code = code
+                self.network = network
+                self.source = source
+                self.latitude = latitude
+                self.longitude = longitude
 
 
 def _site_lookup_key_func(site=None, network=None, code=None, **kwargs):
@@ -809,7 +856,10 @@ def cache_timeseries(timeseries, force_intervals=False,
     elif update_values == None or update_values == False:
         last_value = cached_timeseries.values.order_by(
             desc(DBValue.timestamp)).first()
-        start_time = last_value.timestamp
+        if last_value:
+            start_time = last_value.timestamp
+        else:
+            start_time = timeseries.begin_datetime
     elif type(update_values) == datetime:
         start_time = update_values
     elif type(update_values) == timedelta:
