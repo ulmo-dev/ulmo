@@ -195,6 +195,9 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
     return CacheObj
 
 
+#----------------------------------------------------------------------------
+# Mixin classes
+#----------------------------------------------------------------------------
 class DBCacheDatesMixin(object):
     """
     Mixin class for keeping track of cache times
@@ -203,6 +206,9 @@ class DBCacheDatesMixin(object):
                             onupdate=sa.func.now())
 
 
+#----------------------------------------------------------------------------
+# Database models
+#----------------------------------------------------------------------------
 class DBSource(Base):
     __tablename__ = 'source'
 
