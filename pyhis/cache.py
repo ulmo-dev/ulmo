@@ -32,10 +32,13 @@ import pyhis
 from pyhis import waterml
 from pyhis.exceptions import NoDataError
 
-USE_SPATIAL = False
-if USE_SPATIAL:
+
+USE_SPATIAL = True
+try:
     from geoalchemy import (GeometryColumn, GeometryDDL, Point,
                             WKTSpatialElement)
+except ImportError:
+    USE_SPATIAL = False
 
 CACHE_DATABASE_FILE = os.path.join(tempfile.gettempdir(), "pyhis_cache.db")
 ECHO_SQLALCHEMY = False
@@ -82,7 +85,7 @@ def init_cache(cache_database_uri=CACHE_DATABASE_FILE,
     global _cache
     global USE_SPATIAL
 
-    USE_SPATIAL = use_spatial
+    # USE_SPATIAL = use_spatial
 
     if schema:
         update_models_schema(schema)
@@ -610,10 +613,10 @@ CacheVariable = create_cache_obj(DBVariable, 'variable',
                                  _variable_db_lookup_func)
 
 
-
 def create_all_tables():
     """run create_all to make sure the database tables are all there"""
     Base.metadata.create_all()
+
 
 def update_models_schema(schema):
     def is_a_pyhis_cache_model(x):
