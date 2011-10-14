@@ -904,11 +904,13 @@ def cache_timeseries(timeseries, force_intervals=False,
         request_interval = DEFAULT_SMALL_REQUEST_INTERVAL
         end_time = start_time + request_interval
         while end_time < timeseries.end_datetime:
+            begin_date_str=start_time.strftime('%Y-%m-%d')
+            end_date_str=end_time.strftime('%Y-%m-%d')
             series, quantity = \
                     waterml.get_series_and_quantity_for_timeseries(
                 timeseries,
-                begin_date_str=start_time.strftime('%Y-%m-%d'),
-                end_date_str=end_time.strftime('%Y-%m-%d'))
+                begin_date_str=begin_date_str,
+                end_date_str=end_date_str)
             _cache_series_values(series, cached_timeseries,
                                  update_values=update_values)
             start_time = end_time
