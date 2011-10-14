@@ -136,11 +136,12 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
         data = np.array([float(value.value) for value in values])
     except AttributeError:
         raise NoDataError(
-            'No data values returned by service for "%s:%s:%s". This '
-            'is not valid in waterml, so the service is probably '
-            'misconfigured or broken.' %
+            'No data values returned by service for "%s:%s:%s  (%s - %s)". '
+            'This indicates either a bad date range, or it is possible that '
+            ' the service could be misconfigured or broken.' %
             (timeseries.site.network, timeseries.site.code,
-             timeseries.variable.code))
+             timeseries.variable.code,
+             begin_date_str, end_date_str))
 
     if len(dates) != len(data):
         raise ValueError("Number of dates does not match number of "
