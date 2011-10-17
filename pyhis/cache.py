@@ -669,6 +669,8 @@ def cache_sites(sites, update_values=None):
                         site, timeseries, fault))
             except NoDataError as e:
                 warnings.warn(str(e))
+            except Exception as e:
+                pass
             _clear_timeseries_from_memory_cache(timeseries)
 
         _clear_site_from_memory_cache(site)
