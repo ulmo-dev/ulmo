@@ -265,7 +265,7 @@ def _units_from_wml_units(units):
     """returns a PyHIS Units instance from a suds WaterML units element"""
     try:
         abbreviation=units._unitsAbbreviation
-    except:
+    except AttributeError:
         abbreviation=''
     return pyhis.Units(
         name=units.value,
