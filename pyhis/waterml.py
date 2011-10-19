@@ -225,12 +225,18 @@ def _variable_from_wml_variableInfo(variable_info):
     id = getattr(variable_info.variableCode[0], '_variableID', None)
     no_data_value = getattr(variable_info, 'NoDataValue', None)
 
+    variable_info_units = getattr(variable_info, "units", None)
+    if variable_info_units:
+        units = _units_from_wml_units(variable_info_units)
+    else:
+        units = None
+
     return pyhis.Variable(
         name=variable_info.variableName,
         code=variable_info.variableCode[0].value,
         id=id,
         vocabulary=variable_info.variableCode[0]._vocabulary,
-        units=_units_from_wml_units(variable_info.units),
+        units=units,
         no_data_value=no_data_value)
 
 
