@@ -31,7 +31,7 @@ def get_sites_for_source(source):
     log.info('making GetSites query...')
     get_sites_response = source.suds_client.service.GetSites('')
 
-    log.info('processing %s sites...' % len(get_sites_response.site))
+    log.debug('processing %s sites...' % len(get_sites_response.site))
     site_list = [_site_from_wml_siteInfo(site.siteInfo, source)
                  for site in get_sites_response.site]
 
@@ -110,10 +110,10 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
         begin_date_str,
         end_date_str)
 
-    log.info('processing timeseries request for "%s:%s:%s (%s - %s)"...' %
-                (timeseries.site.network, timeseries.site.code,
-                 timeseries.variable.code,
-                 begin_date_str, end_date_str))
+    log.debug('processing timeseries request for "%s:%s:%s (%s - %s)"...' %
+              (timeseries.site.network, timeseries.site.code,
+               timeseries.variable.code,
+               begin_date_str, end_date_str))
 
     unit_code = getattr(timeseries_response.timeSeries.variable.units,
                         '_unitsCode', None)
