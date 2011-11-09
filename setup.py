@@ -14,11 +14,11 @@ PyHIS is a python library for querying CUAHSI*-HIS** web services.
 from setuptools import Command, setup, find_packages
 
 setup(
-    name='PyHIS',
+    name='pyhis',
     version='0.1-alpha',
     license='BSD',
     author='Andy Wilson',
-    author_email='wilson.andrew.j+pyhis@gmail.com',
+    author_email='wilson.andrew.j@gmail.com',
     description='a python library for querying data via CUAHSI-HIS '
                 'web services',
     long_description=__doc__,
