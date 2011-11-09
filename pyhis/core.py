@@ -15,7 +15,7 @@ from . import waterml
 from . import shapefile
 
 # default timeout for http requests in seconds
-SUDS_TIMEOUT = 600  # 5 minutes
+SUDS_TIMEOUT = 600  # 10 minutes
 
 # fancy this up a bit sometime
 LOG_FORMAT = '%(message)s'
