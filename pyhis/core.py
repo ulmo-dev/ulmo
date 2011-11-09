@@ -35,9 +35,7 @@ __all__ = ['Site', 'Source', 'TimeSeries', 'Variable', 'Units']
 
 
 class Site(object):
-    """
-    Contains information about a site
-    """
+    """Contains information about a site"""
     _timeseries_dict = {}
     _dataframe = None
     _site_info_response = None
@@ -212,18 +210,21 @@ class Source(object):
         len(self._sites)
 
     def get_sites_within_shapefile(self, filename):
-        """ Reads polygon from shapefile, sends vertices
-        to get_sites_within_polygon, returns subset of sites"""
+        """Reads polygon from shapefile, sends vertices to
+        get_sites_within_polygon, returns subset of sites
+        """
         print 'not implemented'
 
     def get_sites_within_radius_r(self, latitude, longitude,
                                   radius, npoints=100):
-        """ Generates circular poly, sends vertices to
-        get_sites_within_polygon, returns subset of sites"""
+        """Generates circular poly, sends vertices to
+        get_sites_within_polygon, returns subset of sites
+        """
         print 'not implemented'
 
     def get_sites_within_polygon(self, verts):
-        """ returns dict of sites within polygon defined by verts"""
+        """returns dict of sites within polygon defined by verts
+        """
         points = np.vstack((self.sites_array['longitude'],
                             self.sites_array['latitude'])).T
         idx = points_inside_poly(points, verts)
@@ -235,9 +236,7 @@ class Source(object):
 
 
 class TimeSeries(object):
-    """
-    Contains information about a time series
-    """
+    """Contains information about a time series"""
 
     site = None
     variable = None
@@ -289,9 +288,7 @@ class TimeSeries(object):
 
 
 class Units(object):
-    """
-    Contains information about units of measurement
-    """
+    """Contains information about units of measurement"""
 
     name = None
     abbreviation = None
@@ -307,9 +304,7 @@ class Units(object):
 
 
 class Variable(object):
-    """
-    Contains information about a variable
-    """
+    """Contains information about a variable"""
 
     name = None
     code = None
