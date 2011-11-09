@@ -130,15 +130,17 @@ class Source(object):
     """Represents a water data source"""
     suds_client = None
     url = None
+    default_network = None
     _description = None
     _all_sites = False
     _sites = {}
     _sites_array = []
     _use_cache = None
 
-    def __init__(self, wsdl_url, description=None, use_cache=True):
+    def __init__(self, wsdl_url, network=None, description=None, use_cache=True):
         self.suds_client = suds.client.Client(wsdl_url, timeout=SUDS_TIMEOUT)
         self.url = wsdl_url
+        self.default_network = network
         self._description = description
         self._use_cache = use_cache
 
@@ -179,8 +181,11 @@ class Source(object):
 
         return self._sites_array
 
-    def get_site(self, network, site_code):
+    def get_site(self, site_code, network=None):
         """returns a single site"""
+        if not network:
+            network = self.default_network
+
         if (network, site_code) in self._sites:
             return self._sites[(network, site_code)]
 
