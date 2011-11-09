@@ -14,15 +14,15 @@ from __future__ import absolute_import
 from .core import *
 
 import quantities as pq
-from . import quantities as sq
+from . import quantities as phq
 
 #: mapping of variable codes to quantities they represent
 unit_quantities = {
-    '48': sq.ftH2O,
-    '52': sq.mH2O,
+    '48': phq.ftH2O,
+    '52': phq.mH2O,
     '96': pq.degC,
     '137': pq.dimensionless,
-    '199': sq.mgl,
-    '269': sq.mScm,
-    '306': sq.ppt,
+    '199': phq.mgl,
+    '269': phq.mScm,
+    '306': phq.ppt,
     }

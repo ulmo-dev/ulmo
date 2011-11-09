@@ -6,8 +6,8 @@
     primarily for unit conversion.
 """
 from __future__ import absolute_import
-import quantities as pq
 
+import quantities as pq
 
 #: Unit of concentration - milligrams per liter
 mgl = pq.UnitQuantity('Concentration',
