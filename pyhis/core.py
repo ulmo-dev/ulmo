@@ -5,6 +5,7 @@
     Core data models for PyHIS
 """
 import logging
+import warnings
 
 import numpy as np
 from matplotlib.nxutils import points_inside_poly
@@ -268,6 +269,11 @@ class TimeSeries(object):
 
     @property
     def series(self):
+        warnings.warn("timeseries.series is being deprecated. Use timeseries.data instead")
+        return self.data
+
+    @property
+    def data(self):
         if not len(self._series):
             self._update_series()
         return self._series
