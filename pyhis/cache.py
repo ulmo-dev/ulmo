@@ -132,8 +132,7 @@ init_cache()
 
 
 def clear_memory_cache():
-    """
-    Clean out the in-memory cache dict. This is useful for
+    """Clean out the in-memory cache dict. This is useful for
     large/long-running programs that might be using up all available
     memory.
     """
@@ -151,10 +150,9 @@ def clear_memory_cache():
 # cache SQLAlchemy models
 #----------------------------------------------------------------------------
 def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
-    """
-    Create a cache object that searches the in-memory cache dict for
-    the key returned by calling lookup_key_func. If no object is found
-    matching this key, then call db_lookup_func to search the
+    """Create a cache object that searches the in-memory cache dict
+    for the key returned by calling lookup_key_func. If no object is
+    found matching this key, then call db_lookup_func to search the
     database. If no result is found in the database, then create a new
     database object, save it to the database and return the new
     object.
@@ -199,9 +197,7 @@ def create_cache_obj(db_model, cache_key, lookup_key_func, db_lookup_func):
 # Mixin classes
 #----------------------------------------------------------------------------
 class DBCacheDatesMixin(object):
-    """
-    Mixin class for keeping track of cache times
-    """
+    """Mixin class for keeping track of cache times"""
     last_refreshed = Column(DateTime, default=sa.func.now(),
                             onupdate=sa.func.now())
 
@@ -248,10 +244,9 @@ CacheSource = create_cache_obj(DBSource, 'source', _source_lookup_key_func,
 
 
 class DBSiteMixin(object):
-    """
-    Using inheritance with the SQLAlchemy declarative pattern is done
-    via Mixin Classes. This class provides a Mixin Class for the Site
-    DB model that can be used for both spatial and non-spatial
+    """Using inheritance with the SQLAlchemy declarative pattern is
+    done via Mixin Classes. This class provides a Mixin Class for the
+    Site DB model that can be used for both spatial and non-spatial
     database site models.
     """
     __tablename__ = 'site'
@@ -638,17 +633,13 @@ create_all_tables()
 # cache functions
 #----------------------------------------------------------------------------
 def cache_all(source_url, update_values=None):
-    """
-    Cache all available data for a source
-    """
+    """Cache all available data for a source"""
     source = pyhis.Source(source_url)
     cache_sites(source.sites.values(), update_values=update_values)
 
 
 def cache_sites(sites, update_values=None):
-    """
-    Cache all available data for a collection of sites
-    """
+    """Cache all available data for a collection of sites"""
     total_sites = len(sites)
 
     for i, site in enumerate(sites, 1):
@@ -681,8 +672,7 @@ def cache_sites(sites, update_values=None):
 
 
 def _clear_site_from_memory_cache(site):
-    """
-    clears the potentially weighty parts of a cached site from
+    """clears the potentially weighty parts of a cached site from
     in-memory cache (like site response and Timeseries objects). This
     can keep the memory footprint of long running scripts from
     ballooning, but it means that you won't have the performance
@@ -716,18 +706,15 @@ def _clear_site_from_memory_cache(site):
 
 
 def _clear_timeseries_from_memory_cache(timeseries):
-    """
-    clears a timeseries from the in-memory cache
-    """
+    """clears a timeseries from the in-memory cache"""
     timeseries_cache_key = _timeseries_lookup_key_func(timeseries)
     del _cache['timeseries'][timeseries_cache_key]
 
 
 def get_sites_for_source(source):
-    """
-    return a dict of pyhis.Site objects for a given source. The source
-    can be either a string representing the url or a pyhis.Source
-    object
+    """return a dict of pyhis.Site objects for a given source. The
+    source can be either a string representing the url or a
+    pyhis.Source object
     """
     cached_source = CacheSource(source)
 
@@ -759,10 +746,9 @@ def get_sites_for_source(source):
 
 
 def get_site(source, network, code):
-    """
-    return a pyhis.Site for a given source, network and site_code. The
-    source can be either a string representing the url or a
-    pyhis.Source object
+    """return a pyhis.Site for a given source, network and
+    site_code. The source can be either a string representing the url
+    or a pyhis.Source object
     """
     cached_source = CacheSource(source)
 
@@ -777,9 +763,8 @@ def get_site(source, network, code):
 
 
 def get_timeseries_dict_for_site(site):
-    """
-    returns a dict of pyhis.TimeSeries objects with the variable code
-    as keys for a given site and variable_code
+    """returns a dict of pyhis.TimeSeries objects with the variable
+    code as keys for a given site and variable_code
     """
     cached_site = CacheSite(site)
 
@@ -809,8 +794,7 @@ def get_timeseries_dict_for_site(site):
 
 def get_series_and_quantity_for_timeseries(
     timeseries, check_for_updates=False, defer_commit=False):
-    """
-    returns a tuple where the first element is a pandas.Series
+    """returns a tuple where the first element is a pandas.Series
     containing the timeseries data for the timeseries and the second
     element is the python quantity that corresponds the unit for the
     variable. Takes a suds WaterML TimeSeriesResponseType object.
@@ -853,24 +837,22 @@ def get_series_and_quantity_for_timeseries(
 
 def cache_timeseries(timeseries, force_intervals=False,
                      small_request_interval=None, update_values=None):
-    """
-    cache all values for a timeseries
+    """cache all values for a timeseries
 
     update_values can be one of several types of values: If
-    update_values is None or False, then it will only add new
-    records, and further more it will only add records AFTER the
-    latest timestamp for a particular timeseries. This can be much
-    faster if you know the source you're hitting won't be updating
-    old data. In this case, you will only be requesting new data. If
-    update_values is a datetime, it will force an update of values
-    after that date. If update_values is a datetime.timedelta
-    object, then it will force an update of values of since the
-    timedelta amount of time since the last record in the
-    database. This is a good choice for services which provide
-    provisional data that may be qa/qc'd or changed after for a
-    short period of time, but then it becomes more or less
-    permanent. If update_values is True, then it will request and
-    update ALL records in the database.
+    update_values is None or False, then it will only add new records,
+    and further more it will only add records AFTER the latest
+    timestamp for a particular timeseries. This can be much faster if
+    you know the source you're hitting won't be updating old data. In
+    this case, you will only be requesting new data. If update_values
+    is a datetime, it will force an update of values after that
+    date. If update_values is a datetime.timedelta object, then it
+    will force an update of values of since the timedelta amount of
+    time since the last record in the database. This is a good choice
+    for services which provide provisional data that may be qa/qc'd or
+    changed after for a short period of time, but then it becomes more
+    or less permanent. If update_values is True, then it will request
+    and update ALL records in the database.
     """
     cached_timeseries = CacheTimeSeries(timeseries)
 
@@ -920,8 +902,7 @@ def cache_timeseries(timeseries, force_intervals=False,
 
 def _cache_series_values(series, cached_timeseries, defer_commit=False,
                          update_values=None):
-    """
-    Adds all the values in a pandas series to the database cache,
+    """Adds all the values in a pandas series to the database cache,
     associating them with the DBTimeSeries object cached_timeseries.
     """
 

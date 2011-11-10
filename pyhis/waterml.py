@@ -24,8 +24,7 @@ log = logging.getLogger(__name__)
 # waterml functions
 #------------------------------------------------------------------------------
 def get_sites_for_source(source):
-    """
-    return a sites dict for for a given source. The source can be
+    """return a sites dict for for a given source. The source can be
     either a string representing the url or a pyhis.Source object
     """
     log.info('making GetSites query...')
@@ -39,10 +38,9 @@ def get_sites_for_source(source):
 
 
 def get_description_for_source(source):
-    """
-    return string containg the source description for a given source.
-    The source can be either a string representing the url or a
-    pyhis.Source object
+    """return string containg the source description for a given
+    source.  The source can be either a string representing the url or
+    a pyhis.Source object
     """
     # Note: A source description isn't returned with the GetSites
     # response but rather is attached only to siteInfo responses and
@@ -61,8 +59,7 @@ def get_description_for_source(source):
 
 
 def get_timeseries_dict_for_site(site):
-    """
-    returns a list of pyhis.TimeSeries objects for a given site and
+    """returns a list of pyhis.TimeSeries objects for a given site and
     variable_code
     """
     try:
@@ -216,8 +213,9 @@ def _site_from_wml_siteInfo(siteInfo, source):
 
 
 def _variable_from_wml_variableInfo(variable_info):
-    """returns a PyHIS Variable instance from a suds WaterML variableInfo
-    element"""
+    """returns a PyHIS Variable instance from a suds WaterML
+    variableInfo element
+    """
     if len(variable_info.variableCode) > 1:
         raise NotImplementedError(
             "Multiple variable codes not currently supported")

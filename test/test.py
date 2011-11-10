@@ -45,9 +45,7 @@ class TWDBTestBase(TestBase):
 
 
 class TWDBFreshCacheTests(TWDBTestBase):
-    """
-    Run tests with cache backend
-    """
+    """Run tests with cache backend"""
 
     def __context__(self):
         if os.path.exists(TEST_CACHE_DATABASE_PATH):
@@ -62,9 +60,7 @@ class TWDBFreshCacheTests(TWDBTestBase):
 
 
 class TWDBCacheTests(TWDBTestBase):
-    """
-    Run tests with cache backend
-    """
+    """Run tests with cache backend"""
 
     def __context__(self):
         pyhis.cache.init_cache(TEST_CACHE_DATABASE_PATH)
@@ -111,9 +107,7 @@ class TWDBCacheTests(TWDBTestBase):
 
 
 class TWDBNoCacheTests(TWDBTestBase):
-    """
-    Run tests without cache backend
-    """
+    """Run tests without cache backend"""
 
     def __context__(self):
         self.source = pyhis.Source(
