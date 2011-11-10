@@ -5,5 +5,8 @@ pyhis.egg-info/
 dist/
 build/
 
+# ignore sphinx build dir
+docs/_build/
+
 # ignore compiled python files
 *.pyc
