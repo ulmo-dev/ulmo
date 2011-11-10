@@ -32,7 +32,7 @@ except ImportError as error:
     log.info('cache not available due to import error:\n%s' % error)
     cache = None
 
-__all__ = ['Site', 'Source', 'TimeSeries', 'Variable', 'Units']
+__all__ = ['Site', 'Service', 'TimeSeries', 'Variable', 'Units']
 
 
 class Site(object):
@@ -41,7 +41,7 @@ class Site(object):
     _dataframe = None
     _site_info_response = None
     _use_cache = None
-    source = None
+    service = None
     name = None
     code = None
     id = None
@@ -50,14 +50,14 @@ class Site(object):
     longitude = None
 
     def __init__(self, network=None, code=None, name=None, id=None,
-                 latitude=None, longitude=None, source=None, use_cache=True):
+                 latitude=None, longitude=None, service=None, use_cache=True):
         self.network = network
         self.code = code
         self.name = name
         self.id = id
         self.latitude = latitude
         self.longitude = longitude
-        self.source = source
+        self.service = service
         self._use_cache = use_cache
 
         # if we don't have all the info, make a GetSiteInfo request
@@ -105,7 +105,7 @@ class Site(object):
         """makes a GetSiteInfo updates site info and series information"""
         log.info('making GetSiteInfo request for "%s:%s"...' %
                  (self.network, self.code))
-        self._site_info_response = self.source.suds_client.service.GetSiteInfoObject(
+        self._site_info_response = self.service.suds_client.service.GetSiteInfoObject(
             '%s:%s' % (self.network, self.code))
 
         if len(self._site_info_response.site) > 1 or \
@@ -127,8 +127,8 @@ class Site(object):
         return "<Site: %s [%s]>" % (self.name, self.code)
 
 
-class Source(object):
-    """Represents a water data source"""
+class Service(object):
+    """Represents a water data service"""
     suds_client = None
     url = None
     default_network = None
@@ -160,7 +160,7 @@ class Source(object):
         return self._description
 
     def get_all_sites(self):
-        """returns all the sites available for a given source"""
+        """returns all the sites available for a given service"""
         if not self._all_sites:
             self._update_all_sites()
         return self._sites
@@ -194,22 +194,22 @@ class Source(object):
         if cache_enabled:
             site = cache.get_site(self, network, site_code)
         else:
-            site = Site(network=network, code=site_code, source=self)
+            site = Site(network=network, code=site_code, service=self)
 
         self._sites[(network, site_code)] = site
         return site
 
     def _update_description(self, force_waterml=False):
         """update self._description"""
-        self._description = waterml.get_description_for_source(self)
+        self._description = waterml.get_description_for_service(self)
 
     def _update_all_sites(self):
         """update the self._sites dict"""
         cache_enabled = self._use_cache and cache
         if cache_enabled:
-            self._sites = cache.get_sites_for_source(self)
+            self._sites = cache.get_sites_for_service(self)
         else:
-            self._sites = waterml.get_sites_for_source(self)
+            self._sites = waterml.get_sites_for_service(self)
         self._all_sites = True
 
     def __len__(self):
@@ -238,7 +238,13 @@ class Source(object):
                      for sitecode in self.sites_array['sitecode'][idx]])
 
     def __repr__(self):
-        return "<Source: %s>" % (self.url)
+        return "<Service: %s>" % (self.url)
+
+
+class Source(Service):
+    def __init__(self, *args, **kwargs):
+        warnings.warn("pyhis.core.Source is being deprecated. Use pyhis.core.Service instead")
+        super(Source, self).__init__(*args, **kwargs)
 
 
 class TimeSeries(object):

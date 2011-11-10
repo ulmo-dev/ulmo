@@ -108,9 +108,9 @@ def init_cache(cache_database_uri=CACHE_DATABASE_FILE,
     # in-memory cache dict that will keep us from creating multiple cache
     # objects that represent the same DB objects
     _cache = {
-        'source': {},       # key: url
-        'site': {},         # key: (source_url, network, site_code)
-        'timeseries': {},   # key: (source_url, network, site_code, variable_code)
+        'service': {},       # key: url
+        'site': {},         # key: (service_url, network, site_code)
+        'timeseries': {},   # key: (service_url, network, site_code, variable_code)
         'variable': {},     # key: (vocabulary, variable_code)
         'units': {},        # key: (name, code)
         }
@@ -138,9 +138,9 @@ def clear_memory_cache():
     """
     global _cache
     _cache = {
-        'source': {},       # key: url
-        'site': {},         # key: (source_url, network, site_code)
-        'timeseries': {},   # key: (source_url, network, site_code, variable_code)
+        'service': {},       # key: url
+        'site': {},         # key: (service_url, network, site_code)
+        'timeseries': {},   # key: (service_url, network, site_code, variable_code)
         'variable': {},     # key: (vocabulary, variable_code)
         'units': {},        # key: (name, code)
         }
@@ -205,42 +205,42 @@ class DBCacheDatesMixin(object):
 #----------------------------------------------------------------------------
 # Database models
 #----------------------------------------------------------------------------
-class DBSource(Base):
-    __tablename__ = 'source'
+class DBService(Base):
+    __tablename__ = 'service'
 
     id = Column(Integer, primary_key=True)
     url = Column(String, unique=True)
-    sites = relationship('DBSite', backref='source', lazy='dynamic')
+    sites = relationship('DBSite', backref='service', lazy='dynamic')
     last_get_sites = Column(DateTime)
 
-    def __init__(self, source=None, url=None):
-        if not source is None:
-            self._from_pyhis(source)
+    def __init__(self, service=None, url=None):
+        if not service is None:
+            self._from_pyhis(service)
         else:
             self.url = url
 
-    def _from_pyhis(self, pyhis_source):
-        self.url = pyhis_source.url
+    def _from_pyhis(self, pyhis_service):
+        self.url = pyhis_service.url
 
     def to_pyhis(self):
-        return pyhis.Source(wsdl_url=self.url)
+        return pyhis.Service(wsdl_url=self.url)
 
 
-def _source_lookup_key_func(source=None, url=None):
-    if not source is None:
-        return source.url
+def _service_lookup_key_func(service=None, url=None):
+    if not service is None:
+        return service.url
     if url:
         return url
 
 
-def _source_db_lookup_func(source=None, url=None):
-    if not source is None:
-        url = source.url
+def _service_db_lookup_func(service=None, url=None):
+    if not service is None:
+        url = service.url
 
-    return db_session.query(DBSource).filter_by(url=url).one()
+    return db_session.query(DBService).filter_by(url=url).one()
 
-CacheSource = create_cache_obj(DBSource, 'source', _source_lookup_key_func,
-                               _source_db_lookup_func)
+CacheService = create_cache_obj(DBService, 'service', _service_lookup_key_func,
+                               _service_db_lookup_func)
 
 
 class DBSiteMixin(object):
@@ -258,8 +258,8 @@ class DBSiteMixin(object):
     network = Column(String)
 
     @declared_attr
-    def source_id(cls):
-        return Column(Integer, ForeignKey('source.id'), nullable=False)
+    def service_id(cls):
+        return Column(Integer, ForeignKey('service.id'), nullable=False)
 
     @declared_attr
     def timeseries_list(cls):
@@ -275,7 +275,7 @@ class DBSiteMixin(object):
             )
 
     # populated by backref:
-    #   source = DBSource
+    #   service = DBService
 
     def _from_pyhis(self, pyhis_site):
         self.site_id = pyhis_site.id
@@ -284,16 +284,16 @@ class DBSiteMixin(object):
         self.network = pyhis_site.network
         self.latitude = pyhis_site.latitude
         self.longitude = pyhis_site.longitude
-        self.source = CacheSource(pyhis_site.source)
+        self.service = CacheService(pyhis_site.service)
 
-    def to_pyhis(self, source=None):
-        # because every site needs a reference to a source, a source
+    def to_pyhis(self, service=None):
+        # because every site needs a reference to a service, a service
         # object *should* be passed to this method to avoid an extra
         # object being created. Some proxy voodoo could that could go
         # on here to prevent this. For now, assume that if we didn't
-        # get a source, then just make a new one.
-        if source is None:
-            source = self.source.to_pyhis()
+        # get a service, then just make a new one.
+        if service is None:
+            service = self.service.to_pyhis()
 
         return pyhis.Site(
             code=self.code,
@@ -302,7 +302,7 @@ class DBSiteMixin(object):
             network=self.network,
             latitude=self.latitude,
             longitude=self.longitude,
-            source=source)
+            service=service)
 
 if USE_SPATIAL:
     class DBSite(Base, DBSiteMixin, DBCacheDatesMixin):
@@ -330,7 +330,7 @@ if USE_SPATIAL:
             self.the_geom = WKTSpatialElement(wkt_point)
 
         def __init__(self, site=None, site_id=None, name=None, code=None,
-                     network=None, source=None, latitude=0, longitude=0):
+                     network=None, service=None, latitude=0, longitude=0):
             self.the_geom = WKTSpatialElement("POINT(%f %f)" % (latitude, longitude))
             if site:
                 self._from_pyhis(site)
@@ -339,7 +339,7 @@ if USE_SPATIAL:
                 self.name = name
                 self.code = code
                 self.network = network
-                self.source = source
+                self.service = service
 
     GeometryDDL(DBSite.__table__)
 
@@ -350,7 +350,7 @@ else:
         longitude = Column(Float)
 
         def __init__(self, site=None, site_id=None, name=None, code=None,
-                     network=None, source=None, latitude=None, longitude=None):
+                     network=None, service=None, latitude=None, longitude=None):
             if site:
                 self._from_pyhis(site)
             else:
@@ -358,7 +358,7 @@ else:
                 self.name = name
                 self.code = code
                 self.network = network
-                self.source = source
+                self.service = service
                 self.latitude = latitude
                 self.longitude = longitude
 
@@ -453,10 +453,10 @@ def _timeseries_lookup_key_func(timeseries=None, url=None, network=None,
                                 site_code=None, variable=None, site=None,
                                 **kwargs):
     if timeseries:
-        return (timeseries.site.source.url, timeseries.site.network,
+        return (timeseries.site.service.url, timeseries.site.network,
                 timeseries.site.code, timeseries.variable.code)
     if site and variable:
-        return (site.source.url, site.network, site.code, variable.code)
+        return (site.service.url, site.network, site.code, variable.code)
     if url and network and site_code and variable:
         return (url, network, site_code, variable.code)
 
@@ -632,10 +632,10 @@ create_all_tables()
 #----------------------------------------------------------------------------
 # cache functions
 #----------------------------------------------------------------------------
-def cache_all(source_url, update_values=None):
-    """Cache all available data for a source"""
-    source = pyhis.Source(source_url)
-    cache_sites(source.sites.values(), update_values=update_values)
+def cache_all(service_url, update_values=None):
+    """Cache all available data for a service"""
+    service = pyhis.Service(service_url)
+    cache_sites(service.sites.values(), update_values=update_values)
 
 
 def cache_sites(sites, update_values=None):
@@ -678,7 +678,7 @@ def _clear_site_from_memory_cache(site):
     ballooning, but it means that you won't have the performance
     advantage of having these objects in the in-memory cache after
     this function is called. Note: these objects won't be gc'd if
-    there are references to them somewhere else (e.g. a source object
+    there are references to them somewhere else (e.g. a service object
     that still holds a reference to the site object in its sites
     dict).
     """
@@ -711,22 +711,22 @@ def _clear_timeseries_from_memory_cache(timeseries):
     del _cache['timeseries'][timeseries_cache_key]
 
 
-def get_sites_for_source(source):
-    """return a dict of pyhis.Site objects for a given source. The
-    source can be either a string representing the url or a
-    pyhis.Source object
+def get_sites_for_service(service):
+    """return a dict of pyhis.Site objects for a given service. The
+    service can be either a string representing the url or a
+    pyhis.Service object
     """
-    cached_source = CacheSource(source)
+    cached_service = CacheService(service)
 
-    if not cached_source.last_get_sites or \
-           _need_to_update_source(cached_source):
-        site_list = waterml.get_sites_for_source(cached_source.to_pyhis())
+    if not cached_service.last_get_sites or \
+           _need_to_update_service(cached_service):
+        site_list = waterml.get_sites_for_service(cached_service.to_pyhis())
 
         # since the sites don't exist in the db yet, just
         # instantiating them via the CacheSite constructor will
         # queue them to be saved to the db and (update them in the
         # in-memory cache)
-        skip_db_lookup = bool(cached_source.sites.count() == 0)
+        skip_db_lookup = bool(cached_service.sites.count() == 0)
         cache_sites = [CacheSite(site, auto_commit=False,
                                  skip_db_lookup=skip_db_lookup)
                        for site in site_list.values()]
@@ -734,30 +734,30 @@ def get_sites_for_source(source):
         # add queued sites to cache
         db_session.add_all(cache_sites)
 
-        # update cached_source.last_get_sites
-        cached_source.last_get_sites = sa.func.now()
+        # update cached_service.last_get_sites
+        cached_service.last_get_sites = sa.func.now()
 
         # commit
         db_session.commit()
 
     return dict([(cached_site.code,
-                  cached_site.to_pyhis(source))
-                 for cached_site in cached_source.sites])
+                  cached_site.to_pyhis(service))
+                 for cached_site in cached_service.sites])
 
 
-def get_site(source, network, code):
-    """return a pyhis.Site for a given source, network and
-    site_code. The source can be either a string representing the url
-    or a pyhis.Source object
+def get_site(service, network, code):
+    """return a pyhis.Site for a given service, network and
+    site_code. The service can be either a string representing the url
+    or a pyhis.Service object
     """
-    cached_source = CacheSource(source)
+    cached_service = CacheService(service)
 
     try:
         cached_site = _site_db_lookup_func(network=network, code=code)
         return cached_site.to_pyhis()
     except NoResultFound:
         pyhis_site = pyhis.core.Site(network=network, code=code,
-                                     source=cached_source.to_pyhis())
+                                     service=cached_service.to_pyhis())
         CacheSite(site=pyhis_site)
         return pyhis_site
 
@@ -843,7 +843,7 @@ def cache_timeseries(timeseries, force_intervals=False,
     update_values is None or False, then it will only add new records,
     and further more it will only add records AFTER the latest
     timestamp for a particular timeseries. This can be much faster if
-    you know the source you're hitting won't be updating old data. In
+    you know the service you're hitting won't be updating old data. In
     this case, you will only be requesting new data. If update_values
     is a datetime, it will force an update of values after that
     date. If update_values is a datetime.timedelta object, then it
@@ -932,8 +932,8 @@ def _cache_series_values(series, cached_timeseries, defer_commit=False,
         db_session.commit()
 
 
-def _need_to_update_source(cached_source):
-    time_since_last_cached = datetime.now() - cached_source.last_get_sites
+def _need_to_update_service(cached_service):
+    time_since_last_cached = datetime.now() - cached_service.last_get_sites
     return bool(time_since_last_cached > CACHE_EXPIRES['get_sites'])
 
 
