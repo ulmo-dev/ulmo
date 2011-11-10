@@ -24,14 +24,13 @@ log = logging.getLogger(__name__)
 # waterml functions
 #------------------------------------------------------------------------------
 def get_sites_for_source(source):
-    """
-    return a sites dict for for a given source. The source can be
+    """return a sites dict for for a given source. The source can be
     either a string representing the url or a pyhis.Source object
     """
     log.info('making GetSites query...')
     get_sites_response = source.suds_client.service.GetSites('')
 
-    log.info('processing %s sites...' % len(get_sites_response.site))
+    log.debug('processing %s sites...' % len(get_sites_response.site))
     site_list = [_site_from_wml_siteInfo(site.siteInfo, source)
                  for site in get_sites_response.site]
 
@@ -39,10 +38,9 @@ def get_sites_for_source(source):
 
 
 def get_description_for_source(source):
-    """
-    return string containg the source description for a given source.
-    The source can be either a string representing the url or a
-    pyhis.Source object
+    """return string containg the source description for a given
+    source.  The source can be either a string representing the url or
+    a pyhis.Source object
     """
     # Note: A source description isn't returned with the GetSites
     # response but rather is attached only to siteInfo responses and
@@ -61,8 +59,7 @@ def get_description_for_source(source):
 
 
 def get_timeseries_dict_for_site(site):
-    """
-    returns a list of pyhis.TimeSeries objects for a given site and
+    """returns a list of pyhis.TimeSeries objects for a given site and
     variable_code
     """
     try:
@@ -110,10 +107,10 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
         begin_date_str,
         end_date_str)
 
-    log.info('processing timeseries request for "%s:%s:%s (%s - %s)"...' %
-                (timeseries.site.network, timeseries.site.code,
-                 timeseries.variable.code,
-                 begin_date_str, end_date_str))
+    log.debug('processing timeseries request for "%s:%s:%s (%s - %s)"...' %
+              (timeseries.site.network, timeseries.site.code,
+               timeseries.variable.code,
+               begin_date_str, end_date_str))
 
     unit_code = getattr(timeseries_response.timeSeries.variable.units,
                         '_unitsCode', None)
@@ -216,8 +213,9 @@ def _site_from_wml_siteInfo(siteInfo, source):
 
 
 def _variable_from_wml_variableInfo(variable_info):
-    """returns a PyHIS Variable instance from a suds WaterML variableInfo
-    element"""
+    """returns a PyHIS Variable instance from a suds WaterML
+    variableInfo element
+    """
     if len(variable_info.variableCode) > 1:
         raise NotImplementedError(
             "Multiple variable codes not currently supported")

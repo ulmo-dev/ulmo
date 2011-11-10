@@ -5,6 +5,7 @@
     Core data models for PyHIS
 """
 import logging
+import warnings
 
 import numpy as np
 from matplotlib.nxutils import points_inside_poly
@@ -15,7 +16,7 @@ from . import waterml
 from . import shapefile
 
 # default timeout for http requests in seconds
-SUDS_TIMEOUT = 600  # 5 minutes
+SUDS_TIMEOUT = 600  # 10 minutes
 
 # fancy this up a bit sometime
 LOG_FORMAT = '%(message)s'
@@ -35,9 +36,7 @@ __all__ = ['Site', 'Source', 'TimeSeries', 'Variable', 'Units']
 
 
 class Site(object):
-    """
-    Contains information about a site
-    """
+    """Contains information about a site"""
     _timeseries_dict = {}
     _dataframe = None
     _site_info_response = None
@@ -132,15 +131,17 @@ class Source(object):
     """Represents a water data source"""
     suds_client = None
     url = None
+    default_network = None
     _description = None
     _all_sites = False
     _sites = {}
     _sites_array = []
     _use_cache = None
 
-    def __init__(self, wsdl_url, description=None, use_cache=True):
+    def __init__(self, wsdl_url, network=None, description=None, use_cache=True):
         self.suds_client = suds.client.Client(wsdl_url, timeout=SUDS_TIMEOUT)
         self.url = wsdl_url
+        self.default_network = network
         self._description = description
         self._use_cache = use_cache
 
@@ -181,8 +182,11 @@ class Source(object):
 
         return self._sites_array
 
-    def get_site(self, network, site_code):
+    def get_site(self, site_code, network=None):
         """returns a single site"""
+        if not network:
+            network = self.default_network
+
         if (network, site_code) in self._sites:
             return self._sites[(network, site_code)]
 
@@ -212,18 +216,21 @@ class Source(object):
         len(self._sites)
 
     def get_sites_within_shapefile(self, filename):
-        """ Reads polygon from shapefile, sends vertices
-        to get_sites_within_polygon, returns subset of sites"""
+        """Reads polygon from shapefile, sends vertices to
+        get_sites_within_polygon, returns subset of sites
+        """
         print 'not implemented'
 
     def get_sites_within_radius_r(self, latitude, longitude,
                                   radius, npoints=100):
-        """ Generates circular poly, sends vertices to
-        get_sites_within_polygon, returns subset of sites"""
+        """Generates circular poly, sends vertices to
+        get_sites_within_polygon, returns subset of sites
+        """
         print 'not implemented'
 
     def get_sites_within_polygon(self, verts):
-        """ returns dict of sites within polygon defined by verts"""
+        """returns dict of sites within polygon defined by verts
+        """
         points = np.vstack((self.sites_array['longitude'],
                             self.sites_array['latitude'])).T
         idx = points_inside_poly(points, verts)
@@ -235,9 +242,7 @@ class Source(object):
 
 
 class TimeSeries(object):
-    """
-    Contains information about a time series
-    """
+    """Contains information about a time series"""
 
     site = None
     variable = None
@@ -264,6 +269,11 @@ class TimeSeries(object):
 
     @property
     def series(self):
+        warnings.warn("timeseries.series is being deprecated. Use timeseries.data instead")
+        return self.data
+
+    @property
+    def data(self):
         if not len(self._series):
             self._update_series()
         return self._series
@@ -289,9 +299,7 @@ class TimeSeries(object):
 
 
 class Units(object):
-    """
-    Contains information about units of measurement
-    """
+    """Contains information about units of measurement"""
 
     name = None
     abbreviation = None
@@ -307,9 +315,7 @@ class Units(object):
 
 
 class Variable(object):
-    """
-    Contains information about a variable
-    """
+    """Contains information about a variable"""
 
     name = None
     code = None
