@@ -13,6 +13,8 @@ from __future__ import absolute_import
 
 from .core import *
 
+from . import his_central
+
 import quantities as pq
 from . import quantities as phq
 

@@ -123,6 +123,12 @@ class TWDBNoCacheTests(TWDBTestBase):
         del self.source
 
 
+class HISCentralTests(TestBase):
+    @test
+    def all_services(self):
+        assert len(pyhis.his_central.services()) > 70
+
+
 if __name__ == '__main__':
     # suite = Tests([TWDBFreshCacheTests(),
     #                TWDBCacheTests(),
@@ -131,6 +137,7 @@ if __name__ == '__main__':
         TWDBFreshCacheTests(),
         TWDBCacheTests(),
         TWDBNoCacheTests(),
+        HISCentralTests(),
         ])
 
     suite.run()
