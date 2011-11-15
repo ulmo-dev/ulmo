@@ -56,14 +56,15 @@ To start off lets import pyhis into python::
   #
   # In [1]: import pyhis
   # cache initialized with database: sqlite:////var/folders/j0/3qhzgkzn7xgdzh0488y4_b340000gn/T/pyhis_cache.db
-  
+
 This command makes pyhis and all of its abilities available to python. If you look at the output above you can see
 that by default PyHIS has created a sqlite database to automatically cache (store locally) any data and metadata
 you access with PyHIS.
 
 If you would like to store the data somewhere else you can provide a path and name for your database::
+
   pyhis.cache.init_cache(cache_database_uri='mycache.db')
-  
+
   # Output:
   #
   # In [2]: pyhis.cache.init_cache(cache_database_uri='mycache.db')
@@ -85,7 +86,7 @@ CUAHSI-HIS maintains a list of registered HIS data services on at HIS Central (h
 can be viewed from within PyHIS by using the following function::
 
   list_of_services = pyhis.his_central.services()
-  len(list_of_services) #number of available services 
+  len(list_of_services) #number of available services
   list_of_services #to see the list
 
   # Output:
@@ -110,7 +111,7 @@ can be viewed from within PyHIS by using the following function::
   # 'CIMS'),
   # ...
   # ]
-  
+
 The above command returns a lust of all available services. You can also request a list of services with data
 available within a bounding box::
 
@@ -188,7 +189,7 @@ do (Note: Some of these are internal functions that will be hidden in furture ve
   nwisuv.url
   # Output: 'http://river.sdsc.edu/wateroneflow/NWIS/UnitValues.asmx?WSDL'
   # i.e. the original url we specified
-  
+
   nwisuv.sites
   # Out: making GetSites query...
   # Out:
@@ -219,7 +220,7 @@ Lets find some sites within the Austin, TX area. PyHIS has three convinience fun
 narrow down the list of sites you are interested in. These are: ``get_sites_within_polygon``, ``get_sites_within_shapefile``
 and ``get_sites_within_radius_r``. These do basically what you would expect from the name.
 
-  
+
 
 
 Lets look at one of the sites::
@@ -233,17 +234,17 @@ Lets see what we can find out about this gage::
   mysite = nwisuv.sites['08158000']
   mysite. #hit tab
   # Out: mysite.code                mysite.latitude            mysite.network             mysite.timeseries
-         mysite.dataframe           mysite.longitude           mysite.service             
-         mysite.id                  mysite.name                mysite.site_info_response 
+         mysite.dataframe           mysite.longitude           mysite.service
+         mysite.id                  mysite.name                mysite.site_info_response
 
 Lets look at some of these::
 
   mysite.name
   # Out: u'Colorado Rv at Austin, TX'
-  
+
   mysite.code
   # Out: u'08158000'
-  
+
   mysite.latitude
   # Out: 30.244653701782227
 
@@ -281,19 +282,19 @@ Lets look at some of the metadata about the discharge timeseries::
   mydischarge. #press tab
   # Out: mydischarge.begin_datetime         mydischarge.quality_control_level  mydischarge.value_count
          mydischarge.data                   mydischarge.quantity               mydischarge.variable
-         mydischarge.end_datetime           mydischarge.series                 
-         mydischarge.method                 mydischarge.site  
+         mydischarge.end_datetime           mydischarge.series
+         mydischarge.method                 mydischarge.site
 
   mydischarge.value_count
   # Out: 11520
 
 So a time
-         
+
 Lets get the discharge data for the entire time period::
 
   mydata = mydischarge.data
   #   --- OR ---
-  # mydata = mysite.timeseries['00060'].data #i.e. You can string all the commands together. 
+  # mydata = mysite.timeseries['00060'].data #i.e. You can string all the commands together.
   #
   # Out: making timeseries request for "NWISUV:08158000:00060 (None - None)"...
          /Users/dharhas/work/pyhis/pyhis/waterml.py:128: UserWarning: Unit conversion not available for 00060: UNKNOWN [cfs]
@@ -309,7 +310,7 @@ read from the local cache.
 Lets look at the data::
 
   mydata
-  # Out: 
+  # Out:
   #  2011-07-18 09:00:00    126.0
   #  2011-07-18 09:15:00    126.0
   #  2011-07-18 09:30:00    139.0
@@ -365,7 +366,7 @@ Lets look at the data::
   #       mydata.cumprod            mydata.last_valid_index   mydata.setflags           mydata.weekday
   #       mydata.cumsum             mydata.load               mydata.shape
 
- 
+
 As you can see there is a pretty long List of functions available for a ``pandas`` timeseries object. Lets try
 a few::
 
@@ -408,7 +409,7 @@ a few::
          2011-11-15 09:30:00    9954532.0
          2011-11-15 09:45:00    9954640.0
          length: 11415
-         
+
   # Plot data
   mydata.plot()
 
@@ -420,4 +421,3 @@ a few::
 
 Getting more complicated. Lets write a script
 =============================================
-
