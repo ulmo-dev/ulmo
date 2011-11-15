@@ -17,6 +17,7 @@ from . import his_central
 
 import quantities as pq
 from . import quantities as phq
+from . import util
 
 #: mapping of variable codes to quantities they represent
 unit_quantities = {
