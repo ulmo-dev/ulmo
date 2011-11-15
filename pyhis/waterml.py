@@ -94,7 +94,7 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
     # timeseries date, acquire more data
     if not begin_date_str:
         if DISREGARD_TIMESERIES_DATE:
-            begin_date_str = '1800-01-01'
+            begin_date_str = '1851-01-01'
         else:
             begin_date_str = timeseries.begin_datetime.strftime('%Y-%m-%d')
     if not end_date_str:
