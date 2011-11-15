@@ -35,6 +35,16 @@ Code Snippet to be run in IPython or Python prompt::
 The line starting with a ``#`` are comment lines. The section following ``# Output:`` demonstrates the expected output of the code snippet.
 You can follow along by cutting and pasting the each code snippet into the IPython prompt.
 
+Installing PyHIS
+================
+
+PyHIS is available on the Python Package Index and can be installed on most systems using either ``easy_install pyhis``
+or ``pip install pyhis``. PyHIS uses several scientific python plotting and analysis libraries. Although easy_install and
+pip will attempt to install these automatically it is better to use a scientific python distribution like
+PythonXY (http://www.pythonxy.com, Windows Only)) or the Enthought Python Distribution - EPD Free
+(http://enthought.com/products/epd_free.php, Windows/Linux/Mac OS X) prior to installing PyHIS.
+
+
 Initiating PyHIS
 ================
 
@@ -407,3 +417,7 @@ a few::
 
   # save data to csv file
   mydata.to_csv('mydata.csv')
+
+Getting more complicated. Lets write a script
+=============================================
+

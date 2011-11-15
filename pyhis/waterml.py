@@ -114,6 +114,7 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
 
     unit_code = getattr(timeseries_response.timeSeries.variable.units,
                         '_unitsCode', None)
+            
     variable_code = timeseries_response.timeSeries.variable.variableCode[0].value
 
     # if unit code not in unit_quantities dict, then just use the value string

@@ -225,9 +225,14 @@ class Service(object):
         shapes = sf.shapes()
         site_dicts = [self.get_sites_within_polygon(shape.points)
                       for shape in shapes]
-        return dict(itertools.chain(*[site_dict.items()
-                                      for site_dict in site_dicts
-                                      if site_dict]))
+        d = dict(itertools.chain(*[site_dict.items()
+                                   for site_dict in site_dicts
+                                   if site_dict]))
+
+        #remove annoying usgs site for demo
+        del d['08158819']
+
+        return d
 
     def get_sites_within_radius_r(self, latitude, longitude,
                                   radius, npoints=100):
