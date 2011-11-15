@@ -125,7 +125,7 @@ class HISCentralTests(TestBase):
         assert len(pyhis.his_central.services()) > 70
 
 
-class ShapeTest(TestBase):
+class ShapeTests(TestBase):
     def __context__(self):
         if os.path.exists(TEST_CACHE_DATABASE_PATH):
             os.remove(TEST_CACHE_DATABASE_PATH)
@@ -147,11 +147,11 @@ if __name__ == '__main__':
     #                TWDBCacheTests(),
     #                TWDBNoCacheTests()])
     suite = Tests([
-        # TWDBFreshCacheTests(),
-        # TWDBCacheTests(),
-        # TWDBNoCacheTests(),
-        # HISCentralTests(),
-        ShapeTest()
+        TWDBFreshCacheTests(),
+        TWDBCacheTests(),
+        TWDBNoCacheTests(),
+        HISCentralTests(),
+        ShapeTests()
         ])
 
     suite.run()
