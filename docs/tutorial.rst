@@ -53,7 +53,9 @@ you access with PyHIS.
 
 If you would like to store the data somewhere else you can provide a path and name for your database::
   pyhis.cache.init_cache(cache_database_uri='mycache.db')
+  
   # Output:
+  #
   # In [2]: pyhis.cache.init_cache(cache_database_uri='mycache.db')
   # cache initialized with database: sqlite:///mycache.db
 
@@ -67,5 +69,34 @@ Accessing CUAHSI-HIS data services requires knowing the WSDL (Web Service Defini
 of the service you are interested in. This is a very complicated way of saying you need to now the
 special web link that provides the data. WSDL's look like this
 http://river.sdsc.edu/wateroneflow/NWIS/DailyValues.asmx?WSDL . Clicking on that link takes you to a page
-full of gobbldy gook XML that is impossible to understand. This is what PyHIS needs to make the magic happen
+full of gobbledy gook XML that is impossible to understand. This is what PyHIS needs to make the magic happen.
+
+CUAHSI-HIS maintains a list of registered HIS data services on at HIS Central (http://hiscentral.cuahsi.org/). These
+can be viewed from within PyHIS by using the following function::
+
+  list_of_services = pyhis.his_central.services()
+  list_of_services #to see the list
+
+  # Output:
+  # In [3]: list_of_services = pyhis.his_central.services()
+  # In [4]: list_of_services
+  # [(u'USGS: NWIS Daily Values',
+  # 'http://river.sdsc.edu/wateroneflow/NWIS/DailyValues.asmx?WSDL',
+  # 'NWISDV'),
+  # (u'USGS: NWIS Instantaneous Irregular Data',
+  # 'http://river.sdsc.edu/wateroneflow/NWIS/Data.asmx?WSDL',
+  # 'NWISIID'),
+  # (u'USGS: NWIS Unit Values',
+  # 'http://river.sdsc.edu/wateroneflow/NWIS/UnitValues.asmx?WSDL',
+  # 'NWISUV'),
+  # (u'EPA: EPA STORET',
+  # 'http://river.sdsc.edu/wateroneflow/EPA/cuahsi_1_0.asmx?WSDL',
+  # 'EPA'),
+  # (u'Chesapeake Bay Information Management System: Chesapeake Bay Information Management System',
+  # 'http://eddy.ccny.cuny.edu/CIMS/cuahsi_1_1.asmx?WSDL',
+  # 'CIMS'),
+
+The services a returned as a list of tuples each containing the name of the service, the WSDL to access
+the service and the network name. PyHIS is not limited to the services registered at HIS Central, any
+WaterOneFlow compliant data service can be accessed as long as your know the WSDL url.
 
