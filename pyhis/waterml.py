@@ -23,39 +23,39 @@ log = logging.getLogger(__name__)
 #------------------------------------------------------------------------------
 # waterml functions
 #------------------------------------------------------------------------------
-def get_sites_for_source(source):
-    """return a sites dict for for a given source. The source can be
-    either a string representing the url or a pyhis.Source object
+def get_sites_for_service(service):
+    """return a sites dict for for a given service. The service can be
+    either a string representing the url or a pyhis.Service object
     """
     log.info('making GetSites query...')
-    get_sites_response = source.suds_client.service.GetSites('')
+    get_sites_response = service.suds_client.service.GetSites('')
 
     log.debug('processing %s sites...' % len(get_sites_response.site))
-    site_list = [_site_from_wml_siteInfo(site.siteInfo, source)
+    site_list = [_site_from_wml_siteInfo(site.siteInfo, service)
                  for site in get_sites_response.site]
 
     return dict([(site.code, site) for site in site_list])
 
 
-def get_description_for_source(source):
-    """return string containg the source description for a given
-    source.  The source can be either a string representing the url or
-    a pyhis.Source object
+def get_description_for_service(service):
+    """return string containg the service description for a given
+    service.  The service can be either a string representing the url or
+    a pyhis.Service object
     """
-    # Note: A source description isn't returned with the GetSites
+    # Note: A service description isn't returned with the GetSites
     # response but rather is attached only to siteInfo responses and
     # timeseries responses...
 
-    source_description = None
+    service_description = None
 
-    log.info('looking up source description...')
+    log.info('looking up service description...')
     try:
-        site_info = source.sites.values()[0]
-        source_description = site_info.site[0].seriesCatalog[0].series[0].Source.SourceDescription
+        site_info = service.sites.values()[0]
+        service_description = site_info.site[0].seriesCatalog[0].series[0].Service.ServiceDescription
     except KeyError:
-        warnings.warn('unable to determine source description')
+        warnings.warn('unable to determine service description')
 
-    return source_description
+    return service_description
 
 
 def get_timeseries_dict_for_site(site):
@@ -82,7 +82,7 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
     element is the python quantity that corresponds the unit for the
     variable. Takes a suds WaterML TimeSeriesResponseType object.
     """
-    suds_client = timeseries.site.source.suds_client
+    suds_client = timeseries.site.service.suds_client
     log.info('making timeseries request for "%s:%s:%s (%s - %s)"...' %
                 (timeseries.site.network, timeseries.site.code,
                  timeseries.variable.code,
@@ -186,7 +186,7 @@ def _lat_long_from_geolocation(geolocation):
             geolocation.geogLocation.__class__.__name__)
 
 
-def _site_from_wml_siteInfo(siteInfo, source):
+def _site_from_wml_siteInfo(siteInfo, service):
     """returns a PyHIS Site instance from a suds WaterML siteInfo element"""
     if not getattr(siteInfo, 'siteCode', None):
         # if siteInfo doesn't have a siteCode something is horribly wrong...
@@ -208,8 +208,8 @@ def _site_from_wml_siteInfo(siteInfo, source):
         network=site_code._network,
         latitude=latitude,
         longitude=longitude,
-        source=source,
-        use_cache=source._use_cache)
+        service=service,
+        use_cache=service._use_cache)
 
 
 def _variable_from_wml_variableInfo(variable_info):
