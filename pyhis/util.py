@@ -5,12 +5,7 @@
    Collection of useful functions for common use cases
 """
 import pyhis
-
-
-def get_single_parameter_from_multiple_services(wsdl_list, param_list, merge=False):
-    """given a list of service wsdl urls and list of service specific
-    param codes return list of """
-    pass
+import pandas
 
 
 def get_parameter_within_polygon(wsdl_list, param_code_list, verts, merge='ByService'):
@@ -20,6 +15,8 @@ def get_parameter_within_polygon(wsdl_list, param_code_list, verts, merge='BySer
         merge = False : Each site timeseries is a column in dataframe
         merge = 'ByService' : each column in dataframe corresponds to a service
         merge = True : single pandas.timeseries
+
+    Note: merging averages across values that occur at the same timestamp.
     """
 
     dataframe = pandas.DataFrame()

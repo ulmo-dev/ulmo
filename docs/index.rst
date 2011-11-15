@@ -12,7 +12,10 @@ What is PyHIS?
 **PyHIS** (Python Hydrologic Information System) is a python module that enables retrieval of time series water data from
 WaterOneFlow/WaterML web services that are part of the national CUAHSI-HIS system. It is a key part of the Python services stack developed by
 the **Texas Water Development Board** for **'Water Data for Texas'** - a unified hydrological 
-information system that shares environmental data for the state of Texas. 
+information system that shares environmental data for the state of Texas.
+
+Currently PyHIS is considered alpha quality. Although it is being used as the backend for several large projects at TWDB, the API is not stable and is expected to
+change.
 
 **PyHIS** 
 
@@ -21,11 +24,14 @@ How do I get started
 
 The latest release version of PyHIS is available on pypi and can be installed using
 easy_install or pip install. The development version of PyHIS is available for download via
-Github (https://github.com/swtools/pyhis ). Currently PyHIS is considered alpha quality. Although it is
-being used as the backend for several large projects at TWDB, the API is not stable and is expected to
-change.
+Github (https://github.com/swtools/pyhis ).
 
 
+
+.. toctree::
+   :maxdepth: 3
+
+   GettingStarted
 
 
 .. toctree::
