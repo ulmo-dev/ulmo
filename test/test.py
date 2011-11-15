@@ -14,6 +14,8 @@ USGS_WSDL_URL = 'file://' + os.path.abspath('./usgs_wsdl.xml')
 TEST_CACHE_DATABASE_PATH = os.path.join(tempfile.gettempdir(),
                                         'pyhis_test_cache.db')
 
+TEST_SHAPEFILE_PATH = 'shapefiles/pyhis_test.shp'
+
 
 class TWDBTestBase(TestBase):
     """Base class for using TWDB dataset as a service"""
@@ -88,7 +90,7 @@ class TWDBCacheTests(TWDBTestBase):
 
         # test that the db has been altered
         del cache._cache['timeseries'][(TWDB_WSDL_URL, 'TWDBSondes',
-                                              'Aransas95_D1', 'CON001')]
+                                        'Aransas95_D1', 'CON001')]
 
         # query timseries so that it gets set up in the cache
         cached_ts = cache.CacheTimeSeries(
@@ -123,15 +125,33 @@ class HISCentralTests(TestBase):
         assert len(pyhis.his_central.services()) > 70
 
 
+class ShapeTest(TestBase):
+    def __context__(self):
+        if os.path.exists(TEST_CACHE_DATABASE_PATH):
+            os.remove(TEST_CACHE_DATABASE_PATH)
+        pyhis.cache.init_cache(TEST_CACHE_DATABASE_PATH)
+
+        self.service = pyhis.Service(
+            TWDB_WSDL_URL,
+            use_cache=True)
+        yield
+        del self.service
+
+    @test
+    def get_sites_within_shapefile(self):
+        sites = self.service.get_sites_within_shapefile(TEST_SHAPEFILE_PATH)
+        assert len(sites) == 13
+
 if __name__ == '__main__':
     # suite = Tests([TWDBFreshCacheTests(),
     #                TWDBCacheTests(),
     #                TWDBNoCacheTests()])
     suite = Tests([
-        TWDBFreshCacheTests(),
-        TWDBCacheTests(),
-        TWDBNoCacheTests(),
-        HISCentralTests(),
+        # TWDBFreshCacheTests(),
+        # TWDBCacheTests(),
+        # TWDBNoCacheTests(),
+        # HISCentralTests(),
+        ShapeTest()
         ])
 
     suite.run()

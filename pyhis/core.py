@@ -4,6 +4,7 @@
 
     Core data models for PyHIS
 """
+import itertools
 import logging
 import warnings
 
@@ -215,11 +216,18 @@ class Service(object):
     def __len__(self):
         len(self._sites)
 
-    def get_sites_within_shapefile(self, filename):
-        """Reads polygon from shapefile, sends vertices to
-        get_sites_within_polygon, returns subset of sites
+    def get_sites_within_shapefile(self, shapefile_path):
+        """Returns the set of sites contained within the polygons of a
+        shapefile. The shapefile is assumed to be in WGS84 coordinate
+        system.
         """
-        print 'not implemented'
+        sf = shapefile.Reader(shapefile_path)
+        shapes = sf.shapes()
+        site_dicts = [self.get_sites_within_polygon(shape.points)
+                      for shape in shapes]
+        return dict(itertools.chain(*[site_dict.items()
+                                      for site_dict in site_dicts
+                                      if site_dict]))
 
     def get_sites_within_radius_r(self, latitude, longitude,
                                   radius, npoints=100):
@@ -231,6 +239,7 @@ class Service(object):
     def get_sites_within_polygon(self, verts):
         """returns dict of sites within polygon defined by verts
         """
+        self.generate_sites_array()
         points = np.vstack((self.sites_array['longitude'],
                             self.sites_array['latitude'])).T
         idx = points_inside_poly(points, verts)
