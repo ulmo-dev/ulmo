@@ -23,7 +23,7 @@ travis_sites = nwis_uv.get_sites_within_shapefile('travis_county.shp')
 target_percentile = 0.2 #(i.e. 20%)
 
 # start with an empty list
-list_of_critial_gages = [] 
+list_of_critical_gages = [] 
 
 # loop through the sites in Travis County
 for site in travis_sites:
@@ -33,10 +33,22 @@ for site in travis_sites:
         print 'Discharge data available'
         # calculate the target quantile from historical daily value data
         threshold = nwis_dv.sites[site].timeseries['00060/DataType=Average'].data.quantile(target_percentile)
+        print 'threshold value: ' , threshold
         
         
         #if the latest downloaded data is below threshold then add to list of critical gages
         if nwis_uv.sites[site].timeseries['00060'].data[-1] < threshold:
             print 'adding gage to critical gage list: ', site
-            list_of_critical_gages.append(site)
+            list_of_critical_gages.append(nwis_uv.sites[site])
         
+
+#plot discharg at the critical gages
+plt.figure()
+for gage in list_of_critical_gages:
+    gage.timeseries['00060'].data.plot(label=gage.name)
+
+plt.legend()
+plt.ylabel = 'Discharge (cfs)'
+plt.title('Critical Gages in Travis County')
+plt.savefig('travis_county_critical_gages.png')
+

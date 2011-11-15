@@ -218,10 +218,39 @@ Python window and open a new prompt. PyHIS has options to force refreshing of th
 
 Lets find some sites within the Austin, TX area. PyHIS has three convinience functions you can use to
 narrow down the list of sites you are interested in. These are: ``get_sites_within_polygon``, ``get_sites_within_shapefile``
-and ``get_sites_within_radius_r``. These do basically what you would expect from the name.
+and ``get_sites_within_radius_r``. These do basically what you would expect from the name::
 
-
-
+  travis_sites = nwis_uv.get_sites_within_shapefile('travis_county.shp')
+  len(travis_sites)
+  # Out: 27
+  travis_sites
+  # Out:  {'08154500/agency=TX071': <Site: LCRA Lk Travis nr Austin, TX [08154500/agency=TX071]>,
+  #        '08154700': <Site: Bull Ck at Loop 360 nr Austin, TX [08154700]>,
+  #        '08154900/agency=TX071': <Site: LCRA Lk Austin at Austin, TX [08154900/agency=TX071]>,
+  #        '08155200': <Site: Barton Ck at SH 71 nr Oak Hill, TX [08155200]>,
+  #        '08155240': <Site: Barton Ck at Lost Ck Blvd nr Austin, TX [08155240]>,
+  #        '08155300': <Site: Barton Ck at Loop 360, Austin, TX [08155300]>,
+  #        '08155400': <Site: Barton Ck abv Barton Spgs at Austin, TX [08155400]>,
+  #        '08155500': <Site: Barton Spgs at Austin, TX [08155500]>,
+  #        '08155541': <Site: W Bouldin Ck at Oltorf Rd, Austin, TX [08155541]>,
+  #        '08156675': <Site: Shoal Ck at Silverway Dr, Austin, TX [08156675]>,
+  #        '08156800': <Site: Shoal Ck at W 12th St, Austin, TX [08156800]>,
+  #        '08156910': <Site: Waller Ck at Koenig Lane, Austin, TX [08156910]>,
+  #        '08158000': <Site: Colorado Rv at Austin, TX [08158000]>,
+  #        '08158030': <Site: Boggy Ck at Manor Rd, Austin, TX [08158030]>,
+  #        '08158035': <Site: Boggy Ck at Webberville Rd, Austin, TX [08158035]>,
+  #        '08158045': <Site: Ft Br Boggy Ck at Manor Rd, Austin, TX [08158045]>,
+  #        '08158200': <Site: Walnut Ck at Dessau Rd, Austin, TX [08158200]>,
+  #        '08158380': <Site: Little Walnut Ck at Georgian Dr, Austin, TX [08158380]>,
+  #        '08158600': <Site: Walnut Ck at Webberville Rd, Austin, TX [08158600]>,
+  #        '08158827': <Site: Onion Ck at Twin Creeks Rd nr Manchaca, TX [08158827]>,
+  #        '08158840': <Site: Slaughter Ck at FM 1826 nr Austin, TX [08158840]>,
+  #        '08158860': <Site: Slaughter Ck at FM 2304 nr Austin, TX [08158860]>,
+  #        '08158920': <Site: Williamson Ck at Oak Hill, TX [08158920]>,
+  #        '08158927': <Site: Kincheon Br at William Cannon Blvd, Austin, TX [08158927]>,
+  #        '08158930': <Site: Williamson Ck at Manchaca Rd, Austin, TX [08158930]>,
+  #        '08158970': <Site: Williamson Ck at Jimmy Clay Rd, Austin, TX [08158970]>,
+  #        '08159000': <Site: Onion Ck at US Hwy 183, Austin, TX [08159000]>}  
 
 Lets look at one of the sites::
 
@@ -421,3 +450,6 @@ a few::
 
 Getting more complicated. Lets write a script
 =============================================
+
+Look at tut_example1.py
+
