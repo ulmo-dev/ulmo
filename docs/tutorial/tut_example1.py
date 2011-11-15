@@ -41,3 +41,14 @@ for site in travis_sites:
             print 'adding gage to critical gage list: ', site
             list_of_critical_gages.append(nwis_uv.sites[site])
         
+
+#plot discharg at the critical gages
+plt.figure()
+for gage in list_of_critical_gages:
+    gage.timeseries['00060'].data.plot(label=gage.name)
+
+plt.legend()
+plt.ylabel = 'Discharge (cfs)'
+plt.title('Critical Gages in Travis County')
+plt.savefig('travis_county_critical_gages.png')
+
