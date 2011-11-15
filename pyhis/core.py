@@ -139,7 +139,8 @@ class Service(object):
     _sites_array = []
     _use_cache = None
 
-    def __init__(self, wsdl_url, network=None, description=None, use_cache=True):
+    def __init__(self, wsdl_url, network=None, description=None,
+                 use_cache=True):
         self.suds_client = suds.client.Client(wsdl_url, timeout=SUDS_TIMEOUT)
         self.url = wsdl_url
         self.default_network = network
