@@ -876,19 +876,20 @@ def cache_timeseries(timeseries, force_intervals=False,
 
     if start_time >= cached_timeseries.end_datetime:
         return
+
     if timeseries.value_count < MAX_VALUE_COUNT and force_intervals == False:
         series, quantity = \
                 waterml.get_series_and_quantity_for_timeseries(
             timeseries,
-            begin_date_str=start_time.strftime('%Y-%m-%d'))
+            begin_date_str=_date_string(start_time))
         _cache_series_values(series, cached_timeseries,
                              update_values=update_values)
     else:
         request_interval = DEFAULT_SMALL_REQUEST_INTERVAL
         end_time = start_time + request_interval
         while end_time < timeseries.end_datetime:
-            begin_date_str=start_time.strftime('%Y-%m-%d')
-            end_date_str=end_time.strftime('%Y-%m-%d')
+            begin_date_str = _date_string(start_time)
+            end_date_str = _date_string(end_time)
             series, quantity = \
                     waterml.get_series_and_quantity_for_timeseries(
                 timeseries,
@@ -958,3 +959,12 @@ def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
         return True
 
     return True
+
+
+def _date_string(datetime_obj):
+    """returns the '%Y-%m-%d' string for a given datetime.
+    datetime.strftime() only works for years prior to 1900, so that's
+    why we implement our own method here.
+    """
+    return '%s-%s-%s' % (
+        datetime_obj.year, datetime_obj.month, datetime_obj.day)
