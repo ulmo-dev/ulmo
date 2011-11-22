@@ -83,10 +83,6 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
     variable. Takes a suds WaterML TimeSeriesResponseType object.
     """
     suds_client = timeseries.site.service.suds_client
-    log.info('making timeseries request for "%s:%s:%s (%s - %s)"...' %
-                (timeseries.site.network, timeseries.site.code,
-                 timeseries.variable.code,
-                 begin_date_str, end_date_str))
 
     # workaround for USGS waterml reflection service hosted at sdsc is
     # returning timeseries begin date that is just a 31 days prior,
@@ -100,6 +96,11 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
     if not end_date_str:
         end_date_str = (timeseries.end_datetime + timedelta(days=1))\
                        .strftime('%Y-%m-%d')
+
+    log.info('making timeseries request for "%s:%s:%s (%s - %s)"...' %
+                (timeseries.site.network, timeseries.site.code,
+                 timeseries.variable.code,
+                 begin_date_str, end_date_str))
 
     timeseries_response = suds_client.service.GetValuesObject(
         '%s:%s' % (timeseries.site.network, timeseries.site.code),
