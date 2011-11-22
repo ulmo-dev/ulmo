@@ -108,6 +108,12 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
         begin_date_str,
         end_date_str)
 
+    if not hasattr(timeseries_response, 'timeSeries'):
+        raise NoDataError(
+            'TimeseriesResponse does not contain a timesSeries element. This '
+            'shouldn\'t happen and is may indicate an error on the part of '
+            'the wateroneflow service.')
+
     log.debug('processing timeseries request for "%s:%s:%s (%s - %s)"...' %
               (timeseries.site.network, timeseries.site.code,
                timeseries.variable.code,
