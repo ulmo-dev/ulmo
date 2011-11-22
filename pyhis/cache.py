@@ -859,6 +859,8 @@ def cache_timeseries(timeseries, force_intervals=False,
     if update_values == True:
         start_time = timeseries.begin_datetime
     elif update_values == None or update_values == False:
+        if not _need_to_update_timeseries(cached_timeseries, timeseries):
+            return
         last_value = cached_timeseries.values.order_by(
             desc(DBValue.timestamp)).first()
         if last_value:
