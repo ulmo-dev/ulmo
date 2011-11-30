@@ -52,7 +52,8 @@ USE_CACHE = True
 # cache
 CACHE_EXPIRES = {
     'get_sites': timedelta(days=7),
-    'timeseries': timedelta(days=7)
+    'site': timedelta(days=7),
+    'timeseries': timedelta(days=7),
     }
 
 # If there are more than these values in a value count, break the
@@ -770,6 +771,19 @@ def get_timeseries_dict_for_site(site):
     """
     cached_site = CacheSite(site)
 
+    if _need_to_update_site(cached_site):
+        ts_dict = waterml.get_timeseries_dict_for_site(site)
+
+        for timeseries in ts_dict.values():
+            cached_timeseries = CacheTimeSeries(timeseries)
+            cached_timeseries.begin_datetime = timeseries.begin_datetime
+            cached_timeseries.end_datetime = timeseries.end_datetime
+            cached_timeseries.value_count = timeseries.value_count
+
+        # update last_refreshed
+        cached_site.last_refreshed = sa.func.now()
+        db_session.commit()
+
     if cached_site.timeseries_list.count() == 0:
         timeseries_dict = waterml.\
                           get_timeseries_dict_for_site(cached_site.to_pyhis())
@@ -940,6 +954,11 @@ def _cache_series_values(series, cached_timeseries, defer_commit=False,
 def _need_to_update_service(cached_service):
     time_since_last_cached = datetime.now() - cached_service.last_get_sites
     return bool(time_since_last_cached > CACHE_EXPIRES['get_sites'])
+
+
+def _need_to_update_site(cached_site):
+    time_since_last_cached = datetime.now() - cached_site.last_refreshed
+    return bool(time_since_last_cached > CACHE_EXPIRES['site'])
 
 
 def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
