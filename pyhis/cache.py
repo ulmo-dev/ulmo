@@ -25,7 +25,7 @@ from sqlalchemy.ext.declarative import (declarative_base, declared_attr,
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.schema import ForeignKey, Index, UniqueConstraint
-from sqlalchemy.sql.expression import desc
+from sqlalchemy.sql.expression import asc, desc
 import suds
 
 import pyhis
@@ -972,13 +972,18 @@ def _need_to_update_timeseries(cached_timeseries, pyhis_timeseries):
         # services get it wrong, so we only update if value_count is
         # off and we are outside of our pre-determined cache window
         time_since_last_cached = datetime.utcnow() - cached_timeseries.last_refreshed
-        return bool(time_since_last_cached > CACHE_EXPIRES['timeseries'])
+        if time_since_last_cached > CACHE_EXPIRES['timeseries']:
+            return True
 
     try:
-        if cached_timeseries.values[0].timestamp == pyhis_timeseries.begin_datetime \
-            and cached_timeseries.values[-1].timestamp == pyhis_timeseries.end_datetime:
+        first_value = cached_timeseries.values.order_by(
+            asc(DBValue.timestamp)).first()
+        last_value = cached_timeseries.values.order_by(
+            desc(DBValue.timestamp)).first()
+        if first_value.timestamp == pyhis_timeseries.begin_datetime \
+            and last_value.timestamp == pyhis_timeseries.end_datetime:
             return False
-    except KeyError:
+    except NoResultFound:
         return True
 
     return True
