@@ -33,7 +33,7 @@ from pyhis import waterml
 from pyhis.exceptions import NoDataError
 
 
-USE_SPATIAL = True
+USE_SPATIAL = False
 try:
     from geoalchemy import (GeometryColumn, GeometryDDL, Point,
                             WKTSpatialElement)
