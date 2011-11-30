@@ -541,7 +541,7 @@ class DBValue(Base, DBCacheDatesMixin):
     value = Column(Float)
     timestamp = Column(DateTime)
     timeseries_id = Column(Integer, ForeignKey('timeseries.id'),
-                           nullable=False)
+                           index=True, nullable=False)
 
     def __init__(self, value=None, timestamp=None, timeseries=None):
         self.value = value
