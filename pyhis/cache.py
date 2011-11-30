@@ -648,27 +648,29 @@ def cache_sites(sites, update_values=None):
         # try:
         log.info('caching values for site %s/%s: %s' %
                  (i, total_sites, site.name))
-
-        # update the timeseries dict, which will automatically
-        # cache the values then delete it to free up the memory
-        for timeseries in site.timeseries.values():
-            try:
-                cache_timeseries(timeseries, update_values=update_values)
-            except suds.WebFault as fault:
-                warnings.warn(
-                    "There was a problem getting values for %s:%s\n%s " % (
-                        site, timeseries, fault))
-            except NoDataError as e:
-                warnings.warn(str(e))
-            except Exception as e:
-                pass
-            _clear_timeseries_from_memory_cache(timeseries)
+        cache_site(site)
 
         _clear_site_from_memory_cache(site)
         # except Exception as e:
         #     import pdb; pdb.set_trace()
         #     warnings.warn("There was a problem getting values for "
         #                   "%s, skipping..." % (site))
+
+
+def cache_site(site, update_values=None):
+    """cache data for a single site"""
+    # update the timeseries dict, which will automatically
+    # cache the values then delete it to free up the memory
+    for timeseries in site.timeseries.values():
+        try:
+            cache_timeseries(timeseries, update_values=update_values)
+        except suds.WebFault as fault:
+            warnings.warn(
+                "There was a problem getting values for %s:%s\n%s " % (
+                    site, timeseries, fault))
+        except NoDataError as e:
+            warnings.warn(str(e))
+            _clear_timeseries_from_memory_cache(timeseries)
 
 
 def _clear_site_from_memory_cache(site):
