@@ -15,7 +15,7 @@ from setuptools import Command, setup, find_packages
 
 setup(
     name='pyhis',
-    version='0.1-alpha',
+    version='0.1.2-alpha',
     license='BSD',
     author='Andy Wilson',
     author_email='wilson.andrew.j@gmail.com',
