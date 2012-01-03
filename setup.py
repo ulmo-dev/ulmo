@@ -30,6 +30,7 @@ setup(
         'numpy>=1.4.0',
         'pandas>=0.3.0',
         'quantities>=0.9.0',
+        'requests>=0.9.0',
         'sqlalchemy>=0.7.1',
         'suds>=0.4',
     ],
