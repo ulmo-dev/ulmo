@@ -26,13 +26,12 @@ setup(
     packages=find_packages(),
     platforms='any',
     install_requires=[
+        'matplotlib>=1.1.0',
         'numpy>=1.4.0',
         'pandas>=0.3.0',
-        'suds>=0.4',
         'quantities>=0.9.0',
         'sqlalchemy>=0.7.1',
-        'attest>=0.5.0',
-        'matplotlib'
+        'suds>=0.4',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
