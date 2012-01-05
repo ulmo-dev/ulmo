@@ -612,10 +612,17 @@ CacheVariable = create_cache_obj(DBVariable, 'variable',
 
 
 def update_models_schema(schema):
-    def is_a_pyhis_cache_model(x):
-        return getattr(x, '__module__', None) == 'pyhis.cache' and isinstance(x, DeclarativeMeta)
+    #XXX: make this less awful
+    import usgs_cache
 
-    pyhis_cache_models = filter(is_a_pyhis_cache_model, globals().values())
+    def is_a_pyhis_cache_model(x):
+        module = getattr(x, '__module__', None)
+        return (module == 'pyhis.cache' or module == 'pyhis.usgs_cache')\
+            and isinstance(x, DeclarativeMeta)
+
+    pyhis_cache_models = filter(
+        is_a_pyhis_cache_model,
+        globals().values() + usgs_cache.__dict__.values())
     for model in pyhis_cache_models:
         model.__table__.schema = schema
 
