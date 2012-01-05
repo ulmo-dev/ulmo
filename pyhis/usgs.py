@@ -1,8 +1,6 @@
+import cStringIO as StringIO
 from datetime import datetime as dt, timedelta as td
 import logging
-import cStringIO as StringIO
-import os
-import tempfile
 from urllib import urlencode
 
 import isodate
