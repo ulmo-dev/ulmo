@@ -15,8 +15,6 @@ from pyhis import usgs_cache as uc
 
 INSTANTANEOUS_URL = "http://waterservices.usgs.gov/nwis/iv?"
 DAILY_URL = "http://waterservices.usgs.gov/nwis/dv?"
-TEST_FILE = "/home/wilsaj/test/texas_usgs.xml"
-TEST_SITE_FILE = "/home/wilsaj/test/usgs_site.xml"
 NS = "{http://www.cuahsi.org/waterML/1.1/}"
 
 # configure logging
