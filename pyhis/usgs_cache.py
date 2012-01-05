@@ -48,9 +48,6 @@ class USGSSite(cache.Base, cache.DBCacheDatesMixin):
     timeseries = relationship('USGSTimeSeries', lazy='dynamic')
 
 
-cache.init_cache()
-
-
 class USGSVariable(cache.Base, cache.DBCacheDatesMixin):
     __tablename__ = 'usgs_variable'
 
