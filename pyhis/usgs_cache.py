@@ -26,9 +26,9 @@ class USGSSite(cache.Base, cache.DBCacheDatesMixin):
     """
     __tablename__ = 'usgs_site'
     __table_args__ = (
-        UniqueConstraint('network', 'code'),
-           Index('idx_%s_code_service_id' % __tablename__,
-                 'code', 'service_id'),
+        UniqueConstraint('code', 'network', 'service_id'),
+           Index('idx_%s_code_network_service_id' % __tablename__,
+                 'code', 'network', 'service_id'),
             {}
             )
     id = Column(Integer, primary_key=True)
