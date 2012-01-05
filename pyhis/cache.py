@@ -129,9 +129,6 @@ def init_cache(cache_database_uri=CACHE_DATABASE_FILE,
         pass
 
 
-init_cache()
-
-
 def clear_memory_cache():
     """Clean out the in-memory cache dict. This is useful for
     large/long-running programs that might be using up all available
