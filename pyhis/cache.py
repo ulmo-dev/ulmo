@@ -636,16 +636,15 @@ def cache_sites(sites, update_values=None):
     for i, site in enumerate(sites, 1):
         # this could be improved by not having to create the
         # dataframe object
-        # try:
-        log.info('caching values for site %s/%s: %s' %
-                 (i, total_sites, site.name))
-        cache_site(site)
-
-        _clear_site_from_memory_cache(site)
-        # except Exception as e:
-        #     import pdb; pdb.set_trace()
-        #     warnings.warn("There was a problem getting values for "
-        #                   "%s, skipping..." % (site))
+        try:
+            log.info('caching values for site %s/%s: %s' %
+                     (i, total_sites, site.name))
+            cache_site(site)
+        except suds.WebFault as fault:
+            warnings.warn("There was a problem getting values for "
+                          "%s: %s" % (site, fault))
+        finally:
+            _clear_site_from_memory_cache(site)
 
 
 def cache_site(site, update_values=None):
@@ -661,6 +660,7 @@ def cache_site(site, update_values=None):
                     site, timeseries, fault))
         except NoDataError as e:
             warnings.warn(str(e))
+        finally:
             _clear_timeseries_from_memory_cache(timeseries)
 
 
