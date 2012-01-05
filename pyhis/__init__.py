@@ -14,6 +14,7 @@ from __future__ import absolute_import
 from .core import *
 
 from . import his_central
+from . import usgs
 
 import quantities as pq
 from . import quantities as phq
