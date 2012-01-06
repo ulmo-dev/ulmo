@@ -280,8 +280,7 @@ def variable_dict_from_element(variable_element):
 
 
 def values_from_element(values_element):
-    return [{'timestamp': dt.strptime(value.attrib['dateTime'],
-                                      '%Y-%m-%dT%H:%M:%S.%f'),
+    return [{'timestamp': isodate.parse_datetime(value.attrib['dateTime']),
              'value': value.text,
              'qualifiers': value.attrib['qualifiers']}
             for value in values_element.findall(NS + 'value')]
