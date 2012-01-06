@@ -167,9 +167,8 @@ def get_site_data_from_web_service(url, site_code, parameter_code=None,
                   'site': site_code}
     if parameter_code:
         url_params['parameterCd'] = parameter_code
-    if 'iv' in url:
-        url_params['period'] = 'P121D'
-    url_params.update(date_range_url_params(date_range))
+
+    url_params.update(date_range_url_params(date_range, url))
 
     url += urlencode(url_params)
 
@@ -213,7 +212,7 @@ def _get_service_url(service):
         raise "service must be either 'daily' ('dv') or 'instantaneous' ('iv')"
 
 
-def date_range_url_params(date_range):
+def date_range_url_params(date_range, url):
     if date_range is None:
         return {}
     if type(date_range) is dt:
@@ -223,7 +222,9 @@ def date_range_url_params(date_range):
                     endDT=isodate.datetime_isoformat(date_range[1]))
     if type(date_range) is td:
         return dict(duration=isodate.duration_isoformat(date_range))
-    if date_range == 'all':
+    if date_range == 'all' and 'iv' in url:
+        return dict(period=isodate.duration_isoformat(td(days=120)))
+    if date_range == 'all' and 'dv' in url:
         return dict(startDT=isodate.datetime_isoformat(dt(1851, 1, 1)))
 
     raise(TypeError,
