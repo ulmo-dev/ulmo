@@ -31,6 +31,9 @@ def get_sites(state_code, site_type=None, service="daily",
     url = _get_service_url(service)
 
     if use_cache:
+        log.debug(
+            'checking cache for sites: %s {state_code: %s, site_type: %s}' %
+            (url, state_code, site_type))
         sites = get_sites_from_cache(url, state_code, site_type)
     else:
         site_elements = get_sites_from_web_service(url, state_code, site_type)
@@ -95,6 +98,8 @@ def get_site_data(site_code, parameter_code=None, date_range=None,
     url = _get_service_url(service)
 
     if use_cache:
+        log.debug(
+            'checking cache for site data: %s' % site_code)
         data_dict = get_site_data_from_cache(url, site_code, parameter_code,
                                              date_range)
     if not use_cache or not data_dict:
