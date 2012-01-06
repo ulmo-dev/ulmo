@@ -259,13 +259,13 @@ def variable_dict_from_element(variable_element):
     variable_code = code.text
     variable_name = variable_element.find(NS + 'variableName').text
     variable_description = variable_element.find(NS + 'variableDescription').text
-
     option = variable_element.find('%(ns)soptions/%(ns)soption' % {'ns': NS})
 
     if option is not None:
         variable_code += ':' + option.attrib['optionCode']
-        variable_name = option.text + ' ' + variable_name
-        variable_description = option.text + ' ' + variable_description
+        if option.text:
+            variable_name = option.text + ' ' + variable_name
+            variable_description = option.text + ' ' + variable_description
 
     return {
         'name': variable_name,
