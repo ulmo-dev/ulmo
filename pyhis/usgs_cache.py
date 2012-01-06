@@ -100,5 +100,5 @@ class USGSValue(cache.Base, cache.DBCacheDatesMixin):
     qualifiers = Column(String)
 
     timeseries_id = Column(Integer, ForeignKey('usgs_timeseries.id'),
-                           nullable=False)
+                           nullable=False, index=True)
     timeseries = relationship('USGSTimeSeries', uselist=False)
