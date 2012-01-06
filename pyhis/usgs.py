@@ -109,8 +109,7 @@ def get_site_data(site_code, parameter_code=None, date_range=None,
     return data_dict
 
 
-def get_site_data_from_cache(url, site_code, parameter_code=None,
-                             date_range=None):
+def _get_cached_timeseries_list(url, site_code, parameter_code=None):
     service = c.query_or_new(c.db_session, uc.USGSService, dict(url=url))
     try:
         site = c.db_session.query(uc.USGSSite)\
@@ -129,8 +128,12 @@ def get_site_data_from_cache(url, site_code, parameter_code=None,
     else:
         ts_list = site.timeseries.all()
 
-    if not ts_list:
-        return
+    return ts_list
+
+
+def get_site_data_from_cache(url, site_code, parameter_code=None,
+                             date_range=None):
+    ts_list = _get_cached_timeseries_list(url, site_code, parameter_code)
 
     date_range_clause = None
     if type(date_range) is dt:
@@ -317,3 +320,22 @@ def bulk_upsert_values(value_dicts, timeseries):
             .values(update_dict).execute()
 
     c.db_session.commit()
+
+
+def cache_all_sites(state_code, service):
+    sites = get_sites(state_code, service=service)
+
+    for site_code in sites.keys():
+        update_site_cache(site_code, service)
+
+
+def update_site_cache(site_code, service):
+    url = _get_service_url(service)
+    ts_list = _get_cached_timeseries_list(url, site_code)
+
+    for ts in ts_list:
+        if ts.values.count() == 0:
+            site_data = get_site_data(site_code, service=service, date_range='all')
+        else:
+            #XXX: do update stuff here
+            pass
