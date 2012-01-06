@@ -103,8 +103,9 @@ def get_site_data(site_code, parameter_code=None, date_range=None,
         data_dict = get_site_data_from_cache(url, site_code, parameter_code,
                                              date_range)
     if not use_cache or not data_dict:
-        data_dict = get_site_data_from_web_service(url, site_code, parameter_code,
-                                               date_range)
+        data_dict = get_site_data_from_web_service(
+            url, site_code, parameter_code, date_range)
+
     return data_dict
 
 
