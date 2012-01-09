@@ -1,4 +1,4 @@
-from sqlalchemy import (Column, Integer, String,  DateTime)
+from sqlalchemy import (BigInteger, Column, Integer, String,  DateTime)
 from sqlalchemy.ext.declarative import (declarative_base, declared_attr,
                                         DeclarativeMeta)
 from sqlalchemy.orm import relationship, sessionmaker
@@ -94,7 +94,7 @@ class USGSValue(cache.Base, cache.DBCacheDatesMixin):
         {}
         )
 
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger, primary_key=True)
     value = Column(String)
     timestamp = Column(DateTime)
     qualifiers = Column(String)
