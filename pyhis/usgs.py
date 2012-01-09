@@ -180,30 +180,33 @@ def get_site_data_from_web_service(url, site_code, parameter_code=None,
     req = requests.get(url)
     content_io = StringIO.StringIO(str(req.content))
 
-    return parse_site_data_from_waterml(content_io)
+    return parse_site_data_from_waterml(content_io, url)
 
 
-def parse_site_data_from_waterml(content_io):
+def parse_site_data_from_waterml(content_io, url, cache_values=True):
     data_dict = {}
+    if cache_values:
+        service = c.query_or_new(c.db_session, uc.USGSService, dict(url=url))
 
     for (event, ele) in iterparse(content_io):
         if ele.tag == NS + "timeSeries":
-            source_info_element = ele.find(NS + 'sourceInfo')
-            site = c.query_or_new(
-                c.db_session, uc.USGSSite,
-                site_dict_from_element(source_info_element))
-            var_element = ele.find(NS + 'variable')
-            variable = c.query_or_new(
-                c.db_session, uc.USGSVariable,
-                variable_dict_from_element(var_element))
-            timeseries = c.query_or_new(
-                c.db_session, uc.USGSTimeSeries,
-                {'variable': variable, 'site': site})
             values_element = ele.find(NS + 'values')
             values = values_from_element(values_element)
-            bulk_upsert_values(values, timeseries)
-            data_dict[variable.code] = values
-
+            var_element = ele.find(NS + 'variable')
+            code = var_element.find(NS + 'variableCode').text
+            data_dict[code] = values
+            if cache_values:
+                source_info_element = ele.find(NS + 'sourceInfo')
+                site = c.query_or_new(
+                    c.db_session, uc.USGSSite,
+                    dict(site_dict_from_element(source_info_element).items() + [('service_id', service.id)]))
+                variable = c.query_or_new(
+                    c.db_session, uc.USGSVariable,
+                    variable_dict_from_element(var_element))
+                timeseries = c.query_or_new(
+                    c.db_session, uc.USGSTimeSeries,
+                    {'variable': variable, 'site': site})
+                bulk_upsert_values(values, timeseries)
     return data_dict
 
 
