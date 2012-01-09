@@ -165,28 +165,27 @@ def get_site_data_from_cache(url, site_code, parameter_code=None,
                  for ts in ts_list])
 
 
-def get_site_data_from_web_service(url, site_code, parameter_code=None,
+def get_site_data_from_web_service(service_url, site_code, parameter_code=None,
                                    date_range=None):
     url_params = {'format': 'waterml,1.1',
                   'site': site_code}
     if parameter_code:
         url_params['parameterCd'] = parameter_code
 
-    url_params.update(date_range_url_params(date_range, url))
+    url_params.update(date_range_url_params(date_range, service_url))
+    request_url = service_url + urlencode(url_params)
 
-    url += urlencode(url_params)
-
-    log.info('making request for site data: %s' % url)
-    req = requests.get(url)
+    log.info('making request for site data: %s' % request_url)
+    req = requests.get(request_url)
     content_io = StringIO.StringIO(str(req.content))
 
-    return parse_site_data_from_waterml(content_io, url)
+    return parse_site_data_from_waterml(content_io, service_url)
 
 
-def parse_site_data_from_waterml(content_io, url, cache_values=True):
+def parse_site_data_from_waterml(content_io, service_url, cache_values=True):
     data_dict = {}
     if cache_values:
-        service = c.query_or_new(c.db_session, uc.USGSService, dict(url=url))
+        service = c.query_or_new(c.db_session, uc.USGSService, dict(url=service_url))
 
     for (event, ele) in iterparse(content_io):
         if ele.tag == NS + "timeSeries":
