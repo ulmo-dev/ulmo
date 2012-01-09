@@ -5,6 +5,7 @@ from urllib import urlencode
 
 import isodate
 from lxml.etree import iterparse
+import pytz
 import requests
 from sqlalchemy import and_
 from sqlalchemy.orm import exc as sa_exc
@@ -137,27 +138,27 @@ def get_site_data_from_cache(url, site_code, parameter_code=None,
 
     date_range_clause = None
     if type(date_range) is dt:
-        date_range_clause = (uc.USGSValue.timestamp >= date_range)
+        date_range_clause = (uc.USGSValue.datetime_utc >= date_range)
     elif type(date_range) is list or type(date_range) is tuple:
-        date_range_clause = and_(uc.USGSValue.timestamp >= date_range[0],
-                                 uc.USGSValue.timestamp <= date_range[1])
+        date_range_clause = and_(uc.USGSValue.datetime_utc >= date_range[0],
+                                 uc.USGSValue.datetime_utc <= date_range[1])
     elif type(date_range) is td:
         current_time = c.db_session.execute(func.now()).scalar()
         time_ago = current_time - date_range
-        date_range_clause = (uc.USGSValue.timestamp >= time_ago)
+        date_range_clause = (uc.USGSValue.datetime_utc >= time_ago)
 
     def values_query(values):
         if date_range_clause or date_range == 'all':
             return values.filter(date_range_clause).all()
         else:
-            val = values.order_by(desc(uc.USGSValue.timestamp)).first()
+            val = values.order_by(desc(uc.USGSValue.datetime_utc)).first()
             if val:
                 return [val]
             else:
                 return []
 
     return dict([(ts.variable.code,
-                  [dict(timestamp=value.timestamp,
+                  [dict(datetime_utc=value.datetime_utc,
                         value=value.value,
                         qualifiers=value.qualifiers)
                    for value in values_query(ts.values)])
@@ -283,7 +284,14 @@ def variable_dict_from_element(variable_element):
 
 
 def values_from_element(values_element):
-    return [{'timestamp': isodate.parse_datetime(value.attrib['dateTime']),
+    def parse_datetime(datetime_str):
+        datetime = isodate.parse_datetime(datetime_str)
+        if datetime.tzinfo is not None:
+            return datetime.astimezone(tz=pytz.utc).replace(tzinfo=None)
+        else:
+            return datetime
+
+    return [{'datetime_utc': parse_datetime(value.attrib['dateTime']),
              'value': value.text,
              'qualifiers': value.attrib['qualifiers']}
             for value in values_element.findall(NS + 'value')]
@@ -295,27 +303,26 @@ def bulk_upsert_values(value_dicts, timeseries):
         .filter_by(timeseries=timeseries).all()
 
     db_value_dict = dict([
-            (db_value.timestamp, (db_value.value, db_value.qualifiers))
+            (db_value.datetime_utc, (db_value.value, db_value.qualifiers))
             for db_value in db_values])
     insert_dicts = tuple(
         [dict(value_dict.items() + [('timeseries_id', timeseries.id)])
          for value_dict in value_dicts
-         if value_dict['timestamp'] not in db_value_dict])
+         if value_dict['datetime_utc'] not in db_value_dict])
     update_dicts = tuple(
         [dict(value_dict.items() + [('timeseries_id', timeseries.id)])
          for value_dict in value_dicts
-         if value_dict['timestamp'] in db_value_dict \
-             and not db_value_dict[value_dict['timestamp']] == \
+         if value_dict['datetime_utc'] in db_value_dict \
+             and not db_value_dict[value_dict['datetime_utc']] == \
              (value_dict['value'], value_dict['qualifiers'])])
 
     if insert_dicts:
         uc.USGSValue.__table__.insert(bind=c.db_session.bind)\
             .execute(insert_dicts)
-
     for update_dict in update_dicts:
         uc.USGSValue.__table__.update()\
             .where(and_(
-                uc.USGSValue.timestamp == update_dict['timestamp'],
+                uc.USGSValue.datetime_utc == update_dict['datetime_utc'],
                 uc.USGSValue.timeseries_id == update_dict['timeseries_id']))\
             .values(update_dict).execute()
 

@@ -88,15 +88,16 @@ class USGSTimeSeries(cache.Base, cache.DBCacheDatesMixin):
 class USGSValue(cache.Base, cache.DBCacheDatesMixin):
     __tablename__ = 'usgs_value'
     __table_args__ = (
-        UniqueConstraint('timeseries_id', 'timestamp'),
-        Index('idx_%s_timeseries_id_timestamp' % __tablename__,
-              'timeseries_id', 'timestamp'),
+        UniqueConstraint('timeseries_id', 'datetime_utc'),
+        Index('idx_%s_timeseries_id_datetime_utc' % __tablename__,
+              'timeseries_id', 'datetime_utc'),
         {}
         )
 
     id = Column(BigInteger, primary_key=True)
     value = Column(String)
-    timestamp = Column(DateTime)
+
+    datetime_utc = Column(DateTime)
     qualifiers = Column(String)
 
     timeseries_id = Column(Integer, ForeignKey('usgs_timeseries.id'),
