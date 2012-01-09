@@ -341,12 +341,13 @@ def cache_all_sites(state_code, service):
 def update_site_cache(site_code, service):
     url = _get_service_url(service)
     ts_list = _get_cached_timeseries_list(url, site_code)
+
     if not ts_list:
         site_data = get_site_data(site_code, service=service, date_range='all')
 
     for ts in ts_list:
         if ts.values.count() == 0:
-            site_data = get_site_data(site_code, service=service, date_range='all')
+            site_data = get_site_data(site_code, parameter_code=ts.variable.code, service=service, date_range='all')
         else:
             #XXX: do update stuff here
             pass
