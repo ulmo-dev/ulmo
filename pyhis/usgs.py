@@ -365,5 +365,10 @@ def update_site_cache(site_code, service):
         if ts.values.count() == 0:
             site_data = get_site_data(site_code, parameter_code=ts.variable.code, service=service, date_range='all')
         else:
-            #XXX: do update stuff here
-            pass
+            now = func.now().scalar()
+            time_since_last_refresh = now - ts.last_refreshed
+            get_site_data_from_web_service(
+                url, site_code, parameter_code=ts.variable.code, modified_since=time_since_last_refresh)
+            # update ts.last_refreshed
+            ts.last_refreshed = now
+            c.db_session.commit()
