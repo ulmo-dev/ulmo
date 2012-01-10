@@ -9,7 +9,7 @@ import pytz
 import requests
 from sqlalchemy import and_
 from sqlalchemy.orm import exc as sa_exc
-from sqlalchemy.sql.expression import desc, func
+from sqlalchemy.sql.expression import asc, desc, func
 
 import pyhis.cache as c
 from pyhis import usgs_cache as uc
@@ -116,14 +116,21 @@ def get_site_data(site_code, parameter_code=None, date_range=None,
     return data_dict
 
 
-def _get_cached_timeseries_list(url, site_code, parameter_code=None):
+def _get_cached_site(url, site_code):
     service = c.query_or_new(c.db_session, uc.USGSService, dict(url=url))
     try:
-        site = c.db_session.query(uc.USGSSite)\
+        return c.db_session.query(uc.USGSSite)\
             .filter_by(service=service, code=site_code).one()
 
     except sa_exc.NoResultFound:
         return
+
+
+def _get_cached_timeseries_list(url, site_code, parameter_code=None):
+    site = _get_cached_site(url, site_code)
+
+    if not site:
+        return []
 
     if parameter_code:
         try:
@@ -172,11 +179,14 @@ def get_site_data_from_cache(url, site_code, parameter_code=None,
 
 
 def get_site_data_from_web_service(service_url, site_code, parameter_code=None,
-                                   date_range=None):
+                                   date_range=None, modified_since=None):
+    """queries service for data and returns a data dict"""
     url_params = {'format': 'waterml,1.1',
                   'site': site_code}
     if parameter_code:
         url_params['parameterCd'] = parameter_code
+    if modified_since:
+        url_params['modifiedSince'] = isodate.duration_isoformat(modified_since)
 
     url_params.update(date_range_url_params(date_range, service_url))
     request_url = service_url + urlencode(url_params)
@@ -349,26 +359,51 @@ def bulk_upsert_values(value_dicts, timeseries):
 
 def cache_all_sites(state_code, service):
     sites = get_sites(state_code, service=service)
-
     for site_code in sites.keys():
+        update_site_cache(site_code, service)
+
+
+def cache_sites(site_codes, service):
+    for site_code in site_codes:
         update_site_cache(site_code, service)
 
 
 def update_site_cache(site_code, service):
     url = _get_service_url(service)
-    ts_list = _get_cached_timeseries_list(url, site_code)
+    site = _get_cached_site(url, site_code)
 
-    if not ts_list:
+    if not site:
+        return
+
+    # grab timestamp now so as to be conservative when we update
+    # last_refreshed values
+    now = c.db_session.execute(func.now()).scalar().replace(tzinfo=None)
+
+    # if we don't have timeseries objects yet or if something went
+    # wrong mid-update, grab all data for a site
+    if not site.timeseries.count() or \
+            [1 for ts in site.timeseries.all() if ts.values.count() == 0]:
         site_data = get_site_data(site_code, service=service, date_range='all')
 
-    for ts in ts_list:
-        if ts.values.count() == 0:
-            site_data = get_site_data(site_code, parameter_code=ts.variable.code, service=service, date_range='all')
-        else:
-            now = func.now().scalar()
-            time_since_last_refresh = now - ts.last_refreshed
-            get_site_data_from_web_service(
-                url, site_code, parameter_code=ts.variable.code, modified_since=time_since_last_refresh)
-            # update ts.last_refreshed
-            ts.last_refreshed = now
-            c.db_session.commit()
+    else:
+        timeseries_ids = [ts.id for ts in site.timeseries.all()]
+        # when's was the most recent update for this site?
+        oldest_refresh = c.db_session.query(uc.USGSValue)\
+            .filter(uc.USGSValue.timeseries_id.in_(timeseries_ids))\
+            .order_by(asc(uc.USGSValue.last_refreshed)).first().last_refreshed
+        time_since_oldest_refresh = now - oldest_refresh
+
+        # don't bother updating daily values more than once a day
+        if service == 'daily' and time_since_oldest_refresh < td(days=1):
+            return
+
+        site_data = get_site_data_from_web_service(
+            url, site_code, modified_since=time_since_oldest_refresh)
+
+        # update last_refreshed on all these values
+        c.db_session.execute(
+            uc.USGSValue.__table__.update()\
+                .where(uc.USGSValue.timeseries_id.in_(timeseries_ids))\
+                .values(last_refreshed=now))
+
+    return site_data
