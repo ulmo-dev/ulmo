@@ -225,6 +225,16 @@ def _get_service_url(service):
 
 
 def date_range_url_params(date_range, url):
+    """returns a dict of url parameters that should be used for the
+    date_range, depending on what type of object date_range is. If
+    date_range is a single datetime, returns startDT. If date_range is
+    a pair of datetimes then it returns a startDT and endDT. If
+    date_range is a timedelta then it returns a period. If date_range
+    is the string 'all', then it returns that will get all the
+    available data from the service, depending on the service
+    (instantaneous is only the last 120 days, daily values queries
+    data starting in 1851).
+    """
     if date_range is None:
         return {}
     if type(date_range) is dt:
