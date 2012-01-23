@@ -993,3 +993,16 @@ def _date_string(datetime_obj):
     """
     return '%s-%s-%s' % (
         datetime_obj.year, datetime_obj.month, datetime_obj.day)
+
+
+def query_or_new(db_session, model, search_dict, auto_commit=True):
+    try:
+        instance = db_session.query(model).filter_by(
+            **search_dict).one()
+    except NoResultFound:
+        instance = model(**search_dict)
+        db_session.add(instance)
+        if auto_commit:
+            db_session.commit()
+    return instance
+
