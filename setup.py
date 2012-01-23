@@ -26,6 +26,7 @@ setup(
     packages=find_packages(),
     platforms='any',
     install_requires=[
+        'isodate>=0.4.6',
         'matplotlib>=1.1.0',
         'numpy>=1.4.0',
         'pandas>=0.3.0',
