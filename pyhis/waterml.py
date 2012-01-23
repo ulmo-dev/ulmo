@@ -143,7 +143,7 @@ def get_series_and_quantity_for_timeseries(timeseries, begin_date_str=None,
         raise NoDataError(
             'No data values returned by service for "%s:%s:%s  (%s - %s)". '
             'This indicates either a bad date range, or it is possible that '
-            ' the service could be misconfigured or broken.' %
+            'the service could be misconfigured or broken.' %
             (timeseries.site.network, timeseries.site.code,
              timeseries.variable.code,
              begin_date_str, end_date_str))
