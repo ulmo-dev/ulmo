@@ -387,7 +387,7 @@ def update_site_cache(site_code, service):
 
     else:
         timeseries_ids = [ts.id for ts in site.timeseries.all()]
-        # when's was the most recent update for this site?
+        # when was the most recent update for this site?
         oldest_refresh = c.db_session.query(uc.USGSValue)\
             .filter(uc.USGSValue.timeseries_id.in_(timeseries_ids))\
             .order_by(asc(uc.USGSValue.last_refreshed)).first().last_refreshed
