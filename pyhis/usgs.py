@@ -94,7 +94,7 @@ def cache_site_elements(site_elements, service):
 
 
 def get_site_data(site_code, parameter_code=None, date_range=None,
-                  service="daily", use_cache=True):
+                  service="daily", agency_code="USGS", use_cache=True):
     """returns a dict of  data for a site"""
     url = _get_service_url(service)
 
