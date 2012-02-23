@@ -363,12 +363,12 @@ def cache_all_sites(state_code, service):
         update_site_cache(site_code, service)
 
 
-def cache_sites(site_codes, service):
+def cache_sites(site_codes, service, recache=False):
     for site_code in site_codes:
-        update_site_cache(site_code, service)
+        update_site_cache(site_code, service, recache)
 
 
-def update_site_cache(site_code, service):
+def update_site_cache(site_code, service, recache=False):
     url = _get_service_url(service)
     site = _get_cached_site(url, site_code)
 
@@ -384,6 +384,11 @@ def update_site_cache(site_code, service):
     if not site.timeseries.count() or \
             [1 for ts in site.timeseries.all() if ts.values.count() == 0]:
         site_data = get_site_data(site_code, service=service, date_range='all')
+
+    # recache all the data
+    if recache:
+        site_data = get_site_data(site_code, service=service, date_range='all',
+                                  use_cache=False)
 
     else:
         timeseries_ids = [ts.id for ts in site.timeseries.all()]
