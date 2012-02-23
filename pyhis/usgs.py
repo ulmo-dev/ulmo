@@ -77,14 +77,14 @@ def get_sites_from_cache(url, state_code, site_type=None):
                       for cached_site in cached_sites])
     else:
         site_elements = get_sites_from_web_service(url, state_code, site_type)
-        cache_sites(site_elements, service)
+        cache_site_elements(site_elements, service)
         sites = dict([(k, v.find(NS + 'siteName').text)
                       for k, v in site_elements.items()])
 
     return sites
 
 
-def cache_sites(site_elements, service):
+def cache_site_elements(site_elements, service):
     """update cache to include sites"""
     for source_info in site_elements.values():
         site = uc.USGSSite(
