@@ -398,7 +398,7 @@ def update_site_cache(site_code, service):
             return
 
         site_data = get_site_data_from_web_service(
-            url, site_code, modified_since=time_since_oldest_refresh)
+            url, site_code, date_range=time_since_oldest_refresh)
 
         # update last_refreshed on all these values
         c.db_session.execute(
