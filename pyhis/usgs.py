@@ -253,7 +253,8 @@ def date_range_url_params(date_range, url):
         return dict(startDT=isodate.datetime_isoformat(date_range[0]),
                     endDT=isodate.datetime_isoformat(date_range[1]))
     if type(date_range) is td:
-        return dict(duration=isodate.duration_isoformat(date_range))
+        # return dict(modifiedSince=isodate.duration_isoformat(date_range))
+        return dict(startDT=isodate.datetime_isoformat(dt.now() - date_range))
     if date_range == 'all' and 'iv' in url:
         return dict(period=isodate.duration_isoformat(td(days=120)))
     if date_range == 'all' and 'dv' in url:
