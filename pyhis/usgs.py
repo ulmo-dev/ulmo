@@ -366,7 +366,11 @@ def cache_all_sites(state_code, service):
 
 def cache_sites(site_codes, service, recache=False):
     for site_code in site_codes:
-        update_site_cache(site_code, service, recache)
+        import lxml
+        try:
+            update_site_cache(site_code, service, recache)
+        except lxml.etree.XMLSyntaxError:
+            log.info("XMLSyntaxError for site: %s" % site_code)
 
 
 def update_site_cache(site_code, service, recache=False):
