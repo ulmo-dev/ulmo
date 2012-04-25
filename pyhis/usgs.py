@@ -70,7 +70,7 @@ def get_sites_from_cache(url, state_code, site_type=None):
     service = c.query_or_new(c.db_session, uc.USGSService,
                            dict(url=url))
     cached_sites = c.db_session.query(uc.USGSSite)\
-        .filter_by(service=service).all()
+        .filter_by(service=service).filter_by(state=state_code).all()
 
     if cached_sites:
         sites = dict([(cached_site.code, cached_site.name)
