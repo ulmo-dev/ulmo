@@ -190,6 +190,14 @@ def get_site_data_from_web_service(service_url, site_code, parameter_code=None,
     req = requests.get(service_url, params=url_params)
     print "processing data from request: %s" % req.request.full_url
 
+    if req.status_code != 200:
+        # try again with period of 120 days if full range doesn't work
+        if date_range == 'all':
+            date_range = td(days=120)
+            return get_site_data_from_web_service(service_url, site_code, parameter_code, date_range, modified_since)
+        else:
+            return {}
+    content_io = StringIO.StringIO(str(req.content))
     return parse_site_data_from_waterml(content_io, service_url)
 
 
@@ -251,7 +259,7 @@ def date_range_url_params(date_range, url):
         return dict(period=isodate.duration_isoformat(date_range))
         #return dict(startDT=isodate.datetime_isoformat(dt.now() - date_range))
     if date_range == 'all' and 'iv' in url:
-        return dict(period=isodate.duration_isoformat(td(days=120)))
+        return dict(startDT=isodate.date_isoformat(dt(2007, 10, 1)))
     if date_range == 'all' and 'dv' in url:
         return dict(startDT=isodate.datetime_isoformat(dt(1851, 1, 1)))
 
