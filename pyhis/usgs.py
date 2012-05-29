@@ -87,8 +87,8 @@ def get_sites_from_cache(url, state_code, site_type=None):
 def cache_site_elements(site_elements, service):
     """update cache to include sites"""
     for source_info in site_elements.values():
-        site = uc.USGSSite(
-            service=service, **site_dict_from_element(source_info))
+        site = c.query_or_new(c.db_session, uc.USGSSite,
+            dict(service=service, **site_dict_from_element(source_info)))
         c.db_session.add(site)
     c.db_session.commit()
 
