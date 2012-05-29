@@ -48,7 +48,7 @@ def get_sites_from_web_service(url, state_code, site_type=None):
     """returns a dict containing site code and sourceInfo elements,
     fetches from USGS waterml service
     """
-    url_params = {'format': 'waterml,1.1',
+    url_params = {'format': 'waterml',
                   'stateCd': state_code}
 
     if site_type:
@@ -181,7 +181,7 @@ def get_site_data_from_cache(url, site_code, parameter_code=None,
 def get_site_data_from_web_service(service_url, site_code, parameter_code=None,
                                    date_range=None, modified_since=None):
     """queries service for data and returns a data dict"""
-    url_params = {'format': 'waterml,1.1',
+    url_params = {'format': 'waterml',
                   'site': site_code}
     if parameter_code:
         url_params['parameterCd'] = parameter_code
