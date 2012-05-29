@@ -1,7 +1,6 @@
 import cStringIO as StringIO
 from datetime import datetime as dt, timedelta as td
 import logging
-from urllib import urlencode
 
 import isodate
 from lxml.etree import iterparse
@@ -54,10 +53,8 @@ def get_sites_from_web_service(url, state_code, site_type=None):
     if site_type:
         url_params['siteType'] = site_type
 
-    url += urlencode(url_params)
-
     log.info('making request for sites: %s' % url)
-    req = requests.get(url)
+    req = requests.get(url, params=url_params)
     content_io = StringIO.StringIO(str(req.content))
 
     return dict(set([(ele.find(NS + "siteCode").text, ele)
@@ -189,11 +186,9 @@ def get_site_data_from_web_service(service_url, site_code, parameter_code=None,
         url_params['modifiedSince'] = isodate.duration_isoformat(modified_since)
 
     url_params.update(date_range_url_params(date_range, service_url))
-    request_url = service_url + urlencode(url_params)
 
-    log.info('making request for site data: %s' % request_url)
-    req = requests.get(request_url)
-    content_io = StringIO.StringIO(str(req.content))
+    req = requests.get(service_url, params=url_params)
+    print "processing data from request: %s" % req.request.full_url
 
     return parse_site_data_from_waterml(content_io, service_url)
 
