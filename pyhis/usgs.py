@@ -14,8 +14,8 @@ from sqlalchemy.sql.expression import asc, desc, func
 import pyhis.cache as c
 from pyhis import usgs_cache as uc
 
-INSTANTANEOUS_URL = "http://waterservices.usgs.gov/nwis/iv?"
-DAILY_URL = "http://waterservices.usgs.gov/nwis/dv?"
+INSTANTANEOUS_URL = "http://waterservices.usgs.gov/nwis/iv/"
+DAILY_URL = "http://waterservices.usgs.gov/nwis/dv/"
 NS = "{http://www.cuahsi.org/waterML/1.1/}"
 
 # configure logging
