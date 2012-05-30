@@ -21,16 +21,6 @@ def get_sites(state_code, site_type=None, service="daily"):
     """
     url = _get_service_url(service)
 
-    site_elements = get_sites_from_web_service(url, state_code, site_type)
-    sites = dict([(key, _parse_site_info(source_info))
-                    for key, source_info in site_elements.iteritems()])
-    return sites
-
-
-def get_sites_from_web_service(url, state_code, site_type=None):
-    """returns a dict containing site code and sourceInfo elements,
-    fetches from USGS waterml service
-    """
     url_params = {'format': 'waterml',
                   'stateCd': state_code}
 
@@ -41,9 +31,12 @@ def get_sites_from_web_service(url, state_code, site_type=None):
     req = requests.get(url, params=url_params)
     content_io = StringIO.StringIO(str(req.content))
 
-    return dict(set([(ele.find(NS + "siteCode").text, ele)
+    site_elements = dict(set([(ele.find(NS + "siteCode").text, ele)
                      for (event, ele) in iterparse(content_io)
                      if ele.tag == NS + "sourceInfo"]))
+    sites = dict([(key, _parse_site_info(source_info))
+                    for key, source_info in site_elements.iteritems()])
+    return sites
 
 
 def _parse_site_info(site_info):
