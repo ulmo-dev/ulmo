@@ -39,8 +39,17 @@ class USGSSite(tables.IsDescription):
             offset = tables.StringCol(7)
 
 
-def init_h5(path=HDF5_FILE_PATH):
-    h5file = tables.openFile(path, mode="w", title="pyHIS USGS cache")
+def get_sites(path=HDF5_FILE_PATH):
+    """gets a list of sites from an hdf5 file"""
+    h5file = tables.openFile(path, mode='r')
+    site_table = h5file.root.sites
+    names = site_table.description._v_nestedNames
+    return [_row_to_dict(row, names) for row in site_table.iterrows()]
+
+
+def init_h5(path=HDF5_FILE_PATH, mode='w'):
+    """creates an hdf5 file an initialized it with relevant tables, etc"""
+    h5file = tables.openFile(path, mode=mode, title="pyHIS USGS cache")
     h5file.createTable('/', 'sites', USGSSite, "USGS Sites")
     h5file.close()
 
@@ -60,6 +69,7 @@ def update_site_list(state_code, path=HDF5_FILE_PATH):
             site_row[k] = v
         site_row.append()
     site_table.flush()
+    h5file.close()
 
 
 def _flatten_dict(d, prepend=''):
@@ -79,6 +89,22 @@ def _flatten_dict(d, prepend=''):
     return return_dict
 
 
+def _row_to_dict(row, names):
+    """converts a row to a dict representation, given the row and nested names
+    (i.e. table.description._v_nestedNames)
+    """
+    return_dict = {}
+    for name, val in zip(names, row[:]):
+        if not type(name) == tuple:
+            return_dict[name] = val
+        else:
+            return_dict[name[0]] = _row_to_dict(val, name[1])
+    return return_dict
+
+
 if __name__ == '__main__':
-    init_h5()
-    update_site_list('RI')
+    #init_h5()
+    #update_site_list('RI')
+    sites = get_sites()
+    import pdb; pdb.set_trace()
+    pass
