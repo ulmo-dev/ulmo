@@ -9,7 +9,7 @@ import tables
 from pyhis import usgs_core
 
 # default hdf5 file path
-HDF5_FILE_PATH = os.path.join(tempfile.gettempdir(), "pyhis_usgs.h5")
+HDF5_FILE_PATH = os.path.join(tempfile.gettempdir(), "pyhis.h5")
 
 
 class USGSSite(tables.IsDescription):
@@ -49,8 +49,9 @@ def get_sites(path=HDF5_FILE_PATH):
 
 def init_h5(path=HDF5_FILE_PATH, mode='w'):
     """creates an hdf5 file an initialized it with relevant tables, etc"""
-    h5file = tables.openFile(path, mode=mode, title="pyHIS USGS cache")
-    h5file.createTable('/', 'sites', USGSSite, "USGS Sites")
+    h5file = tables.openFile(path, mode=mode, title="pyHIS data")
+    usgs = h5file.createGroup('/', 'usgs', 'USGS Data')
+    h5file.createTable(usgs, 'sites', USGSSite, "USGS Sites")
     h5file.close()
 
 
