@@ -40,11 +40,11 @@ class USGSSite(tables.IsDescription):
 
 
 def get_sites(path=HDF5_FILE_PATH):
-    """gets a list of sites from an hdf5 file"""
+    """gets a dict of sites from an hdf5 file"""
     h5file = tables.openFile(path, mode='r')
     site_table = h5file.root.sites
     names = site_table.description._v_nestedNames
-    return [_row_to_dict(row, names) for row in site_table.iterrows()]
+    return dict([(row['code'], _row_to_dict(row, names)) for row in site_table.iterrows()])
 
 
 def init_h5(path=HDF5_FILE_PATH, mode='w'):
