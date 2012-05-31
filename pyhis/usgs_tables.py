@@ -109,6 +109,38 @@ def update_site_list(state_code, path=HDF5_FILE_PATH):
     h5file.close()
 
 
+def update_site_data(site_code, path=HDF5_FILE_PATH):
+    """updates data for a given site
+    """
+    #site_data = usgs_core.get_site_data(site_code, date_range='all')
+    site_data = usgs_core.get_site_data(site_code)
+
+    # XXX: use some sort of mutex or file lock to guard against concurrent
+    # processes writing to the file
+    h5file = tables.openFile(path, mode="r+")
+    value_table = h5file.root.usgs.values
+    value_row = value_table.row
+
+    for d in site_data.itervalues():
+        variable = d['variable']
+
+        value_variable = {
+            'variable/code': variable['code'],
+            'variable/network': variable['network'],
+        }
+        if 'statistic' in variable:
+            value_variable['variable/statistic/code'] = variable['statistic']['code']
+            value_variable['variable/statistic/name'] = variable['statistic']['name']
+
+        for value in d['values']:
+            value_flat = _flatten_nested_dict(value)
+            value_flat.update(value_variable)
+            _update_row_with_dict(value_row, value_flat)
+            value_row.append()
+    value_table.flush()
+    h5file.close()
+
+
 def _flatten_nested_dict(d, prepend=''):
     """flattens a nested dict structure into structure suitable for inserting
     into a pytables table; assumes that no keys in the nested dict structure
@@ -139,9 +171,17 @@ def _row_to_dict(row, names):
     return return_dict
 
 
+def _update_row_with_dict(row, dict):
+    """sets the values of row to be the values found in dict"""
+    for k, v in dict.iteritems():
+        row.__setitem__(k, v)
+
+
 if __name__ == '__main__':
     #init_h5()
     #update_site_list('RI')
-    sites = get_sites()
+    #sites = get_sites()
     import pdb; pdb.set_trace()
+    update_site_data('01116300')
+    site = get_site_data('01116300')
     pass
