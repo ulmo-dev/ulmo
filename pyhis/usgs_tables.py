@@ -64,7 +64,7 @@ def update_site_list(state_code, path=HDF5_FILE_PATH):
     site_table = h5file.root.sites
     site_row = site_table.row
     for site in sites.itervalues():
-        flattened = _flatten_dict(site)
+        flattened = _flatten_nested_dict(site)
         for k, v in flattened.iteritems():
             site_row[k] = v
         site_row.append()
@@ -72,7 +72,7 @@ def update_site_list(state_code, path=HDF5_FILE_PATH):
     h5file.close()
 
 
-def _flatten_dict(d, prepend=''):
+def _flatten_nested_dict(d, prepend=''):
     """flattens a nested dict structure into structure suitable for inserting
     into a pytables table; assumes that no keys in the nested dict structure
     contain the character '/'
@@ -81,7 +81,7 @@ def _flatten_dict(d, prepend=''):
 
     for k, v in d.iteritems():
         if isinstance(v, dict):
-            flattened = _flatten_dict(v, prepend=prepend + k + '/')
+            flattened = _flatten_nested_dict(v, prepend=prepend + k + '/')
             return_dict.update(flattened)
         else:
             return_dict[prepend + k] = v
