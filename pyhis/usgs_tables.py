@@ -39,12 +39,46 @@ class USGSSite(tables.IsDescription):
             offset = tables.StringCol(7)
 
 
+class USGSVariable(tables.IsDescription):
+    code = tables.StringCol(5)
+    description = tables.StringCol(250)
+    name = tables.StringCol(250)
+    network = tables.StringCol(20)
+    no_data_value = tables.StringCol(20)
+    type = tables.StringCol(20)
+    unit = tables.StringCol(20)
+    vocabulary = tables.StringCol(20)
+
+    class statistic(tables.IsDescription):
+        code = tables.StringCol(5)
+        name = tables.StringCol(5)
+
+
+class USGSValue(tables.IsDescription):
+    datetime = tables.Time64Col()
+    qualifiers = tables.StringCol(20)
+    value = tables.StringCol(20)
+
+    class site(tables.IsDescription):
+        code = tables.StringCol(5)
+        network = tables.StringCol(5)
+
+    class variable(tables.IsDescription):
+        code = tables.StringCol(5)
+        network = tables.StringCol(5)
+
+        class statistic(tables.IsDescription):
+            code = tables.StringCol(5)
+            name = tables.StringCol(5)
+
+
 def get_sites(path=HDF5_FILE_PATH):
     """gets a dict of sites from an hdf5 file"""
     h5file = tables.openFile(path, mode='r')
-    site_table = h5file.root.sites
+    site_table = h5file.root.usgs.sites
     names = site_table.description._v_nestedNames
     return dict([(row['code'], _row_to_dict(row, names)) for row in site_table.iterrows()])
+    h5file.close()
 
 
 def init_h5(path=HDF5_FILE_PATH, mode='w'):
@@ -52,6 +86,8 @@ def init_h5(path=HDF5_FILE_PATH, mode='w'):
     h5file = tables.openFile(path, mode=mode, title="pyHIS data")
     usgs = h5file.createGroup('/', 'usgs', 'USGS Data')
     h5file.createTable(usgs, 'sites', USGSSite, "USGS Sites")
+    h5file.createTable(usgs, 'variables', USGSVariable, "USGS Variables")
+    h5file.createTable(usgs, 'values', USGSValue, "USGS Values")
     h5file.close()
 
 
@@ -62,7 +98,7 @@ def update_site_list(state_code, path=HDF5_FILE_PATH):
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
     h5file = tables.openFile(path, mode="r+")
-    site_table = h5file.root.sites
+    site_table = h5file.root.usgs.sites
     site_row = site_table.row
     for site in sites.itervalues():
         flattened = _flatten_nested_dict(site)
