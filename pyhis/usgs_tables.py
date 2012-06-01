@@ -77,8 +77,9 @@ def get_sites(path=HDF5_FILE_PATH):
     h5file = tables.openFile(path, mode='r')
     site_table = h5file.root.usgs.sites
     names = site_table.description._v_nestedNames
-    return dict([(row['code'], _row_to_dict(row, names)) for row in site_table.iterrows()])
+    return_dict = dict([(row['code'], _row_to_dict(row, names)) for row in site_table.iterrows()])
     h5file.close()
+    return return_dict
 
 
 def init_h5(path=HDF5_FILE_PATH, mode='w'):
