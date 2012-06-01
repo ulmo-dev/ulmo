@@ -63,44 +63,6 @@ def get_site_data(site_code, service=None, parameter_code=None,
         raise ValueError("service must either be 'daily', 'instantaneous' or none")
 
 
-def _get_site_values(service, date_range, url_params):
-    """downloads and parses values for a site
-
-    returns a values dict containing variable and data values
-    """
-    url_params.update(_date_range_url_params(date_range, service))
-    service_url = _get_service_url(service)
-
-    req = requests.get(service_url, params=url_params)
-    log.info("processing data from request: %s" % req.request.full_url)
-
-    if req.status_code != 200:
-        # try again with period of 120 days if full range doesn't work
-        if service == 'instantaneous' and date_range == 'all':
-            date_range = datetime.timedelta(days=120)
-            return _get_site_values(service, date_range, url_params)
-        else:
-            return {}
-    content_io = StringIO.StringIO(str(req.content))
-
-    data_dict = {}
-    for (event, ele) in iterparse(content_io):
-        if ele.tag == NS + "timeSeries":
-            values_element = ele.find(NS + 'values')
-            values = _parse_values(values_element)
-            var_element = ele.find(NS + 'variable')
-            variable = _parse_variable(var_element)
-            code = variable['code']
-            if 'statistic' in variable:
-                code += ":" + variable['statistic']['code']
-            data_dict[code] = {
-                'values': values,
-                'variable': variable,
-            }
-
-    return data_dict
-
-
 def _date_range_url_params(date_range, service):
     """returns a dict of url parameters that should be used for the
     date_range, depending on what type of object date_range is. If
@@ -140,6 +102,44 @@ def _get_service_url(service):
         return INSTANTANEOUS_URL
     else:
         raise "service must be either 'daily' ('dv') or 'instantaneous' ('iv')"
+
+
+def _get_site_values(service, date_range, url_params):
+    """downloads and parses values for a site
+
+    returns a values dict containing variable and data values
+    """
+    url_params.update(_date_range_url_params(date_range, service))
+    service_url = _get_service_url(service)
+
+    req = requests.get(service_url, params=url_params)
+    log.info("processing data from request: %s" % req.request.full_url)
+
+    if req.status_code != 200:
+        # try again with period of 120 days if full range doesn't work
+        if service == 'instantaneous' and date_range == 'all':
+            date_range = datetime.timedelta(days=120)
+            return _get_site_values(service, date_range, url_params)
+        else:
+            return {}
+    content_io = StringIO.StringIO(str(req.content))
+
+    data_dict = {}
+    for (event, ele) in iterparse(content_io):
+        if ele.tag == NS + "timeSeries":
+            values_element = ele.find(NS + 'values')
+            values = _parse_values(values_element)
+            var_element = ele.find(NS + 'variable')
+            variable = _parse_variable(var_element)
+            code = variable['code']
+            if 'statistic' in variable:
+                code += ":" + variable['statistic']['code']
+            data_dict[code] = {
+                'values': values,
+                'variable': variable,
+            }
+
+    return data_dict
 
 
 def _parse_datetime(iso_datetime_str):
