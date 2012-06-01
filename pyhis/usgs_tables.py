@@ -89,8 +89,11 @@ def get_site(site_code, path=HDF5_FILE_PATH):
 def init_h5(path=HDF5_FILE_PATH, mode='w'):
     """creates an hdf5 file an initialized it with relevant tables, etc"""
     h5file = tables.openFile(path, mode=mode, title="pyHIS data")
+
     usgs = h5file.createGroup('/', 'usgs', 'USGS Data')
-    h5file.createTable(usgs, 'sites', USGSSite, "USGS Sites")
+    sites = h5file.createTable(usgs, 'sites', USGSSite, "USGS Sites")
+    sites.cols.code.createIndex()
+    sites.cols.network.createIndex()
     h5file.createTable(usgs, 'variables', USGSVariable, "USGS Variables")
     h5file.createTable(usgs, 'values', USGSValue, "USGS Values")
     h5file.close()
