@@ -39,6 +39,22 @@ class USGSSite(tables.IsDescription):
             offset = tables.StringCol(7)
 
 
+class USGSValue(tables.IsDescription):
+    # datetime as an integer is yyyymmddhhmmss
+    datetime = tables.StringCol(26)
+    qualifiers = tables.StringCol(20)
+    value = tables.StringCol(20)
+
+    site_code = tables.StringCol(20)
+    site_network = tables.StringCol(10)
+
+    variable_code = tables.StringCol(5)
+    variable_network = tables.StringCol(5)
+
+    variable_statistic_code = tables.StringCol(5)
+    variable_statistic_name = tables.StringCol(20)
+
+
 class USGSVariable(tables.IsDescription):
     code = tables.StringCol(5)
     description = tables.StringCol(250)
@@ -86,6 +102,8 @@ def get_site(site_code, path=HDF5_FILE_PATH):
     """gets a site dict for a specific site_code from an hdf5 file"""
     # XXX: this is really dumb
     return get_sites().get(site_code)
+
+
 def init_h5(path=HDF5_FILE_PATH, mode='w'):
     """creates an hdf5 file an initialized it with relevant tables, etc"""
     h5file = tables.openFile(path, mode=mode, title="pyHIS data")
@@ -95,7 +113,14 @@ def init_h5(path=HDF5_FILE_PATH, mode='w'):
     sites.cols.code.createIndex()
     sites.cols.network.createIndex()
     h5file.createTable(usgs, 'variables', USGSVariable, "USGS Variables")
-    h5file.createTable(usgs, 'values', USGSValue, "USGS Values")
+
+    values = h5file.createTable(usgs, 'values', USGSValue, "USGS Values")
+    values.cols.datetime.createIndex()
+    values.cols.site_code.createIndex()
+    values.cols.site_network.createIndex()
+    values.cols.variable_code.createIndex()
+    values.cols.variable_network.createIndex()
+
     h5file.close()
 
 
