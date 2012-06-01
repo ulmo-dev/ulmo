@@ -82,6 +82,10 @@ def get_sites(path=HDF5_FILE_PATH):
     return return_dict
 
 
+def get_site(site_code, path=HDF5_FILE_PATH):
+    """gets a site dict for a specific site_code from an hdf5 file"""
+    # XXX: this is really dumb
+    return get_sites().get(site_code)
 def init_h5(path=HDF5_FILE_PATH, mode='w'):
     """creates an hdf5 file an initialized it with relevant tables, etc"""
     h5file = tables.openFile(path, mode=mode, title="pyHIS data")
