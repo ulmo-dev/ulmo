@@ -70,24 +70,6 @@ class USGSVariable(tables.IsDescription):
         name = tables.StringCol(5)
 
 
-class USGSValue(tables.IsDescription):
-    datetime = tables.Time64Col()
-    qualifiers = tables.StringCol(20)
-    value = tables.StringCol(20)
-
-    class site(tables.IsDescription):
-        code = tables.StringCol(5)
-        network = tables.StringCol(5)
-
-    class variable(tables.IsDescription):
-        code = tables.StringCol(5)
-        network = tables.StringCol(5)
-
-        class statistic(tables.IsDescription):
-            code = tables.StringCol(5)
-            name = tables.StringCol(5)
-
-
 def get_sites(path=HDF5_FILE_PATH):
     """gets a dict of sites from an hdf5 file"""
     h5file = tables.openFile(path, mode='r')
@@ -112,6 +94,7 @@ def init_h5(path=HDF5_FILE_PATH, mode='w'):
     sites = h5file.createTable(usgs, 'sites', USGSSite, "USGS Sites")
     sites.cols.code.createIndex()
     sites.cols.network.createIndex()
+
     h5file.createTable(usgs, 'variables', USGSVariable, "USGS Variables")
 
     values = h5file.createTable(usgs, 'values', USGSValue, "USGS Values")
@@ -142,11 +125,11 @@ def update_site_list(state_code, path=HDF5_FILE_PATH):
     h5file.close()
 
 
-def update_site_data(site_code, path=HDF5_FILE_PATH):
+def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
     """updates data for a given site
     """
-    #site_data = usgs_core.get_site_data(site_code, date_range='all')
-    site_data = usgs_core.get_site_data(site_code)
+    site = get_site(site_code)
+    site_data = usgs_core.get_site_data(site_code, date_range=date_range)
 
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
@@ -158,20 +141,43 @@ def update_site_data(site_code, path=HDF5_FILE_PATH):
         variable = d['variable']
 
         value_variable = {
-            'variable/code': variable['code'],
-            'variable/network': variable['network'],
+            'site_code': site['code'],
+            'site_network': site['network'],
+            'variable_code': variable['code'],
+            'variable_network': variable['network'],
         }
         if 'statistic' in variable:
-            value_variable['variable/statistic/code'] = variable['statistic']['code']
-            value_variable['variable/statistic/name'] = variable['statistic']['name']
+            value_variable['variable_statistic_code'] = variable['statistic']['code']
+            value_variable['variable_statistic_name'] = variable['statistic']['name']
 
-        for value in d['values']:
-            value_flat = _flatten_nested_dict(value)
-            value_flat.update(value_variable)
-            _update_row_with_dict(value_row, value_flat)
+        update_values = d['values']
+        append_indices = []
+
+        for i, update_value in enumerate(update_values):
+            where_clause = '(site_code == "%s") & (variable_code == "%s") & (datetime == "%s")' % (
+                    site['code'], variable['code'], update_value['datetime'])
+
+            # update matching rows (should only be one), or append index to append_indices
+            for existing_row in value_table.where(where_clause):
+                _update_row_with_value(existing_row, update_value, value_variable)
+                existing_row.update()
+                break
+            else:
+                append_indices.append(i)
+
+        for i in append_indices:
+            append_value = update_values[i]
+            _update_row_with_value(value_row, append_value, value_variable)
             value_row.append()
+
     value_table.flush()
     h5file.close()
+
+
+def _update_row_with_value(row, value, value_variable):
+    """updates an existing value row"""
+    value.update(value_variable)
+    _update_row_with_dict(row, value)
 
 
 def _flatten_nested_dict(d, prepend=''):
@@ -214,7 +220,7 @@ if __name__ == '__main__':
     #init_h5()
     #update_site_list('RI')
     #sites = get_sites()
-    import pdb; pdb.set_trace()
-    update_site_data('01116300')
-    site = get_site_data('01116300')
+    update_site_data('01116300', date_range="all")
+    #site = get_site_data('01116300')
+    #import pdb; pdb.set_trace()
     pass
