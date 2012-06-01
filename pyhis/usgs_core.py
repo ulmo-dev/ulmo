@@ -5,7 +5,6 @@ import logging
 import isodate
 from lxml.etree import iterparse
 import requests
-import pytz
 
 
 INSTANTANEOUS_URL = "http://waterservices.usgs.gov/nwis/iv/"
@@ -142,13 +141,6 @@ def _get_site_values(service, date_range, url_params):
     return data_dict
 
 
-def _parse_datetime(iso_datetime_str):
-    """returns a naive timezone from a given """
-    datetime = isodate.parse_datetime(iso_datetime_str)
-    if datetime.tzinfo is not None:
-        return datetime.astimezone(tz=pytz.utc).replace(tzinfo=None)
-    else:
-        return datetime
 
 
 def _parse_geog_location(geog_location):
@@ -210,7 +202,7 @@ def _parse_values(values_element):
     values element
     """
 
-    return [{'datetime': _parse_datetime(value.attrib['dateTime']),
+    return [{'datetime': value.attrib['dateTime'],
              'value': value.text,
              'qualifiers': value.attrib['qualifiers']}
             for value in values_element.findall(NS + 'value')]
