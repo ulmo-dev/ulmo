@@ -70,6 +70,24 @@ class USGSVariable(tables.IsDescription):
         name = tables.StringCol(5)
 
 
+class USGSValue(tables.IsDescription):
+    datetime = tables.Time64Col()
+    qualifiers = tables.StringCol(20)
+    value = tables.StringCol(20)
+
+    class site(tables.IsDescription):
+        code = tables.StringCol(5)
+        network = tables.StringCol(5)
+
+    class variable(tables.IsDescription):
+        code = tables.StringCol(5)
+        network = tables.StringCol(5)
+
+        class statistic(tables.IsDescription):
+            code = tables.StringCol(5)
+            name = tables.StringCol(5)
+
+
 def get_sites(path=HDF5_FILE_PATH):
     """gets a dict of sites from an hdf5 file"""
     h5file = tables.openFile(path, mode='r')
