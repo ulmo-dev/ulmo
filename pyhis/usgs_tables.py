@@ -1,6 +1,8 @@
 """
 module that defines pytables cache
 """
+import datetime
+import isodate
 import os
 import tempfile
 
@@ -21,6 +23,7 @@ class USGSSite(tables.IsDescription):
     network = tables.StringCol(20)
     site_type = tables.StringCol(20)
     state_code = tables.StringCol(2)
+    last_refresh = tables.StringCol(26)
 
     class location(tables.IsDescription):
         srs = tables.StringCol(20)
@@ -40,7 +43,6 @@ class USGSSite(tables.IsDescription):
 
 
 class USGSValue(tables.IsDescription):
-    # datetime as an integer is yyyymmddhhmmss
     datetime = tables.StringCol(26)
     qualifiers = tables.StringCol(20)
     value = tables.StringCol(20)
@@ -68,24 +70,6 @@ class USGSVariable(tables.IsDescription):
     class statistic(tables.IsDescription):
         code = tables.StringCol(5)
         name = tables.StringCol(5)
-
-
-class USGSValue(tables.IsDescription):
-    datetime = tables.Time64Col()
-    qualifiers = tables.StringCol(20)
-    value = tables.StringCol(20)
-
-    class site(tables.IsDescription):
-        code = tables.StringCol(5)
-        network = tables.StringCol(5)
-
-    class variable(tables.IsDescription):
-        code = tables.StringCol(5)
-        network = tables.StringCol(5)
-
-        class statistic(tables.IsDescription):
-            code = tables.StringCol(5)
-            name = tables.StringCol(5)
 
 
 def get_sites(path=HDF5_FILE_PATH):
@@ -147,13 +131,22 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
     """updates data for a given site
     """
     site = get_site(site_code)
+
+    if not date_range:
+        if site['last_refresh']:
+            date_range = datetime.datetime.now() - isodate.parse_datetime(site['last_refresh'])
+        else:
+            date_range = 'all'
+
+    query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
     site_data = usgs_core.get_site_data(site_code, date_range=date_range)
 
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
-    h5file = tables.openFile(path, mode="r+")
+    h5file = tables.openFile(path, mode="a")
     value_table = h5file.root.usgs.values
     value_row = value_table.row
+    sites_table = h5file.root.usgs.sites
 
     for d in site_data.itervalues():
         variable = d['variable']
@@ -172,21 +165,35 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
         append_indices = []
 
         for i, update_value in enumerate(update_values):
-            where_clause = '(site_code == "%s") & (variable_code == "%s") & (datetime == "%s")' % (
-                    site['code'], variable['code'], update_value['datetime'])
+            updated = False
 
-            # update matching rows (should only be one), or append index to append_indices
-            for existing_row in value_table.where(where_clause):
+             update matching rows (should only be one), or append index to append_indices
+            for existing_row in value_table.where('(site_code == scode) & (variable_code == vcode) & (datetime == dtime)', {
+                    'scode': site['code'],
+                    'vcode': variable['code'],
+                    'dtime': update_value['datetime'],
+                    }):
                 _update_row_with_value(existing_row, update_value, value_variable)
-                existing_row.update()
-                break
-            else:
+                updated = True
+
+            # note: you can't use break/else pattern above due to the way
+            # updates are implemented (http://www.pytables.org/trac-bck/ticket/140)
+            if not updated:
                 append_indices.append(i)
+
+            if i % 1000 == 0:
+                value_table.flush()
+                print "%s | %s" % (site['code'], i)
 
         for i in append_indices:
             append_value = update_values[i]
             _update_row_with_value(value_row, append_value, value_variable)
             value_row.append()
+
+    for site_row in sites_table.where('(code == "%s")' % site['code']):
+        site_row['last_refresh'] = query_isodate
+        site_row.update()
+        sites_table.flush()
 
     value_table.flush()
     h5file.close()
@@ -235,10 +242,11 @@ def _update_row_with_dict(row, dict):
 
 
 if __name__ == '__main__':
-    #init_h5()
-    #update_site_list('RI')
-    #sites = get_sites()
-    update_site_data('01116300', date_range="all")
+    init_h5()
+    update_site_list('RI')
+    sites = get_sites()
+    for site in sites:
+        update_site_data(site)
     #site = get_site_data('01116300')
     #import pdb; pdb.set_trace()
     pass
