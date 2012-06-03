@@ -52,14 +52,15 @@ def get_site_data(site_code, service=None, parameter_code=None,
         url_params['modifiedSince'] = isodate.duration_isoformat(modified_since)
 
     if service in ('daily', 'instantaneous'):
-        return _get_site_values(service, date_range, url_params)
+        values = _get_site_values(service, date_range, url_params)
     elif not service:
         values = _get_site_values('daily', date_range, url_params)
         values.update(
             _get_site_values('instantaneous', date_range, url_params))
-        return values
     else:
         raise ValueError("service must either be 'daily', 'instantaneous' or none")
+
+    return values
 
 
 def _date_range_url_params(date_range, service):
