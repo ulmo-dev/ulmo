@@ -112,6 +112,7 @@ def _get_site_values(service, date_range, url_params):
     url_params.update(_date_range_url_params(date_range, service))
     service_url = _get_service_url(service)
 
+    query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
     req = requests.get(service_url, params=url_params)
     log.info("processing data from request: %s" % req.request.full_url)
 
@@ -135,13 +136,12 @@ def _get_site_values(service, date_range, url_params):
             if 'statistic' in variable:
                 code += ":" + variable['statistic']['code']
             data_dict[code] = {
+                'last_refresh': query_isodate,
                 'values': values,
                 'variable': variable,
             }
 
     return data_dict
-
-
 
 
 def _parse_geog_location(geog_location):
