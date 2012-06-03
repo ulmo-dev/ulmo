@@ -7,6 +7,7 @@ import os
 import tempfile
 
 import tables
+from tables.exceptions import NoSuchNodeError
 
 from pyhis import usgs_core
 
@@ -99,12 +100,7 @@ def init_h5(path=HDF5_FILE_PATH, mode='w'):
 
     h5file.createTable(usgs, 'variables', USGSVariable, "USGS Variables")
 
-    values = h5file.createTable(usgs, 'values', USGSValue, "USGS Values")
-    values.cols.datetime.createIndex()
-    values.cols.site_code.createIndex()
-    values.cols.site_network.createIndex()
-    values.cols.variable_code.createIndex()
-    values.cols.variable_network.createIndex()
+    h5file.createGroup(usgs, 'values', "USGS Values")
 
     h5file.close()
 
@@ -144,34 +140,24 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
     h5file = tables.openFile(path, mode="a")
-    value_table = h5file.root.usgs.values
-    value_row = value_table.row
     sites_table = h5file.root.usgs.sites
 
     for d in site_data.itervalues():
         variable = d['variable']
 
-        value_variable = {
-            'site_code': site['code'],
-            'site_network': site['network'],
-            'variable_code': variable['code'],
-            'variable_network': variable['network'],
-        }
-        if 'statistic' in variable:
-            value_variable['variable_statistic_code'] = variable['statistic']['code']
-            value_variable['variable_statistic_name'] = variable['statistic']['name']
+        value_table = _get_value_table(h5file, site, variable)
+        value_row = value_table.row
 
         update_values = d['values']
         append_indices = []
 
         for i, update_value in enumerate(update_values):
             updated = False
-            where_clause = '(site_code == "%s") & (variable_code == "%s") & (datetime == "%s")' % (
-                    site['code'], variable['code'], update_value['datetime'])
+            where_clause = '(datetime == "%s")' % update_value['datetime']
 
             # update matching rows (should only be one), or append index to append_indices
             for existing_row in value_table.where(where_clause):
-                _update_row_with_value(existing_row, update_value, value_variable)
+                _update_row_with_value(existing_row, update_value)
                 updated = True
 
             # note: you can't use break/else pattern above due to the way
@@ -185,7 +171,7 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
 
         for i in append_indices:
             append_value = update_values[i]
-            _update_row_with_value(value_row, append_value, value_variable)
+            _update_row_with_value(value_row, append_value)
             value_row.append()
 
     for site_row in sites_table.where('(code == "%s")' % site['code']):
@@ -197,9 +183,31 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
     h5file.close()
 
 
-def _update_row_with_value(row, value, value_variable):
+def _get_value_table(h5file, site, variable):
+    """returns a value table for a given open h5file (writable), site and
+    variable. If the value table already exists, it is returned. If it doesn't,
+    it will be created.
+    """
+    site_group = 'site_%s' % site['code']
+    site_path = '/usgs/values/%s' % site_group
+    try:
+        h5file.getNode(site_path)
+    except NoSuchNodeError:
+        h5file.createGroup('/usgs/values', site_group, "Site %s" % site['code'])
+
+    value_table_name = 'variable_%s' % variable['code']
+    try:
+        values_path = '/'.join([site_path, value_table_name])
+        value_table = h5file.getNode(values_path)
+    except NoSuchNodeError:
+        value_table = h5file.createTable(site_path, value_table_name, USGSValue, "Values for site: %s, variable: %s" % (site['code'], variable['code']))
+        value_table.cols.datetime.createIndex()
+
+    return value_table
+
+
+def _update_row_with_value(row, value):
     """updates an existing value row"""
-    value.update(value_variable)
     _update_row_with_dict(row, value)
 
 
