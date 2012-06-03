@@ -166,13 +166,11 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
 
         for i, update_value in enumerate(update_values):
             updated = False
+            where_clause = '(site_code == "%s") & (variable_code == "%s") & (datetime == "%s")' % (
+                    site['code'], variable['code'], update_value['datetime'])
 
-             update matching rows (should only be one), or append index to append_indices
-            for existing_row in value_table.where('(site_code == scode) & (variable_code == vcode) & (datetime == dtime)', {
-                    'scode': site['code'],
-                    'vcode': variable['code'],
-                    'dtime': update_value['datetime'],
-                    }):
+            # update matching rows (should only be one), or append index to append_indices
+            for existing_row in value_table.where(where_clause):
                 _update_row_with_value(existing_row, update_value, value_variable)
                 updated = True
 
