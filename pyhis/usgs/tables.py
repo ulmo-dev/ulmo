@@ -1,6 +1,8 @@
 """
 module that defines pytables cache
 """
+from __future__ import absolute_import
+
 import datetime
 import isodate
 import os
@@ -10,7 +12,7 @@ import warnings
 import tables
 from tables.exceptions import NoSuchNodeError
 
-from pyhis import usgs_core
+from pyhis.usgs import core
 
 # default hdf5 file path
 HDF5_FILE_PATH = os.path.join(tempfile.gettempdir(), "pyhis.h5")
@@ -99,7 +101,7 @@ def init_h5(path=HDF5_FILE_PATH, mode='w'):
 
 def update_site_list(state_code, service=None, path=HDF5_FILE_PATH):
     """update list of sites for a given state_code"""
-    sites = usgs_core.get_sites(state_code, service=service)
+    sites = core.get_sites(state_code, service=service)
 
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
@@ -127,7 +129,7 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
             date_range = 'all'
 
     query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
-    site_data = usgs_core.get_site_data(site_code, date_range=date_range)
+    site_data = core.get_site_data(site_code, date_range=date_range)
 
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
