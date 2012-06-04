@@ -52,21 +52,6 @@ class USGSValue(tables.IsDescription):
     value = tables.StringCol(20)
 
 
-class USGSVariable(tables.IsDescription):
-    code = tables.StringCol(5)
-    description = tables.StringCol(250)
-    name = tables.StringCol(250)
-    network = tables.StringCol(20)
-    no_data_value = tables.StringCol(20)
-    type = tables.StringCol(20)
-    unit = tables.StringCol(20)
-    vocabulary = tables.StringCol(20)
-
-    class statistic(tables.IsDescription):
-        code = tables.StringCol(5)
-        name = tables.StringCol(5)
-
-
 def get_sites(path=HDF5_FILE_PATH):
     """gets a dict of sites from an hdf5 file"""
     h5file = tables.openFile(path, mode='r')
@@ -123,8 +108,6 @@ def init_h5(path=HDF5_FILE_PATH, mode='w'):
     sites = h5file.createTable(usgs, 'sites', USGSSite, "USGS Sites")
     sites.cols.code.createIndex()
     sites.cols.network.createIndex()
-
-    h5file.createTable(usgs, 'variables', USGSVariable, "USGS Variables")
 
     h5file.createGroup(usgs, 'values', "USGS Values")
 
