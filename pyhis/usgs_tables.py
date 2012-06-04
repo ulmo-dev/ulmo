@@ -97,9 +97,9 @@ def init_h5(path=HDF5_FILE_PATH, mode='w'):
     h5file.close()
 
 
-def update_site_list(state_code, path=HDF5_FILE_PATH):
+def update_site_list(state_code, service=None, path=HDF5_FILE_PATH):
     """update list of sites for a given state_code"""
-    sites = usgs_core.get_sites(state_code)
+    sites = usgs_core.get_sites(state_code, service=service)
 
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file

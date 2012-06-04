@@ -17,27 +17,30 @@ logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
-def get_sites(state_code, site_type=None, service="daily"):
+def get_sites(state_code, site_type=None, service=None):
     """returns a dict containing site code and site names; currently
     only supports queries by state_code
     """
-    url = _get_service_url(service)
-
     url_params = {'format': 'waterml',
                   'stateCd': state_code}
-
     if site_type:
         url_params['siteType'] = site_type
 
-    log.info('making request for sites: %s' % url)
-    req = requests.get(url, params=url_params)
-    content_io = StringIO.StringIO(str(req.content))
+    if not service:
+        sites = get_sites(state_code, site_type, service="daily")
+        sites.update(get_sites(state_code, site_type, service="instantaneous"))
 
-    site_elements = dict(set([(ele.find(NS + "siteCode").text, ele)
-                     for (event, ele) in iterparse(content_io)
-                     if ele.tag == NS + "sourceInfo"]))
-    sites = dict([(key, _parse_site_info(source_info))
-                    for key, source_info in site_elements.iteritems()])
+    else:
+        url = _get_service_url(service)
+        log.info('making request for sites: %s' % url)
+        req = requests.get(url, params=url_params)
+        content_io = StringIO.StringIO(str(req.content))
+
+        site_elements = dict(set([(ele.find(NS + "siteCode").text, ele)
+                        for (event, ele) in iterparse(content_io)
+                        if ele.tag == NS + "sourceInfo"]))
+        sites = dict([(key, _parse_site_info(source_info))
+                        for key, source_info in site_elements.iteritems()])
     return sites
 
 
