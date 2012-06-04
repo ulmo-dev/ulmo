@@ -161,14 +161,15 @@ def _parse_site_info(site_info):
     site_code = site_info.find(NS + "siteCode")
     timezone_info = site_info.find(NS + "timeZoneInfo")
 
+    full_site_code = site_code.attrib.get('network') + ":" + site_code.text
+
     return {
         'agency': site_code.attrib.get('agencyCode'),
-        'code': site_code.text,
+        'code': full_site_code,
         'county': site_info.find(NS + "siteProperty[@name='countyCd']").text,
         'huc': site_info.find(NS + "siteProperty[@name='hucCd']").text,
         'location': _parse_geog_location(geog_location),
         'name': site_info.find(NS + "siteName").text,
-        'network': site_code.attrib.get('network'),
         'site_type': site_info.find(NS + "siteProperty[@name='siteTypeCd']").text,
         'state_code': site_info.find(NS + "siteProperty[@name='stateCd']").text,
         'timezone_info': _parse_timezone_info(timezone_info),
@@ -213,15 +214,16 @@ def _parse_variable(variable_element):
     """returns a dict that represents a variable for a given etree variable element"""
     variable_code = variable_element.find(NS + 'variableCode')
     statistic = variable_element.find(NS + 'options/' + NS + "option[@name='Statistic']")
+    full_variable_code = variable_code.attrib.get('vocabulary') + ":" + variable_code.text
+
     return_dict = {
-        'code': variable_code.text,
+        'code': full_variable_code,
         'description': variable_element.find(NS + 'variableDescription').text,
         'id': variable_code.attrib.get('variableID'),
         'network': variable_code.attrib.get('network'),
         'name': variable_element.find(NS + 'variableName').text,
         'unit': variable_element.find(NS + 'unit/' + NS + 'unitCode').text,
         'no_data_value': variable_element.find(NS + 'noDataValue').text,
-        'vocabulary': variable_code.attrib.get('vocabulary'),
     }
 
     if statistic is not None:
