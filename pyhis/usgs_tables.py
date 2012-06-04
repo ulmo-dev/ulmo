@@ -139,12 +139,11 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
 
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
-    h5file = tables.openFile(path, mode="a")
+    h5file = tables.openFile(path, mode="r+")
     sites_table = h5file.root.usgs.sites
 
     for d in site_data.itervalues():
         variable = d['variable']
-
         value_table = _get_value_table(h5file, site, variable)
         value_row = value_table.row
 
@@ -173,13 +172,13 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
             append_value = update_values[i]
             _update_row_with_dict(value_row, append_value)
             value_row.append()
+        value_table.flush()
 
     for site_row in sites_table.where('(code == "%s")' % site['code']):
         site_row['last_refresh'] = query_isodate
         site_row.update()
         sites_table.flush()
 
-    value_table.flush()
     h5file.close()
 
 
