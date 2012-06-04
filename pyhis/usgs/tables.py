@@ -71,8 +71,7 @@ def get_sites(path=HDF5_FILE_PATH):
     """gets a dict of sites from an hdf5 file"""
     h5file = tables.openFile(path, mode='r')
     site_table = h5file.root.usgs.sites
-    names = site_table.description._v_nestedNames
-    return_dict = dict([(row['code'], _row_to_dict(row, names)) for row in site_table.iterrows()])
+    return_dict = dict([(row['code'], _row_to_dict(row, table)) for row in site_table.iterrows()])
     h5file.close()
     return return_dict
 
@@ -232,10 +231,10 @@ def _get_value_table(h5file, site, variable):
     return value_table
 
 
-def _row_to_dict(row, names):
-    """converts a row to a dict representation, given the row and nested names
-    (i.e. table.description._v_nestedNames)
+def _row_to_dict(row, table):
+    """converts a row to a dict representation, given the row and table
     """
+    names = table.description._v_nestedNames
     return_dict = {}
     for name, val in zip(names, row[:]):
         if not type(name) == tuple:
