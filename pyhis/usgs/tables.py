@@ -226,7 +226,7 @@ def _get_value_table(h5file, site, variable):
             warnings.simplefilter("ignore")
             value_table = h5file.createTable(site_path, value_table_name, USGSValue, "Values for site: %s, variable: %s:%s" % (site['code'],
                 variable['code'], variable['statistic']['code']))
-            value_table.cols.datetime.createIndex()
+            value_table.cols.datetime.createCSIndex()
 
     return value_table
 
