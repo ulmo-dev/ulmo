@@ -157,7 +157,7 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
 
             # update matching rows (should only be one), or append index to append_indices
             for existing_row in value_table.where(where_clause):
-                _update_row_with_value(existing_row, update_value)
+                _update_row_with_dict(existing_row, update_value)
                 updated = True
 
             # note: you can't use break/else pattern above due to the way
@@ -171,7 +171,7 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
 
         for i in append_indices:
             append_value = update_values[i]
-            _update_row_with_value(value_row, append_value)
+            _update_row_with_dict(value_row, append_value)
             value_row.append()
 
     for site_row in sites_table.where('(code == "%s")' % site['code']):
@@ -204,11 +204,6 @@ def _get_value_table(h5file, site, variable):
         value_table.cols.datetime.createIndex()
 
     return value_table
-
-
-def _update_row_with_value(row, value):
-    """updates an existing value row"""
-    _update_row_with_dict(row, value)
 
 
 def _flatten_nested_dict(d, prepend=''):
