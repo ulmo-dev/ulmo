@@ -192,14 +192,25 @@ def _get_value_table(h5file, site, variable):
     variable. If the value table already exists, it is returned. If it doesn't,
     it will be created.
     """
+    agency_group = site['agency']
+    agency_path = '/usgs/values/%s' % agency_group
+
+    try:
+        h5file.getNode(agency_path)
+    except NoSuchNodeError:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            h5file.createGroup('/usgs/values', agency_group, "%s sites" % site['agency'])
+
     site_group = site['code']
-    site_path = '/usgs/values/%s' % site_group
+    site_path = '%s/%s' % (agency_path, site_group)
+
     try:
         h5file.getNode(site_path)
     except NoSuchNodeError:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            h5file.createGroup('/usgs/values', site_group, "Site %s" % site['code'])
+            h5file.createGroup(agency_path, site_group, "Site %s" % site['code'])
 
     if 'statistic' in variable:
         value_table_name = variable['code'] + ":" + variable['statistic']['code']
