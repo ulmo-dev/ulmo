@@ -5,6 +5,7 @@ import datetime
 import isodate
 import os
 import tempfile
+import warnings
 
 import tables
 from tables.exceptions import NoSuchNodeError
@@ -191,20 +192,29 @@ def _get_value_table(h5file, site, variable):
     variable. If the value table already exists, it is returned. If it doesn't,
     it will be created.
     """
-    site_group = 'site_%s' % site['code']
+    site_group = site['code']
     site_path = '/usgs/values/%s' % site_group
     try:
         h5file.getNode(site_path)
     except NoSuchNodeError:
-        h5file.createGroup('/usgs/values', site_group, "Site %s" % site['code'])
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            h5file.createGroup('/usgs/values', site_group, "Site %s" % site['code'])
 
-    value_table_name = 'variable_%s' % variable['code']
+    if 'statistic' in variable:
+        value_table_name = variable['code'] + ":" + variable['statistic']['code']
+    else:
+        value_table_name = variable['code']
+
     try:
         values_path = '/'.join([site_path, value_table_name])
         value_table = h5file.getNode(values_path)
     except NoSuchNodeError:
-        value_table = h5file.createTable(site_path, value_table_name, USGSValue, "Values for site: %s, variable: %s" % (site['code'], variable['code']))
-        value_table.cols.datetime.createIndex()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            value_table = h5file.createTable(site_path, value_table_name, USGSValue, "Values for site: %s, variable: %s:%s" % (site['code'],
+                variable['code'], variable['statistic']['code']))
+            value_table.cols.datetime.createIndex()
 
     return value_table
 
