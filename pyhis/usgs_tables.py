@@ -48,15 +48,6 @@ class USGSValue(tables.IsDescription):
     qualifiers = tables.StringCol(20)
     value = tables.StringCol(20)
 
-    site_code = tables.StringCol(20)
-    site_network = tables.StringCol(10)
-
-    variable_code = tables.StringCol(5)
-    variable_network = tables.StringCol(5)
-
-    variable_statistic_code = tables.StringCol(5)
-    variable_statistic_name = tables.StringCol(20)
-
 
 class USGSVariable(tables.IsDescription):
     code = tables.StringCol(5)
