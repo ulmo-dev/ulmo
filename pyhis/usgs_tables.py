@@ -183,6 +183,23 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
     h5file.close()
 
 
+def _flatten_nested_dict(d, prepend=''):
+    """flattens a nested dict structure into structure suitable for inserting
+    into a pytables table; assumes that no keys in the nested dict structure
+    contain the character '/'
+    """
+    return_dict = {}
+
+    for k, v in d.iteritems():
+        if isinstance(v, dict):
+            flattened = _flatten_nested_dict(v, prepend=prepend + k + '/')
+            return_dict.update(flattened)
+        else:
+            return_dict[prepend + k] = v
+
+    return return_dict
+
+
 def _get_value_table(h5file, site, variable):
     """returns a value table for a given open h5file (writable), site and
     variable. If the value table already exists, it is returned. If it doesn't,
@@ -204,23 +221,6 @@ def _get_value_table(h5file, site, variable):
         value_table.cols.datetime.createIndex()
 
     return value_table
-
-
-def _flatten_nested_dict(d, prepend=''):
-    """flattens a nested dict structure into structure suitable for inserting
-    into a pytables table; assumes that no keys in the nested dict structure
-    contain the character '/'
-    """
-    return_dict = {}
-
-    for k, v in d.iteritems():
-        if isinstance(v, dict):
-            flattened = _flatten_nested_dict(v, prepend=prepend + k + '/')
-            return_dict.update(flattened)
-        else:
-            return_dict[prepend + k] = v
-
-    return return_dict
 
 
 def _row_to_dict(row, names):
