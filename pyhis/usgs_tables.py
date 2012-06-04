@@ -155,10 +155,6 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
             if not updated:
                 append_indices.append(i)
 
-            if i % 1000 == 0:
-                value_table.flush()
-                print "%s | %s" % (site['code'], i)
-
         for i in append_indices:
             append_value = update_values[i]
             _update_row_with_dict(value_row, append_value)
