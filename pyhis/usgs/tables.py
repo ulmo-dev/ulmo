@@ -82,6 +82,39 @@ def get_site(site_code, path=HDF5_FILE_PATH):
     return get_sites().get(site_code)
 
 
+def get_site_data(site_code, agency_code=None, path=HDF5_FILE_PATH):
+    """gets the data for a given site"""
+    # walk the agency groups looking for site code
+    h5file = tables.openFile(path, mode='r')
+    site_table = h5file.root.usgs.sites
+    if agency_code:
+        where_clause = "(code == '%s') & (agency == '%s')" % (site_code, agency_code)
+    else:
+        where_clause = '(code == "%s")' % site_code
+
+    agency = None
+    for count, row in enumerate(site_table.where(where_clause)):
+        agency = row['agency']
+
+    if not agency:
+        h5file.close()
+        return {}
+    if count >= 1 and not agency_code:
+        raise ('more than one site found, limit your query using an agency code')
+
+    site_path = '/usgs/values/%s/%s' % (agency, site_code)
+    try:
+        site_group = h5file.getNode(site_path)
+    except NoSuchNodeError:
+        raise "no site found for code: %s" % site_code
+
+    values_dict = dict([
+        _values_table_as_dict(table)
+        for table in site_group._f_walkNodes('Table')])
+    h5file.close()
+    return values_dict
+
+
 def init_h5(path=HDF5_FILE_PATH, mode='w'):
     """creates an hdf5 file an initialized it with relevant tables, etc"""
     h5file = tables.openFile(path, mode=mode, title="pyHIS data")
@@ -138,6 +171,7 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
     for d in site_data.itervalues():
         variable = d['variable']
         value_table = _get_value_table(h5file, site, variable)
+        value_table.attrs.variable = variable
         value_row = value_table.row
 
         update_values = d['values']
@@ -248,6 +282,19 @@ def _update_row_with_dict(row, dict):
     """sets the values of row to be the values found in dict"""
     for k, v in dict.iteritems():
         row.__setitem__(k, v)
+
+
+def _values_table_as_dict(table):
+    variable = table.attrs.variable
+
+    values = [_row_to_dict(value, table)
+              for value in table.itersorted(table.cols.datetime)]
+    values_dict = {
+        'variable': variable,
+        'values': values
+    }
+
+    return variable['code'] + ":" + variable['statistic']['code'], values_dict
 
 
 if __name__ == '__main__':
