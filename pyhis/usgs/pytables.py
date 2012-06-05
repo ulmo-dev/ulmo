@@ -123,13 +123,11 @@ def update_site_list(state_code, service=None, path=HDF5_FILE_PATH):
     # processes writing to the file
     h5file = tables.openFile(path, mode="r+")
     site_table = h5file.root.usgs.sites
-    site_row = site_table.row
-    for site in sites.itervalues():
-        flattened = _flatten_nested_dict(site)
-        for k, v in flattened.iteritems():
-            site_row[k] = v
-        site_row.append()
-    site_table.flush()
+    site_values = [
+        _flatten_nested_dict(site)
+        for site in sites.itervalues()]
+    where_filter = "(code == '%(code)s') & (agency == '%(agency)s')"
+    _update_or_append(site_table, site_values, where_filter)
     h5file.close()
 
 
@@ -154,32 +152,13 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
 
     for d in site_data.itervalues():
         variable = d['variable']
-        value_table = _get_value_table(h5file, site, variable)
-        value_table.attrs.variable = variable
-        value_row = value_table.row
-
         update_values = d['values']
-        append_indices = []
-
-        for i, update_value in enumerate(update_values):
-            updated = False
-            where_clause = '(datetime == "%s")' % update_value['datetime']
-
-            # update matching rows (should only be one), or append index to append_indices
-            for existing_row in value_table.where(where_clause):
-                _update_row_with_dict(existing_row, update_value)
-                updated = True
-
-            # note: you can't use break/else pattern above due to the way
-            # updates are implemented (http://www.pytables.org/trac-bck/ticket/140)
-            if not updated:
-                append_indices.append(i)
-
-        for i in append_indices:
-            append_value = update_values[i]
-            _update_row_with_dict(value_row, append_value)
-            value_row.append()
-        value_table.flush()
+        # add last_modified date to the values we're updating
+        for value in update_values:
+            value.update({'last_modified': query_isodate})
+        value_table = _get_value_table(h5file, site, variable)
+        where_filter = '(datetime == "%(datetime)s")'
+        _update_or_append(value_table, update_values, where_filter)
 
     for site_row in sites_table.where('(code == "%s")' % site['code']):
         site_row['last_refresh'] = query_isodate
@@ -187,6 +166,34 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
         sites_table.flush()
 
     h5file.close()
+
+
+def _update_or_append(table, update_values, where_filter):
+    """updates table with dict representations of rows, appending new rows if
+    need be; where_filter should uniquely identify a row within a table and will
+    determine whether or not a row is updated or appended
+    """
+    value_row = table.row
+    append_indices = []
+    for i, update_value in enumerate(update_values):
+        updated = False
+
+        where_clause = where_filter % update_value
+        # update matching rows (should only be one), or append index to append_indices
+        for existing_row in table.where(where_clause):
+            _update_row_with_dict(existing_row, update_value)
+            updated = True
+
+        # note: you can't use break/else pattern above due to the way
+        # updates are implemented (http://www.pytables.org/trac-bck/ticket/140)
+        if not updated:
+            append_indices.append(i)
+
+    for i in append_indices:
+        append_value = update_values[i]
+        _update_row_with_dict(value_row, append_value)
+        value_row.append()
+    table.flush()
 
 
 def _flatten_nested_dict(d, prepend=''):
