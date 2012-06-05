@@ -56,7 +56,7 @@ def get_sites(path=HDF5_FILE_PATH):
     """gets a dict of sites from an hdf5 file"""
     h5file = tables.openFile(path, mode='r')
     site_table = h5file.root.usgs.sites
-    return_dict = dict([(row['code'], _row_to_dict(row, table)) for row in site_table.iterrows()])
+    return_dict = dict([(row['code'], _row_to_dict(row, site_table)) for row in site_table.iterrows()])
     h5file.close()
     return return_dict
 
