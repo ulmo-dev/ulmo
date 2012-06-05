@@ -252,12 +252,19 @@ def _row_to_dict(row, table):
     """converts a row to a dict representation, given the row and table
     """
     names = table.description._v_nestedNames
+    return _row_to_dict_with_names(row, names)
+
+
+def _row_to_dict_with_names(row, names):
+    """converts a row to a dict representation given the row and dested names;
+    this is just a helper function for _row_to_dict
+    """
     return_dict = {}
     for name, val in zip(names, row[:]):
         if not type(name) == tuple:
             return_dict[name] = val
         else:
-            return_dict[name[0]] = _row_to_dict(val, name[1])
+            return_dict[name[0]] = _row_to_dict_with_names(val, name[1])
     return return_dict
 
 
