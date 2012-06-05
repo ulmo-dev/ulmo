@@ -50,6 +50,7 @@ class USGSValue(tables.IsDescription):
     datetime = tables.StringCol(26)
     qualifiers = tables.StringCol(20)
     value = tables.StringCol(20)
+    last_modified = tables.StringCol(26)
 
 
 def get_sites(path=HDF5_FILE_PATH):
