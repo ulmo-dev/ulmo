@@ -278,14 +278,3 @@ def _values_table_as_dict(table):
     }
 
     return variable['code'] + ":" + variable['statistic']['code'], values_dict
-
-
-if __name__ == '__main__':
-    init_h5()
-    update_site_list('RI')
-    sites = get_sites()
-    for site in sites:
-        update_site_data(site)
-    #site = get_site_data('01116300')
-    #import pdb; pdb.set_trace()
-    pass
