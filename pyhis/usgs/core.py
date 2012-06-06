@@ -34,6 +34,7 @@ def get_sites(state_code, site_type=None, service=None):
         url = _get_service_url(service)
         log.info('making request for sites: %s' % url)
         req = requests.get(url, params=url_params)
+        log.info("processing data from request: %s" % req.request.full_url)
         content_io = StringIO.StringIO(str(req.content))
 
         site_elements = dict(set([(ele.find(NS + "siteCode").text, ele)
