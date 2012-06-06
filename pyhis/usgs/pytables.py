@@ -168,72 +168,6 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
     h5file.close()
 
 
-def _update_or_append(table, update_values, where_filter):
-    """updates table with dict representations of rows, appending new rows if
-    need be; where_filter should uniquely identify a row within a table and will
-    determine whether or not a row is updated or appended
-    """
-    value_row = table.row
-    for i, update_value in enumerate(update_values):
-        where_clause = where_filter % update_value
-        # update matching rows (should only be one), or append index to append_indices
-        updated = False
-        for existing_row in table.where(where_clause):
-            updated = True
-            _update_row_with_dict(existing_row, update_value)
-            existing_row.update()
-            table.flush()
-        if not updated:
-            update_value['__flag_for_append'] = True
-    for update_value in update_values:
-        if '__flag_for_append' in update_value:
-            del update_value['__flag_for_append']
-            _update_row_with_dict(value_row, update_value)
-            value_row.append()
-    table.flush()
-
-
-def _update_or_append_sortable(table, update_values, sortby):
-    """updates table with dict representations of rows, appending new rows if
-    need be; sortby should be a completly sortable column (with a CSIndex)
-    """
-    value_row = table.row
-    update_values.sort(key=lambda v: v[sortby])
-    table_iterator = table.itersorted(sortby)
-    try:
-        current_row = table_iterator.next()
-    except StopIteration:
-        current_row = None
-
-    for i, update_value in enumerate(update_values):
-        if not current_row or update_value[sortby] < current_row[sortby]:
-            update_value['__flag_for_append'] = True
-
-        elif current_row:
-            # advance the table iterator until you are >= update_value
-            while current_row and current_row[sortby] < update_value[sortby]:
-                try:
-                    current_row = table_iterator.next()
-                except StopIteration:
-                    current_row = None
-
-            # if we match, then update
-            if current_row and current_row[sortby] == update_value[sortby]:
-                _update_row_with_dict(current_row, update_value)
-                current_row.update()
-
-            # else flag for append
-            else:
-                update_value['__flag_for_append'] = True
-
-    for update_value in update_values:
-        if '__flag_for_append' in update_value:
-            del update_value['__flag_for_append']
-            _update_row_with_dict(value_row, update_value)
-            value_row.append()
-    table.flush()
-
-
 def _flatten_nested_dict(d, prepend=''):
     """flattens a nested dict structure into structure suitable for inserting
     into a pytables table; assumes that no keys in the nested dict structure
@@ -312,6 +246,72 @@ def _row_to_dict_with_names(row, names):
         else:
             return_dict[name[0]] = _row_to_dict_with_names(val, name[1])
     return return_dict
+
+
+def _update_or_append(table, update_values, where_filter):
+    """updates table with dict representations of rows, appending new rows if
+    need be; where_filter should uniquely identify a row within a table and will
+    determine whether or not a row is updated or appended
+    """
+    value_row = table.row
+    for i, update_value in enumerate(update_values):
+        where_clause = where_filter % update_value
+        # update matching rows (should only be one), or append index to append_indices
+        updated = False
+        for existing_row in table.where(where_clause):
+            updated = True
+            _update_row_with_dict(existing_row, update_value)
+            existing_row.update()
+            table.flush()
+        if not updated:
+            update_value['__flag_for_append'] = True
+    for update_value in update_values:
+        if '__flag_for_append' in update_value:
+            del update_value['__flag_for_append']
+            _update_row_with_dict(value_row, update_value)
+            value_row.append()
+    table.flush()
+
+
+def _update_or_append_sortable(table, update_values, sortby):
+    """updates table with dict representations of rows, appending new rows if
+    need be; sortby should be a completly sortable column (with a CSIndex)
+    """
+    value_row = table.row
+    update_values.sort(key=lambda v: v[sortby])
+    table_iterator = table.itersorted(sortby)
+    try:
+        current_row = table_iterator.next()
+    except StopIteration:
+        current_row = None
+
+    for i, update_value in enumerate(update_values):
+        if not current_row or update_value[sortby] < current_row[sortby]:
+            update_value['__flag_for_append'] = True
+
+        elif current_row:
+            # advance the table iterator until you are >= update_value
+            while current_row and current_row[sortby] < update_value[sortby]:
+                try:
+                    current_row = table_iterator.next()
+                except StopIteration:
+                    current_row = None
+
+            # if we match, then update
+            if current_row and current_row[sortby] == update_value[sortby]:
+                _update_row_with_dict(current_row, update_value)
+                current_row.update()
+
+            # else flag for append
+            else:
+                update_value['__flag_for_append'] = True
+
+    for update_value in update_values:
+        if '__flag_for_append' in update_value:
+            del update_value['__flag_for_append']
+            _update_row_with_dict(value_row, update_value)
+            value_row.append()
+    table.flush()
 
 
 def _update_row_with_dict(row, dict):
