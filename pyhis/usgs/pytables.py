@@ -157,8 +157,8 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
         for value in update_values:
             value.update({'last_modified': query_isodate})
         value_table = _get_value_table(h5file, site, variable)
-        where_filter = '(datetime == "%(datetime)s")'
-        _update_or_append(value_table, update_values, where_filter)
+        _update_or_append_sortable(value_table, update_values, 'datetime')
+        value_table.flush()
 
     for site_row in sites_table.where('(code == "%s")' % site['code']):
         site_row['last_refresh'] = query_isodate
@@ -174,25 +174,63 @@ def _update_or_append(table, update_values, where_filter):
     determine whether or not a row is updated or appended
     """
     value_row = table.row
-    append_indices = []
     for i, update_value in enumerate(update_values):
-        updated = False
-
         where_clause = where_filter % update_value
         # update matching rows (should only be one), or append index to append_indices
+        updated = False
         for existing_row in table.where(where_clause):
-            _update_row_with_dict(existing_row, update_value)
             updated = True
-
-        # note: you can't use break/else pattern above due to the way
-        # updates are implemented (http://www.pytables.org/trac-bck/ticket/140)
+            _update_row_with_dict(existing_row, update_value)
+            existing_row.update()
+            table.flush()
         if not updated:
-            append_indices.append(i)
+            update_value['__flag_for_append'] = True
+    for update_value in update_values:
+        if '__flag_for_append' in update_value:
+            del update_value['__flag_for_append']
+            _update_row_with_dict(value_row, update_value)
+            value_row.append()
+    table.flush()
 
-    for i in append_indices:
-        append_value = update_values[i]
-        _update_row_with_dict(value_row, append_value)
-        value_row.append()
+
+def _update_or_append_sortable(table, update_values, sortby):
+    """updates table with dict representations of rows, appending new rows if
+    need be; sortby should be a completly sortable column (with a CSIndex)
+    """
+    value_row = table.row
+    update_values.sort(key=lambda v: v[sortby])
+    table_iterator = table.itersorted(sortby)
+    try:
+        current_row = table_iterator.next()
+    except StopIteration:
+        current_row = None
+
+    for i, update_value in enumerate(update_values):
+        if not current_row or update_value[sortby] < current_row[sortby]:
+            update_value['__flag_for_append'] = True
+
+        elif current_row:
+            # advance the table iterator until you are >= update_value
+            while current_row and current_row[sortby] < update_value[sortby]:
+                try:
+                    current_row = table_iterator.next()
+                except StopIteration:
+                    current_row = None
+
+            # if we match, then update
+            if current_row and current_row[sortby] == update_value[sortby]:
+                _update_row_with_dict(current_row, update_value)
+                current_row.update()
+
+            # else flag for append
+            else:
+                update_value['__flag_for_append'] = True
+
+    for update_value in update_values:
+        if '__flag_for_append' in update_value:
+            del update_value['__flag_for_append']
+            _update_row_with_dict(value_row, update_value)
+            value_row.append()
     table.flush()
 
 
