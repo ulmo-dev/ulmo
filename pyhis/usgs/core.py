@@ -37,11 +37,7 @@ def get_sites(state_code, site_type=None, service=None):
         log.info("processing data from request: %s" % req.request.full_url)
         content_io = StringIO.StringIO(str(req.content))
 
-        site_elements = dict(set([(ele.find(NS + "siteCode").text, ele)
-                        for (event, ele) in iterparse(content_io)
-                        if ele.tag == NS + "sourceInfo"]))
-        sites = dict([(key, _parse_site_info(source_info))
-                        for key, source_info in site_elements.iteritems()])
+        sites = _parse_sites(content_io)
     return sites
 
 
@@ -188,6 +184,16 @@ def _parse_site_info(site_info):
         'state_code': site_info.find(NS + "siteProperty[@name='stateCd']").text,
         'timezone_info': _parse_timezone_info(timezone_info),
     }
+
+
+def _parse_sites(content_io):
+    """parses sites out of a waterml file; content_io should be a file-like object"""
+    site_elements = dict(set([(ele.find(NS + "siteCode").text, ele)
+                    for (event, ele) in iterparse(content_io)
+                    if ele.tag == NS + "sourceInfo"]))
+    sites = dict([(key, _parse_site_info(source_info))
+                    for key, source_info in site_elements.iteritems()])
+    return sites
 
 
 def _parse_timezone_info(timezone_info):

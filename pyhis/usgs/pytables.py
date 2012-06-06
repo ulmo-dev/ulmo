@@ -118,17 +118,7 @@ def init_h5(path=HDF5_FILE_PATH, mode='w'):
 def update_site_list(state_code, service=None, path=HDF5_FILE_PATH):
     """update list of sites for a given state_code"""
     sites = core.get_sites(state_code, service=service)
-
-    # XXX: use some sort of mutex or file lock to guard against concurrent
-    # processes writing to the file
-    h5file = tables.openFile(path, mode="r+")
-    site_table = h5file.root.usgs.sites
-    site_values = [
-        _flatten_nested_dict(site)
-        for site in sites.itervalues()]
-    where_filter = "(code == '%(code)s') & (agency == '%(agency)s')"
-    _update_or_append(site_table, site_values, where_filter)
-    h5file.close()
+    _update_site_table(sites, path)
 
 
 def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
@@ -318,6 +308,21 @@ def _update_row_with_dict(row, dict):
     """sets the values of row to be the values found in dict"""
     for k, v in dict.iteritems():
         row.__setitem__(k, v)
+
+
+def _update_site_table(sites, path):
+    """updates a sites table with a given list of sites dicts
+    """
+    # XXX: use some sort of mutex or file lock to guard against concurrent
+    # processes writing to the file
+    h5file = tables.openFile(path, mode="r+")
+    site_table = h5file.root.usgs.sites
+    site_values = [
+        _flatten_nested_dict(site)
+        for site in sites.itervalues()]
+    where_filter = "(code == '%(code)s') & (agency == '%(agency)s')"
+    _update_or_append(site_table, site_values, where_filter)
+    h5file.close()
 
 
 def _values_table_as_dict(table):
