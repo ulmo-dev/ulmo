@@ -147,6 +147,17 @@ def _get_site_values(service, date_range, url_params):
     return data_dict
 
 
+def _parse_datetime(datetime_str):
+    """returns an iso 8601 datetime string; USGS returns fractions of a second
+    which are usually all 0s. ISO 8601 does not limit the number of decimal
+    places but we have to cut them off at some point
+    """
+    #XXX: this could be sped up if need be
+    #XXX: also, we need to document that we are throwing away fractions of
+    #     seconds
+    return isodate.datetime_isoformat(isodate.parse_datetime(datetime_str))
+
+
 def _parse_geog_location(geog_location):
     """returns a dict representation of a geogLocation etree element"""
     return {
@@ -206,7 +217,7 @@ def _parse_values(values_element):
     values element
     """
 
-    return [{'datetime': value.attrib['dateTime'],
+    return [{'datetime': _parse_datetime(value.attrib['dateTime']),
              'value': value.text,
              'qualifiers': value.attrib['qualifiers']}
             for value in values_element.findall(NS + 'value')]
