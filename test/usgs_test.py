@@ -1,5 +1,7 @@
+import datetime
 import os
 
+import isodate
 import tables
 
 import pyhis
@@ -27,10 +29,10 @@ def test_parse_get_sites():
 
 
 def test_update_site_list():
-    assert _count_sites() == 0
+    assert _count_rows('/usgs/sites') == 0
     sites = test_parse_get_sites()
     pyhis.usgs.pytables._update_site_table(sites, TEST_FILE_PATH)
-    assert _count_sites() == 63
+    assert _count_rows('/usgs/sites') == 63
 
 
 def test_pytables_get_sites():
@@ -38,9 +40,47 @@ def test_pytables_get_sites():
     assert len(sites) == 63
 
 
-def _count_sites():
-    h5file = tables.openFile(TEST_FILE_PATH, mode="r")
-    sites_table = h5file.root.usgs.sites
-    number_of_sites = len([1 for i in sites_table.iterrows()])
+def test_update_or_append():
+    h5file = tables.openFile(TEST_FILE_PATH, mode="r+")
+    test_table = _create_test_table(h5file, 'update_or_append', pyhis.usgs.pytables.USGSValue)
+    where_filter = '(datetime == "%(datetime)s")'
+
+    initial_values = [
+            {'datetime': isodate.datetime_isoformat(datetime.datetime(2000, 1, 1) + \
+                datetime.timedelta(days=i)),
+             'value': 'initial',
+             'qualifiers': ''}
+            for i in range(1000)]
+
+
+    update_values = [
+            {'datetime': isodate.datetime_isoformat(datetime.datetime(2000, 1, 1) + \
+                datetime.timedelta(days=i)),
+             'value': 'updated',
+             'qualifiers': ''}
+            for i in [20, 30, 10, 999, 1000, 2000, 399]]
+
+    pyhis.usgs.pytables._update_or_append(test_table, initial_values, where_filter)
     h5file.close()
-    return number_of_sites
+
+    assert _count_rows('/test/update_or_append') == 1000
+
+    h5file = tables.openFile(TEST_FILE_PATH, mode="r+")
+    test_table = h5file.getNode('/test/update_or_append')
+    pyhis.usgs.pytables._update_or_append(test_table, update_values, where_filter)
+    h5file.close()
+    assert _count_rows('/test/update_or_append') == 1002
+
+
+def _count_rows(path):
+    h5file = tables.openFile(TEST_FILE_PATH, mode="r")
+    table = h5file.getNode(path)
+    number_of_rows = len([1 for i in table.iterrows()])
+    h5file.close()
+    return number_of_rows
+
+
+def _create_test_table(h5file, table_name, description):
+    test_table = h5file.createTable('/test', table_name, description,
+                                    createparents=True)
+    return test_table
