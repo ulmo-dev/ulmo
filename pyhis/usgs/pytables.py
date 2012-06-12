@@ -53,8 +53,10 @@ class USGSValue(tables.IsDescription):
     last_modified = tables.StringCol(26)
 
 
-def get_sites(path=HDF5_FILE_PATH):
+def get_sites(path=None):
     """gets a dict of sites from an hdf5 file"""
+    if not path:
+        path = HDF5_FILE_PATH
     h5file = tables.openFile(path, mode='r')
     site_table = h5file.root.usgs.sites
     return_dict = dict([(row['code'], _row_to_dict(row, site_table)) for row in site_table.iterrows()])
@@ -62,14 +64,18 @@ def get_sites(path=HDF5_FILE_PATH):
     return return_dict
 
 
-def get_site(site_code, path=HDF5_FILE_PATH):
+def get_site(site_code, path=None):
     """gets a site dict for a specific site_code from an hdf5 file"""
+    if not path:
+        path = HDF5_FILE_PATH
     # XXX: this is really dumb
-    return get_sites().get(site_code)
+    return get_sites(path).get(site_code)
 
 
-def get_site_data(site_code, agency_code=None, path=HDF5_FILE_PATH):
+def get_site_data(site_code, agency_code=None, path=None):
     """gets the data for a given site"""
+    if not path:
+        path = HDF5_FILE_PATH
     # walk the agency groups looking for site code
     h5file = tables.openFile(path, mode='r')
     site_table = h5file.root.usgs.sites
@@ -101,8 +107,10 @@ def get_site_data(site_code, agency_code=None, path=HDF5_FILE_PATH):
     return values_dict
 
 
-def init_h5(path=HDF5_FILE_PATH, mode='w'):
+def init_h5(path=None, mode='w'):
     """creates an hdf5 file an initialized it with relevant tables, etc"""
+    if not path:
+        path = HDF5_FILE_PATH
     h5file = tables.openFile(path, mode=mode, title="pyHIS data")
 
     usgs = h5file.createGroup('/', 'usgs', 'USGS Data')
@@ -115,15 +123,19 @@ def init_h5(path=HDF5_FILE_PATH, mode='w'):
     h5file.close()
 
 
-def update_site_list(state_code, service=None, path=HDF5_FILE_PATH):
+def update_site_list(state_code, service=None, path=None):
     """update list of sites for a given state_code"""
+    if not path:
+        path = HDF5_FILE_PATH
     sites = core.get_sites(state_code, service=service)
     _update_site_table(sites, path)
 
 
-def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
+def update_site_data(site_code, date_range=None, path=None):
     """updates data for a given site
     """
+    if not path:
+        path = HDF5_FILE_PATH
     site = get_site(site_code)
 
     if not date_range:
@@ -147,6 +159,7 @@ def update_site_data(site_code, date_range=None, path=HDF5_FILE_PATH):
         for value in update_values:
             value.update({'last_modified': query_isodate})
         value_table = _get_value_table(h5file, site, variable)
+        value_table.attrs.variable = variable
         _update_or_append_sortable(value_table, update_values, 'datetime')
         value_table.flush()
 
