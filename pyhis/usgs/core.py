@@ -129,7 +129,11 @@ def _get_site_values(service, date_range, url_params):
     service_url = _get_service_url(service)
 
     query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
-    req = requests.get(service_url, params=url_params)
+    try:
+        req = requests.get(service_url, params=url_params)
+    except requests.exceptions.ConnectionError:
+        log.info("There was a connection error with query:\n\t%s\n\t%s" % (service_url, url_params))
+        return {}
     log.info("processing data from request: %s" % req.request.full_url)
 
     if req.status_code != 200:
