@@ -104,7 +104,7 @@ def _date_range_url_params(date_range, service):
         if service in ('iv', 'instantaneous'):
             return dict(startDT=isodate.date_isoformat(datetime.datetime(2007, 10, 1)))
         if service in ('dv', 'daily'):
-            return dict(startDT=isodate.datetime_isoformat(datetime.datetime(1851, 1, 1)))
+            return dict(startDT=isodate.date_isoformat(datetime.datetime(1851, 1, 1)))
 
     raise(TypeError,
           "date_range must be either a datetime, a 2-tuple of "
