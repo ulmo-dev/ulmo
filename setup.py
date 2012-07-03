@@ -27,6 +27,7 @@ setup(
     platforms='any',
     install_requires=[
         'isodate>=0.4.6',
+        'lxml>=2.3',
         'matplotlib>=1.1.0',
         'numpy>=1.4.0',
         'pandas>=0.3.0',
