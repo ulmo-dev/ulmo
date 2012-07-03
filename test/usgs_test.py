@@ -11,8 +11,7 @@ TEST_FILE_PATH = '/tmp/pyhis_test.h5'
 
 
 def test_init():
-    if os.path.exists(TEST_FILE_PATH):
-        os.remove(TEST_FILE_PATH)
+    _remove_test_file()
     assert not os.path.exists(TEST_FILE_PATH)
     pyhis.usgs.pytables.init_h5(TEST_FILE_PATH)
     assert os.path.exists(TEST_FILE_PATH)
@@ -73,6 +72,21 @@ def test_update_or_append():
     assert _count_rows('/test/update_or_append') == 1002
 
 
+def test_core_get_sites_by_state_code():
+    sites = pyhis.usgs.core.get_sites(state_code='RI')
+    assert len(sites) == 63
+
+
+def test_core_get_sites_single_site():
+    sites = pyhis.usgs.core.get_sites(sites='08068500')
+    assert len(sites) == 1
+
+
+def test_core_get_sites_multiple_sites():
+    sites = pyhis.usgs.core.get_sites(sites=['08068500', '08041500'])
+    assert len(sites) == 2
+
+
 def _count_rows(path):
     h5file = tables.openFile(TEST_FILE_PATH, mode="r")
     table = h5file.getNode(path)
@@ -85,3 +99,9 @@ def _create_test_table(h5file, table_name, description):
     test_table = h5file.createTable('/test', table_name, description,
                                     createparents=True)
     return test_table
+
+
+def _remove_test_file():
+    if os.path.exists(TEST_FILE_PATH):
+        os.remove(TEST_FILE_PATH)
+
