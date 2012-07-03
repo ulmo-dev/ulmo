@@ -69,7 +69,15 @@ def get_site(site_code, path=None):
     if not path:
         path = HDF5_FILE_PATH
     # XXX: this is really dumb
-    return get_sites(path).get(site_code)
+    sites = get_sites(path)
+    if site_code in sites:
+        site = sites.get(site_code)
+    else:
+        sites = core.get_sites(sites=site_code)
+        site = sites.get(site_code)
+        if not site:
+            raise LookupError("Could not find site %s" % site_code)
+    return site
 
 
 def get_site_data(site_code, agency_code=None, path=None):
@@ -123,11 +131,11 @@ def init_h5(path=None, mode='w'):
     h5file.close()
 
 
-def update_site_list(state_code, service=None, path=None):
+def update_site_list(sites=None, state_code=None, service=None, path=None):
     """update list of sites for a given state_code"""
     if not path:
         path = HDF5_FILE_PATH
-    sites = core.get_sites(state_code, service=service)
+    sites = core.get_sites(sites=sites, state_code=state_code, service=service)
     _update_site_table(sites, path)
 
 

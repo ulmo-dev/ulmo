@@ -17,18 +17,34 @@ logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
-def get_sites(state_code, site_type=None, service=None):
-    """returns a dict containing site code and site names; currently
-    only supports queries by state_code
+def get_sites(sites=None, state_code=None, site_type=None, service=None):
+    """Fetches sites from USGS services. See the USGS waterservices documentation for options
+
+    :param sites: The site to use or list of sites to use; lists will be joined by a ','
+    :param state_code: Two-letter state code used in stateCd parameter
+    :param site_type: Type of site used in siteType parameter
+    :param service: The service to use, either "individual" or "daily" if None (default), then both services are used
+
+    :returns: a dict containing site code and site names
+    :rtype: dict
     """
-    url_params = {'format': 'waterml',
-                  'stateCd': state_code}
+    url_params = {'format': 'waterml'}
+
+    if state_code:
+        url_params['stateCd'] = state_code
+
+    if sites:
+        if isinstance(sites, basestring):
+            url_params['sites'] = sites
+        else:
+            url_params['sites'] = ','.join(sites)
+
     if site_type:
         url_params['siteType'] = site_type
 
     if not service:
-        sites = get_sites(state_code, site_type, service="daily")
-        sites.update(get_sites(state_code, site_type, service="instantaneous"))
+        return_sites = get_sites(sites=sites, state_code=state_code, site_type=site_type, service="daily")
+        return_sites.update(get_sites(sites=sites, state_code=state_code, site_type=site_type, service="instantaneous"))
 
     else:
         url = _get_service_url(service)
@@ -37,8 +53,8 @@ def get_sites(state_code, site_type=None, service=None):
         log.info("processing data from request: %s" % req.request.full_url)
         content_io = StringIO.StringIO(str(req.content))
 
-        sites = _parse_sites(content_io)
-    return sites
+        return_sites = _parse_sites(content_io)
+    return return_sites
 
 
 def get_site_data(site_code, service=None, parameter_code=None,

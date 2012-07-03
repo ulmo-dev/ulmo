@@ -3,6 +3,7 @@ import os
 
 import isodate
 import tables
+import pytest
 
 import pyhis
 
@@ -40,6 +41,25 @@ def test_pytables_get_sites():
     assert len(sites) == 63
 
 
+def test_pytables_get_site():
+    pyhis.usgs.pytables.get_sites(TEST_FILE_PATH)
+    site = pyhis.usgs.pytables.get_site('01115100', TEST_FILE_PATH)
+    assert len(site) == 11
+
+
+def test_pytables_get_site_fallback_to_core():
+    site_code = '08068500'
+    sites = pyhis.usgs.pytables.get_sites(TEST_FILE_PATH)
+    assert site_code not in sites
+    site = pyhis.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
+    assert len(site) == 10
+
+
+def test_pytables_get_site_raises_lookup():
+    with pytest.raises(LookupError):
+        pyhis.usgs.pytables.get_site('98068500', TEST_FILE_PATH)
+
+
 def test_update_or_append():
     h5file = tables.openFile(TEST_FILE_PATH, mode="r+")
     test_table = _create_test_table(h5file, 'update_or_append', pyhis.usgs.pytables.USGSValue)
@@ -51,7 +71,6 @@ def test_update_or_append():
              'value': 'initial',
              'qualifiers': ''}
             for i in range(1000)]
-
 
     update_values = [
             {'datetime': isodate.datetime_isoformat(datetime.datetime(2000, 1, 1) + \
