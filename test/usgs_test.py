@@ -11,7 +11,8 @@ TEST_FILE_PATH = '/tmp/pyhis_test.h5'
 
 
 def test_init():
-    os.remove(TEST_FILE_PATH)
+    if os.path.exists(TEST_FILE_PATH):
+        os.remove(TEST_FILE_PATH)
     assert not os.path.exists(TEST_FILE_PATH)
     pyhis.usgs.pytables.init_h5(TEST_FILE_PATH)
     assert os.path.exists(TEST_FILE_PATH)
