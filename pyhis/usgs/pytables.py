@@ -73,7 +73,8 @@ def get_site(site_code, path=None):
     if site_code in sites:
         site = sites.get(site_code)
     else:
-        sites = core.get_sites(sites=site_code)
+        update_site_list(sites=site_code)
+        sites = get_sites(path)
         site = sites.get(site_code)
         if not site:
             raise LookupError("Could not find site %s" % site_code)
