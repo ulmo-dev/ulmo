@@ -29,7 +29,7 @@ def test_parse_get_sites():
     return sites
 
 
-def test_update_site_list():
+def test_update_site_table():
     assert _count_rows('/usgs/sites') == 0
     sites = test_parse_get_sites()
     pyhis.usgs.pytables._update_site_table(sites, TEST_FILE_PATH)
@@ -89,6 +89,14 @@ def test_update_or_append():
     pyhis.usgs.pytables._update_or_append(test_table, update_values, where_filter)
     h5file.close()
     assert _count_rows('/test/update_or_append') == 1002
+
+
+def test_update_site_list():
+    test_init()
+    assert _count_rows('/usgs/sites') == 0
+    sites = test_parse_get_sites()
+    pyhis.usgs.pytables.update_site_list(state_code='RI', path=TEST_FILE_PATH)
+    assert _count_rows('/usgs/sites') == 63
 
 
 def test_core_get_sites_by_state_code():
