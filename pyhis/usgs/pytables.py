@@ -73,7 +73,7 @@ def get_site(site_code, path=None):
     if site_code in sites:
         site = sites.get(site_code)
     else:
-        update_site_list(sites=site_code)
+        update_site_list(sites=site_code, path=path)
         sites = get_sites(path)
         site = sites.get(site_code)
         if not site:
