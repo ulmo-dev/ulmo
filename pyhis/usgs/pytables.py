@@ -156,6 +156,7 @@ def update_site_data(site_code, date_range=None, path=None):
 
     query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
     site_data = core.get_site_data(site_code, date_range=date_range)
+    _update_site_table([site], path)
 
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
