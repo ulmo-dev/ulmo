@@ -146,7 +146,7 @@ def update_site_data(site_code, date_range=None, path=None):
     """
     if not path:
         path = HDF5_FILE_PATH
-    site = get_site(site_code)
+    site = get_site(site_code, path=path)
 
     if not date_range:
         if site['last_refresh']:
