@@ -138,7 +138,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None):
     if not path:
         path = HDF5_FILE_PATH
     sites = core.get_sites(sites=sites, state_code=state_code, service=service)
-    _update_site_table(sites, path)
+    _update_site_table(sites.itervalues(), path)
 
 
 def update_site_data(site_code, date_range=None, path=None):
@@ -343,7 +343,7 @@ def _update_site_table(sites, path):
     site_table = h5file.root.usgs.sites
     site_values = [
         _flatten_nested_dict(site)
-        for site in sites.itervalues()]
+        for site in sites]
     where_filter = "(code == '%(code)s') & (agency == '%(agency)s')"
     _update_or_append(site_table, site_values, where_filter)
     h5file.close()
