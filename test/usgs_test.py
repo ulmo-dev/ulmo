@@ -92,6 +92,14 @@ def test_update_or_append():
     assert _count_rows('/test/update_or_append') == 1002
 
 
+def test_non_usgs_site():
+    site_code = '08152500'
+    test_init()
+    pyhis.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+    site_data = pyhis.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+    assert len(site_data['72020:00011']['values']) > 1000
+
+
 def test_update_site_list():
     test_init()
     assert _count_rows('/usgs/sites') == 0
