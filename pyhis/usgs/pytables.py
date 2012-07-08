@@ -107,6 +107,7 @@ def get_site_data(site_code, agency_code=None, path=None):
     try:
         site_group = h5file.getNode(site_path)
     except NoSuchNodeError:
+        h5file.close()
         raise Exception("no site found for code: %s" % site_code)
 
     values_dict = dict([
