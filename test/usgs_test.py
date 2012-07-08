@@ -94,7 +94,6 @@ def test_update_or_append():
 def test_update_site_list():
     test_init()
     assert _count_rows('/usgs/sites') == 0
-    sites = test_parse_get_sites()
     pyhis.usgs.pytables.update_site_list(state_code='RI', path=TEST_FILE_PATH)
     assert _count_rows('/usgs/sites') == 63
 
