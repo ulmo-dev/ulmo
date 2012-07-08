@@ -30,9 +30,10 @@ def test_parse_get_sites():
 
 
 def test_update_site_table():
+    test_init()
     assert _count_rows('/usgs/sites') == 0
     sites = test_parse_get_sites()
-    pyhis.usgs.pytables._update_site_table(sites, TEST_FILE_PATH)
+    pyhis.usgs.pytables._update_site_table(sites.values(), TEST_FILE_PATH)
     assert _count_rows('/usgs/sites') == 63
 
 
