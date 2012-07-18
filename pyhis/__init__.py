@@ -15,6 +15,7 @@ from .core import *
 
 from . import his_central
 from . import usgs
+from . import wof
 
 #import quantities as pq
 #from . import quantities as phq
