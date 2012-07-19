@@ -1,8 +1,46 @@
 from lxml import etree
 
 
+def parse_site_values(content_io, namespace):
+    """
+    """
+    data_dict = {}
+    for (event, ele) in etree.iterparse(content_io):
+        if ele.tag == namespace + "timeSeries":
+            values_element = ele.find(namespace + 'values')
+            values = _parse_values(values_element)
+            var_element = ele.find(namespace + 'variable')
+            variable = _parse_variable(var_element)
+            code = variable['code']
+            if 'statistic' in variable:
+                code += ":" + variable['statistic']['code']
+            data_dict[code] = {
+                'last_refresh': query_isodate,
+                'values': values,
+                'variable': variable,
+            }
 
-def parse_site_info(site_info, namespace):
+
+def parse_sites(content_io, namespace, site_info_name):
+    """parses sites out of a waterml file; content_io should be a file-like object"""
+    site_elements = dict(set([(ele.find(namespace + "siteCode").text, ele)
+                    for (event, ele) in etree.iterparse(content_io)
+                    if ele.tag == namespace + site_info_name]))
+    sites = dict([(key, _parse_site_info(source_info, namespace))
+                    for key, source_info in site_elements.iteritems()])
+    return sites
+
+
+def _parse_geog_location(geog_location, namespace):
+    """returns a dict representation of a geogLocation etree element"""
+    return {
+        'srs': geog_location.attrib.get('srs'),
+        'latitude': geog_location.find(namespace + 'latitude').text,
+        'longitude': geog_location.find(namespace + 'longitude').text,
+    }
+
+
+def _parse_site_info(site_info, namespace):
     """returns a dict representation of a site given an etree sourceInfo object
     representing a site
     """
@@ -21,27 +59,6 @@ def parse_site_info(site_info, namespace):
         'site_type': site_info.find(namespace + "siteProperty[@name='siteTypeCd']").text,
         'state_code': site_info.find(namespace + "siteProperty[@name='stateCd']").text,
         'timezone_info': _parse_timezone_info(timezone_info, namespace),
-    }
-
-
-
-def parse_sites(content_io, namespace, site_info_name):
-    """parses sites out of a waterml file; content_io should be a file-like object"""
-    site_elements = dict(set([(ele.find(namespace + "siteCode").text, ele)
-                    for (event, ele) in etree.iterparse(content_io)
-                    if ele.tag == namespace + site_info_name]))
-    sites = dict([(key, parse_site_info(source_info, namespace))
-                    for key, source_info in site_elements.iteritems()])
-    return sites
-
-
-
-def _parse_geog_location(geog_location, namespace):
-    """returns a dict representation of a geogLocation etree element"""
-    return {
-        'srs': geog_location.attrib.get('srs'),
-        'latitude': geog_location.find(namespace + 'latitude').text,
-        'longitude': geog_location.find(namespace + 'longitude').text,
     }
 
 
