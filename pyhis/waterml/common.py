@@ -85,6 +85,19 @@ def _parse_timezone_element(timezone_element):
     }
 
 
+def _parse_timezone_info(timezone_info, namespace):
+    """returns a dict representation of a timeZoneInfo etree element"""
+    return_dict = {}
+
+    if timezone_info.attrib.get('siteUsesDaylightSavingsTime', "false") == "true":
+        return_dict['uses_dst'] = True
+        return_dict['dst_tz'] = _parse_timezone_element(timezone_info.find(namespace + 'daylightSavingsTimeZone'))
+
+    return_dict['default_tz'] = _parse_timezone_element(timezone_info.find(namespace + 'defaultTimeZone'))
+
+    return return_dict
+
+
 def _parse_values(values_element, namespace):
     """returns a list of dicts that represent the values for a given etree
     values element
