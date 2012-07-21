@@ -146,6 +146,6 @@ def _get_site_values(service, date_range, url_params):
             return {}
     content_io = StringIO.StringIO(str(req.content))
 
-    data_dict = wml.parse_site_values(content_io)
+    data_dict = wml.parse_site_values(content_io, query_isodate)
 
     return data_dict

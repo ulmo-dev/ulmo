@@ -1,7 +1,9 @@
+import isodate
+
 from lxml import etree
 
 
-def parse_site_values(content_io, namespace):
+def parse_site_values(content_io, namespace, query_isodate):
     """
     """
     data_dict = {}
@@ -19,6 +21,7 @@ def parse_site_values(content_io, namespace):
                 'values': values,
                 'variable': variable,
             }
+    return data_dict
 
 
 def parse_sites(content_io, namespace, site_info_name):
@@ -48,29 +51,28 @@ def _parse_site_info(site_info, namespace):
     site_code = site_info.find(namespace + "siteCode")
     timezone_info = site_info.find(namespace + "timeZoneInfo")
 
-    return {
+    return_dict = {
         'agency': site_code.attrib.get('agencyCode'),
         'code': site_code.text,
-        'county': site_info.find(namespace + "siteProperty[@name='countyCd']").text,
-        'huc': site_info.find(namespace + "siteProperty[@name='hucCd']").text,
         'location': _parse_geog_location(geog_location, namespace),
         'name': site_info.find(namespace + "siteName").text,
         'network': site_code.attrib.get('network'),
-        'site_type': site_info.find(namespace + "siteProperty[@name='siteTypeCd']").text,
-        'state_code': site_info.find(namespace + "siteProperty[@name='stateCd']").text,
-        'timezone_info': _parse_timezone_info(timezone_info, namespace),
     }
 
+    if not timezone_info is None:
+        return_dict['timezone_info'] = _parse_timezone_info(timezone_info, namespace)
 
-def _parse_timezone_info(timezone_info, namespace):
-    """returns a dict representation of a timeZoneInfo etree element"""
-    return_dict = {}
+    site_properties = {
+        'county': 'countyCd',
+        'huc': 'hucCd',
+        'site_type': 'siteTypeCd',
+        'state_code': 'stateCd',
+    }
 
-    if timezone_info.attrib.get('siteUsesDaylightSavingsTime', "false") == "true":
-        return_dict['uses_dst'] = True
-        return_dict['dst_tz'] = _parse_timezone_element(timezone_info.find(namespace + 'daylightSavingsTimeZone'))
-
-    return_dict['default_tz'] = _parse_timezone_element(timezone_info.find(namespace + 'defaultTimeZone'))
+    for k, v in site_properties.iteritems():
+        find_element = site_info.find(namespace + "siteProperty[@name='%s']" % v)
+        if find_element:
+            return_dict[k] = find_element.text
 
     return return_dict
 
