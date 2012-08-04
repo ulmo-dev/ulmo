@@ -12,5 +12,7 @@ TWDB_WSDL_URL = 'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL'
 
 
 def test_core_get_sites():
-    pyhis.wof.core.get_sites(TWDB_WSDL_URL)
+    sites = pyhis.wof.core.get_sites(TWDB_WSDL_URL)
+    import pytest; pytest.set_trace()
+    assert len(sites) == 74
 
