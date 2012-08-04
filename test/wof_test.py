@@ -16,3 +16,10 @@ def test_core_get_sites():
     import pytest; pytest.set_trace()
     assert len(sites) == 74
 
+
+
+def test_specific_sites():
+    site = pyhis.wof.core.get_site_data(TWDB_WSDL_URL, 'Aransas95_D1', network='TWDBSondes')
+    site['latitude'] == 28.06666667
+    site['longitude'] == -97.20333333
+    site['name'] == 'Upper Copano Bay'
