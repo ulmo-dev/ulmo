@@ -21,8 +21,17 @@ def get_sites(wsdl_url):
     sites = wml.parse_sites(response_buffer)
     return sites
 
-def get_site_data(site_code, service=None, parameter_code=None,
-                  date_range=None, modified_since=None):
-    pass
 
+def get_site_data(wsdl_url, site_code, network, variable_code, variable_vocabulary):
+        #kservice=None, parameter_code=None,
+                  #date_range=None, modified_since=None):
+    suds_client = suds.client.Client(wsdl_url)
+    suds_client.service.GetValuesObject(
+        '%s:%s' % (network, site_code),
+        '%s:%s' % (timeseries.variable.vocabulary, timeseries.variable.code),
+        begin_date_str,
+        end_date_str)
+    suds_client.service.GetSites('')
+    response_text = unicode(suds_client.last_received())
+    response_buffer = StringIO.StringIO()
 
