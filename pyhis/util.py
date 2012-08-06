@@ -4,8 +4,12 @@
 
    Collection of useful functions for common use cases
 """
-import pyhis
+import os
+
+import appdirs
 import pandas
+
+import pyhis
 
 
 #http://midgewater.twdb.state.tx.us/tpwd/soap/wateroneflow.wsdl
@@ -36,10 +40,19 @@ def get_parameter_within_polygon(wsdl_list, param_code_list, verts, merge='BySou
         if merge.lower()=='BySource':
             pd = pandas.DataSet({site.network:pd.mean(axis=1)})
         dataframe.append(pd)
-        
+
     if merge is True:
         dataframe = dataframe.mean(axis=1)
-            
+
     return dataframe
-    
-    
+
+
+def _get_pyhis_dir():
+    return_dir = appdirs.user_data_dir('pyhis', 'pyhis')
+    _mkdir_if_doesnt_exist(return_dir)
+    return return_dir
+
+
+def _mkdir_if_doesnt_exist(dir_path):
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)

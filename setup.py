@@ -26,6 +26,7 @@ setup(
     packages=find_packages(),
     platforms='any',
     install_requires=[
+        'appdirs>=1.2.0',
         'isodate>=0.4.6',
         'lxml>=2.3',
         'matplotlib>=1.1.0',
