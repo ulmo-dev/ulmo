@@ -9,11 +9,6 @@ NCDC_GSOD_DIR = os.path.join(util._get_pyhis_dir(), 'ncdc_gsod')
 NCDC_GSOD_START_YEAR = 1929
 
 
-def _init_temp_dir():
-    if not os.path.exists(NCDC_GSOD_DIR):
-        os.mkdir(NCDC_GSOD_DIR)
-
-
 def download_ncdc_gsod_files(historical=False, start_year=None, end_year=None):
     """downloads Global Summary of Day data from ncdc and saves files in data directory
 
@@ -53,3 +48,8 @@ def download_ncdc_gsod_files(historical=False, start_year=None, end_year=None):
                 f.write(chunk)
 
         print 'file saved at {0}'.format(filename)
+
+
+def _init_temp_dir():
+    if not os.path.exists(NCDC_GSOD_DIR):
+        os.mkdir(NCDC_GSOD_DIR)
