@@ -1,6 +1,5 @@
 import datetime
 import os
-import tempfile
 
 import requests
 
@@ -15,8 +14,8 @@ def _init_temp_dir():
         os.mkdir(NCDC_GSOD_DIR)
 
 
-def retrieve_ncdc_gsod_files(historical=False, start_year=None, end_year=None):
-    """ retrieves Global Summary of Day data from ncdc and saves files in data directory
+def download_ncdc_gsod_files(historical=False, start_year=None, end_year=None):
+    """downloads Global Summary of Day data from ncdc and saves files in data directory
 
     Parameters
     ----------
@@ -54,7 +53,3 @@ def retrieve_ncdc_gsod_files(historical=False, start_year=None, end_year=None):
                 f.write(chunk)
 
         print 'file saved at {0}'.format(filename)
-
-
-if __name__ == '__main__':
-    retrieve_ncdc_gsod_files(historical=True)
