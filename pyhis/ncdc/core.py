@@ -9,7 +9,7 @@ NCDC_GSOD_DIR = os.path.join(util._get_pyhis_dir(), 'ncdc_gsod')
 NCDC_GSOD_START_YEAR = 1929
 
 
-def download_ncdc_gsod_files(historical=False, start_year=None, end_year=None):
+def download_gsod_files(historical=False, start_year=None, end_year=None):
     """downloads Global Summary of Day data from ncdc and saves files in data directory
 
     Parameters
