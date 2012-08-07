@@ -66,6 +66,21 @@ def download_stations_file():
     print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
 
 
+def get_data(station_codes, start_date=None, end_date=None, parameters=None):
+    if start_date:
+        start_year = start_date.year
+    else:
+        start_year = NCDC_GSOD_START_YEAR
+    if end_date:
+        end_year = end_date.year
+    else:
+        end_year = datetime.datetime.now().year
+
+    for year in range(start_year, end_year + 1):
+        return _get_gsod_data(station_codes, start_year, end_year, parameters)
+
+
+
 def get_stations_list(update=True):
     """returns a dict of station dicts
 
