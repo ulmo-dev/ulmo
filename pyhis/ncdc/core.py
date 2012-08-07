@@ -144,8 +144,8 @@ def _get_gsod_data(station_codes, start_year, end_year, parameters):
                 if parameters:
                     year_data = year_data[parameters]
                 if not year_data is None:
-                    if data_dict[station]:
-                        data_dict[station].append(year_data)
+                    if not data_dict[station] is None:
+                        data_dict[station] = np.append(data_dict[station], year_data)
                     else:
                         data_dict[station] = year_data
     return data_dict
