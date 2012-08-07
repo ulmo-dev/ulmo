@@ -171,7 +171,6 @@ def _read_gsod_file(gsod_tar, station, year):
 
     gsod_tar.extract('./' + tar_station_filename, ncdc_temp_dir)
     with gzip.open(temp_path, 'rb') as gunzip_f:
-
         columns = [
             # name, length, # of spaces separating previous column
             ('USAF', 6, 0),
@@ -200,6 +199,7 @@ def _read_gsod_file(gsod_tar, station, year):
             ('snow_depth', 5, 1),
             ('FRSHTT', 6, 2),
         ]
+
         dtype = np.dtype([
             (column[0], '|S%s' % column[1])
             for column in columns])
@@ -223,4 +223,3 @@ if __name__ == '__main__':
         for station in stations.values()
         if station['state'] == 'TX']
     d = _get_gsod_data(2012, texas_stations)
-    import pdb; pdb.set_trace()
