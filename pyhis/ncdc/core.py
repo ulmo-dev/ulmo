@@ -179,7 +179,7 @@ def _read_gsod_file(gsod_tar, station, year):
     with gzip.open(temp_path, 'rb') as gunzip_f:
 
         columns = [
-            # name, length, previous_separation_spaces
+            # name, length, # of spaces separating previous column
             ('USAF', 6, 0),
             ('WBAN', 5, 1),
             ('date', 8, 2),
@@ -211,8 +211,8 @@ def _read_gsod_file(gsod_tar, station, year):
             for column in columns])
 
         # note: ignore initial 0
-        delimiter = list(itertools.chain(*[column[1:][::-1] for column in columns]))
-        usecols = range(1,len(columns)*2, 2)
+        delimiter = itertools.chain(*[column[1:][::-1] for column in columns])
+        usecols = range(1, len(columns)*2, 2)
 
         data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
                 usecols=usecols, dtype=dtype)
