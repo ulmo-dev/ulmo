@@ -108,24 +108,31 @@ def _download_gsod_file(year):
     print 'file saved at {0}'.format(filename)
 
 
-def _get_gsod_data(year, read_stations=None):
+def _get_gsod_data(station_codes, start_year, end_year, parameters):
     # note: opening tar files and parsing the headers and such is a relatively
     # lengthy operation so you don't want to do it too often, hence try to
     # grab all stations at the same time per tarfile
-    data_dict = {}
+    data_dict = {station_code: None for station_code in station_codes}
 
-    tar_path = os.path.join(NCDC_GSOD_DIR, 'gsod_' + str(year) + '.tar')
-    with tarfile.open(tar_path, 'r:') as gsod_tar:
-        stations_in_file = [
-            name.split('./')[-1].rsplit('-', 1)[0]
-            for name in gsod_tar.getnames() if len(name) > 1]
-        if read_stations:
-            stations = list(set(read_stations) & set(stations_in_file))
-        else:
-            stations = stations_in_file
-        for station in stations:
-            data_dict[station] = _read_gsod_file(gsod_tar, station, year)
-
+    for year in range(start_year, end_year + 1):
+        tar_path = os.path.join(NCDC_GSOD_DIR, 'gsod_' + str(year) + '.tar')
+        with tarfile.open(tar_path, 'r:') as gsod_tar:
+            stations_in_file = [
+                name.split('./')[-1].rsplit('-', 1)[0]
+                for name in gsod_tar.getnames() if len(name) > 1]
+            if station_codes:
+                stations = list(set(station_codes) & set(stations_in_file))
+            else:
+                stations = stations_in_file
+            for station in stations:
+                year_data = _read_gsod_file(gsod_tar, station, year)
+                if parameters:
+                    year_data = year_data[parameters]
+                if not year_data is None:
+                    if data_dict[station]:
+                        data_dict[station].append(year_data)
+                    else:
+                        data_dict[station] = year_data
     return data_dict
 
 
