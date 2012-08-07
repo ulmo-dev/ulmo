@@ -206,7 +206,7 @@ def _read_gsod_file(gsod_tar, station, year):
 
         # note: ignore initial 0
         delimiter = itertools.chain(*[column[1:][::-1] for column in columns])
-        usecols = range(1, len(columns)*2, 2)
+        usecols = range(1, len(columns) * 2, 2)
 
         data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
                 usecols=usecols, dtype=dtype)
