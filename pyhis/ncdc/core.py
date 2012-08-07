@@ -244,4 +244,7 @@ if __name__ == '__main__':
         '-'.join((station['USAF'], station['WBAN']))
         for station in stations.values()
         if station['state'] == 'TX']
-    d = _get_gsod_data(2012, texas_stations)
+    data = get_data(texas_stations, datetime.datetime(2011, 1,1),
+            datetime.datetime.now(), parameters=['date', 'mean_temp', 'precip',
+                'max_wind_speed'])
+    import pdb; pdb.set_trace()
