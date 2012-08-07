@@ -4,12 +4,6 @@ import gzip
 import itertools
 import os
 import tarfile
-import tempfile
-
-try:
-    import cStringIO as StringIO
-except ImportError:
-    import StringIO
 
 import numpy as np
 import requests
