@@ -47,6 +47,27 @@ def get_parameter_within_polygon(wsdl_list, param_code_list, verts, merge='BySou
     return dataframe
 
 
+def get_or_create_group(h5file, path, title):
+    return _get_or_create_node('createGroup', h5file, path, title)
+
+
+def get_or_create_table(h5file, path, table_definition, title):
+    return _get_or_create_node('createTable', h5file, path, table_definition,
+            title)
+
+
+def _get_or_create_node(method_name, h5file, path, *args, **kwargs):
+    try:
+        node = h5file.getNode(path)
+    except NoSuchNodeError:
+        where, name = path.rsplit('/', 1)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            create_method = getattr(h5file, method_name)
+            node = create_method(*args, **kwargs)
+    return node
+
+
 def _get_pyhis_dir():
     return_dir = appdirs.user_data_dir('pyhis', 'pyhis')
     _mkdir_if_doesnt_exist(return_dir)
