@@ -18,10 +18,14 @@ import pyhis
 
 
 def get_default_h5file():
-    default_dir = appdirs.user_data_dir('pyhis', 'pyhis')
-    if not os.path.exists(default_dir):
-        os.makedirs(default_dir)
+    default_dir = get_pyhis_dir()
     return os.path.join(default_dir, "pyhis.h5")
+
+
+def get_pyhis_dir():
+    return_dir = appdirs.user_data_dir('pyhis', 'pyhis')
+    _mkdir_if_doesnt_exist(return_dir)
+    return return_dir
 
 
 def get_parameter_within_polygon(wsdl_list, param_code_list, verts, merge='BySource'):
@@ -76,12 +80,7 @@ def _get_or_create_node(method_name, h5file, path, *args, **kwargs):
     return node
 
 
-def _get_pyhis_dir():
-    return_dir = appdirs.user_data_dir('pyhis', 'pyhis')
-    _mkdir_if_doesnt_exist(return_dir)
-    return return_dir
-
-
 def _mkdir_if_doesnt_exist(dir_path):
     if not os.path.exists(dir_path):
-        os.mkdir(dir_path)
+        os.makedirs(dir_path)
+

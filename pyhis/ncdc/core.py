@@ -10,7 +10,7 @@ import requests
 
 from pyhis import util
 
-NCDC_GSOD_DIR = os.path.join(util._get_pyhis_dir(), 'ncdc_gsod')
+NCDC_GSOD_DIR = os.path.join(util.get_pyhis_dir(), 'ncdc_gsod')
 NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'ish-history.csv')
 NCDC_GSOD_START_YEAR = 1929
 
@@ -112,11 +112,9 @@ def _get_gsod_data(station_codes, start_year, end_year, parameters):
 
 
 def _init_temp_dir():
-    if not os.path.exists(NCDC_GSOD_DIR):
-        os.mkdir(NCDC_GSOD_DIR)
     ncdc_temp_dir = os.path.join(NCDC_GSOD_DIR, 'temp')
     if not os.path.exists(ncdc_temp_dir):
-        os.mkdir(ncdc_temp_dir)
+        os.makedirs(ncdc_temp_dir)
 
 
 def _process_station(station_row):
