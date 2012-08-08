@@ -29,7 +29,6 @@ def get_data(station_codes, start_date=None, end_date=None, parameters=None):
         return _get_gsod_data(station_codes, start_year, end_year, parameters)
 
 
-
 def get_stations_list(update=True):
     """returns a dict of station dicts
 
