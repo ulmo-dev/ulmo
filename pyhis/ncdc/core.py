@@ -91,6 +91,8 @@ def _get_gsod_data(station_codes, start_year, end_year, parameters):
 
     for year in range(start_year, end_year + 1):
         tar_path = os.path.join(NCDC_GSOD_DIR, 'gsod_' + str(year) + '.tar')
+        if not os.path.exists(tar_path):
+            _download_gsod_file(year)
         with tarfile.open(tar_path, 'r:') as gsod_tar:
             stations_in_file = [
                 name.split('./')[-1].rsplit('-', 1)[0]
