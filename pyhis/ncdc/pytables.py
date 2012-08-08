@@ -20,6 +20,10 @@ def init_h5(path=None, mode='w'):
     if not path:
         path = HDF5_FILE_PATH
     h5file = tables.openFile(path, mode=mode, title="pyHIS data")
+def get_stations(update=True, path=None):
+    #XXX: we should have a fast pytables version of stations list
+    return core.get_stations(update=update)
+
 
     ncdc = h5file.createGroup('/', 'ncdc', 'NCDC Data')
     gsod = h5file.createGroup(ncdc, 'gsod', 'Global Summary of the Day')
