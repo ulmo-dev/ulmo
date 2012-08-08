@@ -15,11 +15,6 @@ class NCDCValue(tables.IsDescription):
     last_modified = tables.StringCol(26)
 
 
-def init_h5(path=None, mode='w'):
-    """creates an hdf5 file an initialized it with relevant tables, etc"""
-    if not path:
-        path = HDF5_FILE_PATH
-    h5file = tables.openFile(path, mode=mode, title="pyHIS data")
 def get_stations(update=True, path=None):
     #XXX: we should have a fast pytables version of stations list
     return core.get_stations(update=update)
@@ -59,6 +54,18 @@ def _get_value_table(h5file, site, variable):
             value_table.attrs.name = site['name']
 
     return value_table
+
+
+def _init_h5(path=None, mode='w'):
+    """creates an hdf5 file an initialized it with relevant tables, etc"""
+    if not path:
+        path = HDF5_FILE_PATH
+    with tables.openFile(path, mode=mode, title="pyHIS data") as h5file:
+        ncdc = h5file.createGroup('/', 'ncdc', 'NCDC Data')
+        gsod = h5file.createGroup(ncdc, 'gsod', 'Global Summary of the Day')
+        h5file.createGroup(gsod, 'values', 'Values')
+
+
 if __name__ == '__main__':
     test_path = '/User/wilsaj/test/pyhis_test.h5'
     _init_h5()
