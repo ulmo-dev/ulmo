@@ -24,6 +24,9 @@ def get_data(station_codes, start_date=None, end_date=None, parameters=None):
         end_year = end_date.year
     else:
         end_year = datetime.datetime.now().year
+    if parameters and not 'date' in parameters:
+        # add date to list of parameters if it's not there already
+        parameters.insert(0, 'date')
 
     for year in range(start_year, end_year + 1):
         return _get_gsod_data(station_codes, start_year, end_year, parameters)
@@ -201,7 +204,7 @@ if __name__ == '__main__':
         '-'.join((station['USAF'], station['WBAN']))
         for station in stations.values()
         if station['state'] == 'TX']
-    data = get_data(texas_stations, datetime.datetime(2011, 1,1),
+    data = get_data(texas_stations, datetime.datetime(2011, 1, 1),
             datetime.datetime.now(), parameters=['date', 'mean_temp', 'precip',
                 'max_wind_speed'])
     import pdb; pdb.set_trace()
