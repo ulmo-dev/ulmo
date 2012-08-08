@@ -15,16 +15,6 @@ NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'ish-history.csv')
 NCDC_GSOD_START_YEAR = 1929
 
 
-def download_stations_file():
-    """download current station list and return filename
-    """
-    url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
-    r = requests.get(url)
-    with open(NCDC_GSOD_STATIONS_FILE, 'wb') as f:
-        f.write(r.content)
-    print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
-
-
 def get_data(station_codes, start_date=None, end_date=None, parameters=None):
     if start_date:
         start_year = start_date.year
@@ -53,7 +43,7 @@ def get_stations_list(update=True):
              stations file is pulled from the web.
     """
     if update or not os.path.exists(NCDC_GSOD_STATIONS_FILE):
-        download_stations_file()
+        _download_stations_file()
 
     with open(NCDC_GSOD_STATIONS_FILE, 'rb') as f:
         reader = csv.DictReader(f)
@@ -80,6 +70,15 @@ def _download_gsod_file(year):
                 break
             f.write(chunk)
     print 'file saved at {0}'.format(filename)
+
+
+def _download_stations_file():
+    """download current station list"""
+    url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
+    r = requests.get(url)
+    with open(NCDC_GSOD_STATIONS_FILE, 'wb') as f:
+        f.write(r.content)
+    print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
 
 
 def _get_gsod_data(station_codes, start_year, end_year, parameters):
