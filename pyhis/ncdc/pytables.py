@@ -120,7 +120,7 @@ def _update_station_data(station, station_data, path=None):
 
         for variable in variables:
             value_table = _get_value_table(h5file, station, variable)
-            util.append_or_update_sortable(value_table, station_data, 'date')
+            util.update_or_append_sortable(value_table, station_data, 'date')
 
 
 if __name__ == '__main__':
