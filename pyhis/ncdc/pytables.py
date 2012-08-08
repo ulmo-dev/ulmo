@@ -3,9 +3,11 @@ import tempfile
 
 import tables
 
+from pyhis.ncdc import core
+from pyhis import util
 
 # default hdf5 file path
-HDF5_FILE_PATH = os.path.join(tempfile.gettempdir(), "pyhis.h5")
+HDF5_FILE_PATH = util.get_default_h5file()
 
 
 class NCDCValue(tables.IsDescription):
