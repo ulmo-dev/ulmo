@@ -213,7 +213,7 @@ if __name__ == '__main__':
     #_download_gsod_file(2012)
     stations = get_stations(update=False)
     texas_stations = [
-        '-'.join((station['USAF'], station['WBAN']))
+        _station_code(station)
         for station in stations.values()
         if station['state'] == 'TX']
     data = get_data(texas_stations, datetime.datetime(2011, 1, 1),
