@@ -68,6 +68,53 @@ def get_or_create_table(h5file, path, table_definition, title):
             title)
 
 
+def update_or_append_sortable(table, update_values, sortby):
+    """updates table with dict representations of rows, appending new rows if
+    need be; sortby should be a completly sortable column (with a CSIndex)
+    """
+    value_row = table.row
+    update_values.sort(key=lambda v: v[sortby])
+    table_iterator = table.itersorted(sortby)
+    try:
+        current_row = table_iterator.next()
+    except StopIteration:
+        current_row = None
+
+    for i, update_value in enumerate(update_values):
+        if not current_row or update_value[sortby] < current_row[sortby]:
+            update_value['__flag_for_append'] = True
+
+        elif current_row:
+            # advance the table iterator until you are >= update_value
+            while current_row and current_row[sortby] < update_value[sortby]:
+                try:
+                    current_row = table_iterator.next()
+                except StopIteration:
+                    current_row = None
+
+            # if we match, then update
+            if current_row and current_row[sortby] == update_value[sortby]:
+                _update_row_with_dict(current_row, update_value)
+                current_row.update()
+
+            # else flag for append
+            else:
+                update_value['__flag_for_append'] = True
+
+    for update_value in update_values:
+        if '__flag_for_append' in update_value:
+            del update_value['__flag_for_append']
+            _update_row_with_dict(value_row, update_value)
+            value_row.append()
+    table.flush()
+
+
+def _update_row_with_dict(row, dict):
+    """sets the values of row to be the values found in dict"""
+    for k, v in dict.iteritems():
+        row.__setitem__(k, v)
+
+
 def _get_or_create_node(method_name, h5file, path, *args, **kwargs):
     try:
         node = h5file.getNode(path)
