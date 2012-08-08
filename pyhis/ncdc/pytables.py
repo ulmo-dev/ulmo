@@ -95,11 +95,11 @@ def _get_value_table(h5file, station, variable):
     return value_table
 
 
-def _init_h5(path=None, mode='w'):
+def _init_h5(path=None):
     """creates an hdf5 file an initialized it with relevant tables, etc"""
     if not path:
         path = HDF5_FILE_PATH
-    with tables.openFile(path, mode=mode, title="pyHIS data") as h5file:
+    with tables.openFile(path, mode='a', title="pyHIS data") as h5file:
         ncdc = h5file.createGroup('/', 'ncdc', 'NCDC Data')
         gsod = h5file.createGroup(ncdc, 'gsod', 'Global Summary of the Day')
         h5file.createGroup(gsod, 'values', 'Values')
