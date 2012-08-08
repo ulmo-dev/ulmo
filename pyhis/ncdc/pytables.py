@@ -114,7 +114,7 @@ def _last_updated():
 def _update_station_data(station, station_data, path=None):
     if not path:
         path = HDF5_FILE_PATH
-    with tables.openFile(path, mode='r') as h5file:
+    with tables.openFile(path, mode='a') as h5file:
         #XXX: assumes first dict is representative of all dicts
         variables = station_data[0].keys()
 
