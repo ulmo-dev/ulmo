@@ -55,3 +55,13 @@ def _get_value_table(h5file, site, variable):
             value_table.attrs.name = site['name']
 
     return value_table
+if __name__ == '__main__':
+    test_path = '/User/wilsaj/test/pyhis_test.h5'
+    _init_h5()
+    stations = get_stations(update=False)
+    texas_stations = [
+        code
+        for code, station in stations.iteritems()
+        if station['state'] == 'TX']
+    update_data(texas_stations, 2012, 2012, path=test_path)
+    import pdb; pdb.set_trace()
