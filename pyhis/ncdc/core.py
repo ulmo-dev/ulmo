@@ -110,6 +110,9 @@ def _get_gsod_data(station_codes, start_year, end_year, parameters):
                         data_dict[station] = np.append(data_dict[station], year_data)
                     else:
                         data_dict[station] = year_data
+    for key, data_array in data_dict.iteritems():
+        if not data_dict[key] is None:
+            data_dict[key] = _record_array_to_value_dicts(data_array)
     return data_dict
 
 
@@ -185,11 +188,10 @@ def _read_gsod_file(gsod_tar, station, year):
         delimiter = itertools.chain(*[column[1:][::-1] for column in columns])
         usecols = range(1, len(columns) * 2, 2)
 
-        data_array = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
+        data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
                 usecols=usecols, dtype=dtype)
     os.remove(temp_path)
 
-    data = _record_array_to_value_dicts(data_array)
     return data
 
 
@@ -216,4 +218,3 @@ if __name__ == '__main__':
     data = get_data(texas_stations, datetime.datetime(2011, 1, 1),
             datetime.datetime.now(), parameters=['date', 'mean_temp', 'precip',
                 'max_wind_speed'])
-    import pdb; pdb.set_trace()
