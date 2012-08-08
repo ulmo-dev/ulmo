@@ -50,7 +50,7 @@ def get_stations(update=True):
     with open(NCDC_GSOD_STATIONS_FILE, 'rb') as f:
         reader = csv.DictReader(f)
         stations = {
-            '-'.join([row['USAF'], row['WBAN']]): _process_station(row)
+            _station_code(row): _process_station(row)
             for row in reader
         }
     return stations
@@ -188,11 +188,25 @@ def _read_gsod_file(gsod_tar, station, year):
         delimiter = itertools.chain(*[column[1:][::-1] for column in columns])
         usecols = range(1, len(columns) * 2, 2)
 
-        data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
+        data_array = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
                 usecols=usecols, dtype=dtype)
     os.remove(temp_path)
 
+    data = _record_array_to_value_dicts(data_array)
     return data
+
+
+def _record_array_to_value_dicts(record_array):
+    keys = record_array.dtype.fields.keys()
+    value_dicts = [
+        {key: value[key] for key in keys}
+        for value in record_array]
+    return value_dicts
+
+
+def _station_code(station):
+    """returns station code from a station dict"""
+    return '-'.join([station['USAF'], station['WBAN']])
 
 
 if __name__ == '__main__':
