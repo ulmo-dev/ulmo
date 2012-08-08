@@ -37,7 +37,6 @@ def get_stations(update=True):
 
     stations are keyed to their USAF-WBAN codes
 
-
     Parameters
     ----------
     update : if False, tries to use a cached copy of the stations file. If one
@@ -78,6 +77,7 @@ def _download_stations_file():
     """download current station list"""
     url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
     r = requests.get(url)
+    util._mkdir_if_doesnt_exist(os.path.dirname(NCDC_GSOD_STATIONS_FILE))
     with open(NCDC_GSOD_STATIONS_FILE, 'wb') as f:
         f.write(r.content)
     print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
@@ -111,12 +111,6 @@ def _get_gsod_data(station_codes, start_year, end_year, parameters):
     return data_dict
 
 
-def _init_temp_dir():
-    ncdc_temp_dir = os.path.join(NCDC_GSOD_DIR, 'temp')
-    if not os.path.exists(ncdc_temp_dir):
-        os.makedirs(ncdc_temp_dir)
-
-
 def _process_station(station_row):
     """converts a csv row to a more human-friendly version"""
     station_dict = {
@@ -147,6 +141,7 @@ def _read_gsod_file(gsod_tar, station, year):
         return None
 
     ncdc_temp_dir = os.path.join(NCDC_GSOD_DIR, 'temp')
+    util._mkdir_if_doesnt_exist(ncdc_temp_dir)
     temp_path = os.path.join(ncdc_temp_dir, tar_station_filename)
 
     gsod_tar.extract('./' + tar_station_filename, ncdc_temp_dir)
