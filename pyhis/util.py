@@ -16,6 +16,14 @@ import pyhis
 #http://midgewater.twdb.state.tx.us/tceq/soap/wateroneflow.wsdl
 #http://midgewater.twdb.state.tx.us/cbi/soap/wateroneflow.wsdl
 
+
+def get_default_h5file():
+    default_dir = appdirs.user_data_dir('pyhis', 'pyhis')
+    if not os.path.exists(default_dir):
+        os.makedirs(default_dir)
+    return os.path.join(default_dir, "pyhis.h5")
+
+
 def get_parameter_within_polygon(wsdl_list, param_code_list, verts, merge='BySource'):
     """given a list of service wsdl urls and list of service specific
     param codes and a list of polygon vertices returns pandas.DataFrame of data.
