@@ -1,5 +1,4 @@
-import os
-import tempfile
+import datetime
 
 import tables
 
@@ -17,6 +16,18 @@ class NCDCValue(tables.IsDescription):
     last_modified = tables.StringCol(26)
 
 
+def get_data(station_codes, start_date=None, end_date=None, parameters=None,
+        path=None):
+    if isinstance(station_codes, basestring):
+        return _get_station_data(station_codes, start_date, end_date,
+                parameters)
+    else:
+        return_dict = {}
+        for station_code in station_codes:
+            return_dict[station_code] = _get_station_data(station_codes,
+                    start_date, end_date, parameters)
+
+
 def get_stations(update=True, path=None):
     #XXX: we should have a fast pytables version of stations list
     return core.get_stations(update=update)
@@ -28,6 +39,8 @@ def get_stations(update=True, path=None):
     h5file.close()
 
 
+def _get_station_data(station_code, start_date=None, end_date=None, parameters=None):
+    pass
 
 def _get_value_table(h5file, site, variable):
     """returns a value table for a given open h5file (writable), site and
