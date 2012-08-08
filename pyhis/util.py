@@ -125,7 +125,7 @@ def _get_or_create_node(method_name, h5file, path, *args, **kwargs):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             create_method = getattr(h5file, method_name)
-            node = create_method(path, *args, **kwargs)
+            node = create_method(where, name, *args, **kwargs)
     return node
 
 
