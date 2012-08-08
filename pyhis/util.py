@@ -5,9 +5,11 @@
    Collection of useful functions for common use cases
 """
 import os
+import warnings
 
 import appdirs
 import pandas
+import tables
 
 import pyhis
 
@@ -118,12 +120,12 @@ def _update_row_with_dict(row, dict):
 def _get_or_create_node(method_name, h5file, path, *args, **kwargs):
     try:
         node = h5file.getNode(path)
-    except NoSuchNodeError:
+    except tables.exceptions.NoSuchNodeError:
         where, name = path.rsplit('/', 1)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             create_method = getattr(h5file, method_name)
-            node = create_method(*args, **kwargs)
+            node = create_method(path, *args, **kwargs)
     return node
 
 
