@@ -32,7 +32,7 @@ def get_data(station_codes, start_date=None, end_date=None, parameters=None):
         return _get_gsod_data(station_codes, start_year, end_year, parameters)
 
 
-def get_stations_list(update=True):
+def get_stations(update=True):
     """returns a dict of station dicts
 
     stations are keyed to their USAF-WBAN codes
@@ -199,7 +199,7 @@ def _read_gsod_file(gsod_tar, station, year):
 
 if __name__ == '__main__':
     #_download_gsod_file(2012)
-    stations = get_stations_list(update=False)
+    stations = get_stations(update=False)
     texas_stations = [
         '-'.join((station['USAF'], station['WBAN']))
         for station in stations.values()
