@@ -37,7 +37,6 @@ def get_stations(update=True):
 
     stations are keyed to their USAF-WBAN codes
 
-
     Parameters
     ----------
     update : if False, tries to use a cached copy of the stations file. If one
@@ -78,6 +77,7 @@ def _download_stations_file():
     """download current station list"""
     url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
     r = requests.get(url)
+    util._mkdir_if_doesnt_exist(os.path.dirname(NCDC_GSOD_STATIONS_FILE))
     with open(NCDC_GSOD_STATIONS_FILE, 'wb') as f:
         f.write(r.content)
     print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
@@ -91,6 +91,8 @@ def _get_gsod_data(station_codes, start_year, end_year, parameters):
 
     for year in range(start_year, end_year + 1):
         tar_path = os.path.join(NCDC_GSOD_DIR, 'gsod_' + str(year) + '.tar')
+        if not os.path.exists(tar_path):
+            _download_gsod_file(year)
         with tarfile.open(tar_path, 'r:') as gsod_tar:
             stations_in_file = [
                 name.split('./')[-1].rsplit('-', 1)[0]
@@ -108,13 +110,10 @@ def _get_gsod_data(station_codes, start_year, end_year, parameters):
                         data_dict[station] = np.append(data_dict[station], year_data)
                     else:
                         data_dict[station] = year_data
+    for key, data_array in data_dict.iteritems():
+        if not data_dict[key] is None:
+            data_dict[key] = _record_array_to_value_dicts(data_array)
     return data_dict
-
-
-def _init_temp_dir():
-    ncdc_temp_dir = os.path.join(NCDC_GSOD_DIR, 'temp')
-    if not os.path.exists(ncdc_temp_dir):
-        os.makedirs(ncdc_temp_dir)
 
 
 def _process_station(station_row):
@@ -147,6 +146,7 @@ def _read_gsod_file(gsod_tar, station, year):
         return None
 
     ncdc_temp_dir = os.path.join(NCDC_GSOD_DIR, 'temp')
+    util._mkdir_if_doesnt_exist(ncdc_temp_dir)
     temp_path = os.path.join(ncdc_temp_dir, tar_station_filename)
 
     gsod_tar.extract('./' + tar_station_filename, ncdc_temp_dir)
@@ -188,11 +188,10 @@ def _read_gsod_file(gsod_tar, station, year):
         delimiter = itertools.chain(*[column[1:][::-1] for column in columns])
         usecols = range(1, len(columns) * 2, 2)
 
-        data_array = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
+        data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
                 usecols=usecols, dtype=dtype)
     os.remove(temp_path)
 
-    data = _record_array_to_value_dicts(data_array)
     return data
 
 
@@ -219,4 +218,3 @@ if __name__ == '__main__':
     data = get_data(texas_stations, datetime.datetime(2011, 1, 1),
             datetime.datetime.now(), parameters=['date', 'mean_temp', 'precip',
                 'max_wind_speed'])
-    import pdb; pdb.set_trace()

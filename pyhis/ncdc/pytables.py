@@ -95,11 +95,11 @@ def _get_value_table(h5file, station, variable):
     return value_table
 
 
-def _init_h5(path=None, mode='w'):
+def _init_h5(path=None):
     """creates an hdf5 file an initialized it with relevant tables, etc"""
     if not path:
         path = HDF5_FILE_PATH
-    with tables.openFile(path, mode=mode, title="pyHIS data") as h5file:
+    with tables.openFile(path, mode='a', title="pyHIS data") as h5file:
         ncdc = h5file.createGroup('/', 'ncdc', 'NCDC Data')
         gsod = h5file.createGroup(ncdc, 'gsod', 'Global Summary of the Day')
         h5file.createGroup(gsod, 'values', 'Values')
@@ -114,13 +114,13 @@ def _last_updated():
 def _update_station_data(station, station_data, path=None):
     if not path:
         path = HDF5_FILE_PATH
-    with tables.openFile(path, mode='r') as h5file:
+    with tables.openFile(path, mode='a') as h5file:
         #XXX: assumes first dict is representative of all dicts
         variables = station_data[0].keys()
 
         for variable in variables:
             value_table = _get_value_table(h5file, station, variable)
-            util.append_or_update_sortable(value_table, station_data, 'date')
+            util.update_or_append_sortable(value_table, station_data, 'date')
 
 
 if __name__ == '__main__':
