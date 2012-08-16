@@ -198,7 +198,7 @@ def _read_gsod_file(gsod_tar, station, year):
 def _record_array_to_value_dicts(record_array):
     keys = record_array.dtype.fields.keys()
     value_dicts = [
-        {key: value[key] for key in keys}
+        {key: value[key_index] for key_index, key in enumerate(keys)}
         for value in record_array]
     return value_dicts
 
@@ -218,3 +218,4 @@ if __name__ == '__main__':
     data = get_data(texas_stations, datetime.datetime(2011, 1, 1),
             datetime.datetime.now(), parameters=['date', 'mean_temp', 'precip',
                 'max_wind_speed'])
+    import pdb; pdb.set_trace()
