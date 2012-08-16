@@ -14,7 +14,7 @@ from __future__ import absolute_import
 from .core import *
 
 from . import his_central
-from . import pyhis
+from . import ncdc
 from . import usgs
 from . import wof
 
