@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import tables
 
@@ -34,6 +35,8 @@ def get_stations(update=True, path=None):
 
 
 def update_data(station_codes=None, start_year=None, end_year=None, path=None):
+    if not os.path.exists(path):
+        _init_h5(path)
     if not start_year:
         last_updated = _last_updated()
         if not last_updated:
