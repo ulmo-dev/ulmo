@@ -76,9 +76,9 @@ def _get_value_table(h5file, station, variable):
     variable. If the value table already exists, it is returned. If it doesn't,
     it will be created.
     """
-    gsod_path = '/ncdc/gsod'
+    gsod_values_path = '/ncdc/gsod/values'
     station_code = core._station_code(station)
-    station_path = '/'.join((gsod_path, station_code))
+    station_path = '/'.join((gsod_values_path, station_code))
     util.get_or_create_group(h5file, station_path, "station %s" % station_code)
 
     value_table_name = variable
