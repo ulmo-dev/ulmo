@@ -93,11 +93,11 @@ def test_update_or_append():
 
 
 def test_non_usgs_site():
-    site_code = '08152500'
+    site_code = '07335390'
     test_init()
     pyhis.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
     site_data = pyhis.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
-    assert len(site_data['72020:00011']['values']) > 1000
+    assert len(site_data['00062:32400']['values']) > 1000
 
 
 def test_update_site_list():
