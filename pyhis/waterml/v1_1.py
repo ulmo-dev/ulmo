@@ -9,6 +9,5 @@ def parse_sites(content_io):
 
 
 def parse_site_values(content_io, query_isodate):
-    return common.parse_site_values(content_io, query_isodate,
-            WATERML_V1_1_NAMESPACE)
-
+    return common.parse_site_values(
+        content_io, WATERML_V1_1_NAMESPACE, query_isodate)
