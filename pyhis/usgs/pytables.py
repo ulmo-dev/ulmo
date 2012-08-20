@@ -27,7 +27,6 @@ class USGSSite(tables.IsDescription):
     network = tables.StringCol(20)
     site_type = tables.StringCol(20)
     state_code = tables.StringCol(2)
-    last_refresh = tables.StringCol(26)
 
     class location(tables.IsDescription):
         srs = tables.StringCol(20)
@@ -146,22 +145,23 @@ def update_site_data(site_code, date_range=None, path=None):
     """
     if not path:
         path = HDF5_FILE_PATH
+    update_site_list(sites=site_code, path=path)
     site = get_site(site_code, path=path)
 
-    if not date_range:
-        if site['last_refresh']:
-            date_range = datetime.datetime.now() - isodate.parse_datetime(site['last_refresh'])
-        else:
-            date_range = 'all'
-
     query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
-    site_data = core.get_site_data(site_code, date_range=date_range)
-    _update_site_table([site], path)
 
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
     h5file = tables.openFile(path, mode="r+")
-    sites_table = h5file.root.usgs.sites
+
+    if not date_range:
+        last_site_refresh = _last_refresh(site, h5file)
+        if last_site_refresh:
+            date_range = datetime.datetime.now() - isodate.parse_datetime(last_site_refresh)
+        else:
+            date_range = 'all'
+
+    site_data = core.get_site_data(site_code, date_range=date_range)
 
     for d in site_data.itervalues():
         variable = d['variable']
@@ -171,13 +171,9 @@ def update_site_data(site_code, date_range=None, path=None):
             value.update({'last_modified': query_isodate})
         value_table = _get_value_table(h5file, site, variable)
         value_table.attrs.variable = variable
+        value_table.attrs.last_refresh = query_isodate
         _update_or_append_sortable(value_table, update_values, 'datetime')
         value_table.flush()
-
-    for site_row in sites_table.where('(code == "%s")' % site['code']):
-        site_row['last_refresh'] = query_isodate
-        site_row.update()
-        sites_table.flush()
 
     h5file.close()
 
@@ -199,11 +195,7 @@ def _flatten_nested_dict(d, prepend=''):
     return return_dict
 
 
-def _get_value_table(h5file, site, variable):
-    """returns a value table for a given open h5file (writable), site and
-    variable. If the value table already exists, it is returned. If it doesn't,
-    it will be created.
-    """
+def _get_site_group(h5file, site):
     agency_group = site['agency']
     agency_path = '/usgs/values/%s' % agency_group
 
@@ -214,15 +206,26 @@ def _get_value_table(h5file, site, variable):
             warnings.simplefilter("ignore")
             h5file.createGroup('/usgs/values', agency_group, "%s sites" % site['agency'])
 
-    site_group = site['code']
-    site_path = '%s/%s' % (agency_path, site_group)
+    site_code = site['code']
+    site_path = '%s/%s' % (agency_path, site_code)
 
     try:
-        h5file.getNode(site_path)
+        site_group = h5file.getNode(site_path)
     except NoSuchNodeError:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            h5file.createGroup(agency_path, site_group, "Site %s" % site['code'])
+            site_group = h5file.createGroup(agency_path, site_code, "Site %s" % site_code)
+
+    return site_group
+
+
+def _get_value_table(h5file, site, variable):
+    """returns a value table for a given open h5file (writable), site and
+    variable. If the value table already exists, it is returned. If it doesn't,
+    it will be created.
+    """
+    site_group = _get_site_group(h5file, site)
+    site_path = site_group._v_pathname
 
     if 'statistic' in variable:
         value_table_name = variable['code'] + ":" + variable['statistic']['code']
@@ -240,6 +243,20 @@ def _get_value_table(h5file, site, variable):
             value_table.cols.datetime.createCSIndex()
 
     return value_table
+
+
+def _last_refresh(site, h5file):
+    """returns last refresh for a given site"""
+    site_group = _get_site_group(h5file, site)
+    last_refresheds = [
+        getattr(child.attrs, 'last_refreshed', None)
+        for child in site_group._f_iterNodes()]
+
+    # XXX: this won't work in python3
+    if not len(last_refresheds):
+        return None
+    else:
+        return min(last_refresheds)
 
 
 def _row_to_dict(row, table):
@@ -339,14 +356,13 @@ def _update_site_table(sites, path):
     """
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
-    h5file = tables.openFile(path, mode="r+")
-    site_table = h5file.root.usgs.sites
-    site_values = [
-        _flatten_nested_dict(site)
-        for site in sites]
-    where_filter = "(code == '%(code)s') & (agency == '%(agency)s')"
-    _update_or_append(site_table, site_values, where_filter)
-    h5file.close()
+    with tables.openFile(path, mode="r+") as h5file:
+        site_table = h5file.root.usgs.sites
+        site_values = [
+            _flatten_nested_dict(site)
+            for site in sites]
+        where_filter = "(code == '%(code)s') & (agency == '%(agency)s')"
+        _update_or_append(site_table, site_values, where_filter)
 
 
 def _values_table_as_dict(table):
