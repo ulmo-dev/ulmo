@@ -45,7 +45,7 @@ def test_pytables_get_sites():
 def test_pytables_get_site():
     pyhis.usgs.pytables.get_sites(TEST_FILE_PATH)
     site = pyhis.usgs.pytables.get_site('01115100', TEST_FILE_PATH)
-    assert len(site) == 11
+    assert len(site) == 10
 
 
 def test_pytables_get_site_fallback_to_core():
@@ -53,7 +53,7 @@ def test_pytables_get_site_fallback_to_core():
     sites = pyhis.usgs.pytables.get_sites(TEST_FILE_PATH)
     assert site_code not in sites
     site = pyhis.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
-    assert len(site) == 11
+    assert len(site) == 10
 
 
 def test_pytables_get_site_raises_lookup():
