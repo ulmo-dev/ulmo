@@ -3,7 +3,6 @@ import datetime
 import logging
 
 import isodate
-from lxml.etree import iterparse
 import requests
 
 import pyhis.waterml.v1_1 as wml
