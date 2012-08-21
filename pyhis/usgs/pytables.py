@@ -5,17 +5,16 @@ from __future__ import absolute_import
 
 import datetime
 import isodate
-import os
-import tempfile
 import warnings
 
 import tables
 from tables.exceptions import NoSuchNodeError
 
+from pyhis import util
 from pyhis.usgs import core
 
 # default hdf5 file path
-HDF5_FILE_PATH = os.path.join(tempfile.gettempdir(), "pyhis.h5")
+HDF5_FILE_PATH = util.get_default_h5file_path()
 
 
 class USGSSite(tables.IsDescription):
