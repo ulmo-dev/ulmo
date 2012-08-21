@@ -7,7 +7,7 @@ from pyhis.ncdc import core
 from pyhis import util
 
 # default hdf5 file path
-HDF5_FILE_PATH = util.get_default_h5file()
+HDF5_FILE_PATH = util.get_default_h5file_path()
 
 
 class NCDCValue(tables.IsDescription):
