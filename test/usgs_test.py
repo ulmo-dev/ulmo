@@ -13,9 +13,6 @@ TEST_FILE_PATH = '/tmp/pyhis_test.h5'
 
 def test_init():
     _remove_test_file()
-    assert not os.path.exists(TEST_FILE_PATH)
-    pyhis.usgs.pytables.init_h5(TEST_FILE_PATH)
-    assert os.path.exists(TEST_FILE_PATH)
 
 
 def test_parse_get_sites():
@@ -29,11 +26,10 @@ def test_parse_get_sites():
     return sites
 
 
-def test_update_site_table():
+def test_update_sites_table():
     test_init()
-    assert _count_rows('/usgs/sites') == 0
     sites = test_parse_get_sites()
-    pyhis.usgs.pytables._update_site_table(sites.values(), TEST_FILE_PATH)
+    pyhis.usgs.pytables._update_sites_table(sites.values(), TEST_FILE_PATH)
     assert _count_rows('/usgs/sites') == 63
 
 
@@ -102,7 +98,6 @@ def test_non_usgs_site():
 
 def test_update_site_list():
     test_init()
-    assert _count_rows('/usgs/sites') == 0
     pyhis.usgs.pytables.update_site_list(state_code='RI', path=TEST_FILE_PATH)
     assert _count_rows('/usgs/sites') == 63
 
@@ -139,4 +134,3 @@ def _create_test_table(h5file, table_name, description):
 def _remove_test_file():
     if os.path.exists(TEST_FILE_PATH):
         os.remove(TEST_FILE_PATH)
-

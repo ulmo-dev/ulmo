@@ -55,11 +55,17 @@ def get_sites(path=None):
     """gets a dict of sites from an hdf5 file"""
     if not path:
         path = HDF5_FILE_PATH
-    h5file = tables.openFile(path, mode='r')
-    site_table = h5file.root.usgs.sites
-    return_dict = dict([(row['code'], _row_to_dict(row, site_table)) for row in site_table.iterrows()])
-    h5file.close()
-    return return_dict
+    with util.open_h5file(path, 'r') as h5file:
+        #site_table = h5file.root.usgs.sites
+        #return_dict = dict([(row['code'], _row_to_dict(row, site_table)) for row in site_table.iterrows()])
+        sites_table = _get_sites_table(h5file)
+        if not sites_table:
+            return {}
+
+        return dict([
+            (row['code'], _row_to_dict(row, sites_table))
+            for row in sites_table.iterrows()])
+    #return return_dict
 
 
 def get_site(site_code, path=None):
@@ -71,6 +77,8 @@ def get_site(site_code, path=None):
     if site_code in sites:
         site = sites.get(site_code)
     else:
+        # TODO: this might be a bad idea - it requires writing to the file and
+        # we might want to guarantee that gets don't require a write lock
         update_site_list(sites=site_code, path=path)
         sites = get_sites(path)
         site = sites.get(site_code)
@@ -84,51 +92,36 @@ def get_site_data(site_code, agency_code=None, path=None):
     if not path:
         path = HDF5_FILE_PATH
     # walk the agency groups looking for site code
-    h5file = tables.openFile(path, mode='r')
-    site_table = h5file.root.usgs.sites
-    if agency_code:
-        where_clause = "(code == '%s') & (agency == '%s')" % (site_code, agency_code)
-    else:
-        where_clause = '(code == "%s")' % site_code
+    with util.open_h5file(path, mode='r') as h5file:
+        sites_table = _get_sites_table(h5file)
+        if sites_table is None:
+            return {}
 
-    agency = None
-    for count, row in enumerate(site_table.where(where_clause)):
-        agency = row['agency']
+        if agency_code:
+            where_clause = "(code == '%s') & (agency == '%s')" % (site_code, agency_code)
+        else:
+            where_clause = '(code == "%s")' % site_code
 
-    if not agency:
-        h5file.close()
-        return {}
-    if count >= 1 and not agency_code:
-        raise ('more than one site found, limit your query using an agency code')
+        agency = None
+        for count, row in enumerate(sites_table.where(where_clause)):
+            agency = row['agency']
 
-    site_path = '/usgs/values/%s/%s' % (agency, site_code)
-    try:
-        site_group = h5file.getNode(site_path)
-    except NoSuchNodeError:
-        h5file.close()
-        raise Exception("no site found for code: %s" % site_code)
+        if not agency:
+            return {}
 
-    values_dict = dict([
-        _values_table_as_dict(table)
-        for table in site_group._f_walkNodes('Table')])
-    h5file.close()
-    return values_dict
+        if count >= 1 and not agency_code:
+            raise ('more than one site found, limit your query using an agency code')
 
+        site_path = '/usgs/values/%s/%s' % (agency, site_code)
+        try:
+            site_group = h5file.getNode(site_path)
+        except NoSuchNodeError:
+            raise Exception("no site found for code: %s" % site_code)
 
-def init_h5(path=None, mode='w'):
-    """creates an hdf5 file an initialized it with relevant tables, etc"""
-    if not path:
-        path = HDF5_FILE_PATH
-    h5file = tables.openFile(path, mode=mode, title="pyHIS data")
-
-    usgs = h5file.createGroup('/', 'usgs', 'USGS Data')
-    sites = h5file.createTable(usgs, 'sites', USGSSite, "USGS Sites")
-    sites.cols.code.createIndex()
-    sites.cols.network.createIndex()
-
-    h5file.createGroup(usgs, 'values', "USGS Values")
-
-    h5file.close()
+        values_dict = dict([
+            _values_table_as_dict(table)
+            for table in site_group._f_walkNodes('Table')])
+        return values_dict
 
 
 def update_site_list(sites=None, state_code=None, service=None, path=None):
@@ -136,7 +129,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None):
     if not path:
         path = HDF5_FILE_PATH
     sites = core.get_sites(sites=sites, state_code=state_code, service=service)
-    _update_site_table(sites.itervalues(), path)
+    _update_sites_table(sites.itervalues(), path)
 
 
 def update_site_data(site_code, date_range=None, path=None):
@@ -151,30 +144,27 @@ def update_site_data(site_code, date_range=None, path=None):
 
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
-    h5file = tables.openFile(path, mode="r+")
+    with util.open_h5file(path, mode="r+") as h5file:
+        if not date_range:
+            last_site_refresh = _last_refresh(site, h5file)
+            if last_site_refresh:
+                date_range = datetime.datetime.now() - isodate.parse_datetime(last_site_refresh)
+            else:
+                date_range = 'all'
 
-    if not date_range:
-        last_site_refresh = _last_refresh(site, h5file)
-        if last_site_refresh:
-            date_range = datetime.datetime.now() - isodate.parse_datetime(last_site_refresh)
-        else:
-            date_range = 'all'
+        site_data = core.get_site_data(site_code, date_range=date_range)
 
-    site_data = core.get_site_data(site_code, date_range=date_range)
-
-    for d in site_data.itervalues():
-        variable = d['variable']
-        update_values = d['values']
-        # add last_modified date to the values we're updating
-        for value in update_values:
-            value.update({'last_modified': query_isodate})
-        value_table = _get_value_table(h5file, site, variable)
-        value_table.attrs.variable = variable
-        value_table.attrs.last_refresh = query_isodate
-        _update_or_append_sortable(value_table, update_values, 'datetime')
-        value_table.flush()
-
-    h5file.close()
+        for d in site_data.itervalues():
+            variable = d['variable']
+            update_values = d['values']
+            # add last_modified date to the values we're updating
+            for value in update_values:
+                value.update({'last_modified': query_isodate})
+            value_table = _get_value_table(h5file, site, variable)
+            value_table.attrs.variable = variable
+            value_table.attrs.last_refresh = query_isodate
+            _update_or_append_sortable(value_table, update_values, 'datetime')
+            value_table.flush()
 
 
 def _flatten_nested_dict(d, prepend=''):
@@ -194,28 +184,72 @@ def _flatten_nested_dict(d, prepend=''):
     return return_dict
 
 
+def _get_agency_group(h5file, agency_name):
+    values_group = _get_values_group(h5file)
+    if values_group is None:
+        return None
+
+    try:
+        agency_group = h5file.getNode(values_group, agency_name)
+    except NoSuchNodeError:
+        if _is_writable(h5file):
+            agency_group = h5file.createGroup(
+                    values_group, agency_name, "%s sites" % agency_name)
+        else:
+            return None
+
+    return agency_group
+
+
 def _get_site_group(h5file, site):
-    agency_group = site['agency']
-    agency_path = '/usgs/values/%s' % agency_group
-
-    try:
-        h5file.getNode(agency_path)
-    except NoSuchNodeError:
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            h5file.createGroup('/usgs/values', agency_group, "%s sites" % site['agency'])
-
+    agency_name = site['agency']
     site_code = site['code']
-    site_path = '%s/%s' % (agency_path, site_code)
+
+    agency_group = _get_agency_group(h5file, agency_name)
+    if agency_group is None:
+        return None
 
     try:
-        site_group = h5file.getNode(site_path)
+        site_group = h5file.getNode(agency_group, site_code)
     except NoSuchNodeError:
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            site_group = h5file.createGroup(agency_path, site_code, "Site %s" % site_code)
-
+        if _is_writable(h5file):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                site_group = h5file.createGroup(agency_group, site_code, "Site %s" % site_code)
+        else:
+            return None
     return site_group
+
+
+def _get_sites_table(h5file):
+    usgs_group = _get_usgs_group(h5file)
+    if usgs_group is None:
+        return None
+
+    sites_table_name = 'sites'
+    try:
+        sites_table = h5file.getNode(usgs_group, sites_table_name)
+    except NoSuchNodeError:
+        if _is_writable(h5file):
+            sites_table = h5file.createTable(usgs_group, sites_table_name, USGSSite, 'USGS Sites')
+            sites_table.cols.code.createIndex()
+            sites_table.cols.network.createIndex()
+        else:
+            return None
+
+    return sites_table
+
+
+def _get_usgs_group(h5file):
+    try:
+        usgs_group = h5file.getNode('/usgs')
+    except NoSuchNodeError:
+        if _is_writable(h5file):
+            usgs_group = h5file.createGroup('/', 'usgs', 'USGS Data')
+        else:
+            return None
+
+    return usgs_group
 
 
 def _get_value_table(h5file, site, variable):
@@ -224,7 +258,8 @@ def _get_value_table(h5file, site, variable):
     it will be created.
     """
     site_group = _get_site_group(h5file, site)
-    site_path = site_group._v_pathname
+    if site_group is None:
+        return None
 
     if 'statistic' in variable:
         value_table_name = variable['code'] + ":" + variable['statistic']['code']
@@ -232,16 +267,44 @@ def _get_value_table(h5file, site, variable):
         value_table_name = variable['code']
 
     try:
-        values_path = '/'.join([site_path, value_table_name])
-        value_table = h5file.getNode(values_path)
+        value_table = h5file.getNode(site_group, value_table_name)
     except NoSuchNodeError:
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            value_table = h5file.createTable(site_path, value_table_name, USGSValue, "Values for site: %s, variable: %s:%s" % (site['code'],
-                variable['code'], variable['statistic']['code']))
-            value_table.cols.datetime.createCSIndex()
+        if _is_writable(h5file):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                value_table = h5file.createTable(site_group, value_table_name, USGSValue, "Values for site: %s, variable: %s:%s" % (site['code'],
+                    variable['code'], variable['statistic']['code']))
+                value_table.cols.datetime.createCSIndex()
+        else:
+            return None
 
     return value_table
+
+
+def _get_values_group(h5file):
+    usgs_group = _get_usgs_group(h5file)
+    if usgs_group is None:
+        return None
+
+    values_group_name = 'values'
+    try:
+        values_group = h5file.getNode(usgs_group, values_group_name)
+    except NoSuchNodeError:
+        if _is_writable(h5file):
+            values_group = h5file.createGroup(
+                usgs_group, values_group_name, 'USGS Values')
+        else:
+            return None
+
+    return values_group
+
+
+def _is_writable(h5file):
+    """returns True if h5file is writable, false otherwise"""
+    if h5file.mode in ['r', 'rb']:
+        return False
+    else:
+        return True
 
 
 def _last_refresh(site, h5file):
@@ -350,18 +413,18 @@ def _update_row_with_dict(row, dict):
         row.__setitem__(k, v)
 
 
-def _update_site_table(sites, path):
+def _update_sites_table(sites, path):
     """updates a sites table with a given list of sites dicts
     """
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
-    with tables.openFile(path, mode="r+") as h5file:
-        site_table = h5file.root.usgs.sites
+    with util.open_h5file(path, mode="r+") as h5file:
+        sites_table = _get_sites_table(h5file)
         site_values = [
             _flatten_nested_dict(site)
             for site in sites]
         where_filter = "(code == '%(code)s') & (agency == '%(agency)s')"
-        _update_or_append(site_table, site_values, where_filter)
+        _update_or_append(sites_table, site_values, where_filter)
 
 
 def _values_table_as_dict(table):
