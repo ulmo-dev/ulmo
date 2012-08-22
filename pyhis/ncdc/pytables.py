@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import tables
 
@@ -6,7 +7,7 @@ from pyhis.ncdc import core
 from pyhis import util
 
 # default hdf5 file path
-HDF5_FILE_PATH = util.get_default_h5file()
+HDF5_FILE_PATH = util.get_default_h5file_path()
 
 
 class NCDCValue(tables.IsDescription):
@@ -34,6 +35,8 @@ def get_stations(update=True, path=None):
 
 
 def update_data(station_codes=None, start_year=None, end_year=None, path=None):
+    if not os.path.exists(path):
+        _init_h5(path)
     if not start_year:
         last_updated = _last_updated()
         if not last_updated:
@@ -73,9 +76,9 @@ def _get_value_table(h5file, station, variable):
     variable. If the value table already exists, it is returned. If it doesn't,
     it will be created.
     """
-    gsod_path = '/ncdc/gsod'
+    gsod_values_path = '/ncdc/gsod/values'
     station_code = core._station_code(station)
-    station_path = '/'.join((gsod_path, station_code))
+    station_path = '/'.join((gsod_values_path, station_code))
     util.get_or_create_group(h5file, station_path, "station %s" % station_code)
 
     value_table_name = variable

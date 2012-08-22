@@ -4,6 +4,7 @@
 
    Collection of useful functions for common use cases
 """
+from contextlib import contextmanager
 import os
 import warnings
 
@@ -19,7 +20,7 @@ import pyhis
 #http://midgewater.twdb.state.tx.us/cbi/soap/wateroneflow.wsdl
 
 
-def get_default_h5file():
+def get_default_h5file_path():
     default_dir = get_pyhis_dir()
     return os.path.join(default_dir, "pyhis.h5")
 
@@ -109,6 +110,22 @@ def update_or_append_sortable(table, update_values, sortby):
             _update_row_with_dict(value_row, update_value)
             value_row.append()
     table.flush()
+
+
+@contextmanager
+def open_h5file(path, mode):
+    """returns an open h5file, creating a new one if it doesn't
+    already exist
+    """
+    # create file if it doesn't exist
+    _mkdir_if_doesnt_exist(os.path.dirname(path))
+    if not os.path.exists(path):
+        new_file = tables.openFile(path, mode='w', title="pyHIS data")
+        new_file.close()
+
+    open_file = tables.openFile(path, mode=mode)
+    yield open_file
+    open_file.close()
 
 
 def _update_row_with_dict(row, dict):

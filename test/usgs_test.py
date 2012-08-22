@@ -13,9 +13,6 @@ TEST_FILE_PATH = '/tmp/pyhis_test.h5'
 
 def test_init():
     _remove_test_file()
-    assert not os.path.exists(TEST_FILE_PATH)
-    pyhis.usgs.pytables.init_h5(TEST_FILE_PATH)
-    assert os.path.exists(TEST_FILE_PATH)
 
 
 def test_parse_get_sites():
@@ -29,11 +26,10 @@ def test_parse_get_sites():
     return sites
 
 
-def test_update_site_table():
+def test_update_sites_table():
     test_init()
-    assert _count_rows('/usgs/sites') == 0
     sites = test_parse_get_sites()
-    pyhis.usgs.pytables._update_site_table(sites.values(), TEST_FILE_PATH)
+    pyhis.usgs.pytables._update_sites_table(sites.values(), TEST_FILE_PATH)
     assert _count_rows('/usgs/sites') == 63
 
 
@@ -45,7 +41,7 @@ def test_pytables_get_sites():
 def test_pytables_get_site():
     pyhis.usgs.pytables.get_sites(TEST_FILE_PATH)
     site = pyhis.usgs.pytables.get_site('01115100', TEST_FILE_PATH)
-    assert len(site) == 11
+    assert len(site) == 10
 
 
 def test_pytables_get_site_fallback_to_core():
@@ -53,7 +49,7 @@ def test_pytables_get_site_fallback_to_core():
     sites = pyhis.usgs.pytables.get_sites(TEST_FILE_PATH)
     assert site_code not in sites
     site = pyhis.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
-    assert len(site) == 11
+    assert len(site) == 10
 
 
 def test_pytables_get_site_raises_lookup():
@@ -93,16 +89,15 @@ def test_update_or_append():
 
 
 def test_non_usgs_site():
-    site_code = '08152500'
+    site_code = '07335390'
     test_init()
     pyhis.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
     site_data = pyhis.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
-    assert len(site_data['72020:00011']['values']) > 1000
+    assert len(site_data['00062:32400']['values']) > 1000
 
 
 def test_update_site_list():
     test_init()
-    assert _count_rows('/usgs/sites') == 0
     pyhis.usgs.pytables.update_site_list(state_code='RI', path=TEST_FILE_PATH)
     assert _count_rows('/usgs/sites') == 63
 
@@ -139,4 +134,3 @@ def _create_test_table(h5file, table_name, description):
 def _remove_test_file():
     if os.path.exists(TEST_FILE_PATH):
         os.remove(TEST_FILE_PATH)
-

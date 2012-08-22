@@ -3,7 +3,6 @@ import datetime
 import logging
 
 import isodate
-from lxml.etree import iterparse
 import requests
 
 import pyhis.waterml.v1_1 as wml
@@ -14,8 +13,9 @@ DAILY_URL = "http://waterservices.usgs.gov/nwis/dv/"
 
 # configure logging
 LOG_FORMAT = '%(message)s'
-logging.basicConfig(format=LOG_FORMAT, level=logging.INFO)
+logging.basicConfig(format=LOG_FORMAT)
 log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
 
 def get_sites(sites=None, state_code=None, site_type=None, service=None):
