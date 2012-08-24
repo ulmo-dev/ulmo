@@ -152,40 +152,40 @@ def _read_gsod_file(gsod_tar, station, year):
     gsod_tar.extract('./' + tar_station_filename, ncdc_temp_dir)
     with gzip.open(temp_path, 'rb') as gunzip_f:
         columns = [
-            # name, length, # of spaces separating previous column
-            ('USAF', 6, 0),
-            ('WBAN', 5, 1),
-            ('date', 8, 2),
-            ('mean_temp', 6, 2),
-            ('mean_temp_count', 2, 1),
-            ('dew_point', 6, 2),
-            ('dew_point_count', 2, 1),
-            ('sea_level_pressure', 6, 2),
-            ('sea_level_pressure_count', 2, 1),
-            ('station_pressure', 6, 2),
-            ('station_pressure_count', 2, 1),
-            ('visibility', 5, 2),
-            ('visibility_count', 2, 1),
-            ('mean_wind_speed', 5, 2),
-            ('mean_wind_speed_count', 2, 1),
-            ('max_wind_speed', 5, 2),
-            ('max_gust', 5, 2),
-            ('max_temp', 6, 2),
-            ('max_temp_flag', 1, 0),
-            ('min_temp', 6, 1),
-            ('min_temp_flag', 1, 0),
-            ('precip', 5, 1),
-            ('precip_flag', 1, 0),
-            ('snow_depth', 5, 1),
-            ('FRSHTT', 6, 2),
+            # name, length, # of spaces separating previous column, dtype
+            ('USAF', 6, 0, 'S6'),
+            ('WBAN', 5, 1, 'S5'),
+            ('date', 8, 2, 'S8'),
+            ('mean_temp', 6, 2, float),
+            ('mean_temp_count', 2, 1, int),
+            ('dew_point', 6, 2, float),
+            ('dew_point_count', 2, 1, int),
+            ('sea_level_pressure', 6, 2, float),
+            ('sea_level_pressure_count', 2, 1, int),
+            ('station_pressure', 6, 2, float),
+            ('station_pressure_count', 2, 1, int),
+            ('visibility', 5, 2, float),
+            ('visibility_count', 2, 1, int),
+            ('mean_wind_speed', 5, 2, float),
+            ('mean_wind_speed_count', 2, 1, int),
+            ('max_wind_speed', 5, 2, float),
+            ('max_gust', 5, 2, float),
+            ('max_temp', 6, 2, float),
+            ('max_temp_flag', 1, 0, 'S1'),
+            ('min_temp', 6, 1, float),
+            ('min_temp_flag', 1, 0, 'S1'),
+            ('precip', 5, 1, float),
+            ('precip_flag', 1, 0, 'S1'),
+            ('snow_depth', 5, 1, float),
+            ('FRSHTT', 6, 2, 'S6'),
         ]
 
         dtype = np.dtype([
-            (column[0], '|S%s' % column[1])
+            (column[0], column[3])
             for column in columns])
 
         # note: ignore initial 0
-        delimiter = itertools.chain(*[column[1:][::-1] for column in columns])
+        delimiter = itertools.chain(*[column[1:3][::-1] for column in columns])
         usecols = range(1, len(columns) * 2, 2)
 
         data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
@@ -196,9 +196,14 @@ def _read_gsod_file(gsod_tar, station, year):
 
 
 def _record_array_to_value_dicts(record_array):
-    keys = record_array.dtype.fields.keys()
+    # somehow we can end up with single-element arrays that are 0-dimensional??
+    # (occurs in numpy 1.6.0)
+    if record_array.ndim == 0:
+        record_array = record_array.flatten()
+
+    names = record_array.dtype.names
     value_dicts = [
-        {key: value[key_index] for key_index, key in enumerate(keys)}
+        {name: value[name_index] for name_index, name in enumerate(names)}
         for value in record_array]
     return value_dicts
 
@@ -215,7 +220,9 @@ if __name__ == '__main__':
         _station_code(station)
         for station in stations.values()
         if station['state'] == 'TX']
-    data = get_data(texas_stations, datetime.datetime(2011, 1, 1),
-            datetime.datetime.now(), parameters=['date', 'mean_temp', 'precip',
-                'max_wind_speed'])
+    data = get_data(texas_stations, start_date=datetime.datetime(2012, 1, 1),
+        end_date=datetime.datetime(2012, 2, 1))
+    station_data = data[texas_stations[2]]
+    import pandas
+    df = pandas.DataFrame(station_data)
     import pdb; pdb.set_trace()
