@@ -196,9 +196,9 @@ def _read_gsod_file(gsod_tar, station, year):
 
 
 def _record_array_to_value_dicts(record_array):
-    keys = record_array.dtype.fields.keys()
+    names = record_array.dtype.names
     value_dicts = [
-        {key: value[key_index] for key_index, key in enumerate(keys)}
+        {name: value[name_index] for name_index, name in enumerate(names)}
         for value in record_array]
     return value_dicts
 
