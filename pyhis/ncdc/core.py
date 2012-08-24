@@ -196,6 +196,11 @@ def _read_gsod_file(gsod_tar, station, year):
 
 
 def _record_array_to_value_dicts(record_array):
+    # somehow we can end up with single-element arrays that are 0-dimensional??
+    # (occurs in numpy 1.6.0)
+    if record_array.ndim == 0:
+        record_array = record_array.flatten()
+
     names = record_array.dtype.names
     value_dicts = [
         {name: value[name_index] for name_index, name in enumerate(names)}
