@@ -30,6 +30,7 @@ setup(
         'isodate>=0.4.6',
         'lxml>=2.3',
         'matplotlib>=1.1.0',
+        'numexpr>=2.0.1',
         'numpy>=1.4.0',
         'pandas>=0.3.0',
         'quantities>=0.9.0',
