@@ -55,6 +55,10 @@ def get_stations(update=True):
     return stations
 
 
+def _convert_date_string(date_string):
+    return datetime.datetime.strptime(date_string, '%Y%m%d').date()
+
+
 def _download_gsod_file(year):
     base_url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/'
     CHUNK = 64 * 1024
@@ -155,7 +159,7 @@ def _read_gsod_file(gsod_tar, station, year):
             # name, length, # of spaces separating previous column, dtype
             ('USAF', 6, 0, 'S6'),
             ('WBAN', 5, 1, 'S5'),
-            ('date', 8, 2, 'S8'),
+            ('date', 8, 2, object),
             ('mean_temp', 6, 2, float),
             ('mean_temp_count', 2, 1, int),
             ('dew_point', 6, 2, float),
@@ -189,7 +193,7 @@ def _read_gsod_file(gsod_tar, station, year):
         usecols = range(1, len(columns) * 2, 2)
 
         data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
-                usecols=usecols, dtype=dtype)
+                usecols=usecols, dtype=dtype, converters={5: _convert_date_string})
     os.remove(temp_path)
 
     return data
