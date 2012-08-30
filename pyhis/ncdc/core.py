@@ -128,7 +128,6 @@ def _download_stations_file():
     print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
 
 
-
 def _process_station(station_row):
     """converts a csv row to a more human-friendly version"""
     station_dict = {
