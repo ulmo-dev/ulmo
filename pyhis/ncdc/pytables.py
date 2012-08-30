@@ -40,7 +40,7 @@ def update_data(station_codes=None, start_year=None, end_year=None, path=None):
     if not start_year:
         last_updated = _last_updated()
         if not last_updated:
-            start_year = core.NCDC_GSOD_START_YEAR
+            start_year = core.NCDC_GSOD_START_DATE.year
         else:
             start_year = last_updated.year
     if not end_year:
