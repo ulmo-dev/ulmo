@@ -15,11 +15,6 @@ import tables
 import pyhis
 
 
-#http://midgewater.twdb.state.tx.us/tpwd/soap/wateroneflow.wsdl
-#http://midgewater.twdb.state.tx.us/tceq/soap/wateroneflow.wsdl
-#http://midgewater.twdb.state.tx.us/cbi/soap/wateroneflow.wsdl
-
-
 def get_default_h5file_path():
     default_dir = get_pyhis_dir()
     return os.path.join(default_dir, "pyhis.h5")
