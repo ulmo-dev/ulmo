@@ -122,7 +122,7 @@ def _download_stations_file():
     """download current station list"""
     url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
     r = requests.get(url)
-    util._mkdir_if_doesnt_exist(os.path.dirname(NCDC_GSOD_STATIONS_FILE))
+    util.mkdir_if_doesnt_exist(os.path.dirname(NCDC_GSOD_STATIONS_FILE))
     with open(NCDC_GSOD_STATIONS_FILE, 'wb') as f:
         f.write(r.content)
     print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
@@ -158,7 +158,7 @@ def _read_gsod_file(gsod_tar, station, year):
         return None
 
     ncdc_temp_dir = os.path.join(NCDC_GSOD_DIR, 'temp')
-    util._mkdir_if_doesnt_exist(ncdc_temp_dir)
+    util.mkdir_if_doesnt_exist(ncdc_temp_dir)
     temp_path = os.path.join(ncdc_temp_dir, tar_station_filename)
 
     gsod_tar.extract('./' + tar_station_filename, ncdc_temp_dir)

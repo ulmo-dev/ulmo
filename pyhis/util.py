@@ -27,7 +27,7 @@ def get_default_h5file_path():
 
 def get_pyhis_dir():
     return_dir = appdirs.user_data_dir('pyhis', 'pyhis')
-    _mkdir_if_doesnt_exist(return_dir)
+    mkdir_if_doesnt_exist(return_dir)
     return return_dir
 
 
@@ -69,6 +69,12 @@ def get_or_create_group(h5file, path, title):
 def get_or_create_table(h5file, path, table_definition, title):
     return _get_or_create_node('createTable', h5file, path, table_definition,
             title)
+
+
+def mkdir_if_doesnt_exist(dir_path):
+    """makes a directory if it doesn't exist"""
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
 
 
 def update_or_append_sortable(table, update_values, sortby):
@@ -118,7 +124,7 @@ def open_h5file(path, mode):
     already exist
     """
     # create file if it doesn't exist
-    _mkdir_if_doesnt_exist(os.path.dirname(path))
+    mkdir_if_doesnt_exist(os.path.dirname(path))
     if not os.path.exists(path):
         new_file = tables.openFile(path, mode='w', title="pyHIS data")
         new_file.close()
@@ -144,9 +150,4 @@ def _get_or_create_node(method_name, h5file, path, *args, **kwargs):
             create_method = getattr(h5file, method_name)
             node = create_method(where, name, *args, **kwargs)
     return node
-
-
-def _mkdir_if_doesnt_exist(dir_path):
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
 
