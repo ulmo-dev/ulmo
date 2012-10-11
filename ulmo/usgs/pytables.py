@@ -10,8 +10,8 @@ import warnings
 import tables
 from tables.exceptions import NoSuchNodeError
 
-from pyhis import util
-from pyhis.usgs import core
+from ulmo import util
+from ulmo.usgs import core
 
 # default hdf5 file path
 HDF5_FILE_PATH = util.get_default_h5file_path()

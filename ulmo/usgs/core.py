@@ -5,7 +5,7 @@ import logging
 import isodate
 import requests
 
-import pyhis.waterml.v1_1 as wml
+import ulmo.waterml.v1_1 as wml
 
 
 INSTANTANEOUS_URL = "http://waterservices.usgs.gov/nwis/iv/"

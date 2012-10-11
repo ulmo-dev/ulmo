@@ -8,7 +8,7 @@ import tarfile
 import numpy as np
 import requests
 
-from pyhis import util
+from ulmo import util
 
 NCDC_GSOD_DIR = os.path.join(util.get_pyhis_dir(), 'ncdc_gsod')
 NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'ish-history.csv')

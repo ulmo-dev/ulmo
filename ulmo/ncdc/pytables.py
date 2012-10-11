@@ -3,8 +3,8 @@ import os
 
 import tables
 
-from pyhis.ncdc import core
-from pyhis import util
+from ulmo.ncdc import core
+from ulmo import util
 
 # default hdf5 file path
 HDF5_FILE_PATH = util.get_default_h5file_path()

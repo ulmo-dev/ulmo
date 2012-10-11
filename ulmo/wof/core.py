@@ -2,7 +2,7 @@ import cStringIO as StringIO
 
 import suds
 
-import pyhis.waterml.v1_0 as wml
+import ulmo.waterml.v1_0 as wml
 
 
 def get_sites(wsdl_url):

@@ -7,7 +7,7 @@ import os
 import numpy as np
 import pandas
 
-from pyhis import util
+from ulmo import util
 
 # directory where drought data will be stashed
 CPC_DROUGHT_DIR = os.path.join(util.get_pyhis_dir(), 'cpc/drought')
