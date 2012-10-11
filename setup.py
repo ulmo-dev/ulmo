@@ -26,7 +26,7 @@ setup(
         'matplotlib>=1.1.0',
         'numexpr>=2.0.1',
         'numpy>=1.4.0',
-        'pandas>=0.3.0',
+        'pandas>=0.8.0',
         'quantities>=0.9.0',
         'requests==0.13.0',
         'sqlalchemy>=0.7.1',
