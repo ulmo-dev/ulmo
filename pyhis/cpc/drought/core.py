@@ -112,7 +112,7 @@ def _convert_state_codes(dataframe):
         np.array([i for i in STATE_CODES.iteritems()],
                  dtype=np.dtype([('state', '|S2'), ('code', int)])))
     merged = pandas.merge(dataframe, state_codes, left_on='state_code', right_on='code', how='left')
-    return merged[['state', 'climate_division', 'year', 'week', 'pdsi']]
+    return merged[['state', 'climate_division', 'year', 'week', 'cmi', 'pdsi']]
 
 
 def _first_sunday(year):
