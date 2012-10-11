@@ -66,8 +66,21 @@ STATE_CODES = {
 }
 
 
-def get_data(state=None, climate_division=None, start_date=None, end_date=None):
-    """returns a dataframe of data with the given parameters"""
+def get_data(state=None, climate_division=None, start_date=None, end_date=None,
+             as_dataframe=False):
+    """returns requested data
+
+    Parameters
+    ----------
+    state : optionally limits data selection to a given state
+    climate_division: optionally limits data selection to a climate division
+    start_date: default is the start of the current calendar year
+    end_date: default is the current date
+    as_dataframe: if True, will return a pandas.DataFrame object, otherwise a
+            a nested set of dicts will be returned, with data indexed by
+            state, then climate division; setting this to True will return
+            much faster if querying large amounts of data
+    """
     #XXX: add a non-dataframe option
     start_date = util.parse_datestr(start_date)
     end_date = util.parse_datestr(end_date)
@@ -109,7 +122,28 @@ def get_data(state=None, climate_division=None, start_date=None, end_date=None):
             # some data are duplicated (e.g. final data from 2011 stretches into
             # prelim data of 2012), so just take those that are new
             data = data.append(year_data.ix[year_data.index - data.index])
-    return data
+    if as_dataframe:
+        return data
+    else:
+        return _as_data_dict(data)
+
+
+def _as_data_dict(dataframe):
+    data_dict = {}
+    for state in dataframe['state'].unique():
+        state_dict = {}
+        for name, group in dataframe.groupby(['state', 'climate_division']):
+            s, climate_division = name
+            values = [
+                {
+                    'period': str(record['period']),
+                    'cmi': record['cmi'],
+                    'pdsi': record['pdsi'],
+                }
+                for record in group.to_records()]
+            state_dict[climate_division] = values
+        data_dict[state] = state_dict
+    return data_dict
 
 
 def _convert_state_codes(dataframe):
