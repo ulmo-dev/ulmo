@@ -11,7 +11,6 @@ import os
 import warnings
 
 import appdirs
-import pandas
 import requests
 import tables
 
