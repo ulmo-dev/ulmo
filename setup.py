@@ -1,28 +1,22 @@
 """
-PyHIS
--------
+ulmo
+----
 
-PyHIS is a python library for querying CUAHSI*-HIS** web services.
-
-
-* CUAHSI is the Consortium of Universities for the
-  Advancement of Hydrologic Science, Inc.
-** HIS stands for Hydrologic Information System
-
+An open source library for clean, simple and fast access to public hydrology and climatology data
 """
 
 from setuptools import Command, setup, find_packages
 
 setup(
-    name='pyhis',
-    version='0.1.2-alpha',
+    name='ulmo',
+    version='0.1-alpha',
     license='BSD',
     author='Andy Wilson',
     author_email='wilson.andrew.j@gmail.com',
     description='a python library for querying data via CUAHSI-HIS '
                 'web services',
     long_description=__doc__,
-    keywords='his pyhis water waterml cuahsi wateroneflow',
+    keywords='his pyhis ulmo water waterml cuahsi wateroneflow',
     packages=find_packages(),
     platforms='any',
     install_requires=[
