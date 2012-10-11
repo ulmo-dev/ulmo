@@ -5,11 +5,14 @@
    Collection of useful functions for common use cases
 """
 from contextlib import contextmanager
+import datetime
+import email.utils
 import os
 import warnings
 
 import appdirs
 import pandas
+import requests
 import tables
 
 import pyhis
@@ -72,6 +75,27 @@ def mkdir_if_doesnt_exist(dir_path):
         os.makedirs(dir_path)
 
 
+@contextmanager
+def open_file_for_url(url, path, check_modified=True):
+    """returns an open file handle for a data file; downloading if necessary or
+    otherwise using a previously downloaded file
+    """
+    request = requests.get(url)
+    if not os.path.exists(path):
+        _save_request_to_file(request, path)
+    elif check_modified and _request_is_newer_than_file(request, path):
+        _save_request_to_file(request, path)
+    open_file = open(path, 'rb')
+    yield open_file
+    open_file.close()
+
+
+def parse_datestr(date_string):
+    """returns a datetime.date given a string of the format `YYYY-MM-DD`"""
+    if date_string:
+        return datetime.datetime.strptime(date_string, '%Y-%m-%d').date()
+
+
 def update_or_append_sortable(table, update_values, sortby):
     """updates table with dict representations of rows, appending new rows if
     need be; sortby should be a completly sortable column (with a CSIndex)
@@ -127,6 +151,35 @@ def open_h5file(path, mode):
     open_file = tables.openFile(path, mode=mode)
     yield open_file
     open_file.close()
+
+
+def _parse_rfc_1123_timestamp(timestamp_str):
+    return datetime.datetime(*email.utils.parsedate(timestamp_str)[:6])
+
+
+def _request_is_newer_than_file(request, path):
+    """returns true if a request's last-modified header is more recent than a
+    file's last modified timestamp
+    """
+    if not os.path.exists(path):
+        return True
+
+    if not request.headers.get('last-modified'):
+        warnings.warn('no last-modified date for request: %s, downloading file again' % request.url)
+        return True
+
+    request_last_modified = _parse_rfc_1123_timestamp(request.headers.get('last-modified'))
+    path_last_modified = datetime.datetime.fromtimestamp(os.path.getmtime(path))
+    if request_last_modified > path_last_modified:
+        return True
+    else:
+        return False
+
+
+def _save_request_to_file(request, path):
+    mkdir_if_doesnt_exist(os.path.dirname(path))
+    with open(path, 'wb') as f:
+        f.write(request.content)
 
 
 def _update_row_with_dict(row, dict):
