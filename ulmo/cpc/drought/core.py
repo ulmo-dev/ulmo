@@ -10,7 +10,7 @@ import pandas
 from ulmo import util
 
 # directory where drought data will be stashed
-CPC_DROUGHT_DIR = os.path.join(util.get_pyhis_dir(), 'cpc/drought')
+CPC_DROUGHT_DIR = os.path.join(util.get_ulmo_dir(), 'cpc/drought')
 
 # state codes (note: these are not FIPS codes)
 STATE_CODES = {

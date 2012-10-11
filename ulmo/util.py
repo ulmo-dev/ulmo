@@ -16,12 +16,12 @@ import tables
 
 
 def get_default_h5file_path():
-    default_dir = get_pyhis_dir()
-    return os.path.join(default_dir, "pyhis.h5")
+    default_dir = get_ulmo_dir()
+    return os.path.join(default_dir, 'ulmo.h5')
 
 
-def get_pyhis_dir():
-    return_dir = appdirs.user_data_dir('pyhis', 'pyhis')
+def get_ulmo_dir():
+    return_dir = appdirs.user_data_dir('ulmo', 'ulmo')
     mkdir_if_doesnt_exist(return_dir)
     return return_dir
 
@@ -111,7 +111,7 @@ def open_h5file(path, mode):
     # create file if it doesn't exist
     mkdir_if_doesnt_exist(os.path.dirname(path))
     if not os.path.exists(path):
-        new_file = tables.openFile(path, mode='w', title="pyHIS data")
+        new_file = tables.openFile(path, mode='w', title='ulmo data')
         new_file.close()
 
     open_file = tables.openFile(path, mode=mode)

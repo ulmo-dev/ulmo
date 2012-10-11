@@ -10,7 +10,7 @@ import requests
 
 from ulmo import util
 
-NCDC_GSOD_DIR = os.path.join(util.get_pyhis_dir(), 'ncdc_gsod')
+NCDC_GSOD_DIR = os.path.join(util.get_ulmo_dir(), 'ncdc_gsod')
 NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'ish-history.csv')
 NCDC_GSOD_START_DATE = datetime.date(1929, 1, 1)
 
