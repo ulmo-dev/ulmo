@@ -13,8 +13,7 @@ setup(
     license='BSD',
     author='Andy Wilson',
     author_email='wilson.andrew.j@gmail.com',
-    description='a python library for querying data via CUAHSI-HIS '
-                'web services',
+    description='clean, simple and fast access to public hydrology and climatology data',
     long_description=__doc__,
     keywords='his pyhis ulmo water waterml cuahsi wateroneflow',
     packages=find_packages(),
