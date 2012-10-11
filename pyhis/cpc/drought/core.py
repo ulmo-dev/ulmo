@@ -67,6 +67,8 @@ STATE_CODES = {
 
 
 def get_data(state=None, climate_division=None, start_date=None, end_date=None):
+    """returns a dataframe of data with the given parameters"""
+    #XXX: add a non-dataframe option
     start_date = util.parse_datestr(start_date)
     end_date = util.parse_datestr(end_date)
     if not end_date:
@@ -99,12 +101,14 @@ def get_data(state=None, climate_division=None, start_date=None, end_date=None):
         if end_year == year:
             year_data = year_data[year_data['week'] <= end_week]
 
+        year_data = _reindex_data(year_data)
+
         if data is None:
             data = year_data
         else:
-            data = data.append(year_data, ignore_index=True)
-
-    data = _convert_state_codes(data)
+            # some data are duplicated (e.g. final data from 2011 stretches into
+            # prelim data of 2012), so just take those that are new
+            data = data.append(year_data.ix[year_data.index - data.index])
     return data
 
 
@@ -113,8 +117,26 @@ def _convert_state_codes(dataframe):
     state_codes = pandas.DataFrame(
         np.array([i for i in STATE_CODES.iteritems()],
                  dtype=np.dtype([('state', '|S2'), ('code', int)])))
-    merged = pandas.merge(dataframe, state_codes, left_on='state_code', right_on='code', how='left')
-    return merged[['state', 'climate_division', 'year', 'week', 'cmi', 'pdsi']]
+    merged = pandas.merge(dataframe, state_codes,
+            left_on='state_code', right_on='code', how='left')
+    column_names = dataframe.columns.tolist()
+    column_names.remove('state_code')
+    column_names.insert(0, 'state')
+    return merged[column_names]
+
+
+def _convert_week_numbers(dataframe):
+    """adds state abbreviations to a dataframe, based on state codes"""
+    weeks = [key for key, group in dataframe.groupby(['year', 'week'])]
+    periods = [(week[0], week[1], _period_for_week(*week)) for week in weeks]
+    period_dataframe = pandas.DataFrame(periods, columns=['year', 'week', 'period'])
+    merged = pandas.merge(dataframe, period_dataframe,
+            left_on=['year', 'week'], right_on=['year', 'week'])
+    column_names = dataframe.columns.tolist()
+    column_names.remove('week')
+    column_names.remove('year')
+    column_names.insert(2, 'period')
+    return merged[column_names]
 
 
 def _first_sunday(year):
@@ -175,15 +197,17 @@ def _periods_for_range(start_date, end_date):
     return pandas.period_range(start_date, end_date, freq='W-SAT')
 
 
-def _period_for_week_number(year, week_number):
+def _period_for_week(year, week_number):
     """returns a pandas.Period for a given growing season year and week number"""
     first_sunday = _first_sunday(year)
     return pandas.Period(first_sunday, freq='W-SAT') + week_number - 1
 
 
-def _separate_by_climate_divisions(dataframe):
-    dataframe.groupby(['state', 'climate_division'])
-    import pdb; pdb.set_trace()
+def _reindex_data(dataframe):
+    dataframe = _convert_week_numbers(dataframe)
+    dataframe = _convert_state_codes(dataframe)
+    return dataframe.set_index(['state', 'climate_division', 'period'],
+            drop=False)
 
 
 def _week_number(date):
@@ -193,8 +217,3 @@ def _week_number(date):
         first_sunday = _first_sunday(date.year - 1)
     days_since_first_sunday = (date - first_sunday).days
     return (first_sunday.year, (days_since_first_sunday / 7) + 1)
-
-
-if __name__ == '__main__':
-    data = get_data(state='tx', start_date='2011-01-01')
-    import pdb; pdb.set_trace()
