@@ -116,10 +116,14 @@ def _convert_state_codes(dataframe):
 
 
 def _first_sunday(year):
-    """returns the first sunday of a growing season (first sunday in March)"""
+    """returns the first Sunday of a growing season, which is the first Sunday
+    after the first Wednesday in March
+    """
     first_day = datetime.date(year, 3, 1)
     if first_day.weekday() == 6:
         return first_day
+    elif first_day.weekday() <= 2:
+        return first_day - pandas.tseries.offsets.Week(weekday=6)
     else:
         return first_day + pandas.tseries.offsets.Week(weekday=6)
 
