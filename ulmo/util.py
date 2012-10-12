@@ -64,6 +64,22 @@ def open_file_for_url(url, path, check_modified=True):
     open_file.close()
 
 
+@contextmanager
+def open_h5file(path, mode):
+    """returns an open h5file, creating a new one if it doesn't
+    already exist
+    """
+    # create file if it doesn't exist
+    mkdir_if_doesnt_exist(os.path.dirname(path))
+    if not os.path.exists(path):
+        new_file = tables.openFile(path, mode='w', title='ulmo data')
+        new_file.close()
+
+    open_file = tables.openFile(path, mode=mode)
+    yield open_file
+    open_file.close()
+
+
 def parse_datestr(date_string):
     """returns a datetime.date given a string of the format `YYYY-MM-DD`"""
     if date_string:
@@ -109,22 +125,6 @@ def update_or_append_sortable(table, update_values, sortby):
             _update_row_with_dict(value_row, update_value)
             value_row.append()
     table.flush()
-
-
-@contextmanager
-def open_h5file(path, mode):
-    """returns an open h5file, creating a new one if it doesn't
-    already exist
-    """
-    # create file if it doesn't exist
-    mkdir_if_doesnt_exist(os.path.dirname(path))
-    if not os.path.exists(path):
-        new_file = tables.openFile(path, mode='w', title='ulmo data')
-        new_file.close()
-
-    open_file = tables.openFile(path, mode=mode)
-    yield open_file
-    open_file.close()
 
 
 def _is_empty_file(path):
