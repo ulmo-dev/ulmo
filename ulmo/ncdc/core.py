@@ -6,7 +6,6 @@ import os
 import tarfile
 
 import numpy as np
-import requests
 
 from ulmo import util
 
@@ -36,9 +35,7 @@ def get_data(station_codes, start_date=None, end_date=None, parameters=None):
     data_dict = {station_code: None for station_code in station_codes}
 
     for year in range(start_date.year, end_date.year + 1):
-        tar_path = os.path.join(NCDC_GSOD_DIR, 'gsod_' + str(year) + '.tar')
-        if not os.path.exists(tar_path):
-            _download_gsod_file(year)
+        tar_path = _get_gsod_file(year)
         with tarfile.open(tar_path, 'r:') as gsod_tar:
             stations_in_file = [
                 name.split('./')[-1].rsplit('-', 1)[0]
@@ -100,32 +97,22 @@ def _convert_date_string(date_string):
     return datetime.datetime.strptime(date_string, '%Y%m%d').date()
 
 
-def _download_gsod_file(year):
-    base_url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/'
-    CHUNK = 64 * 1024
-    url = base_url + '/' + str(year) + '/' + 'gsod_' + str(year) + '.tar'
-    filename = os.path.join(NCDC_GSOD_DIR, url.split('/')[-1])
-    print 'retrieving ncdc gsod tar data file for {0}'.format(year)
-    r = requests.get(url)
-    download = r.raw
-    with open(filename, 'wb') as f:
-        # https://gist.github.com/1311816
-        while True:
-            chunk = download.read(CHUNK)
-            if not chunk:
-                break
-            f.write(chunk)
-    print 'file saved at {0}'.format(filename)
-
-
 def _download_stations_file():
     """download current station list"""
     url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
-    r = requests.get(url)
-    util.mkdir_if_doesnt_exist(os.path.dirname(NCDC_GSOD_STATIONS_FILE))
-    with open(NCDC_GSOD_STATIONS_FILE, 'wb') as f:
-        f.write(r.content)
+    util.download_file(url, NCDC_GSOD_STATIONS_FILE, check_modified=True)
     print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
+
+
+def _get_gsod_file(year):
+    base_url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/'
+    print 'retrieving ncdc gsod tar data file for {0}'.format(year)
+    url = base_url + '/' + str(year) + '/' + 'gsod_' + str(year) + '.tar'
+    path = os.path.join(NCDC_GSOD_DIR, url.split('/')[-1])
+    util.download_file(url, path, check_modified=True)
+    #r = requests.get(url)
+    print 'file saved at {0}'.format(path)
+    return path
 
 
 def _process_station(station_row):
