@@ -58,7 +58,7 @@ def open_file_for_url(url, path, check_modified=True):
     """returns an open file handle for a data file; downloading if necessary or
     otherwise using a previously downloaded file
     """
-    download_file_for_url(url, path, check_modified)
+    download_file(url, path, check_modified)
     open_file = open(path, 'rb')
     yield open_file
     open_file.close()
