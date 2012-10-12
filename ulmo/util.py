@@ -157,8 +157,10 @@ def _request_is_newer_than_file(request, path):
 
 def _save_request_to_file(request, path):
     mkdir_if_doesnt_exist(os.path.dirname(path))
+    chunk_size = 64 * 1024
     with open(path, 'wb') as f:
-        f.write(request.content)
+        for content in request.iter_content(chunk_size):
+            f.write(content)
 
 
 def _update_row_with_dict(row, dict):
