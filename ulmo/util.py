@@ -21,7 +21,7 @@ def download_file(url, path, check_modified=True):
     date than the filesystem's last modified date for the file
     """
     request = requests.get(url)
-    if not os.path.exists(path) or _is_empty_file(path):
+    if not os.path.exists(path) or not _file_size_matches(request, path):
         _save_request_to_file(request, path)
     elif check_modified and _request_is_newer_than_file(request, path):
         _save_request_to_file(request, path)
@@ -127,9 +127,13 @@ def update_or_append_sortable(table, update_values, sortby):
     table.flush()
 
 
-def _is_empty_file(path):
-    """returns true if file is empty"""
-    return os.path.getsize(path) == 0
+def _file_size_matches(request, path):
+    """returns True if request content-length header matches file size"""
+    content_length = request.headers.get('content-length')
+    if content_length and int(content_length) == os.path.getsize(path):
+        return True
+    else:
+        return False
 
 
 def _parse_rfc_1123_timestamp(timestamp_str):
