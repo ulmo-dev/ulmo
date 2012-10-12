@@ -100,7 +100,7 @@ def _convert_date_string(date_string):
 def _download_stations_file():
     """download current station list"""
     url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
-    util.download_file(url, NCDC_GSOD_STATIONS_FILE, check_modified=True)
+    util.download_if_new(url, NCDC_GSOD_STATIONS_FILE, check_modified=True)
     print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
 
 
@@ -109,7 +109,7 @@ def _get_gsod_file(year):
     print 'retrieving ncdc gsod tar data file for {0}'.format(year)
     url = base_url + '/' + str(year) + '/' + 'gsod_' + str(year) + '.tar'
     path = os.path.join(NCDC_GSOD_DIR, url.split('/')[-1])
-    util.download_file(url, path, check_modified=True)
+    util.download_if_new(url, path, check_modified=True)
     #r = requests.get(url)
     print 'file saved at {0}'.format(path)
     return path

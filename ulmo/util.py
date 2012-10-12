@@ -15,16 +15,16 @@ import requests
 import tables
 
 
-def download_file(url, path, check_modified=True):
+def download_if_new(url, path, check_modified=True):
     """downloads the file located at `url` to `path`, if check_modified is True
     it will only download if the url's last-modified header has a more recent
     date than the filesystem's last modified date for the file
     """
-    request = requests.get(url)
-    if not os.path.exists(path) or not _file_size_matches(request, path):
-        _save_request_to_file(request, path)
-    elif check_modified and _request_is_newer_than_file(request, path):
-        _save_request_to_file(request, path)
+    head = requests.head(url)
+    if not os.path.exists(path) or not _file_size_matches(head, path):
+        _download_file(url, path)
+    elif check_modified and _request_is_newer_than_file(head, path):
+        _download_file(url, path)
 
 
 def get_default_h5file_path():
@@ -58,7 +58,7 @@ def open_file_for_url(url, path, check_modified=True):
     """returns an open file handle for a data file; downloading if necessary or
     otherwise using a previously downloaded file
     """
-    download_file(url, path, check_modified)
+    download_if_new(url, path, check_modified)
     open_file = open(path, 'rb')
     yield open_file
     open_file.close()
@@ -127,6 +127,15 @@ def update_or_append_sortable(table, update_values, sortby):
     table.flush()
 
 
+def _download_file(url, path):
+    request = requests.get(url)
+    mkdir_if_doesnt_exist(os.path.dirname(path))
+    chunk_size = 64 * 1024
+    with open(path, 'wb') as f:
+        for content in request.iter_content(chunk_size):
+            f.write(content)
+
+
 def _file_size_matches(request, path):
     """returns True if request content-length header matches file size"""
     content_length = request.headers.get('content-length')
@@ -157,14 +166,6 @@ def _request_is_newer_than_file(request, path):
         return True
     else:
         return False
-
-
-def _save_request_to_file(request, path):
-    mkdir_if_doesnt_exist(os.path.dirname(path))
-    chunk_size = 64 * 1024
-    with open(path, 'wb') as f:
-        for content in request.iter_content(chunk_size):
-            f.write(content)
 
 
 def _update_row_with_dict(row, dict):
