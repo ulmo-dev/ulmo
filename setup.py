@@ -9,7 +9,7 @@ from setuptools import Command, setup, find_packages
 
 setup(
     name='ulmo',
-    version='0.1-alpha',
+    version='0.2.0',
     license='BSD',
     author='Andy Wilson',
     author_email='wilson.andrew.j@gmail.com',
