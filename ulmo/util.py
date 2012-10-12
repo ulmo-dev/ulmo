@@ -15,6 +15,18 @@ import requests
 import tables
 
 
+def download_file(url, path, check_modified=True):
+    """downloads the file located at `url` to `path`, if check_modified is True
+    it will only download if the url's last-modified header has a more recent
+    date than the filesystem's last modified date for the file
+    """
+    request = requests.get(url)
+    if not os.path.exists(path) or _is_empty_file(path):
+        _save_request_to_file(request, path)
+    elif check_modified and _request_is_newer_than_file(request, path):
+        _save_request_to_file(request, path)
+
+
 def get_default_h5file_path():
     default_dir = get_ulmo_dir()
     return os.path.join(default_dir, 'ulmo.h5')
@@ -46,11 +58,7 @@ def open_file_for_url(url, path, check_modified=True):
     """returns an open file handle for a data file; downloading if necessary or
     otherwise using a previously downloaded file
     """
-    request = requests.get(url)
-    if not os.path.exists(path):
-        _save_request_to_file(request, path)
-    elif check_modified and _request_is_newer_than_file(request, path):
-        _save_request_to_file(request, path)
+    download_file_for_url(url, path, check_modified)
     open_file = open(path, 'rb')
     yield open_file
     open_file.close()
@@ -117,6 +125,11 @@ def open_h5file(path, mode):
     open_file = tables.openFile(path, mode=mode)
     yield open_file
     open_file.close()
+
+
+def _is_empty_file(path):
+    """returns true if file is empty"""
+    return os.path.getsize(path) == 0
 
 
 def _parse_rfc_1123_timestamp(timestamp_str):
