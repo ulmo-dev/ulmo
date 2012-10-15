@@ -56,8 +56,6 @@ def get_sites(path=None):
     if not path:
         path = HDF5_FILE_PATH
     with util.open_h5file(path, 'r') as h5file:
-        #site_table = h5file.root.usgs.sites
-        #return_dict = dict([(row['code'], _row_to_dict(row, site_table)) for row in site_table.iterrows()])
         sites_table = _get_sites_table(h5file)
         if not sites_table:
             return {}
