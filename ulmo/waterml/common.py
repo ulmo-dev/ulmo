@@ -71,7 +71,7 @@ def _parse_site_info(site_info, namespace):
 
     for k, v in site_properties.iteritems():
         find_element = site_info.find(namespace + "siteProperty[@name='%s']" % v)
-        if find_element:
+        if not find_element is None:
             return_dict[k] = find_element.text
 
     return return_dict
@@ -144,6 +144,3 @@ def _parse_datetime(datetime_str):
     #XXX: also, we need to document that we are throwing away fractions of
     #     seconds
     return isodate.datetime_isoformat(isodate.parse_datetime(datetime_str))
-
-
-
