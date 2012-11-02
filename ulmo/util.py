@@ -65,14 +65,17 @@ def open_file_for_url(url, path, check_modified=True):
 
 
 @contextmanager
-def open_h5file(path, mode):
+def open_h5file(path, mode, filters=None):
     """returns an open h5file, creating a new one if it doesn't
     already exist
     """
+    if filters is None:
+        filters = _best_available_filters(['blosc', 'zlib'])
+
     # create file if it doesn't exist
     mkdir_if_doesnt_exist(os.path.dirname(path))
     if not os.path.exists(path):
-        new_file = tables.openFile(path, mode='w', title='ulmo data')
+        new_file = tables.openFile(path, mode='w', title='ulmo data', filters=filters)
         new_file.close()
 
     open_file = tables.openFile(path, mode=mode)
@@ -125,6 +128,17 @@ def update_or_append_sortable(table, update_values, sortby):
             _update_row_with_dict(value_row, update_value)
             value_row.append()
     table.flush()
+
+
+def _best_available_filters(possible_compressions):
+    """returns the best available filters to use"""
+    for possible_compression in possible_compressions:
+        try:
+            return tables.Filters(complevel=1, complib=possible_compression)
+        except tables.FiltersWarning:
+            pass
+
+    return tables.Filters()
 
 
 def _download_file(url, path):
