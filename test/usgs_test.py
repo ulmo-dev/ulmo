@@ -99,12 +99,12 @@ def test_non_usgs_site():
 def test_update_site_list():
     test_init()
     ulmo.usgs.pytables.update_site_list(state_code='RI', path=TEST_FILE_PATH)
-    assert _count_rows('/usgs/sites') == 63
+    assert _count_rows('/usgs/sites') == 64
 
 
 def test_core_get_sites_by_state_code():
     sites = ulmo.usgs.core.get_sites(state_code='RI')
-    assert len(sites) == 63
+    assert len(sites) == 64
 
 
 def test_core_get_sites_single_site():
