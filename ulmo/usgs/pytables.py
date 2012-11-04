@@ -376,6 +376,8 @@ def _update_or_append_sortable(table, update_values, sortby, query_isodate):
     except StopIteration:
         current_row = None
 
+    update_rows = []
+
     for i, update_value in enumerate(update_values):
         if not current_row or update_value[sortby] < current_row[sortby]:
             update_value['__flag_for_append'] = True
@@ -393,12 +395,16 @@ def _update_or_append_sortable(table, update_values, sortby, query_isodate):
                 if current_row['value'] != update_value['value'] or \
                     current_row['qualifiers'] != update_value['qualifiers']:
                     update_value['last_modified'] = query_isodate
-                _update_row_with_dict(current_row, update_value)
-                current_row.update()
+                row_tuple = _updated_row_tuple(current_row, update_value)
+                update_rows.append((current_row.nrow, row_tuple))
 
             # else flag for append
             else:
                 update_value['__flag_for_append'] = True
+
+    for nrow, row_tuple in update_rows:
+        table[nrow] = row_tuple
+        table.flush()
 
     for update_value in update_values:
         if '__flag_for_append' in update_value:
@@ -427,6 +433,14 @@ def _update_sites_table(sites, path):
             for site in sites]
         where_filter = "(code == '%(code)s') & (agency == '%(agency)s')"
         _update_or_append(sites_table, site_values, where_filter)
+
+
+def _updated_row_tuple(row, update_dict):
+    """returns a row tuple suitable for setting directly on the table"""
+    names = row.table.description._v_nestedNames
+    return tuple([
+        update_dict.get(name, original_value)
+        for name, original_value in zip(names, row.fetch_all_fields())])
 
 
 def _values_table_as_dict(table):
