@@ -39,6 +39,6 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     tests_require=[
-        'attest>=0.5.0'
+        'pytest>=2.3.2',
     ],
 )
