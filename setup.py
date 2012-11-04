@@ -40,5 +40,6 @@ setup(
     ],
     tests_require=[
         'pytest>=2.3.2',
+        'mock>=1.0.0',
     ],
 )

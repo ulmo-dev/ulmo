@@ -2,8 +2,10 @@ import datetime
 import os
 
 import isodate
-import tables
+import mock
 import pytest
+import tables
+import time
 
 import ulmo
 
@@ -102,6 +104,58 @@ def test_update_site_list():
     assert _count_rows('/usgs/sites') == 64
 
 
+def test_pytables_update_site_data():
+    test_init()
+    site_code = '01117800'
+    site_data_file = 'site_%s_daily.xml' % site_code
+    with _mock_requests(site_data_file):
+        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+        site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+
+        last_value = site_data['00060:00003']['values'][-1]
+
+        assert last_value['value'] == '74'
+        assert last_value['last_checked'] == last_value['last_modified']
+        original_timestamp = last_value['last_checked']
+
+    # sleep for a second so last_modified changes
+    time.sleep(1)
+
+    update_data_file = 'site_%s_daily_update.xml' % site_code
+    with _mock_requests(update_data_file):
+        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+        site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+
+    last_value = site_data['00060:00003']['values'][-1]
+    assert last_value['last_checked'] != original_timestamp
+    assert last_value['last_checked'] == last_value['last_modified']
+
+    modified_timestamp = last_value['last_checked']
+
+    test_values = [
+        dict(datetime="1963-01-23T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="A", value='7'),
+        dict(datetime="1964-01-23T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="A", value='1017'),
+        dict(datetime="1964-01-24T00:00:00", last_checked=original_timestamp, last_modified=original_timestamp, qualifiers="A", value='191'),
+        dict(datetime="1969-05-26T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="A", value='1080'),
+        dict(datetime="2012-05-25T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P", value='56'),
+        dict(datetime="2012-05-26T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P", value='55'),
+        dict(datetime="2012-05-27T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="A", value='52'),
+        dict(datetime="2012-05-28T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P", value='48'),
+        dict(datetime="2012-05-29T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="P", value='1099'),
+        dict(datetime="2012-05-30T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="P", value='1098'),
+        dict(datetime="2012-05-31T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P", value='41'),
+        dict(datetime="2012-06-01T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P", value='37'),
+        dict(datetime="2012-06-02T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="P", value='1097'),
+        dict(datetime="2012-06-03T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P", value='69'),
+        dict(datetime="2012-06-04T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P", value='81'),
+        dict(datetime="2012-06-05T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="P", value='1071'),
+        dict(datetime="2012-06-06T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="P", value='2071'),
+    ]
+
+    for test_value in test_values:
+        assert site_data['00060:00003']['values'].index(test_value) >= 0
+
+
 def test_core_get_sites_by_state_code():
     sites = ulmo.usgs.core.get_sites(state_code='RI')
     assert len(sites) == 64
@@ -129,6 +183,19 @@ def _create_test_table(h5file, table_name, description):
     test_table = h5file.createTable('/test', table_name, description,
                                     createparents=True)
     return test_table
+
+
+def _mock_requests(path):
+    """mocks the requests library to return a given file's content"""
+    with open(path, 'rb') as f:
+        content = ''.join(f.readlines())
+
+    mock_response = mock.Mock()
+
+    mock_response.status_code = 200
+    mock_response.content = content
+
+    return mock.patch('requests.get', return_value=mock_response)
 
 
 def _remove_test_file():

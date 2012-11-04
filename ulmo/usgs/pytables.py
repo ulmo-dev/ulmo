@@ -48,6 +48,7 @@ class USGSValue(tables.IsDescription):
     datetime = tables.StringCol(26)
     qualifiers = tables.StringCol(20)
     value = tables.StringCol(20)
+    last_checked = tables.StringCol(26)
     last_modified = tables.StringCol(26)
 
 
@@ -63,7 +64,6 @@ def get_sites(path=None):
         return dict([
             (row['code'], _row_to_dict(row, sites_table))
             for row in sites_table.iterrows()])
-    #return return_dict
 
 
 def get_site(site_code, path=None):
@@ -157,11 +157,11 @@ def update_site_data(site_code, date_range=None, path=None):
             update_values = d['values']
             # add last_modified date to the values we're updating
             for value in update_values:
-                value.update({'last_modified': query_isodate})
+                value.update({'last_checked': query_isodate})
             value_table = _get_value_table(h5file, site, variable)
             value_table.attrs.variable = variable
             value_table.attrs.last_refresh = query_isodate
-            _update_or_append_sortable(value_table, update_values, 'datetime')
+            _update_or_append_sortable(value_table, update_values, 'datetime', query_isodate)
             value_table.flush()
 
 
@@ -364,7 +364,7 @@ def _update_or_append(table, update_values, where_filter):
     table.flush()
 
 
-def _update_or_append_sortable(table, update_values, sortby):
+def _update_or_append_sortable(table, update_values, sortby, query_isodate):
     """updates table with dict representations of rows, appending new rows if
     need be; sortby should be a completly sortable column (with a CSIndex)
     """
@@ -390,6 +390,9 @@ def _update_or_append_sortable(table, update_values, sortby):
 
             # if we match, then update
             if current_row and current_row[sortby] == update_value[sortby]:
+                if current_row['value'] != update_value['value'] or \
+                    current_row['qualifiers'] != update_value['qualifiers']:
+                    update_value['last_modified'] = query_isodate
                 _update_row_with_dict(current_row, update_value)
                 current_row.update()
 
@@ -399,6 +402,7 @@ def _update_or_append_sortable(table, update_values, sortby):
 
     for update_value in update_values:
         if '__flag_for_append' in update_value:
+            update_value['last_modified'] = query_isodate
             del update_value['__flag_for_append']
             _update_row_with_dict(value_row, update_value)
             value_row.append()
