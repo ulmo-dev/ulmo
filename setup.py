@@ -28,7 +28,7 @@ setup(
         'pandas>=0.8.0',
         'requests>=0.14.0',
         'suds>=0.4',
-        'tables'
+        'tables>=0.2.3'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
