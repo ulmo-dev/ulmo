@@ -308,15 +308,15 @@ def _is_writable(h5file):
 def _last_refresh(site, h5file):
     """returns last refresh for a given site"""
     site_group = _get_site_group(h5file, site)
-    last_refresheds = [
-        getattr(child.attrs, 'last_refreshed', None)
+    last_refreshes = [
+        getattr(child.attrs, 'last_refresh', None)
         for child in site_group._f_iterNodes()]
 
     # XXX: this won't work in python3
-    if not len(last_refresheds):
+    if not len(last_refreshes):
         return None
     else:
-        return min(last_refresheds)
+        return min(last_refreshes)
 
 
 def _row_to_dict(row, table):

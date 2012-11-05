@@ -156,6 +156,32 @@ def test_pytables_update_site_data():
         assert site_data['00060:00003']['values'].index(test_value) >= 0
 
 
+def test_pytables_last_refresh_gets_updated():
+    test_init()
+    site_code = '01117800'
+    site_data_file = 'site_%s_daily.xml' % site_code
+    with _mock_requests(site_data_file):
+        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+        site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+
+    # sleep for a second so last_modified changes
+    time.sleep(1)
+
+    update_data_file = 'site_%s_daily_update.xml' % site_code
+    with _mock_requests(update_data_file):
+        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+        site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+
+    last_value = site_data['00060:00003']['values'][-1]
+    last_checked = last_value['last_checked']
+
+    site = ulmo.usgs.pytables.get_site(site_code, path=TEST_FILE_PATH)
+    with ulmo.util.open_h5file(TEST_FILE_PATH, mode="r+") as h5file:
+        last_refresh = ulmo.usgs.pytables._last_refresh(site, h5file)
+
+    assert last_refresh == last_checked
+
+
 def test_core_get_sites_by_state_code():
     sites = ulmo.usgs.core.get_sites(state_code='RI')
     assert len(sites) == 64
