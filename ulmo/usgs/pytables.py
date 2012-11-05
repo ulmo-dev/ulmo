@@ -160,8 +160,8 @@ def update_site_data(site_code, date_range=None, path=None):
                 value.update({'last_checked': query_isodate})
             value_table = _get_value_table(h5file, site, variable)
             value_table.attrs.variable = variable
-            value_table.attrs.last_refresh = query_isodate
             _update_or_append_sortable(value_table, update_values, 'datetime', query_isodate)
+            value_table.attrs.last_refresh = query_isodate
             value_table.flush()
 
 
