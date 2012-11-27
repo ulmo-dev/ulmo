@@ -38,8 +38,9 @@ def get_ulmo_dir():
     return return_dir
 
 
-def get_or_create_group(h5file, path, title):
-    return _get_or_create_node('createGroup', h5file, path, title)
+def get_or_create_group(h5file, path, title, *args, **kwargs):
+    return _get_or_create_node('createGroup', h5file, path, title, *args,
+            **kwargs)
 
 
 def get_or_create_table(h5file, path, table_definition, title):
