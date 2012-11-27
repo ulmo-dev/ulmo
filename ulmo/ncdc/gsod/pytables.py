@@ -127,9 +127,8 @@ def _update_station_data(station, station_data, path=None):
 
 
 if __name__ == '__main__':
-    test_path = '/User/wilsaj/test/pyhis_test.h5'
-    _init_h5()
-    stations = get_stations(update=False)
+    test_path = '/Users/wilsaj/test/pyhis_test.h5'
+    stations = get_stations(update=False, path=test_path)
     texas_stations = [
         code
         for code, station in stations.iteritems()
