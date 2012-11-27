@@ -35,8 +35,6 @@ def get_stations(update=True, path=None):
 
 
 def update_data(station_codes=None, start_year=None, end_year=None, path=None):
-    if not os.path.exists(path):
-        _init_h5(path)
     if not start_year:
         last_updated = _last_updated()
         if not last_updated:
@@ -79,7 +77,8 @@ def _get_value_table(h5file, station, variable):
     gsod_values_path = '/ncdc/gsod/values'
     station_code = core._station_code(station)
     station_path = '/'.join((gsod_values_path, station_code))
-    util.get_or_create_group(h5file, station_path, "station %s" % station_code)
+    util.get_or_create_group(h5file, station_path, "station %s" % station_code,
+            createparents=True)
 
     value_table_name = variable
     values_path = '/'.join([station_path, value_table_name])
@@ -98,16 +97,6 @@ def _get_value_table(h5file, station, variable):
     return value_table
 
 
-def _init_h5(path=None):
-    """creates an hdf5 file an initialized it with relevant tables, etc"""
-    if not path:
-        path = HDF5_FILE_PATH
-    with tables.openFile(path, mode='a', title="pyHIS data") as h5file:
-        ncdc = h5file.createGroup('/', 'ncdc', 'NCDC Data')
-        gsod = h5file.createGroup(ncdc, 'gsod', 'Global Summary of the Day')
-        h5file.createGroup(gsod, 'values', 'Values')
-
-
 def _last_updated():
     """returns date of last update"""
     #TODO: implement
@@ -117,7 +106,7 @@ def _last_updated():
 def _update_station_data(station, station_data, path=None):
     if not path:
         path = HDF5_FILE_PATH
-    with tables.openFile(path, mode='a') as h5file:
+    with util.open_h5file(path, mode='a') as h5file:
         #XXX: assumes first dict is representative of all dicts
         variables = station_data[0].keys()
 
