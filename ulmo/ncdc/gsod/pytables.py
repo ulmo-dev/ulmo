@@ -3,7 +3,7 @@ import os
 
 import tables
 
-from ulmo.ncdc import core
+from ulmo.ncdc.gsod import core
 from ulmo import util
 
 # default hdf5 file path
