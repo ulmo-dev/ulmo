@@ -71,7 +71,8 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
     stations['id'] = stations[['country', 'network', 'network_id']].T.apply(''.join)
 
     if as_dataframe:
-        return stations
+        # return dataframe with a meaningful index (id)
+        return stations.set_index('id', drop=False)
     else:
         return {
             station_series['id']: station_series.to_dict()
