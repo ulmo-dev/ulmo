@@ -107,7 +107,7 @@ def test_get_stations_as_dataframe():
 def test_get_stations_by_country():
     with test_util.mocked_requests('ghcnd-stations.txt'):
         stations = ghcn_daily.core.get_stations(country='US', as_dataframe=True)
-    assert 45000 < len(stations) < 46000
+    assert 45000 < len(stations) < 47000
 
 
 def test_get_stations_by_state():
