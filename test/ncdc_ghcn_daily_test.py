@@ -1,3 +1,5 @@
+import pandas
+
 from ulmo.ncdc import ghcn_daily
 
 import test_util
@@ -49,7 +51,10 @@ def test_get_stations_as_dataframe():
 
     for test_station in test_stations:
         station_id = test_station.get('id')
-        assert stations.xs(station_id).to_dict() == test_station
+        station = stations.xs(station_id)
+        station[pandas.isnull(station)] = None
+        station_dict = station.to_dict()
+        assert station_dict == test_station
 
 
 def test_get_stations_by_country():
