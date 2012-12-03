@@ -25,7 +25,7 @@ setup(
         'matplotlib>=1.1.0',
         'numexpr>=2.0.1',
         'numpy>=1.4.0',
-        'pandas>=0.8.0',
+        'pandas>=0.9.1',
         'requests>=0.14.0',
         'suds>=0.4',
         'tables>=0.2.3'
