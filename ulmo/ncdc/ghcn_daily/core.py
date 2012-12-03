@@ -8,7 +8,6 @@ from ulmo import util
 
 
 GHCN_DAILY_DIR = os.path.join(util.get_ulmo_dir(), 'ncdc/ghcn_daily')
-GHCN_DAILY_STATIONS_FILE = os.path.join(GHCN_DAILY_DIR, 'ghcnd-stations.txt')
 
 
 def get_data(station_id, elements=None, update=True):
@@ -93,10 +92,6 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
             dataframe is used internally, so setting this to True is a little
             bit faster as it skips a serialization step. Default is False.,
     """
-    if update or not os.path.exists(GHCN_DAILY_STATIONS_FILE):
-        url = 'http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt'
-        util.download_if_new(url, GHCN_DAILY_STATIONS_FILE, check_modified=True)
-        print 'Saved station list {0}'.format(GHCN_DAILY_STATIONS_FILE)
 
     columns = [
         ('country', 0, 2),
@@ -114,7 +109,8 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
     colspecs = [(start, end) for name, start, end in columns]
     names = [name for name, start, end in columns]
 
-    stations = pandas.io.parsers.read_fwf(GHCN_DAILY_STATIONS_FILE, colspecs=colspecs,
+    stations_file = _get_ghcn_file('ghcnd-stations.txt', check_modified=update)
+    stations = pandas.io.parsers.read_fwf(stations_file, colspecs=colspecs,
             header=None, names=names)
 
     if not country is None:
