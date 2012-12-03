@@ -69,12 +69,12 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
 
     # set id
     stations['id'] = stations[['country', 'network', 'network_id']].T.apply(''.join)
+    stations = stations.set_index('id', drop=False)
 
     if as_dataframe:
-        # return dataframe with a meaningful index (id)
-        return stations.set_index('id', drop=False)
+        return stations
     else:
-        return {
-            station_series['id']: station_series.to_dict()
-            for index, station_series in stations.T.iteritems()
-        }
+        for column_name in stations.columns:
+            stations[column_name][pandas.isnull(stations[column_name])] = None
+
+        return stations.T.to_dict()
