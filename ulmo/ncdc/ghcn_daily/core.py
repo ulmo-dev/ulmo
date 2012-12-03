@@ -64,8 +64,8 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
     stations['wm_oid'] = stations['wm_oid'].astype('|S5')
     stations['wm_oid'][stations['wm_oid'] == 'nan'] = None
 
-    for index, series in stations.iteritems():
-        series[pandas.isnull(series)] = None
+    for column_name in stations.columns:
+        stations[column_name][pandas.isnull(stations[column_name])] = None
 
     # set id
     stations['id'] = stations[['country', 'network', 'network_id']].T.apply(''.join)
