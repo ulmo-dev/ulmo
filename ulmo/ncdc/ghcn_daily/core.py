@@ -1,7 +1,6 @@
 import itertools
 import os
 
-import numpy as np
 import pandas
 
 from ulmo import util
