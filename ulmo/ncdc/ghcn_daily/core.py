@@ -10,7 +10,7 @@ from ulmo import util
 GHCN_DAILY_DIR = os.path.join(util.get_ulmo_dir(), 'ncdc/ghcn_daily')
 
 
-def get_data(station_id, elements=None, update=True):
+def get_data(station_id, elements=None, update=True, as_dataframe=False):
     if isinstance(elements, basestring):
         elements = [elements]
 
@@ -67,7 +67,11 @@ def get_data(station_id, elements=None, update=True):
                 dataframe[column_name][dates] = element_df[col][months]
 
         dataframes[element_name] = dataframe
-    return dataframes
+
+    if as_dataframe:
+        return dataframes
+    else:
+        raise NotImplementedError()
 
 
 def get_stations(country=None, state=None, update=True, as_dataframe=False):
