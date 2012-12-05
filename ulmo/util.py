@@ -11,8 +11,18 @@ import os
 import warnings
 
 import appdirs
+import pandas
 import requests
 import tables
+
+
+def dict_from_dataframe(dataframe):
+    for column_name in dataframe.columns:
+        dataframe[column_name][pandas.isnull(dataframe[column_name])] = None
+    if isinstance(dataframe.index, pandas.PeriodIndex):
+        dataframe.index = [str(i) for i in dataframe.index]
+
+    return dataframe.T.to_dict()
 
 
 def download_if_new(url, path, check_modified=True):
@@ -199,4 +209,3 @@ def _get_or_create_node(method_name, h5file, path, *args, **kwargs):
             create_method = getattr(h5file, method_name)
             node = create_method(where, name, *args, **kwargs)
     return node
-

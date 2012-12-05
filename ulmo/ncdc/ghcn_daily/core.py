@@ -1,6 +1,7 @@
 import itertools
 import os
 
+import numpy as np
 import pandas
 
 from ulmo import util
@@ -70,7 +71,10 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
     if as_dataframe:
         return dataframes
     else:
-        raise NotImplementedError()
+        return {
+            key: util.dict_from_dataframe(dataframe)
+            for key, dataframe in dataframes.iteritems()
+        }
 
 
 def get_stations(country=None, state=None, update=True, as_dataframe=False):
@@ -123,7 +127,7 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
 
     # wm_oid gets converted as a float, so cast it to str manually
     stations['wm_oid'] = stations['wm_oid'].astype('|S5')
-    stations['wm_oid'][stations['wm_oid'] == 'nan'] = None
+    stations['wm_oid'][stations['wm_oid'] == 'nan'] = np.nan
 
     # set station id and index by it
     stations['id'] = stations[['country', 'network', 'network_id']].T.apply(''.join)
@@ -132,10 +136,7 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
     if as_dataframe:
         return stations
     else:
-        for column_name in stations.columns:
-            stations[column_name][pandas.isnull(stations[column_name])] = None
-
-        return stations.T.to_dict()
+        return util.dict_from_dataframe(stations)
 
 
 def _get_ghcn_file(filename, check_modified=True):

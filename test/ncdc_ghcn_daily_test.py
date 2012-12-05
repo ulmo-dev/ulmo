@@ -64,15 +64,38 @@ test_data = {
 }
 
 
-def test_get_data():
+def test_get_data_as_dataframes():
     for station_id, sample_data in test_data.iteritems():
         elements = sample_data.keys()
-        station_data = ghcn_daily.core.get_data(station_id, elements=elements)
+        station_data = ghcn_daily.core.get_data(station_id, elements=elements,
+                as_dataframe=True)
 
         for element_id, element_test_data in sample_data.iteritems():
             element_df = station_data[element_id]
             for date, test_value in element_test_data.iteritems():
                 value = element_df.xs(date)
+                test_array = np.array(test_value, dtype=value.dtype)
+
+                nulls = pandas.isnull(value)
+
+                assert np.all(pandas.isnull(test_array) == nulls)
+                assert np.all(value[~nulls] == test_array[~nulls])
+
+
+def test_get_data_as_dicts():
+    for station_id, sample_data in test_data.iteritems():
+        elements = sample_data.keys()
+        station_data = ghcn_daily.core.get_data(station_id, elements=elements)
+
+        for element_id, element_test_data in sample_data.iteritems():
+            element_dict = station_data[element_id]
+            for date, test_value in element_test_data.iteritems():
+                value_dict = element_dict[date]
+                values = [
+                    value_dict.get(v)
+                    for v in ['value', 'mflag', 'qflag', 'sflag']
+                ]
+                value = np.array(values, dtype=object)
                 test_array = np.array(test_value, dtype=value.dtype)
 
                 nulls = pandas.isnull(value)
