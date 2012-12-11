@@ -4,6 +4,7 @@ python:
 # command to install dependencies
 install: 
   - "pip install numexpr"
+  - "pip install cython"
   - "pip install ."
 # command to run tests
 script: "python setup.py test"
