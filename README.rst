@@ -14,7 +14,7 @@ Features
 
 - retrieves and parses datasets from the web 
 - returns simple python data structures that can be easily pulled into `more
-  sophisticated tools` for analysis
+  sophisticated tools`_ for analysis
 - caches datasets locally and harvests updates as needed
 
 
