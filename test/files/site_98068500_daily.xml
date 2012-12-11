@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:timeSeriesResponse xsi:schemaLocation="http://www.cuahsi.org/waterML/1.1/ http://waterservices.usgs.gov/WaterML-1.1.xsd" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ns1:queryInfo xmlns:ns2="http://www.cuahsi.org/waterML/1.1/">
+    <ns2:creationTime>2012-12-11T11:24:20</ns2:creationTime>
+    <ns2:queryURL>http://waterservices.usgs.gov/nwis/dv/</ns2:queryURL>
+    <ns2:criteria>
+        <ns2:locationParam>[ALL:98068500]</ns2:locationParam>
+        <ns2:variableParam>ALL</ns2:variableParam>
+    </ns2:criteria>
+    <ns2:note title="filter:sites">[ALL:98068500]</ns2:note>
+    <ns2:note title="filter:timeRange">[mode=LATEST, modifiedSince=null]</ns2:note>
+    <ns2:note title="filter:methodId">methodIds=[ALL]</ns2:note>
+    <ns2:note title="requestDT">2012-12-11T16:24:20.146Z</ns2:note>
+    <ns2:note title="requestId">3758f210-43af-11e2-99ca-6cae8b663fb6</ns2:note>
+    <ns2:note title="disclaimer">Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information.</ns2:note>
+    <ns2:note title="server">vaas01</ns2:note>
+</ns1:queryInfo>
+</ns1:timeSeriesResponse>

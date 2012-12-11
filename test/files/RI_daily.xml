@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ns1:timeSeriesResponse xsi:schemaLocation="http://www.cuahsi.org/waterML/1.1/ http://waterservices.usgs.gov/WaterML-1.1.xsd" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <ns1:queryInfo xmlns:ns2="http://www.cuahsi.org/waterML/1.1/">
-    <ns2:creationTime>2012-06-06T10:52:53</ns2:creationTime>
+    <ns2:creationTime>2012-12-11T12:50:49</ns2:creationTime>
     <ns2:queryURL>http://waterservices.usgs.gov/nwis/dv/</ns2:queryURL>
     <ns2:criteria>
         <ns2:locationParam>[]</ns2:locationParam>
@@ -10,8 +10,8 @@
     <ns2:note title="filter:stateCd">[ri]</ns2:note>
     <ns2:note title="filter:timeRange">[mode=LATEST, modifiedSince=null]</ns2:note>
     <ns2:note title="filter:methodId">methodIds=[ALL]</ns2:note>
-    <ns2:note title="requestDT">2012-06-06T14:52:53.094Z</ns2:note>
-    <ns2:note title="requestId">4b1bba00-afe7-11e1-9d82-00144f2bed4a</ns2:note>
+    <ns2:note title="requestDT">2012-12-11T17:50:49.097Z</ns2:note>
+    <ns2:note title="requestId">4c273740-43bb-11e2-8cbe-00144f2bed4a</ns2:note>
     <ns2:note title="disclaimer">Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information.</ns2:note>
     <ns2:note title="server">caas01</ns2:note>
 </ns1:queryInfo>
@@ -90,7 +90,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">91</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">94</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -132,7 +132,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">24</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">19</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -262,7 +262,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">200</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">74</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -388,7 +388,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">843</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">466</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -560,7 +560,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">945</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">695</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -602,7 +602,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">33</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">59</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -644,7 +644,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">82</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">35</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -686,7 +686,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">4.8</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">6.9</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -770,7 +770,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">3.1</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">4.7</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -812,7 +812,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">2.7</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">2.3</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -854,7 +854,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">51</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">20</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -896,7 +896,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">9.4</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">5.5</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -938,7 +938,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">1.3</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">1.5</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -980,7 +980,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">11</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">5.9</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1022,7 +1022,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">2.6</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">2.7</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1064,7 +1064,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">9.2</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">6.3</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1148,7 +1148,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">15</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">17</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1232,7 +1232,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">108</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">55</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1316,7 +1316,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">321</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">239</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1358,7 +1358,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">42</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">44</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1400,7 +1400,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">61</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">40</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1484,7 +1484,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">27</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">17</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1572,7 +1572,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-04T00:00:00.000">42</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">22</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1660,7 +1660,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">81</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">58</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1748,7 +1748,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">177</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">79</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1790,7 +1790,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">16</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">16</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -1920,7 +1920,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">239</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">106</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -2008,7 +2008,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">74</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">57</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -2050,7 +2050,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">113</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">123</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -2184,7 +2184,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">820</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">312</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -2268,7 +2268,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">12.31</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">13.94</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -2310,7 +2310,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">33.51</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">35.66</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -2394,7 +2394,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">6.82</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">7.83</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -2436,7 +2436,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">9.22</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">11.19</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
@@ -2478,7 +2478,7 @@
         <ns1:noDataValue>-999999.0</ns1:noDataValue>
     </ns1:variable>
     <ns1:values>
-        <ns1:value qualifiers="P" dateTime="2012-06-05T00:00:00.000">14.78</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">16.09</ns1:value>
         <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
             <ns1:qualifierCode>P</ns1:qualifierCode>
             <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>

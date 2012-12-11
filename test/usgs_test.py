@@ -25,7 +25,7 @@ def test_parse_get_sites():
         with open(test_util.get_test_file_path(site_file), 'r') as f:
             sites.update(ulmo.waterml.v1_1.parse_sites(f))
 
-    assert len(sites) == 63
+    assert len(sites) == 64
     return sites
 
 
@@ -33,31 +33,44 @@ def test_update_sites_table():
     test_init()
     sites = test_parse_get_sites()
     ulmo.usgs.pytables._update_sites_table(sites.values(), TEST_FILE_PATH)
-    assert _count_rows('/usgs/sites') == 63
+    assert _count_rows('/usgs/sites') == 64
 
 
 def test_pytables_get_sites():
     sites = ulmo.usgs.pytables.get_sites(TEST_FILE_PATH)
-    assert len(sites) == 63
+    assert len(sites) == 64
 
 
 def test_pytables_get_site():
-    ulmo.usgs.pytables.get_sites(TEST_FILE_PATH)
-    site = ulmo.usgs.pytables.get_site('01115100', TEST_FILE_PATH)
-    assert len(site) == 10
-
-
-def test_pytables_get_site_fallback_to_core():
     site_code = '08068500'
-    sites = ulmo.usgs.pytables.get_sites(TEST_FILE_PATH)
-    assert site_code not in sites
+    site_data_file = 'site_%s_daily.xml' % site_code
+    with test_util.mocked_requests(site_data_file):
+        ulmo.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
+
     site = ulmo.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
     assert len(site) == 10
 
 
+def test_pytables_get_site_fallback_to_core():
+    site_code = '07335390'
+    site_data_file = 'site_%s_daily.xml' % site_code
+
+    sites = ulmo.usgs.pytables.get_sites(TEST_FILE_PATH)
+    assert site_code not in sites
+
+    with test_util.mocked_requests(site_data_file):
+        site = ulmo.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
+
+    assert len(site) == 10
+
+
 def test_pytables_get_site_raises_lookup():
-    with pytest.raises(LookupError):
-        ulmo.usgs.pytables.get_site('98068500', TEST_FILE_PATH)
+    site_code = '98068500'
+    site_data_file = 'site_%s_daily.xml' % site_code
+
+    with test_util.mocked_requests(site_data_file):
+        with pytest.raises(LookupError):
+            ulmo.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
 
 
 def test_update_or_append():
@@ -93,15 +106,27 @@ def test_update_or_append():
 
 def test_non_usgs_site():
     site_code = '07335390'
+    site_data_file = 'site_%s_daily.xml' % site_code
     test_init()
-    ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+    with test_util.mocked_requests(site_data_file):
+        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
     site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
     assert len(site_data['00062:32400']['values']) > 1000
 
 
 def test_update_site_list():
     test_init()
-    ulmo.usgs.pytables.update_site_list(state_code='RI', path=TEST_FILE_PATH)
+
+    mocked_urls = {
+        'http://waterservices.usgs.gov/nwis/dv/?stateCd=RI&format=waterml':
+            'RI_daily.xml',
+        'http://waterservices.usgs.gov/nwis/iv/?stateCd=RI&format=waterml':
+            'RI_instantaneous.xml',
+    }
+
+    with test_util.mocked_requests(mocked_urls):
+        ulmo.usgs.pytables.update_site_list(state_code='RI', path=TEST_FILE_PATH)
+
     assert _count_rows('/usgs/sites') == 64
 
 
@@ -184,17 +209,31 @@ def test_pytables_last_refresh_gets_updated():
 
 
 def test_core_get_sites_by_state_code():
-    sites = ulmo.usgs.core.get_sites(state_code='RI')
+    mocked_urls = {
+        'http://waterservices.usgs.gov/nwis/dv/?stateCd=RI&format=waterml':
+            'RI_daily.xml',
+        'http://waterservices.usgs.gov/nwis/iv/?stateCd=RI&format=waterml':
+            'RI_instantaneous.xml',
+    }
+
+    with test_util.mocked_requests(mocked_urls):
+        sites = ulmo.usgs.core.get_sites(state_code='RI')
     assert len(sites) == 64
 
 
 def test_core_get_sites_single_site():
-    sites = ulmo.usgs.core.get_sites(sites='08068500')
+    site_code = '08068500'
+    site_data_file = 'site_%s_daily.xml' % site_code
+    with test_util.mocked_requests(site_data_file):
+        sites = ulmo.usgs.core.get_sites(sites=site_code)
     assert len(sites) == 1
 
 
 def test_core_get_sites_multiple_sites():
-    sites = ulmo.usgs.core.get_sites(sites=['08068500', '08041500'])
+    site_codes = ['08068500', '08041500']
+    sites_data_file = 'sites_%s_daily.xml' % '_'.join(site_codes)
+    with test_util.mocked_requests(sites_data_file):
+        sites = ulmo.usgs.core.get_sites(sites=site_codes)
     assert len(sites) == 2
 
 
