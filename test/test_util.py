@@ -16,7 +16,7 @@ def mocked_requests(path):
         yield
 
     else:
-        test_path = test_file_path(path)
+        test_path = get_test_file_path(path)
 
         with open(test_path, 'rb') as f:
             mock_response = requests.Response()
@@ -27,6 +27,6 @@ def mocked_requests(path):
                 yield
 
 
-def test_file_path(file_path):
+def get_test_file_path(file_path):
     """translates a file path to be relative to the test files directory"""
     return os.path.join(os.path.dirname(__file__), 'files', file_path)
