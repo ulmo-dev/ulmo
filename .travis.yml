@@ -1,7 +1,11 @@
 language: python
 python:
   - "2.7"
-# command to install dependencies
+# install libhdf5 so pytables can link against it
+before_install:
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq libhdf5-dev
+# commands to install ulmo
 install: 
   - "pip install numexpr"
   - "pip install cython"
