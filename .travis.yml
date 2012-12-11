@@ -2,6 +2,8 @@ language: python
 python:
   - "2.7"
 # command to install dependencies
-install: "pip install ."
+install: 
+  - "pip install numexpr"
+  - "pip install ."
 # command to run tests
 script: "python setup.py test"
