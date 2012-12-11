@@ -11,7 +11,7 @@ def test_parse_get_sites():
         with open(test_site_file, 'r') as f:
             sites.update(ulmo.waterml.v1_1.parse_sites(f))
 
-    assert len(sites) == 63
+    assert len(sites) == 64
     return sites
 
 
