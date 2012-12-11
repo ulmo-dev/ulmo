@@ -1,9 +1,15 @@
+import os.path
+
 import numpy as np
 import pandas
 
 from ulmo.ncdc import ghcn_daily
 
 import test_util
+
+import pytest
+
+__module__ = pytest.mark.ghcn_daily
 
 
 test_stations = [{
@@ -63,6 +69,8 @@ test_data = {
     },
 }
 
+mocked_stations_file = 'ghcnd-stations.txt'
+
 
 def test_get_data_as_dataframes():
     for station_id, sample_data in test_data.iteritems():
@@ -105,7 +113,7 @@ def test_get_data_as_dicts():
 
 
 def test_get_stations_as_dicts():
-    with test_util.mocked_requests('ghcnd-stations.txt'):
+    with test_util.mocked_requests(mocked_stations_file):
         stations = ghcn_daily.core.get_stations()
     assert len(stations) > 80000
 
@@ -115,7 +123,7 @@ def test_get_stations_as_dicts():
 
 
 def test_get_stations_as_dataframe():
-    with test_util.mocked_requests('ghcnd-stations.txt'):
+    with test_util.mocked_requests(mocked_stations_file):
         stations = ghcn_daily.core.get_stations(as_dataframe=True)
     assert len(stations) > 80000
 
@@ -128,12 +136,14 @@ def test_get_stations_as_dataframe():
 
 
 def test_get_stations_by_country():
-    with test_util.mocked_requests('ghcnd-stations.txt'):
+    with test_util.mocked_requests(mocked_stations_file):
         stations = ghcn_daily.core.get_stations(country='US', as_dataframe=True)
     assert 45000 < len(stations) < 47000
 
 
 def test_get_stations_by_state():
-    with test_util.mocked_requests('ghcnd-stations.txt'):
+    with test_util.mocked_requests(mocked_stations_file):
         stations = ghcn_daily.core.get_stations(state='TX', as_dataframe=True)
     assert 3200 < len(stations) < 3300
+
+

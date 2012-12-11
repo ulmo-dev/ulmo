@@ -51,7 +51,8 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
         url = _get_service_url(service)
         log.info('making request for sites: %s' % url)
         req = requests.get(url, params=url_params)
-        log.info("processing data from request: %s" % req.request.full_url)
+        if hasattr(req.request, 'full_url'):
+            log.info("processing data from request: %s" % req.request.full_url)
         content_io = StringIO.StringIO(str(req.content))
 
         return_sites = wml.parse_sites(content_io)
@@ -135,7 +136,8 @@ def _get_site_values(service, date_range, url_params):
     except requests.exceptions.ConnectionError:
         log.info("There was a connection error with query:\n\t%s\n\t%s" % (service_url, url_params))
         return {}
-    log.info("processing data from request: %s" % req.request.full_url)
+    if hasattr(req.request, 'full_url'):
+        log.info("processing data from request: %s" % req.request.full_url)
 
     if req.status_code != 200:
         # try again with period of 120 days if full range doesn't work

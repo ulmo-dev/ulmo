@@ -2,12 +2,13 @@ import datetime
 import os
 
 import isodate
-import mock
 import pytest
 import tables
 import time
 
 import ulmo
+
+import test_util
 
 
 TEST_FILE_PATH = '/tmp/ulmo_test.h5'
@@ -21,7 +22,7 @@ def test_parse_get_sites():
     site_files = ['RI_daily.xml', 'RI_instantaneous.xml']
     sites = {}
     for site_file in site_files:
-        with open(site_file, 'r') as f:
+        with open(test_util.get_test_file_path(site_file), 'r') as f:
             sites.update(ulmo.waterml.v1_1.parse_sites(f))
 
     assert len(sites) == 63
@@ -108,7 +109,7 @@ def test_pytables_update_site_data():
     test_init()
     site_code = '01117800'
     site_data_file = 'site_%s_daily.xml' % site_code
-    with _mock_requests(site_data_file):
+    with test_util.mocked_requests(site_data_file):
         ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
         site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
 
@@ -122,7 +123,7 @@ def test_pytables_update_site_data():
     time.sleep(1)
 
     update_data_file = 'site_%s_daily_update.xml' % site_code
-    with _mock_requests(update_data_file):
+    with test_util.mocked_requests(update_data_file):
         ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
         site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
 
@@ -160,7 +161,7 @@ def test_pytables_last_refresh_gets_updated():
     test_init()
     site_code = '01117800'
     site_data_file = 'site_%s_daily.xml' % site_code
-    with _mock_requests(site_data_file):
+    with test_util.mocked_requests(site_data_file):
         ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
         site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
 
@@ -168,7 +169,7 @@ def test_pytables_last_refresh_gets_updated():
     time.sleep(1)
 
     update_data_file = 'site_%s_daily_update.xml' % site_code
-    with _mock_requests(update_data_file):
+    with test_util.mocked_requests(update_data_file):
         ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
         site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
 
@@ -209,19 +210,6 @@ def _create_test_table(h5file, table_name, description):
     test_table = h5file.createTable('/test', table_name, description,
                                     createparents=True)
     return test_table
-
-
-def _mock_requests(path):
-    """mocks the requests library to return a given file's content"""
-    with open(path, 'rb') as f:
-        content = ''.join(f.readlines())
-
-    mock_response = mock.Mock()
-
-    mock_response.status_code = 200
-    mock_response.content = content
-
-    return mock.patch('requests.get', return_value=mock_response)
 
 
 def _remove_test_file():
