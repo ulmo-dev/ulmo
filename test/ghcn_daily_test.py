@@ -7,10 +7,6 @@ from ulmo.ncdc import ghcn_daily
 
 import test_util
 
-import pytest
-
-__module__ = pytest.mark.ghcn_daily
-
 
 test_stations = [{
         'country': 'US',
@@ -69,51 +65,51 @@ test_data = {
     },
 }
 
-mocked_stations_file = 'ghcnd-stations.txt'
-
 
 def test_get_data_as_dataframes():
     for station_id, sample_data in test_data.iteritems():
         elements = sample_data.keys()
-        station_data = ghcn_daily.core.get_data(station_id, elements=elements,
-                as_dataframe=True)
+        with test_util.mocked_requests(station_id + '.dly'):
+            station_data = ghcn_daily.core.get_data(station_id, elements=elements,
+                    as_dataframe=True)
 
-        for element_id, element_test_data in sample_data.iteritems():
-            element_df = station_data[element_id]
-            for date, test_value in element_test_data.iteritems():
-                value = element_df.xs(date)
-                test_array = np.array(test_value, dtype=value.dtype)
+            for element_id, element_test_data in sample_data.iteritems():
+                element_df = station_data[element_id]
+                for date, test_value in element_test_data.iteritems():
+                    value = element_df.xs(date)
+                    test_array = np.array(test_value, dtype=value.dtype)
 
-                nulls = pandas.isnull(value)
+                    nulls = pandas.isnull(value)
 
-                assert np.all(pandas.isnull(test_array) == nulls)
-                assert np.all(value[~nulls] == test_array[~nulls])
+                    assert np.all(pandas.isnull(test_array) == nulls)
+                    assert np.all(value[~nulls] == test_array[~nulls])
 
 
 def test_get_data_as_dicts():
     for station_id, sample_data in test_data.iteritems():
         elements = sample_data.keys()
-        station_data = ghcn_daily.core.get_data(station_id, elements=elements)
+        with test_util.mocked_requests(station_id + '.dly'):
+            station_data = ghcn_daily.core.get_data(station_id, elements=elements)
 
-        for element_id, element_test_data in sample_data.iteritems():
-            element_dict = station_data[element_id]
-            for date, test_value in element_test_data.iteritems():
-                value_dict = element_dict[date]
-                values = [
-                    value_dict.get(v)
-                    for v in ['value', 'mflag', 'qflag', 'sflag']
-                ]
-                value = np.array(values, dtype=object)
-                test_array = np.array(test_value, dtype=value.dtype)
+            for element_id, element_test_data in sample_data.iteritems():
+                element_dict = station_data[element_id]
+                for date, test_value in element_test_data.iteritems():
+                    value_dict = element_dict[date]
+                    values = [
+                        value_dict.get(v)
+                        for v in ['value', 'mflag', 'qflag', 'sflag']
+                    ]
+                    value = np.array(values, dtype=object)
+                    test_array = np.array(test_value, dtype=value.dtype)
 
-                nulls = pandas.isnull(value)
+                    nulls = pandas.isnull(value)
 
-                assert np.all(pandas.isnull(test_array) == nulls)
-                assert np.all(value[~nulls] == test_array[~nulls])
+                    assert np.all(pandas.isnull(test_array) == nulls)
+                    assert np.all(value[~nulls] == test_array[~nulls])
 
 
 def test_get_stations_as_dicts():
-    with test_util.mocked_requests(mocked_stations_file):
+    with test_util.mocked_requests('ghcnd-stations.txt'):
         stations = ghcn_daily.core.get_stations()
     assert len(stations) > 80000
 
@@ -123,7 +119,7 @@ def test_get_stations_as_dicts():
 
 
 def test_get_stations_as_dataframe():
-    with test_util.mocked_requests(mocked_stations_file):
+    with test_util.mocked_requests('ghcnd-stations.txt'):
         stations = ghcn_daily.core.get_stations(as_dataframe=True)
     assert len(stations) > 80000
 
@@ -136,13 +132,13 @@ def test_get_stations_as_dataframe():
 
 
 def test_get_stations_by_country():
-    with test_util.mocked_requests(mocked_stations_file):
+    with test_util.mocked_requests('ghcnd-stations.txt'):
         stations = ghcn_daily.core.get_stations(country='US', as_dataframe=True)
     assert 45000 < len(stations) < 47000
 
 
 def test_get_stations_by_state():
-    with test_util.mocked_requests(mocked_stations_file):
+    with test_util.mocked_requests('ghcnd-stations.txt'):
         stations = ghcn_daily.core.get_stations(state='TX', as_dataframe=True)
     assert 3200 < len(stations) < 3300
 
