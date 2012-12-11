@@ -11,15 +11,13 @@ TWDB_WSDL_URL = 'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL'
     #assert os.path.exists(TEST_FILE_PATH)
 
 
-def test_core_get_sites():
-    sites = ulmo.wof.core.get_sites(TWDB_WSDL_URL)
-    import pytest; pytest.set_trace()
-    assert len(sites) == 74
+#def test_core_get_sites():
+    #sites = ulmo.wof.core.get_sites(TWDB_WSDL_URL)
+    #assert len(sites) == 74
 
 
-
-def test_specific_sites():
-    site = ulmo.wof.core.get_site_data(TWDB_WSDL_URL, 'Aransas95_D1', network='TWDBSondes')
-    site['latitude'] == 28.06666667
-    site['longitude'] == -97.20333333
-    site['name'] == 'Upper Copano Bay'
+#def test_specific_sites():
+    #site = ulmo.wof.core.get_site_data(TWDB_WSDL_URL, 'Aransas95_D1', network='TWDBSondes')
+    #assert site['latitude'] == 28.06666667
+    #assert site['longitude'] == -97.20333333
+    #assert site['name'] == 'Upper Copano Bay'
