@@ -32,13 +32,8 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
          for name, start, end, converter in value_columns]
         for n in xrange(1, 32)
     ]))
-    colspecs = [(start, end) for name, start, end, converter in columns]
-    names = [name for name, start, end, converter in columns]
-    converters = {name: converter for name, start, end, converter in columns}
 
-    station_data = pandas.io.parsers.read_fwf(station_file_path,
-            colspecs=colspecs, header=None, na_values=[-9999], names=names,
-            converters=converters)
+    station_data = _parse_fwf(station_file_path, columns, na_values=[-9999])
 
     dataframes = {}
 
@@ -105,24 +100,21 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
     """
 
     columns = [
-        ('country', 0, 2),
-        ('network', 2, 3),
-        ('network_id', 3, 11),
-        ('latitude', 12, 20),
-        ('longitude', 21, 30),
-        ('elevation', 31, 37),
-        ('state', 38, 40),
-        ('name', 41, 71),
-        ('gsn_flag', 72, 75),
-        ('hcn_flag', 76, 79),
-        ('wm_oid', 80, 85),
+        ('country', 0, 2, None),
+        ('network', 2, 3, None),
+        ('network_id', 3, 11, None),
+        ('latitude', 12, 20, None),
+        ('longitude', 21, 30, None),
+        ('elevation', 31, 37, None),
+        ('state', 38, 40, None),
+        ('name', 41, 71, None),
+        ('gsn_flag', 72, 75, None),
+        ('hcn_flag', 76, 79, None),
+        ('wm_oid', 80, 85, None),
     ]
-    colspecs = [(start, end) for name, start, end in columns]
-    names = [name for name, start, end in columns]
 
     stations_file = _get_ghcn_file('ghcnd-stations.txt', check_modified=update)
-    stations = pandas.io.parsers.read_fwf(stations_file, colspecs=colspecs,
-            header=None, names=names)
+    stations = _parse_fwf(stations_file, columns)
 
     if not country is None:
         stations = stations[stations['country'] == country]
@@ -153,3 +145,16 @@ def _get_ghcn_file(filename, check_modified=True):
     path = os.path.join(GHCN_DAILY_DIR, url.split('/')[-1])
     util.download_if_new(url, path)
     return path
+
+def _parse_fwf(file_path, columns, na_values=None):
+    colspecs = [(start, end) for name, start, end, converter in columns]
+    names = [name for name, start, end, converter in columns]
+    converters = {
+        name: converter
+        for name, start, end, converter in columns
+        if not converter is None
+    }
+
+    return pandas.io.parsers.read_fwf(file_path,
+        colspecs=colspecs, header=None, na_values=na_values, names=names,
+        converters=converters)
