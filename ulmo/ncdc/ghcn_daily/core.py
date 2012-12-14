@@ -61,6 +61,8 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
         for day_of_month in range(1, 32):
             dates = [date for date in (month_starts + day_of_month - 1)
                     if date.day == day_of_month]
+            if not len(dates):
+                continue
             months = [pandas.Period(date, 'M') for date in dates]
             for column_name in dataframe.columns:
                 col = column_name + str(day_of_month)
