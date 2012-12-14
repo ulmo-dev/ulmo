@@ -17,26 +17,28 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
     station_file_path = _get_ghcn_file(station_id + '.dly')
 
     start_columns = [
-        ('year', 11, 15),
-        ('month', 15, 17),
-        ('element', 17, 21),
+        ('year', 11, 15, int),
+        ('month', 15, 17, int),
+        ('element', 17, 21, str),
     ]
     value_columns = [
-        ('value', 0, 5),
-        ('mflag', 5, 6),
-        ('qflag', 6, 7),
-        ('sflag', 7, 8),
+        ('value', 0, 5, float),
+        ('mflag', 5, 6, str),
+        ('qflag', 6, 7, str),
+        ('sflag', 7, 8, str),
     ]
     columns = list(itertools.chain(start_columns, *[
-        [(name + str(n), start + 13 + (8 * n), end + 13 + (8 * n))
-         for name, start, end in value_columns]
+        [(name + str(n), start + 13 + (8 * n), end + 13 + (8 * n), converter)
+         for name, start, end, converter in value_columns]
         for n in xrange(1, 32)
     ]))
-    colspecs = [(start, end) for name, start, end in columns]
-    names = [name for name, start, end in columns]
+    colspecs = [(start, end) for name, start, end, converter in columns]
+    names = [name for name, start, end, converter in columns]
+    converters = {name: converter for name, start, end, converter in columns}
 
     station_data = pandas.io.parsers.read_fwf(station_file_path,
-            colspecs=colspecs, header=None, na_values=['-9999'], names=names)
+            colspecs=colspecs, header=None, na_values=[-9999], names=names,
+            converters=converters)
 
     dataframes = {}
 
