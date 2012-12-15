@@ -172,7 +172,7 @@ def test_get_stations_with_date_range():
             'end': 1920,
             'includes': [
                 'USW00094957',
-                WZ004451000',
+                'WZ004451000',
                 'WZ004455110',
                 'WZ004834260',
             ],
