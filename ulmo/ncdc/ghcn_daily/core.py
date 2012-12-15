@@ -14,8 +14,6 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
     if isinstance(elements, basestring):
         elements = [elements]
 
-    station_file_path = _get_ghcn_file(station_id + '.dly')
-
     start_columns = [
         ('year', 11, 15, int),
         ('month', 15, 17, int),
@@ -33,6 +31,8 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
         for n in xrange(1, 32)
     ]))
 
+    station_file_path = _get_ghcn_file(station_id + '.dly',
+            check_modified=update)
     station_data = _parse_fwf(station_file_path, columns, na_values=[-9999])
 
     dataframes = {}
@@ -76,7 +76,8 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
         }
 
 
-def get_stations(country=None, state=None, update=True, as_dataframe=False):
+def get_stations(country=None, state=None, elements=None, start_year=None,
+        end_year=None, update=True, as_dataframe=False):
     """returns a collection of stations
 
     The stations can be represented as dict of station dicts keyed to their station ID
@@ -88,6 +89,16 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
             (default), then stations from all countries are returned.
     state : The state code to use to limit station results. If set to None
             (default), then stations from all states are returned.
+    elements : List of elements to use to limit the station results. If set,
+            only stations that have data for any these elements will be returned.
+    start_year : Start year to use to limit the station results. If set, only
+            stations that have data after start year will be returned. Can be
+            combined with end_year to get stations with data within a range of
+            years.
+    end_year : End year to use to limit the station results. If set, only
+            stations that have data before the end year will be returned. Can be
+            combined with start_year to get stations with data within a range of
+            years.
     update : If False, tries to use a cached copy of the stations file. If one
              can't be found or if update is True, then a new copy of the
              stations file is pulled from the web. If update is True, but the
@@ -121,13 +132,32 @@ def get_stations(country=None, state=None, update=True, as_dataframe=False):
     if not state is None:
         stations = stations[stations['state'] == state]
 
-    # wm_oid gets converted as a float, so cast it to str manually
-    stations['wm_oid'] = stations['wm_oid'].astype('|S5')
-    stations['wm_oid'][stations['wm_oid'] == 'nan'] = np.nan
-
     # set station id and index by it
     stations['id'] = stations[['country', 'network', 'network_id']].T.apply(''.join)
     stations = stations.set_index('id', drop=False)
+
+    if not elements is None or not start_year is None or not end_year is None:
+        inventory = _get_inventory(update=update)
+        if not elements is None:
+            if isinstance(elements, basestring):
+                elements = [elements]
+
+            mask = np.zeros(len(inventory), dtype=bool)
+            for element in elements:
+                mask += inventory['element'] == element
+            inventory = inventory[mask]
+        if not start_year is None:
+            inventory = inventory[start_year <= inventory['last_year']]
+        if not end_year is None:
+            inventory = inventory[inventory['first_year'] <= end_year]
+
+        uniques = inventory['id'].unique()
+        ids = pandas.DataFrame(uniques, index=uniques, columns=['id'])
+        stations = pandas.merge(stations, ids).set_index('id', drop=False)
+
+    # wm_oid gets converted as a float, so cast it to str manually
+    stations['wm_oid'] = stations['wm_oid'].astype('|S5')
+    stations['wm_oid'][stations['wm_oid'] == 'nan'] = np.nan
 
     if as_dataframe:
         return stations
@@ -145,6 +175,22 @@ def _get_ghcn_file(filename, check_modified=True):
     path = os.path.join(GHCN_DAILY_DIR, url.split('/')[-1])
     util.download_if_new(url, path)
     return path
+
+
+def _get_inventory(update=True):
+    columns = [
+        ('id', 0, 11, None),
+        ('latitude', 12, 20, None),
+        ('longitude', 21, 30, None),
+        ('element', 31, 35, None),
+        ('first_year', 36, 40, None),
+        ('last_year', 41, 45, None),
+    ]
+
+    inventory_file = _get_ghcn_file('ghcnd-inventory.txt',
+            check_modified=update)
+    return _parse_fwf(inventory_file, columns)
+
 
 def _parse_fwf(file_path, columns, na_values=None):
     colspecs = [(start, end) for name, start, end, converter in columns]

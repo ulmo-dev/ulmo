@@ -1,5 +1,3 @@
-import os.path
-
 import numpy as np
 import pandas
 
@@ -34,7 +32,8 @@ test_stations = [{
         'network_id': '00003850',
         'state': 'AL',
         'wm_oid': None
-    }]
+    },
+    ]
 
 test_data = {
     'USW00003870': {
@@ -153,3 +152,133 @@ def test_get_stations_by_state():
     assert 3200 < len(stations) < 3300
 
 
+def test_get_stations_with_date_range():
+    test_ranges = [
+        {
+            'start': 2011,
+            'end': None,
+            'includes': [
+                'KE000063661',
+                'USS0021E07S',
+                'ZI000067983',
+            ],
+            'excludes': [
+                'JQW00021601',
+                'USC00448257',
+                'ZI000067991',
+            ],
+        }, {
+            'start': None,
+            'end': 1920,
+            'includes': [
+                'USW00094957',
+                WZ004451000',
+                'WZ004455110',
+                'WZ004834260',
+            ],
+            'excludes': [
+                'ASN00005063',
+                'CA00405DJDN',
+                'CA005040896',
+            ],
+        }, {
+            'start': 1937,
+            'end': 1945,
+            'includes': [
+                'ASN00015621',
+                'ASN00023053',
+                'WZ004451000',
+                'WZ004834260',
+            ],
+            'excludes': [
+                'ASN00041460',
+                'ASN00023301',
+                'US1COLR0770',
+                'US1COLR0850',
+            ],
+        }, {
+            'start': 1960,
+            'end': 1960,
+            'includes': [
+                'ASN00078019',
+                'ASN00041435',
+            ],
+            'excludes': [
+                'US1COLR0770',
+                'US1COLR0850',
+            ],
+        },
+    ]
+
+    with test_util.mocked_requests('ghcnd-inventory.txt'):
+        for test_range in test_ranges:
+            start = test_range.get('start')
+            end = test_range.get('end')
+            stations = ghcn_daily.core.get_stations(start_year=start,
+                end_year=end, as_dataframe=True)
+            _check_stations_dataframe(stations,
+                test_range.get('includes'),
+                test_range.get('excludes'))
+
+
+def test_get_stations_with_elements():
+    test_elements = [
+        {
+            'elements': 'PRCP',
+            'includes': [
+                'ASN00008230',
+                'WA006567710',
+                'VQC00672823',
+            ],
+            'excludes': [
+                'AR000870470',
+                'AR000875850',
+                'BC000068234',
+                'GME00111464',
+                'UY000864400',
+            ],
+        }, {
+            'elements': 'PRCP',
+            'includes': [
+                'ASN00008230',
+                'WA006567710',
+                'VQC00672823',
+            ],
+            'excludes': [
+                'AR000870470',
+                'AR000875850',
+                'BC000068234',
+                'GME00111464',
+                'UY000864400',
+            ],
+        }, {
+            'elements': ['SNOW', 'TMAX'],
+            'includes': [
+                'ACW00011604',
+                'USW00094895',
+                'VQW00011640',
+                'ZI000067991',
+            ],
+            'excludes': [
+                'BR00B4-0010',
+                'IN003070101',
+                'KZ000038223',
+                'ZA000067753',
+            ],
+        },
+    ]
+    with test_util.mocked_requests('ghcnd-inventory.txt'):
+        for test_element in test_elements:
+            elements = test_element.get('elements')
+            stations = ghcn_daily.core.get_stations(elements=elements,
+                as_dataframe=True)
+            _check_stations_dataframe(stations,
+                test_element.get('includes'),
+                test_element.get('excludes'))
+
+
+def _check_stations_dataframe(stations, includes, excludes):
+    for include in includes:
+        assert include in stations['id']
+    for exclude in excludes:
+        assert not exclude in stations['id']
