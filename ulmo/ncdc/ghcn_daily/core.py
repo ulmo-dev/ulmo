@@ -41,10 +41,12 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
         if not elements is None and element_name not in elements:
             continue
 
-        year_month = ['%s-%s' % tuple(i)
-                      for i in element_df[['year', 'month']].values]
-        monthly_index = pandas.PeriodIndex(year_month, freq='M')
-        element_df.index = monthly_index
+        element_df['month_period'] = element_df.apply(
+                lambda x: pandas.Period('%s-%s' % (x['year'], x['month'])),
+                axis=1)
+        element_df = element_df.set_index('month_period')
+        monthly_index = element_df.index
+
         # here we're just using pandas' builtin resample logic to construct a daily
         # index for the timespan
         daily_index = element_df.resample('D').index.copy()
