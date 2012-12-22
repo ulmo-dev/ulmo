@@ -1,13 +1,8 @@
 .. _api:
 
-API
-===
-
-.. module:: ulmo
-
 
 USGS
-----
+====
 
 .. automodule:: ulmo.usgs.core
    :members:
