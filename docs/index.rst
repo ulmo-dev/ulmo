@@ -10,15 +10,13 @@ Ulmo is a python library for clean, simple and fast access to public hydrology
 and climatology data.
 
 
+
+API Reference
+-------------
+
 .. toctree::
    :maxdepth: 2
 
+   api
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
