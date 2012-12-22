@@ -1,5 +1,14 @@
 """
-module that defines pytables cache
+    ulmo.usgs.pytables
+    ~~~~~~~~~~~~~~~~~~
+
+    This module provides an interface for fetching, updating and retrieiving
+    cached data from the `USGS National Water Information
+    System`_ web services.
+
+
+    .. _USGS National Water Information System: http://waterdata.usgs.gov/nwis
+
 """
 from __future__ import absolute_import
 
@@ -53,7 +62,20 @@ class USGSValue(tables.IsDescription):
 
 
 def get_sites(path=None):
-    """gets a dict of sites from an hdf5 file"""
+    """Fetches previously-cached site information from an hdf5 file.
+
+    Parameters
+    ----------
+    path : `None` or file path
+        Path to the hdf5 file to be queried, if `None` then the default path
+        will be used.
+
+
+    Returns
+    -------
+    sites_dict : dict
+        a python dict with site codes mapped to site information
+    """
     if not path:
         path = HDF5_FILE_PATH
     with util.open_h5file(path, 'r') as h5file:
@@ -67,7 +89,22 @@ def get_sites(path=None):
 
 
 def get_site(site_code, path=None):
-    """gets a site dict for a specific site_code from an hdf5 file"""
+    """Fetches previously-cached site information from an hdf5 file.
+
+    Parameters
+    ----------
+    site_code : str
+        The site code of the site you want to get information for.
+    path : `None` or file path
+        Path to the hdf5 file to be queried, if `None` then the default path
+        will be used.
+
+
+    Returns
+    -------
+    site_dict : dict
+        a python dict containing site information
+    """
     if not path:
         path = HDF5_FILE_PATH
     # XXX: this is really dumb
@@ -86,7 +123,25 @@ def get_site(site_code, path=None):
 
 
 def get_site_data(site_code, agency_code=None, path=None):
-    """gets the data for a given site"""
+    """Fetches previously-cached site data from an hdf5 file.
+
+    Parameters
+    ----------
+    site_code : str
+        The site code of the site you want to get data for.
+    agency_code : `None` or str
+        The agency code to get data for. This will need to be set if a site code
+        is in use by multiple agencies (this is rare).
+    path : `None` or file path
+        Path to the hdf5 file to be queried, if `None` then the default path
+        will be used.
+
+
+    Returns
+    -------
+    data_dict : dict
+        a python dict with parameter codes mapped to value dicts
+    """
     if not path:
         path = HDF5_FILE_PATH
     # walk the agency groups looking for site code
@@ -123,7 +178,28 @@ def get_site_data(site_code, agency_code=None, path=None):
 
 
 def update_site_list(sites=None, state_code=None, service=None, path=None):
-    """update list of sites for a given state_code"""
+    """Update cached site information.
+
+    Parameters
+    ----------
+    sites : str, iterable of strings or `None`
+        The site to use or list of sites to use; lists will be joined by a ','.
+    state_code : str or `None`
+        Two-letter state code used in stateCd parameter.
+    site_type : str or `None`
+        Type of site used in siteType parameter.
+    service : {`None`, 'individual', 'daily'}
+        The service to use, either "individual", "daily", or `None` (default). If
+        `None`, then both services are used.
+    path : `None` or file path
+        Path to the hdf5 file to be queried, if `None` then the default path
+        will be used.
+
+
+    Returns
+    -------
+    None : `None`
+    """
     if not path:
         path = HDF5_FILE_PATH
     sites = core.get_sites(sites=sites, state_code=state_code, service=service)
@@ -131,7 +207,22 @@ def update_site_list(sites=None, state_code=None, service=None, path=None):
 
 
 def update_site_data(site_code, date_range=None, path=None):
-    """updates data for a given site
+    """Update cached site data.
+
+    Parameters
+    ----------
+    site_code : str
+        The site code of the site you want to query data for.
+    date_range : date range
+        Date range to be used for the query. This will be deprecated very soon
+        and replaced with more explicit parameters.
+    modified_since : `None` or datetime.timedelta
+        Passed along as the modifiedSince parameter.
+
+
+    Returns
+    -------
+    None : `None`
     """
     if not path:
         path = HDF5_FILE_PATH
