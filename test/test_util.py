@@ -6,6 +6,11 @@ import mock
 import requests
 
 
+def get_test_file_path(file_path):
+    """translates a file path to be relative to the test files directory"""
+    return os.path.join(os.path.dirname(__file__), 'files', file_path)
+
+
 @contextlib.contextmanager
 def mocked_requests(mocked_urls):
     """mocks the requests library to return a given file's content"""
@@ -33,11 +38,6 @@ def mocked_requests(mocked_urls):
 
             with mock.patch('requests.get', side_effect=side_effect):
                 yield
-
-
-def get_test_file_path(file_path):
-    """translates a file path to be relative to the test files directory"""
-    return os.path.join(os.path.dirname(__file__), 'files', file_path)
 
 
 def _mock_side_effect(url_files):
