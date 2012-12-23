@@ -16,11 +16,25 @@ import datetime
 import isodate
 import warnings
 
-import tables
-from tables.exceptions import NoSuchNodeError
-
 from ulmo import util
 from ulmo.usgs import core
+
+
+# workaround pytables not being pip installable; this means docs can still be
+# generated without tables (e.g. by readthedocs)
+try:
+    import tables
+    from tables.exceptions import NoSuchNodeError
+except ImportError:
+    def fake_func():
+        return None
+    util.get_default_h5file_path = fake_func
+
+    try:
+        import mock
+        tables = mock.MagicMock()
+    except ImportError:
+        pass
 
 
 # default hdf5 file path
