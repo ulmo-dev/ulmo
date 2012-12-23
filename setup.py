@@ -42,7 +42,7 @@ setup(
         'numexpr>=2.0.1',
         'numpy>=1.4.0',
         'pandas>=0.9.1',
-        'requests>=0.14.0',
+        'requests==0.14.2',
         'suds>=0.4',
         'tables>=0.2.3'
     ],
