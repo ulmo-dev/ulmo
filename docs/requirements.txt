@@ -1,3 +1,4 @@
 mock>=1.0.0
 numpydoc>=0.4
+python-dateutil
 sphinx>=1.1.3
