@@ -55,8 +55,8 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     tests_require=[
-        'pytest>=2.3.2',
         'mock>=1.0.0',
+        'pytest>=2.3.2',
     ],
     cmdclass={'test': PyTest},
 )

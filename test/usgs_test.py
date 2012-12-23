@@ -3,12 +3,16 @@ import os
 
 import isodate
 import pytest
-import tables
 import time
 
 import ulmo
 
 import test_util
+
+try:
+    import tables
+except ImportError:
+    pass
 
 
 TEST_FILE_PATH = '/tmp/ulmo_test.h5'
