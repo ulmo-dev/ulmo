@@ -44,8 +44,10 @@ setup(
         'pandas>=0.9.1',
         'requests==0.14.2',
         'suds>=0.4',
-        'tables>=0.2.3'
     ],
+    extras_require = {
+        'pytables_caching': ['tables>=0.2.3']
+    },
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
