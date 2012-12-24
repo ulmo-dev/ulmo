@@ -20,3 +20,6 @@ API Reference
    api
 
 
+
+.. include:: ../CHANGES
+
