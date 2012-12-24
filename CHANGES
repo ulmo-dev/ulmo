@@ -1,0 +1,27 @@
+Changelog
+=========
+
+
+0.2.3 (in development)
+-----
+- add ghcn daily dataset
+- add sphinx documentation
+- clean up tests
+- make pytables an optional dependency; pytables-related functionality is just
+  disabled if pytables can't be found
+
+
+0.2.2
+-----
+- bugfix: broken usgs.pytables last_refresh handling
+
+
+0.2.1
+-----
+- turn on compression for pytables cache files
+- minor bugfix and test cleanup
+
+
+0.2.0
+-----
+- initial public release as ulmo (formerly pyhis)
