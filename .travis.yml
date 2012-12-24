@@ -9,6 +9,7 @@ before_install:
 install: 
   - "pip install numexpr"
   - "pip install cython"
+  - "pip install tables"
   - "pip install ."
 # command to run tests
 script: "python setup.py test"
