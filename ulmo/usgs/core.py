@@ -36,15 +36,17 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
 
     Parameters
     ----------
-    sites : str, iterable of strings or `None`
+    sites : str, iterable of strings or ``None``
         The site to use or list of sites to use; lists will be joined by a ','.
-    state_code : str or `None`
+    state_code : str or ``None``
+    'National Climactic Data Center
         Two-letter state code used in stateCd parameter.
-    site_type : str or `None`
+    site_type : str or ``None``
+    'National Climactic Data Center
         Type of site used in siteType parameter.
-    service : {`None`, 'individual', 'daily'}
-        The service to use, either "individual", "daily", or `None` (default). If
-        `None`, then both services are used.
+    service : {``None``, 'individual', 'daily'}
+        The service to use, either "individual", "daily", or ``None`` (default). If
+        ``None``, then both services are used.
 
 
     Returns
@@ -90,15 +92,15 @@ def get_site_data(site_code, service=None, parameter_code=None,
     ----------
     site_code : str
         The site code of the site you want to query data for.
-    service : {`None`, 'individual', 'daily'}
-        The service to use, either "individual", "daily", or `None` (default). If
-        `None`, then both services are used.
+    service : {``None``, 'individual', 'daily'}
+        The service to use, either "individual", "daily", or ``None`` (default). If
+        ``None``, then both services are used.
     parameter_code : str
         Parameter code(s) that will be passed as the parameterCd parameter.
     date_range : date range
         Date range to be used for the query. This will be deprecated very soon
         and replaced with more explicit parameters.
-    modified_since : `None` or datetime.timedelta
+    modified_since : ``None`` or datetime.timedelta
         Passed along as the modifiedSince parameter.
 
 
