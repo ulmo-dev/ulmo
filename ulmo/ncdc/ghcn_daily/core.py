@@ -1,3 +1,15 @@
+"""
+    ulmo.ncdc.ghcn_daily.core
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    This module provides direct access to `National Climactic Data Center`_
+    `Global Historical Climate Network - Daily`_ dataset.
+
+
+    .. _National Climactic Data Center: http://www.ncdc.noaa.gov
+    .. _Global Historical Climate Network - Daily: http://www.ncdc.noaa.gov/oa/climate/ghcn-daily/
+
+"""
 import itertools
 import os
 
@@ -11,6 +23,34 @@ GHCN_DAILY_DIR = os.path.join(util.get_ulmo_dir(), 'ncdc/ghcn_daily')
 
 
 def get_data(station_id, elements=None, update=True, as_dataframe=False):
+    """Retrieves data for a given station.
+
+
+    Parameters
+    ----------
+    station_id : str
+        Station ID to retrieve data for.
+    elements : ``None``, str, or list of str
+        If specified, limits the query to given element code(s).
+    update : bool
+        If ``True`` (default),  new data files will be downloaded if they are
+        newer than any previously cached files. If ``False``, then previously
+        downloaded files will be used and new files will only be downloaded if
+        there is not a previously downloaded file for a given station.
+    as_dataframe : bool
+        If ``False`` (default), a dict with element codes mapped to value dicts
+        is returned. If ``True``, a dict with element codes mapped to equivalent
+        pandas.DataFrame objects will be returned. The pandas dataframe is used
+        internally, so setting this to ``True`` is a little bit faster as it
+        skips a serialization step. Default is ``False``.
+
+
+    Returns
+    -------
+    site_dict : dict
+        A dict with element codes as keys, mapped to collections of values. See
+        the ``as_dataframe`` parameter for more.
+    """
     if isinstance(elements, basestring):
         elements = [elements]
 
@@ -80,36 +120,47 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
 
 def get_stations(country=None, state=None, elements=None, start_year=None,
         end_year=None, update=True, as_dataframe=False):
-    """returns a collection of stations
+    """Retrieves station information, optionally limited to specific parameters.
 
-    The stations can be represented as dict of station dicts keyed to their station ID
-    or a pandas.dataframe (see the as_dataframe parameter)
 
     Parameters
     ----------
-    country : The country code to use to limit station results. If set to None
-            (default), then stations from all countries are returned.
-    state : The state code to use to limit station results. If set to None
-            (default), then stations from all states are returned.
-    elements : List of elements to use to limit the station results. If set,
-            only stations that have data for any these elements will be returned.
-    start_year : Start year to use to limit the station results. If set, only
-            stations that have data after start year will be returned. Can be
-            combined with end_year to get stations with data within a range of
-            years.
-    end_year : End year to use to limit the station results. If set, only
-            stations that have data before the end year will be returned. Can be
-            combined with start_year to get stations with data within a range of
-            years.
-    update : If False, tries to use a cached copy of the stations file. If one
-             can't be found or if update is True, then a new copy of the
-             stations file is pulled from the web. If update is True, but the
-             cached stations file is still good then a new file won't be pulled.
-             Default is True.
-    as_dataframe : If True, a pandas.DataFrame object will be returned,
-            otherwise a dict is of stations dicts is returned. The pandas
-            dataframe is used internally, so setting this to True is a little
-            bit faster as it skips a serialization step. Default is False.,
+    country : str
+        The country code to use to limit station results. If set to ``None``
+        (default), then stations from all countries are returned.
+    state : str
+        The state code to use to limit station results. If set to ``None``
+        (default), then stations from all states are returned.
+    elements : ``None``, str, or list of str
+        If specified, station results will be limited to the given element codes
+        and only stations that have data for any these elements will be
+        returned.
+    start_year : int
+        If specified, station results will be limited to contain only stations
+        that have data after this year. Can be combined with the ``end_year``
+        argument to get stations with data within a range of years.
+    end_year : int
+        If specified, station results will be limited to contain only stations
+        that have data before this year. Can be combined with the ``start_year``
+        argument to get stations with data within a range of years.
+    update : bool
+        If ``True`` (default),  new data files will be downloaded if they are
+        newer than any previously cached files. If ``False``, then previously
+        downloaded files will be used and new files will only be downloaded if
+        there is not a previously downloaded file for a given station.
+    as_dataframe : bool
+        If ``False`` (default), a dict with station IDs keyed to station dicts
+        is returned. If ``True``, a single pandas.DataFrame object will be
+        returned. The pandas dataframe is used internally, so setting this to
+        ``True`` is a little bit faster as it skips a serialization step.
+        Default is ``False``.
+
+
+    Returns
+    -------
+    stations_dict : dict or pandas.DataFrame
+        A dict or pandas.DataFrame representing station information for stations
+        matching the arguments. See the ``as_dataframe`` parameter for more.
     """
 
     columns = [

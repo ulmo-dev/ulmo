@@ -1,3 +1,13 @@
+"""
+    ulmo.ncdc.gsod.core
+    ~~~~~~~~~~~~~~~~~~~
+
+    This module provides direct access to `National Climactic Data Center`_
+    `Global Summary of the Day`_ dataset.
+
+    .. _National Climactic Data Center: http://www.ncdc.noaa.gov
+    .. _Global Summary of the Day: http://www.ncdc.noaa.gov/oa/gsod.html
+"""
 import csv
 import datetime
 import gzip
@@ -15,6 +25,26 @@ NCDC_GSOD_START_DATE = datetime.date(1929, 1, 1)
 
 
 def get_data(station_codes, start_date=None, end_date=None, parameters=None):
+    """Retrieves data for a set of stations.
+
+
+    Parameters
+    ----------
+    station_codes : list
+        List (or iterable) of station codes to retreive data for.
+    start_date : ``None``, datetime.date or datetime.datetime
+        If specified, data are limited to values after this date.
+    end_date : ``None``, datetime.date or datetime.datetime
+        If specified, data are limited to values before this date.
+    parameters : ``None``, str or list
+        If specified, data are limited to this set of parameter codes.
+
+
+    Returns
+    -------
+    data_dict : dict
+        Dict with station codes keyed to lists of value dicts.
+    """
     if start_date:
         if isinstance(start_date, datetime.datetime):
             start_date = start_date.date()
@@ -64,22 +94,29 @@ def get_data(station_codes, start_date=None, end_date=None, parameters=None):
                         data_dict[station] = np.append(data_dict[station], year_data)
                     else:
                         data_dict[station] = year_data
-    for key, data_array in data_dict.iteritems():
-        if not data_dict[key] is None:
-            data_dict[key] = _record_array_to_value_dicts(data_array)
+    for station, data_array in data_dict.iteritems():
+        if not data_dict[station] is None:
+            data_dict[station] = _record_array_to_value_dicts(data_array)
     return data_dict
 
 
 def get_stations(update=True):
-    """returns a dict of station dicts
+    """Retrieve information on the set of available stations.
 
-    stations are keyed to their USAF-WBAN codes
 
     Parameters
     ----------
-    update : if False, tries to use a cached copy of the stations file. If one
-             can't be found or if update is True, then a new copy of the
-             stations file is pulled from the web.
+    update : bool
+        If ``True`` (default), check for a newer copy of the stations file and
+        download if it is newer the previously downloaded copy. If ``False``,
+        then a new stations file will only be downloaded if a previously
+        downloaded file cannot be found.
+
+
+    Returns
+    -------
+    stations_dict : dict
+        A dict with USAF-WBAN codes keyed to station information dicts.
     """
     if update or not os.path.exists(NCDC_GSOD_STATIONS_FILE):
         _download_stations_file()
@@ -210,18 +247,3 @@ def _record_array_to_value_dicts(record_array):
 def _station_code(station):
     """returns station code from a station dict"""
     return '-'.join([station['USAF'], station['WBAN']])
-
-
-if __name__ == '__main__':
-    #_download_gsod_file(2012)
-    stations = get_stations(update=False)
-    texas_stations = [
-        _station_code(station)
-        for station in stations.values()
-        if station['state'] == 'TX']
-    data = get_data(texas_stations, start_date=datetime.datetime(2012, 1, 1),
-        end_date=datetime.datetime(2012, 2, 1))
-    station_data = data[texas_stations[2]]
-    import pandas
-    df = pandas.DataFrame(station_data)
-    import pdb; pdb.set_trace()
