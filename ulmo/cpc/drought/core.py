@@ -1,5 +1,9 @@
 """
-drought index data from the National Weather Service Climatic Predicition Center
+    ulmo.cpc.drought.core
+    ~~~~~~~~~~~~~~~~~~~~~
+
+    This module provides direct access to `Climate Predicition Center`_ Weekly
+    drought index dataset.
 """
 import datetime
 import os
@@ -68,18 +72,34 @@ STATE_CODES = {
 
 def get_data(state=None, climate_division=None, start_date=None, end_date=None,
              as_dataframe=False):
-    """returns requested data
+    """Retreives data.
+
 
     Parameters
     ----------
-    state : optionally limits data selection to a given state
-    climate_division: optionally limits data selection to a climate division
-    start_date: default is the start of the current calendar year
-    end_date: default is the current date
-    as_dataframe: if True, will return a pandas.DataFrame object, otherwise a
-            a nested set of dicts will be returned, with data indexed by
-            state, then climate division; setting this to True will return
-            much faster if querying large amounts of data
+    state : ``None`` or str
+        If specified, results will be limited to the state corresponding to the
+        given 2-character state code.
+    climate_division : ``None`` or int
+        If specified, results will be limited to the climate division.
+    start_date : ``None`` or datetime.date
+        Results will be limited to those after the given date. Default is the
+        start of the current calendar year.
+    end_date : ``None`` or datetime.date
+        If specified, results will be limited to data before this date.
+    as_dataframe: bool
+        If ``False`` (default), a dict with a nested set of dicts will be
+        returned with data indexed by state, then climate division. If ``True``
+        then a pandas.DataFrame object will be returned.  The pandas dataframe
+        is used internally, so setting this to ``True`` is a little bit faster
+        as it skips a serialization step.
+
+
+    Returns
+    -------
+    data : dict or pandas.Dataframe
+        A dict or pandas.DataFrame representing the data. See the
+        ``as_dataframe`` parameter for more.
     """
     #XXX: add a non-dataframe option
     start_date = util.parse_datestr(start_date)
