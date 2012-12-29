@@ -42,7 +42,7 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
         is returned. If ``True``, a dict with element codes mapped to equivalent
         pandas.DataFrame objects will be returned. The pandas dataframe is used
         internally, so setting this to ``True`` is a little bit faster as it
-        skips a serialization step. Default is ``False``.
+        skips a serialization step.
 
 
     Returns
@@ -153,7 +153,6 @@ def get_stations(country=None, state=None, elements=None, start_year=None,
         is returned. If ``True``, a single pandas.DataFrame object will be
         returned. The pandas dataframe is used internally, so setting this to
         ``True`` is a little bit faster as it skips a serialization step.
-        Default is ``False``.
 
 
     Returns
