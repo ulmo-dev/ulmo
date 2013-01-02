@@ -1,6 +1,13 @@
 .. _api:
 
 
+CPC
+===
+.. automodule:: ulmo.cpc.drought.core
+   :members:
+   :inherited-members:
+
+
 NCDC
 ====
 
