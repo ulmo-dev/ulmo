@@ -1,23 +1,11 @@
 import ulmo
 
-TEST_FILE_PATH = '/tmp/ulmo_test.h5'
-TWDB_WSDL_URL = 'http://his.crwr.utexas.edu/TWDB_Sondes/cuahsi_1_0.asmx?WSDL'
+def test_core_get_sites_waterml_1_0():
+    WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    assert len(sites) == 14
 
 
-#def test_init():
-    #_remove_test_file()
-    #assert not os.path.exists(TEST_FILE_PATH)
-    #ulmo.usgs.pytables.init_h5(TEST_FILE_PATH)
-    #assert os.path.exists(TEST_FILE_PATH)
-
-
-#def test_core_get_sites():
-    #sites = ulmo.wof.core.get_sites(TWDB_WSDL_URL)
-    #assert len(sites) == 74
-
-
-#def test_specific_sites():
-    #site = ulmo.wof.core.get_site_data(TWDB_WSDL_URL, 'Aransas95_D1', network='TWDBSondes')
-    #assert site['latitude'] == 28.06666667
-    #assert site['longitude'] == -97.20333333
-    #assert site['name'] == 'Upper Copano Bay'
+def test_core_get_sites_waterml_1_1():
+    WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
+    sites = ulmo.wof.core.get_sites(WSDL_URL)
+    assert len(sites) == 34
