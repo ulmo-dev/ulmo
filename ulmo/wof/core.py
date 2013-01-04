@@ -2,36 +2,54 @@ import cStringIO as StringIO
 
 import suds
 
-import ulmo.waterml.v1_0 as wml
+from ulmo import waterml
 
 
 def get_sites(wsdl_url):
+    """
+    Retrieves information on available sites for a given WOF service.
+
+    Parameters
+    ----------
+    wsdl_url : str
+
+
+    Returns
+    -------
+    sites_dict : dict
+        a python dict with site codes mapped to site information
+    """
     suds_client = suds.client.Client(wsdl_url)
-    suds_client.service.GetSites('')
-    response_text = unicode(suds_client.last_received())
-    response_buffer = StringIO.StringIO()
+    #outfile = wsdl_url.split('/')[3] + 'wsdl.xml'
+    #with open('files/' + outfile, 'w') as f:
+        #f.write(unicode(suds_client.last_received()))
 
-    # hacks: Hydroserver doesn't declare soap namespace so it doesn't validate
-    inject_namespaces = ['soap', 'wsa', 'wsse', 'wsu', 'xsi']
-    response_buffer.write(response_text[:53])
-    for inject_namespace in inject_namespaces:
-        response_buffer.write(' xmlns:%s="http://soap/envelope/"' % inject_namespace)
-    response_buffer.write(response_text[53:])
-    response_buffer.seek(0)
-    sites = wml.parse_sites(response_buffer)
-    return sites
+    tns_str = str(suds_client.wsdl.tns[1])
+    if tns_str == 'http://www.cuahsi.org/his/1.0/ws/':
+        response = suds_client.service.GetSitesXml('')
+        response_buffer = StringIO.StringIO(response)
+        sites = waterml.v1_0.parse_sites(response_buffer)
+    elif tns_str == 'http://www.cuahsi.org/his/1.1/ws/':
+        response = suds_client.service.GetSites('')
+        response_buffer = StringIO.StringIO(response)
+        sites = waterml.v1_1.parse_sites(response_buffer)
+
+    return {
+        site['network'] + ':' + site['code']: site
+        for site in sites.values()
+    }
 
 
-def get_site_data(wsdl_url, site_code, network, variable_code, variable_vocabulary):
-        #kservice=None, parameter_code=None,
-                  #date_range=None, modified_since=None):
+def get_site_data(wsdl_url, site_code, variable_code, variable_vocabulary):
     suds_client = suds.client.Client(wsdl_url)
     suds_client.service.GetValuesObject(
         '%s:%s' % (network, site_code),
         '%s:%s' % (timeseries.variable.vocabulary, timeseries.variable.code),
         begin_date_str,
         end_date_str)
-    suds_client.service.GetSites('')
     response_text = unicode(suds_client.last_received())
     response_buffer = StringIO.StringIO()
+
+
+
 
