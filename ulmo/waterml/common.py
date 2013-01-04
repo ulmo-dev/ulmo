@@ -24,13 +24,17 @@ def parse_site_values(content_io, namespace, query_isodate):
     return data_dict
 
 
-def parse_sites(content_io, namespace, site_info_name):
+def parse_sites(content_io, namespace, site_info_names):
     """parses sites out of a waterml file; content_io should be a file-like object"""
-    site_elements = dict(set([(ele.find(namespace + "siteCode").text, ele)
-                    for (event, ele) in etree.iterparse(content_io)
-                    if ele.tag == namespace + site_info_name]))
-    sites = dict([(key, _parse_site_info(source_info, namespace))
-                    for key, source_info in site_elements.iteritems()])
+    sites = {}
+    for site_info_name in site_info_names:
+        content_io.seek(0)
+        site_elements = dict(set([(ele.find(namespace + "siteCode").text, ele)
+                        for (event, ele) in etree.iterparse(content_io)
+                        if ele.tag == namespace + site_info_name]))
+        sites.update(dict(
+            [(key, _parse_site_info(source_info, namespace))
+             for key, source_info in site_elements.iteritems()]))
     return sites
 
 
