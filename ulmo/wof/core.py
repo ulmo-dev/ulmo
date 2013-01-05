@@ -16,12 +16,13 @@ from ulmo import waterml
 
 def get_sites(wsdl_url):
     """
-    Retrieves information on available sites for a given WOF service.
+    Retrieves information on available from a WaterOneFlow GetSites request.
+    For more detailed information (including data available for a given site,
+    use get_site_info.
 
     Parameters
     ----------
     wsdl_url : str
-
 
     Returns
     -------
