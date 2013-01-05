@@ -34,12 +34,12 @@ def get_sites(wsdl_url):
     #with open('files/' + outfile, 'w') as f:
         #f.write(unicode(suds_client.last_received()))
 
-    tns_str = str(suds_client.wsdl.tns[1])
-    if tns_str == 'http://www.cuahsi.org/his/1.0/ws/':
+    waterml_version = _waterml_version(suds_client)
+    if waterml_version == '1.0':
         response = suds_client.service.GetSitesXml('')
         response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
         sites = waterml.v1_0.parse_sites(response_buffer)
-    elif tns_str == 'http://www.cuahsi.org/his/1.1/ws/':
+    elif waterml_version == '1.1':
         response = suds_client.service.GetSites('')
         response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
         sites = waterml.v1_1.parse_sites(response_buffer)
@@ -61,5 +61,12 @@ def get_site_data(wsdl_url, site_code, variable_code, variable_vocabulary):
     response_buffer = StringIO.StringIO()
 
 
-
-
+def _waterml_version(suds_client):
+    tns_str = str(suds_client.wsdl.tns[1])
+    if tns_str == 'http://www.cuahsi.org/his/1.0/ws/':
+        return '1.0'
+    elif tns_str == 'http://www.cuahsi.org/his/1.1/ws/':
+        return '1.1'
+    else:
+        raise NotImplementedError("only WaterOneFlow 1.0 and 1.1 are currently"
+            " supported")
