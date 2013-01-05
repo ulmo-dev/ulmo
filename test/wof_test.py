@@ -1,11 +1,17 @@
 import ulmo
 
-def test_core_get_sites_waterml_1_0():
+import test_util
+
     WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    get_sites_file = 'muddyriver_1_0_get_sites.xml'
+    with test_util.mocked_suds_client('1.0', dict(GetSitesXml=get_sites_file)):
+        sites = ulmo.wof.core.get_sites(WSDL_URL)
     assert len(sites) == 14
 
 
 def test_core_get_sites_waterml_1_1():
     WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
-    sites = ulmo.wof.core.get_sites(WSDL_URL)
+    get_sites_file = 'ipswich_1_1_get_sites.xml'
+    with test_util.mocked_suds_client('1.1', dict(GetSites=get_sites_file)):
+        sites = ulmo.wof.core.get_sites(WSDL_URL)
     assert len(sites) == 34

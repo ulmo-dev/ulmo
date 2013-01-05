@@ -1,0 +1,215 @@
+<sitesResponse xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wtr="http://www.cuahsi.org/waterML/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cuahsi.org/waterML/1.0/">
+  <queryInfo>
+    <criteria/>
+  </queryInfo>
+  <site>
+    <siteInfo>
+      <siteName>Commonwealth Ave</siteName>
+      <siteCode network="MuddyRiver" siteID="1">MuddyRiver_1</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.349177</latitude>
+          <longitude>-71.091754</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>0</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = Instream</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Agassiz Road</siteName>
+      <siteCode network="MuddyRiver" siteID="2">MuddyRiver_2</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.343136</latitude>
+          <longitude>-71.094048</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>0</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = Instream</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Bridge Upstr. of Boston Gate Houses</siteName>
+      <siteCode network="MuddyRiver" siteID="3">MuddyRiver_3</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.341133</latitude>
+          <longitude>-71.094017</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>0</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = Instream</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Fens Bridge</siteName>
+      <siteCode network="MuddyRiver" siteID="4">MuddyRiver_4</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.3405</latitude>
+          <longitude>-71.099908</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>3</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = Instream</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Longwood Avenue Bridge</siteName>
+      <siteCode network="MuddyRiver" siteID="5">MuddyRiver_5</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.340374</latitude>
+          <longitude>-71.110708</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>1</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = Instream</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Outlet of Leverett Pond</siteName>
+      <siteCode network="MuddyRiver" siteID="6">MuddyRiver_6</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.330724</latitude>
+          <longitude>-71.113582</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>4</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = Instream</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Outlet of Willow Pond</siteName>
+      <siteCode network="MuddyRiver" siteID="7">MuddyRiver_7</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.325802</latitude>
+          <longitude>-71.11592</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>4</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = Instream</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Outlet of Wards Pond</siteName>
+      <siteCode network="MuddyRiver" siteID="8">MuddyRiver_8</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.322376</latitude>
+          <longitude>-71.117895</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>11</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = Instream</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Longwood Avenue Drain</siteName>
+      <siteCode network="MuddyRiver" siteID="9">MuddyRiver_9</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.337302</latitude>
+          <longitude>-71.111536</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>1</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = outfall</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Tannery Brook Drain</siteName>
+      <siteCode network="MuddyRiver" siteID="10">MuddyRiver_10</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.334172</latitude>
+          <longitude>-71.111668</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>1</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = outfall</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Pearl St. Drain</siteName>
+      <siteCode network="MuddyRiver" siteID="11">MuddyRiver_11</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.332494</latitude>
+          <longitude>-71.112989</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>4</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = outfall</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Daisy Field Drain</siteName>
+      <siteCode network="MuddyRiver" siteID="16">MuddyRiver_13</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.327121</latitude>
+          <longitude>-71.114834</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>1</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = outfall</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Roving Location</siteName>
+      <siteCode network="MuddyRiver" siteID="17">MuddyRiver_14</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.323944</latitude>
+          <longitude>-71.115036</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>8</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = outfall</note>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Village Brook Drain</siteName>
+      <siteCode network="MuddyRiver" siteID="18">MuddyRiver_12</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.330008</latitude>
+          <longitude>-71.113962</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>0</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = outfall</note>
+    </siteInfo>
+  </site>
+</sitesResponse>

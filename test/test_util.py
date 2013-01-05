@@ -1,6 +1,7 @@
 import contextlib
 import os
 import os.path
+import cStringIO as StringIO
 
 import mock
 import requests
@@ -34,13 +35,37 @@ def mocked_requests(mocked_urls):
                     url: open_files.get(file_path)
                     for url, file_path in mocked_urls.iteritems()
                 }
-            side_effect = _mock_side_effect(url_files)
+            side_effect = _mock_request_side_effect(url_files)
 
             with mock.patch('requests.get', side_effect=side_effect):
                 yield
 
 
-def _mock_side_effect(url_files):
+@contextlib.contextmanager
+def mocked_suds_client(waterml_version, mocked_service_calls):
+    """mocks the suds library to return a given file's content"""
+    # if environment variable is set, then don't mock the tests just grab files
+    # over the network. Example:
+    #    env ULMO_DONT_MOCK_TESTS=1 py.test
+    if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
+        yield
+
+    else:
+        tns_str = 'http://www.cuahsi.org/his/%s/ws/' % waterml_version
+        with _open_multiple(mocked_service_calls.values()) as open_files:
+            client = mock.MagicMock()
+            client.wsdl.tns = ('tns', tns_str)
+
+            for service_call, filename in mocked_service_calls.iteritems():
+                open_file = open_files[filename]
+                func = lambda x: open_file.read()
+                setattr(client.service, service_call, func)
+
+            with mock.patch('suds.client.Client', return_value=client):
+                yield
+
+
+def _mock_request_side_effect(url_files):
     def _side_effect(url, *args, **kwargs):
         mock_response = requests.Response()
         mock_response.request = requests.Request(url, *args, **kwargs)
