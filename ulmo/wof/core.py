@@ -37,11 +37,11 @@ def get_sites(wsdl_url):
     tns_str = str(suds_client.wsdl.tns[1])
     if tns_str == 'http://www.cuahsi.org/his/1.0/ws/':
         response = suds_client.service.GetSitesXml('')
-        response_buffer = StringIO.StringIO(response)
+        response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
         sites = waterml.v1_0.parse_sites(response_buffer)
     elif tns_str == 'http://www.cuahsi.org/his/1.1/ws/':
         response = suds_client.service.GetSites('')
-        response_buffer = StringIO.StringIO(response)
+        response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
         sites = waterml.v1_1.parse_sites(response_buffer)
 
     return {
