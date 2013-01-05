@@ -1,3 +1,12 @@
+"""
+    ulmo.wof.core
+    ~~~~~~~~~~~~~
+
+    This module provides direct access to `CUAHSI WaterOneFlow`_ web services.
+
+
+    .. _CUAHSI WaterOneFlow: http://his.cuahsi.org/wofws.html
+"""
 import cStringIO as StringIO
 
 import suds
