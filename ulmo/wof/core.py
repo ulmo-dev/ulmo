@@ -30,9 +30,6 @@ def get_sites(wsdl_url):
         a python dict with site codes mapped to site information
     """
     suds_client = suds.client.Client(wsdl_url)
-    #outfile = wsdl_url.split('/')[3] + 'wsdl.xml'
-    #with open('files/' + outfile, 'w') as f:
-        #f.write(unicode(suds_client.last_received()))
 
     waterml_version = _waterml_version(suds_client)
     if waterml_version == '1.0':
