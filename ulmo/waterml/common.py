@@ -57,18 +57,24 @@ def _parse_site_info(site_info, namespace):
     """returns a dict representation of a site given an etree object
     representing a siteInfo element
     """
-    geog_location = site_info.find(namespace.join(["", "geoLocation/", "geogLocation"]))
     site_code = site_info.find(namespace + "siteCode")
-    timezone_info = site_info.find(namespace + "timeZoneInfo")
 
     return_dict = {
-        'agency': site_code.attrib.get('agencyCode'),
         'code': site_code.text,
-        'location': _parse_geog_location(geog_location, namespace),
         'name': site_info.find(namespace + "siteName").text,
         'network': site_code.attrib.get('network'),
     }
 
+    agency = site_code.attrib.get('agencyCode')
+    if agency:
+        return_dict['agency'] = agency
+
+    geog_location = site_info.find(
+        namespace.join(["", "geoLocation/", "geogLocation"]))
+    if not geog_location is None:
+        return_dict['location'] = _parse_geog_location(geog_location, namespace)
+
+    timezone_info = site_info.find(namespace + "timeZoneInfo")
     if not timezone_info is None:
         return_dict['timezone_info'] = _parse_timezone_info(timezone_info, namespace)
 
