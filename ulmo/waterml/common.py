@@ -78,6 +78,10 @@ def _parse_site_info(site_info, namespace):
     if not timezone_info is None:
         return_dict['timezone_info'] = _parse_timezone_info(timezone_info, namespace)
 
+    elevation_m = site_info.find(namespace + 'elevation_m')
+    if not elevation_m is None:
+        return_dict['elevation_m'] = elevation_m.text
+
     site_properties = {
         'county': 'countyCd',
         'huc': 'hucCd',
