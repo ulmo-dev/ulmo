@@ -54,11 +54,16 @@ def _convert_to_underscore(s):
 
 def _parse_geog_location(geog_location, namespace):
     """returns a dict representation of a geogLocation etree element"""
-    return {
-        'srs': geog_location.attrib.get('srs'),
+    return_dict = {
         'latitude': geog_location.find(namespace + 'latitude').text,
         'longitude': geog_location.find(namespace + 'longitude').text,
     }
+
+    srs = geog_location.attrib.get('srs')
+    if not srs is None:
+        return_dict['srs'] = srs
+
+    return return_dict
 
 
 def _parse_site_info(site_info, namespace):
