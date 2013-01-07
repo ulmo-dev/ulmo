@@ -54,8 +54,8 @@ def _parse_geog_location(geog_location, namespace):
 
 
 def _parse_site_info(site_info, namespace):
-    """returns a dict representation of a site given an etree sourceInfo object
-    representing a site
+    """returns a dict representation of a site given an etree object
+    representing a siteInfo element
     """
     geog_location = site_info.find(namespace.join(["", "geoLocation/", "geogLocation"]))
     site_code = site_info.find(namespace + "siteCode")
