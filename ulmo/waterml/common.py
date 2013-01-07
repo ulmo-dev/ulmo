@@ -1,6 +1,13 @@
+import re
+
 import isodate
 
 from lxml import etree
+
+
+# pre-compiled regexes for underscore conversion
+first_cap_re = re.compile('(.)([A-Z][a-z]+)')
+all_cap_re = re.compile('([a-z0-9])([A-Z])')
 
 
 def parse_site_values(content_io, namespace, query_isodate):
@@ -44,12 +51,76 @@ def parse_site_infos(content_io, namespace, site_info_names):
     return site_infos
 
 
+def parse_sites(content_io, namespace):
+    """parses information contained in site elements (including seriesCatalogs)
+    out of a waterml file; content_io should be a file-like object
+    """
+    content_io.seek(0)
+    site_elements = [
+        ele for (event, ele) in etree.iterparse(content_io)
+        if ele.tag == namespace + 'site']
+    site_dicts = [
+        _parse_site(site_element, namespace)
+        for site_element in site_elements]
+    sites = dict(
+        [(site_dict['code'], site_dict)
+         for site_dict in site_dicts])
+    return sites
+
+
 def _convert_to_underscore(s):
     """converts camelCase to underscore, originally from
     http://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-camel-case
     """
     first_sub = first_cap_re.sub(r'\1_\2', s)
     return all_cap_re.sub(r'\1_\2', first_sub).lower()
+
+
+def _element_dict(element):
+    """converts an element to a dict representation with CamelCase tag names and
+    attributes converted to underscores; this is a generic converter for cases
+    where special parsing isn't necessary.  In most cases you will want to
+    update with this dict.
+
+    Note: does not handle sibling elements
+    """
+    if element is None:
+        return {}
+
+    element_dict = {}
+    element_name = _convert_to_underscore(element.tag.split('}')[-1])
+
+    if len(element) == 0 and not element.text is None:
+        element_dict[element_name] = element.text
+
+    element_dict.update({
+        _element_dict_attribute_name(key, element_name): value
+        for key, value in element.attrib.iteritems()
+    })
+
+    for child in element.iterchildren():
+        element_dict.update(_element_dict(child))
+
+    return element_dict
+
+
+def _element_dict_attribute_name(attribute_name, element_name):
+    attribute_only = _convert_to_underscore(attribute_name.split('}')[-1])
+    if attribute_only.startswith(element_name):
+        return attribute_only
+    else:
+        return element_name + '_' + attribute_only
+
+
+def _parse_datetime(datetime_str):
+    """returns an iso 8601 datetime string; USGS returns fractions of a second
+    which are usually all 0s. ISO 8601 does not limit the number of decimal
+    places but we have to cut them off at some point
+    """
+    #XXX: this could be sped up if need be
+    #XXX: also, we need to document that we are throwing away fractions of
+    #     seconds
+    return isodate.datetime_isoformat(isodate.parse_datetime(datetime_str))
 
 
 def _parse_geog_location(geog_location, namespace):
@@ -64,6 +135,51 @@ def _parse_geog_location(geog_location, namespace):
         return_dict['srs'] = srs
 
     return return_dict
+
+
+def _parse_series(series, namespace):
+    include_elements = [
+        'method',
+        'Method',
+        'source',
+        'Source',
+        'QualityControlLevel',
+        'qualityControlLevel',
+        'variable',
+        'variableTimeInterval',
+        'valueCount',
+    ]
+    exclude_items = [
+        'variable_time_interval_type',
+    ]
+    series_dict = {}
+
+    for include_element in include_elements:
+        element = series.find(namespace + include_element)
+        if not element is None:
+            series_dict.update(_element_dict(element))
+
+    for exclude_item in exclude_items:
+        try:
+            del series_dict[exclude_item]
+        except KeyError:
+            pass
+
+    return series_dict
+
+
+def _parse_site(site, namespace):
+    """returns a dict representation of a site given an etree object
+    representing a site element
+    """
+    site_dict = _parse_site_info(site.find(namespace + 'siteInfo'), namespace)
+    series_elements = site.iter(namespace + 'series')
+    site_dict['series'] = [
+        _parse_series(series_element, namespace)
+        for series_element in series_elements
+    ]
+
+    return site_dict
 
 
 def _parse_site_info(site_info, namespace):
@@ -170,14 +286,3 @@ def _parse_variable(variable_element, namespace):
         }
 
     return return_dict
-
-
-def _parse_datetime(datetime_str):
-    """returns an iso 8601 datetime string; USGS returns fractions of a second
-    which are usually all 0s. ISO 8601 does not limit the number of decimal
-    places but we have to cut them off at some point
-    """
-    #XXX: this could be sped up if need be
-    #XXX: also, we need to document that we are throwing away fractions of
-    #     seconds
-    return isodate.datetime_isoformat(isodate.parse_datetime(datetime_str))

@@ -47,15 +47,47 @@ def get_sites(wsdl_url):
     }
 
 
-def get_site_data(wsdl_url, site_code, variable_code, variable_vocabulary):
+def get_site_info(wsdl_url, site_code):
+    """
+    Retrieves detailed site information e_info.
+
+    Parameters
+    ----------
+    wsdl_url : str
+        URL of a service's web service definition language (WSDL) description.
+        All WaterOneFlow services publish a WSDL description and this url is the
+        entry point to the service.
+    site_code : str
+        Site code of the site you'd like to get more information for. Site codes
+        MUST contain the network and be of the form <network>:<site_code>, as is
+        required by WaterOneFlow.
+
+    Returns
+    -------
+    sites_dict : dict
+        a python dict with site codes mapped to site information
+    """
     suds_client = suds.client.Client(wsdl_url)
-    suds_client.service.GetValuesObject(
-        '%s:%s' % (network, site_code),
-        '%s:%s' % (timeseries.variable.vocabulary, timeseries.variable.code),
-        begin_date_str,
-        end_date_str)
-    response_text = unicode(suds_client.last_received())
-    response_buffer = StringIO.StringIO()
+
+    waterml_version = _waterml_version(suds_client)
+    if waterml_version == '1.0':
+        response = suds_client.service.GetSiteInfo(site_code)
+        response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
+        sites = waterml.v1_0.parse_sites(response_buffer)
+    elif waterml_version == '1.1':
+        response = suds_client.service.GetSiteInfo(site_code)
+        response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
+        sites = waterml.v1_1.parse_sites(response_buffer)
+
+    if len(sites) == 0:
+        return {}
+    site_info = sites.values()[0]
+    series_dict = {
+        series['variable_code_vocabulary'] + ':' + series['variable_code']: series
+        for series in site_info['series']
+    }
+    site_info['series'] = series_dict
+    return site_info
 
 
 def _waterml_version(suds_client):
