@@ -8,6 +8,7 @@ import time
 import ulmo
 
 import test_util
+import waterml_v1_1_test
 
 try:
     import tables
@@ -22,20 +23,9 @@ def test_init():
     _remove_test_file()
 
 
-def test_parse_get_sites():
-    site_files = ['RI_daily.xml', 'RI_instantaneous.xml']
-    sites = {}
-    for site_file in site_files:
-        with open(test_util.get_test_file_path(site_file), 'r') as f:
-            sites.update(ulmo.waterml.v1_1.parse_site_infos(f))
-
-    assert len(sites) == 64
-    return sites
-
-
 def test_update_sites_table():
     test_init()
-    sites = test_parse_get_sites()
+    sites = waterml_v1_1_test.test_parse_site_infos()
     ulmo.usgs.pytables._update_sites_table(sites.values(), TEST_FILE_PATH)
     assert _count_rows('/usgs/sites') == 64
 
