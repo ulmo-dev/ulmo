@@ -35,11 +35,11 @@ def get_sites(wsdl_url):
     if waterml_version == '1.0':
         response = suds_client.service.GetSitesXml('')
         response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
-        sites = waterml.v1_0.parse_sites(response_buffer)
+        sites = waterml.v1_0.parse_site_infos(response_buffer)
     elif waterml_version == '1.1':
         response = suds_client.service.GetSites('')
         response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
-        sites = waterml.v1_1.parse_sites(response_buffer)
+        sites = waterml.v1_1.parse_site_infos(response_buffer)
 
     return {
         site['network'] + ':' + site['code']: site

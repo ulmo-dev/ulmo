@@ -24,18 +24,24 @@ def parse_site_values(content_io, namespace, query_isodate):
     return data_dict
 
 
-def parse_sites(content_io, namespace, site_info_names):
-    """parses sites out of a waterml file; content_io should be a file-like object"""
-    sites = {}
+def parse_site_infos(content_io, namespace, site_info_names):
+    """parses information contained in site info elements out of a waterml file;
+    content_io should be a file-like object
+    """
+    site_infos = {}
     for site_info_name in site_info_names:
         content_io.seek(0)
-        site_elements = dict(set([(ele.find(namespace + "siteCode").text, ele)
-                        for (event, ele) in etree.iterparse(content_io)
-                        if ele.tag == namespace + site_info_name]))
-        sites.update(dict(
-            [(key, _parse_site_info(source_info, namespace))
-             for key, source_info in site_elements.iteritems()]))
-    return sites
+        site_info_elements = [
+            element
+            for (event, element) in etree.iterparse(content_io)
+            if element.tag == namespace + site_info_name
+        ]
+        site_info_dicts = [
+            _parse_site_info(site_info_element, namespace)
+            for site_info_element in site_info_elements
+        ]
+        site_infos.update(dict([(d['code'], d) for d in site_info_dicts]))
+    return site_infos
 
 
 def _parse_geog_location(geog_location, namespace):

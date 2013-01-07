@@ -79,7 +79,7 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
         log.info("processing data from request: %s" % req.request.full_url)
         content_io = StringIO.StringIO(str(req.content))
 
-        return_sites = wml.parse_sites(content_io)
+        return_sites = wml.parse_site_infos(content_io)
     return return_sites
 
 
