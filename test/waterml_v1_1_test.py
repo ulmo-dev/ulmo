@@ -3,16 +3,16 @@ import ulmo
 import test_util
 
 
-def test_parse_get_sites():
+def test_parse_site_infos():
     site_files = ['RI_daily.xml', 'RI_instantaneous.xml']
-    sites = {}
+    site_infos = {}
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
         with open(test_site_file, 'r') as f:
-            sites.update(ulmo.waterml.v1_1.parse_sites(f))
+            site_infos.update(ulmo.waterml.v1_1.parse_site_infos(f))
 
-    assert len(sites) == 64
-    return sites
+    assert len(site_infos) == 64
+    return site_infos
 
 
 def test_parse_site_values():
