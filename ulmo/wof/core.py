@@ -53,7 +53,8 @@ def get_sites(wsdl_url):
 
 def get_site_info(wsdl_url, site_code):
     """
-    Retrieves detailed site information e_info.
+    Retrieves detailed site information from a WaterOneFlow service using a
+    GetSiteInfo request.
 
     Parameters
     ----------
@@ -68,8 +69,8 @@ def get_site_info(wsdl_url, site_code):
 
     Returns
     -------
-    sites_dict : dict
-        a python dict with site codes mapped to site information
+    site_info : dict
+        a python dict containing site information
     """
     suds_client = suds.client.Client(wsdl_url)
 
