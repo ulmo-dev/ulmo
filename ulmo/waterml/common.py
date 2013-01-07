@@ -44,6 +44,14 @@ def parse_site_infos(content_io, namespace, site_info_names):
     return site_infos
 
 
+def _convert_to_underscore(s):
+    """converts camelCase to underscore, originally from
+    http://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-camel-case
+    """
+    first_sub = first_cap_re.sub(r'\1_\2', s)
+    return all_cap_re.sub(r'\1_\2', first_sub).lower()
+
+
 def _parse_geog_location(geog_location, namespace):
     """returns a dict representation of a geogLocation etree element"""
     return {
@@ -82,17 +90,21 @@ def _parse_site_info(site_info, namespace):
     if not elevation_m is None:
         return_dict['elevation_m'] = elevation_m.text
 
-    site_properties = {
-        'county': 'countyCd',
-        'huc': 'hucCd',
-        'site_type': 'siteTypeCd',
-        'state_code': 'stateCd',
+    # WaterML 1.0 notes
+    notes = {
+        _convert_to_underscore(note.attrib['title'].replace(' ', '')): note.text
+        for note in site_info.findall(namespace + 'note')
     }
+    if notes:
+        return_dict['notes'] = notes
 
-    for k, v in site_properties.iteritems():
-        find_element = site_info.find(namespace + "siteProperty[@name='%s']" % v)
-        if not find_element is None:
-            return_dict[k] = find_element.text
+    # WaterML 1.1 siteProperties
+    site_properties = {
+        _convert_to_underscore(site_property.attrib['name'].replace(' ', '')): site_property.text
+        for site_property in site_info.findall(namespace + 'site_property')
+    }
+    if site_properties:
+        return_dict['site_properties'] = site_properties
 
     return return_dict
 
