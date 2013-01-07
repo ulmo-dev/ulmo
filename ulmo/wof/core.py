@@ -87,7 +87,7 @@ def get_site_info(wsdl_url, site_code):
         return {}
     site_info = sites.values()[0]
     series_dict = {
-        series['variable_code_vocabulary'] + ':' + series['variable_code']: series
+        series['variable']['vocabulary'] + ':' + series['variable']['code']: series
         for series in site_info['series']
     }
     site_info['series'] = series_dict

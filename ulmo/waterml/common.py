@@ -76,7 +76,7 @@ def _convert_to_underscore(s):
     return all_cap_re.sub(r'\1_\2', first_sub).lower()
 
 
-def _element_dict(element):
+def _element_dict(element, exclude_children=None):
     """converts an element to a dict representation with CamelCase tag names and
     attributes converted to underscores; this is a generic converter for cases
     where special parsing isn't necessary.  In most cases you will want to
@@ -86,6 +86,9 @@ def _element_dict(element):
     """
     if element is None:
         return {}
+
+    if exclude_children is None:
+        exclude_children = []
 
     element_dict = {}
     element_name = _convert_to_underscore(element.tag.split('}')[-1])
@@ -99,7 +102,8 @@ def _element_dict(element):
     })
 
     for child in element.iterchildren():
-        element_dict.update(_element_dict(child))
+        if not child.tag.split('}')[-1] in exclude_children:
+            element_dict.update(_element_dict(child))
 
     return element_dict
 
@@ -145,7 +149,6 @@ def _parse_series(series, namespace):
         'Source',
         'QualityControlLevel',
         'qualityControlLevel',
-        'variable',
         'variableTimeInterval',
         'valueCount',
     ]
@@ -153,6 +156,9 @@ def _parse_series(series, namespace):
         'variable_time_interval_type',
     ]
     series_dict = {}
+
+    variable_element = series.find(namespace + 'variable')
+    series_dict['variable'] = _parse_variable(variable_element, namespace)
 
     for include_element in include_elements:
         element = series.find(namespace + include_element)
@@ -253,6 +259,31 @@ def _parse_timezone_info(timezone_info, namespace):
     return return_dict
 
 
+def _parse_unit(unit_element, namespace):
+    """returns a list of dicts that represent the values for a given etree
+    values element
+    """
+    unit_dict = _element_dict(unit_element)
+    tag_name = unit_element.tag.split('}')[-1]
+    return_dict = {}
+
+    if '1.0' in namespace:
+        return_dict['name'] = unit_element.text
+
+    keys = [
+        'abbreviation',
+        'code',
+        'name',
+        'type',
+    ]
+    for key in keys:
+        dict_key = tag_name + '_' + key
+        if dict_key in unit_dict:
+            return_dict[key] = unit_dict[dict_key]
+
+    return return_dict
+
+
 def _parse_values(values_element, namespace):
     """returns a list of dicts that represent the values for a given etree
     values element
@@ -266,19 +297,30 @@ def _parse_values(values_element, namespace):
 
 def _parse_variable(variable_element, namespace):
     """returns a dict that represents a variable for a given etree variable element"""
+    return_dict = _element_dict(variable_element,
+        exclude_children=['unit', 'units', 'variableCode', 'variableName',
+            'variableDescription', 'options'])
     variable_code = variable_element.find(namespace + 'variableCode')
-    statistic = variable_element.find(namespace + 'options/' + namespace + "option[@name='Statistic']")
-    return_dict = {
+    return_dict.update({
         'code': variable_code.text,
-        'description': variable_element.find(namespace + 'variableDescription').text,
         'id': variable_code.attrib.get('variableID'),
         'network': variable_code.attrib.get('network'),
         'name': variable_element.find(namespace + 'variableName').text,
-        'unit': variable_element.find(namespace + 'unit/' + namespace + 'unitCode').text,
-        'no_data_value': variable_element.find(namespace + 'noDataValue').text,
         'vocabulary': variable_code.attrib.get('vocabulary'),
-    }
+    })
+    variable_description = variable_element.find(
+            namespace + 'variableDescription')
+    if not variable_description is None:
+        return_dict['description'] = variable_description.text
 
+    unit_element = variable_element.find(namespace + 'unit')
+    if unit_element is None:
+        unit_element = variable_element.find(namespace + 'units')
+
+    if not unit_element is None:
+        return_dict['unit'] = _parse_unit(unit_element, namespace)
+
+    statistic = variable_element.find(namespace + 'options/' + namespace + "option[@name='Statistic']")
     if statistic is not None:
         return_dict['statistic'] = {
             'code': statistic.attrib.get('optionCode'),
