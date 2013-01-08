@@ -74,7 +74,7 @@ def parse_datestr(date_string):
 
 def raise_dependency_error(*args, **kwargs):
     raise DependencyError("Trying to do something that depends on pytables, "
-            "but pytables has not bee installed.")
+            "but pytables has not been installed.")
 
 
 def _download_file(url, path):
