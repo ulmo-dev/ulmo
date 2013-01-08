@@ -5,8 +5,8 @@ ulmo
 
 -----------
 
-.. image:: https://secure.travis-ci.org/swtools/ulmo.png?branch=master
-        :target: https://secure.travis-ci.org/swtools/ulmo
+.. image:: https://secure.travis-ci.org/twdb/ulmo.png?branch=master
+        :target: https://secure.travis-ci.org/twdb/ulmo
 
 
 Features
@@ -46,4 +46,4 @@ you'd like to see added, please open an issue about it.
 
 
 .. _more sophisticated tools: http://pandas.pydata.org
-.. _issue tracker: https://github.com/swtools/ulmo/issues?labels=new+dataset&state=open 
+.. _issue tracker: https://github.com/twdb/ulmo/issues?labels=new+dataset&state=open 
