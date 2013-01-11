@@ -340,7 +340,7 @@ def _parse_variable(variable_element, namespace):
         unit_element = variable_element.find(namespace + 'units')
 
     if not unit_element is None:
-        return_dict['unit'] = _parse_unit(unit_element, namespace)
+        return_dict['units'] = _parse_unit(unit_element, namespace)
 
     statistic = variable_element.find(namespace + 'options/' + namespace + "option[@name='Statistic']")
     if statistic is not None:

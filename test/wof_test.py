@@ -30,7 +30,7 @@ def test_core_get_site_info_waterml_1_0():
     assert 'MR:MuddyRiver_pH' in site_info['series']
     assert 'MR:MuddyRiver_ZN' in site_info['series']
     assert len(site_info['series']) == 27
-    site_info['series']['MR:MuddyRiver_ACID']['variable']['unit'] == {
+    site_info['series']['MR:MuddyRiver_ACID']['variable']['units'] == {
         'abbreviation': 'degC',
         'code': '96',
         'name': 'degree celsius',
@@ -48,7 +48,7 @@ def test_core_get_site_info_waterml_1_1():
     assert 'ipswich:Temp' in site_info['series']
     assert 'ipswich:DO' in site_info['series']
     assert len(site_info['series']) == 3
-    site_info['series']['ipswich:Temp']['variable']['unit'] == {
+    site_info['series']['ipswich:Temp']['variable']['units'] == {
         'abbreviation': 'degC',
         'code': '96',
         'name': 'degree celsius',
