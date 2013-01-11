@@ -1,4 +1,5 @@
 from .misc import (
+        camel_to_underscore,
         dict_from_dataframe,
         download_if_new,
         get_ulmo_dir,

@@ -2,6 +2,7 @@ from contextlib import contextmanager
 import datetime
 import email.utils
 import os
+import re
 import warnings
 
 import appdirs
@@ -9,8 +10,21 @@ import pandas
 import requests
 
 
+# pre-compiled regexes for underscore conversion
+first_cap_re = re.compile('(.)([A-Z][a-z]+)')
+all_cap_re = re.compile('([a-z0-9])([A-Z])')
+
+
 class DependencyError(Exception):
     pass
+
+
+def camel_to_underscore(s):
+    """converts camelCase to underscore, originally from
+    http://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-camel-case
+    """
+    first_sub = first_cap_re.sub(r'\1_\2', s)
+    return all_cap_re.sub(r'\1_\2', first_sub).lower()
 
 
 def dict_from_dataframe(dataframe):

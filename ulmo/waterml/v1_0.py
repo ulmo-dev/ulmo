@@ -9,6 +9,12 @@ def parse_site_infos(content_io):
             site_info_names=['siteInfo'])
 
 
+def parse_site_values(content_io, query_isodate=None):
+    """parses sites out of a waterml file; content_io should be a file-like object"""
+    return common.parse_site_values(content_io, WATERML_V1_0_NAMESPACE,
+            query_isodate=query_isodate)
+
+
 def parse_sites(content_io):
     """parses sites out of a waterml file; content_io should be a file-like object"""
     return common.parse_sites(content_io, WATERML_V1_0_NAMESPACE)

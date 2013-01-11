@@ -1,33 +1,54 @@
-import re
-
 import isodate
 
 from lxml import etree
 
-
-# pre-compiled regexes for underscore conversion
-first_cap_re = re.compile('(.)([A-Z][a-z]+)')
-all_cap_re = re.compile('([a-z0-9])([A-Z])')
+from ulmo import util
 
 
-def parse_site_values(content_io, namespace, query_isodate):
-    """
-    """
+def parse_site_values(content_io, namespace, query_isodate=None):
     data_dict = {}
+    metadata_elements = [
+        # (element name, name of collection,
+        #   key from element dict to use as for a key in the collections dict)
+        ('censorCode', 'censor_codes', 'censor_code'),
+        ('method', 'methods', 'id'),
+        ('offset', 'offsets', 'id'),
+        ('qualifier', 'qualifiers', 'id'),
+        ('qualityControlLevel', 'quality_control_levels', 'id'),
+        ('source', 'sources', 'id')
+    ]
     for (event, ele) in etree.iterparse(content_io):
         if ele.tag == namespace + "timeSeries":
             values_element = ele.find(namespace + 'values')
             values = _parse_values(values_element, namespace)
             var_element = ele.find(namespace + 'variable')
             variable = _parse_variable(var_element, namespace)
+
             code = variable['code']
             if 'statistic' in variable:
                 code += ":" + variable['statistic']['code']
             data_dict[code] = {
-                'last_refresh': query_isodate,
                 'values': values,
                 'variable': variable,
             }
+
+            for tag, collection_name, key in metadata_elements:
+                underscored_tag = util.camel_to_underscore(tag)
+                collection = [
+                    _scrub_prefix(_element_dict(element, namespace),
+                        underscored_tag)
+                    for element in values_element.findall(namespace + tag)
+                ]
+                if len(collection):
+                    collection_dict = {
+                        item[key]: item
+                        for item in collection
+                    }
+                    data_dict[code][collection_name] = collection_dict
+
+            if query_isodate:
+                data_dict[code]['last_refresh'] = query_isodate
+
     return data_dict
 
 
@@ -68,19 +89,13 @@ def parse_sites(content_io, namespace):
     return sites
 
 
-def _convert_to_underscore(s):
-    """converts camelCase to underscore, originally from
-    http://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-camel-case
-    """
-    first_sub = first_cap_re.sub(r'\1_\2', s)
-    return all_cap_re.sub(r'\1_\2', first_sub).lower()
-
-
-def _element_dict(element, exclude_children=None):
+def _element_dict(element, exclude_children=None, prepend_attributes=True):
     """converts an element to a dict representation with CamelCase tag names and
     attributes converted to underscores; this is a generic converter for cases
     where special parsing isn't necessary.  In most cases you will want to
-    update with this dict.
+    update with this dict. If prepend_element_name is True (default), then
+    attributes and children will be prepended with the parent element's tag
+    name.
 
     Note: does not handle sibling elements
     """
@@ -91,14 +106,16 @@ def _element_dict(element, exclude_children=None):
         exclude_children = []
 
     element_dict = {}
-    element_name = _convert_to_underscore(element.tag.split('}')[-1])
+    element_name = util.camel_to_underscore(element.tag.split('}')[-1])
 
     if len(element) == 0 and not element.text is None:
         element_dict[element_name] = element.text
 
     element_dict.update({
-        _element_dict_attribute_name(key, element_name): value
+        _element_dict_attribute_name(key, element_name,
+            prepend_element_name=prepend_attributes): value
         for key, value in element.attrib.iteritems()
+        if value.split(':')[0] not in ['xsd', 'xsi']
     })
 
     for child in element.iterchildren():
@@ -108,9 +125,10 @@ def _element_dict(element, exclude_children=None):
     return element_dict
 
 
-def _element_dict_attribute_name(attribute_name, element_name):
-    attribute_only = _convert_to_underscore(attribute_name.split('}')[-1])
-    if attribute_only.startswith(element_name):
+def _element_dict_attribute_name(attribute_name, element_name,
+        prepend_element_name=True):
+    attribute_only = util.camel_to_underscore(attribute_name.split('}')[-1])
+    if attribute_only.startswith(element_name) or not prepend_element_name:
         return attribute_only
     else:
         return element_name + '_' + attribute_only
@@ -141,6 +159,10 @@ def _parse_geog_location(geog_location, namespace):
     return return_dict
 
 
+def _parse_method(method, namespace):
+    return _element_dict(method, namespace, prepend_attributes=False)
+
+
 def _parse_series(series, namespace):
     include_elements = [
         'method',
@@ -152,9 +174,6 @@ def _parse_series(series, namespace):
         'variableTimeInterval',
         'valueCount',
     ]
-    exclude_items = [
-        'variable_time_interval_type',
-    ]
     series_dict = {}
 
     variable_element = series.find(namespace + 'variable')
@@ -163,13 +182,9 @@ def _parse_series(series, namespace):
     for include_element in include_elements:
         element = series.find(namespace + include_element)
         if not element is None:
-            series_dict.update(_element_dict(element))
-
-    for exclude_item in exclude_items:
-        try:
-            del series_dict[exclude_item]
-        except KeyError:
-            pass
+            name = util.camel_to_underscore(element.tag)
+            element_dict = _scrub_prefix(_element_dict(element), name)
+            series_dict[name] = element_dict
 
     return series_dict
 
@@ -219,7 +234,7 @@ def _parse_site_info(site_info, namespace):
 
     # WaterML 1.0 notes
     notes = {
-        _convert_to_underscore(note.attrib['title'].replace(' ', '')): note.text
+        util.camel_to_underscore(note.attrib['title'].replace(' ', '')): note.text
         for note in site_info.findall(namespace + 'note')
     }
     if notes:
@@ -227,7 +242,7 @@ def _parse_site_info(site_info, namespace):
 
     # WaterML 1.1 siteProperties
     site_properties = {
-        _convert_to_underscore(site_property.attrib['name'].replace(' ', '')): site_property.text
+        util.camel_to_underscore(site_property.attrib['name'].replace(' ', '')): site_property.text
         for site_property in site_info.findall(namespace + 'site_property')
     }
     if site_properties:
@@ -284,15 +299,22 @@ def _parse_unit(unit_element, namespace):
     return return_dict
 
 
+def _parse_value(value_element, namespace):
+    value_dict = _element_dict(value_element, prepend_attributes=False)
+    datetime = _parse_datetime(value_dict.pop('date_time'))
+    value_dict['datetime'] = datetime
+    return value_dict
+
+
 def _parse_values(values_element, namespace):
     """returns a list of dicts that represent the values for a given etree
     values element
     """
 
-    return [{'datetime': _parse_datetime(value.attrib['dateTime']),
-             'value': value.text,
-             'qualifiers': value.attrib['qualifiers']}
-            for value in values_element.findall(namespace + 'value')]
+    return [
+        _parse_value(value, namespace)
+        for value in values_element.findall(namespace + 'value')
+    ]
 
 
 def _parse_variable(variable_element, namespace):
@@ -328,3 +350,11 @@ def _parse_variable(variable_element, namespace):
         }
 
     return return_dict
+
+
+def _scrub_prefix(element_dict, prefix):
+    "returns a dict with prefix scrubbed from the keys"
+    return {
+        k.split(prefix + '_')[-1]: v
+        for k, v in element_dict.items()
+    }
