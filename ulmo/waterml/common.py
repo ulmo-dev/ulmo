@@ -89,6 +89,27 @@ def parse_sites(content_io, namespace):
     return sites
 
 
+def parse_variables(content_io, namespace):
+    """parses information contained in variables elements out of a waterml file;
+    content_io should be a file-like object
+    """
+    content_io.seek(0)
+    variable_elements = [
+        element
+        for (event, element) in etree.iterparse(content_io)
+        if element.tag == namespace + 'variable'
+    ]
+    variable_dicts = [
+        _parse_variable(variable_element, namespace)
+        for variable_element in variable_elements
+    ]
+    variables = {
+        variable_dict['code']: variable_dict
+        for variable_dict in variable_dicts
+    }
+    return variables
+
+
 def _element_dict(element, exclude_children=None, prepend_attributes=True):
     """converts an element to a dict representation with CamelCase tag names and
     attributes converted to underscores; this is a generic converter for cases

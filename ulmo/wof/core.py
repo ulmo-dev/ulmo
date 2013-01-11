@@ -137,6 +137,44 @@ def get_values(wsdl_url, site_code, variable_code):
         return values
 
 
+def get_variable_info(wsdl_url, variable_code):
+    """
+    Retrieves site values from a WaterOneFlow service using a GetVariableInfo
+    request.
+
+    Parameters
+    ----------
+    wsdl_url : str
+        URL of a service's web service definition language (WSDL) description.
+        All WaterOneFlow services publish a WSDL description and this url is the
+        entry point to the service.
+    variable_code : str
+        Variable code of the variable you'd like to get more information on.
+        Variable codes MUST contain the network and be of the form
+        <vocabulary>:<variable_code>, as is required by WaterOneFlow.
+
+    Returns
+    -------
+    variable_info : dict
+        a python dict containing variable information
+    """
+    suds_client = suds.client.Client(wsdl_url)
+
+    waterml_version = _waterml_version(suds_client)
+    if waterml_version == '1.0':
+        response = suds_client.service.GetVariableInfo(variable_code)
+        response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
+        variable_info = waterml.v1_0.parse_variables(response_buffer)
+    elif waterml_version == '1.1':
+        response = suds_client.service.GetVariableInfo(variable_code)
+        response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
+        variable_info = waterml.v1_1.parse_variables(response_buffer)
+    if not variable_code is None:
+        return variable_info.values()[0]
+    else:
+        return variable_info
+
+
 def _waterml_version(suds_client):
     tns_str = str(suds_client.wsdl.tns[1])
     if tns_str == 'http://www.cuahsi.org/his/1.0/ws/':
