@@ -1,0 +1,23 @@
+
+The most recent release of ulmo can be installed from pypi. Pip is a good way to
+do that:
+
+    pip install ulmo
+
+
+To install a development version, grab a copy of the `source code`_ and run:
+
+    python setup.py develop
+
+
+.. note::
+
+    If you're using the PyTables backend for USGS NWIS, you will need to install
+    pytables separately as pytables dependency cannot be automatically resolved
+    via the standard python packaging infrastructure. To install pytables, you
+    may need to install numexpr first, then pytables or use a `free scientific
+    python distribution`_ if compiling things is problematic on your platform.
+
+
+.. _free scientific python distribution: http://numfocus.org/projects-2/software-distributions/
+.. _source code: https://github.com/twdb/ulmo

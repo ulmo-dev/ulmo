@@ -11,6 +11,13 @@ and climatology data.
 
 
 
+Installation
+------------
+
+.. include:: ../INSTALL
+
+
+
 API Reference
 -------------
 
