@@ -97,8 +97,7 @@ def get_site_info(wsdl_url, site_code):
 
 def get_values(wsdl_url, site_code, variable_code):
     """
-    Retrieves site values from a WaterOneFlow service using a GetSiteInfo
-    request.
+    Retrieves site values from a WaterOneFlow service using a GetValues request.
 
     Parameters
     ----------
