@@ -347,10 +347,13 @@ def _parse_variable(variable_element, namespace):
     return_dict.update({
         'code': variable_code.text,
         'id': variable_code.attrib.get('variableID'),
-        'network': variable_code.attrib.get('network'),
         'name': variable_element.find(namespace + 'variableName').text,
         'vocabulary': variable_code.attrib.get('vocabulary'),
     })
+    network = variable_code.attrib.get('network')
+    if network:
+        return_dict['network'] = network
+
     variable_description = variable_element.find(
             namespace + 'variableDescription')
     if not variable_description is None:
