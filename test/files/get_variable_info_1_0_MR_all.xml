@@ -1,0 +1,407 @@
+<variablesResponse xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wtr="http://www.cuahsi.org/waterML/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cuahsi.org/waterML/1.0/">
+  <queryInfo>
+    <creationTime>2013-01-12T22:07:59.1053988Z</creationTime>
+    <criteria>
+      <variableParam>NULL (Request for all variables</variableParam>
+    </criteria>
+    <note>OD Web Service</note>
+  </queryInfo>
+  <variables>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="4">MuddyRiver_TEMP</variableCode>
+      <variableName>Temperature</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="degC" unitsCode="96" unitsType="Temperature">degree celsius</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="6">MuddyRiver_SPCOND</variableCode>
+      <variableName>Specific conductance</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="uS/cm" unitsCode="192">microsiemens per centimeter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="7">MuddyRiver_DO</variableCode>
+      <variableName>Oxygen, dissolved</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="8">MuddyRiver_DOSAT</variableCode>
+      <variableName>Oxygen, dissolved percent of saturation</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="%" unitsCode="1" unitsType="Dimensionless">percent</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="9">MuddyRiver_pH</variableCode>
+      <variableName>pH</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="-" unitsCode="137" unitsType="Dimensionless">dimensionless</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="10">MuddyRiver_FCOLOR</variableCode>
+      <variableName>Field Color observation</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="-" unitsCode="137" unitsType="Dimensionless">dimensionless</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="11">MuddyRiver_SURFACE</variableCode>
+      <variableName>Surface</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="-" unitsCode="137" unitsType="Dimensionless">dimensionless</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="12">MuddyRiver_ODOR</variableCode>
+      <variableName>Odor</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="-" unitsCode="137" unitsType="Dimensionless">dimensionless</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="13">MuddyRiver_FLOW</variableCode>
+      <variableName>Flow</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="-" unitsCode="137" unitsType="Dimensionless">dimensionless</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="14">MuddyRiver_CHL</variableCode>
+      <variableName>Chloride</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="15">MuddyRiver_ALK</variableCode>
+      <variableName>Alkalinity, total </variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="16">MuddyRiver_ACID</variableCode>
+      <variableName>Acid neutralizing capacity</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="17">MuddyRiver_BOD</variableCode>
+      <variableName>BODu</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="18">MuddyRiver_COD</variableCode>
+      <variableName>COD</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="19">MuddyRiver_TOC</variableCode>
+      <variableName>Carbon, total organic</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="20">MuddyRiver_TSS</variableCode>
+      <variableName>Solids, total Suspended</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="21">MuddyRiver_TDS</variableCode>
+      <variableName>Solids, total Dissolved</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="22">MuddyRiver_FC</variableCode>
+      <variableName>Coliform, fecal</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="CFU/100 ml" unitsCode="290">colony forming units per 100 milliliter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="23">MuddyRiver_EC</variableCode>
+      <variableName>E-coli</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="CFU/100 ml" unitsCode="290">colony forming units per 100 milliliter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="24">MuddyRiver_ENT</variableCode>
+      <variableName>Enterococci</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="CFU/100 ml" unitsCode="290">colony forming units per 100 milliliter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="25">MuddyRiver_OG</variableCode>
+      <variableName>Oil and Grease</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="26">MuddyRiver_TPH</variableCode>
+      <variableName>Total petroleum hydrocarbons</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="27">MuddyRiver_TN</variableCode>
+      <variableName>Nitrogen, total</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="28">MuddyRiver_NH4</variableCode>
+      <variableName>Nitrogen, NH4</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="29">MuddyRiver_NO2</variableCode>
+      <variableName>Nitrogen, nitrite (NO2) nitrogen</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="30">MuddyRiver_NO3</variableCode>
+      <variableName>Nitrogen, nitrate (NO3)</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="31">MuddyRiver_TP</variableCode>
+      <variableName>Phosphorus, total</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="32">MuddyRiver_PO4</variableCode>
+      <variableName>Phosphorus, phosphate (PO4)</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="33">MuddyRiver_COLOR</variableCode>
+      <variableName>Color</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="-" unitsCode="137" unitsType="Dimensionless">dimensionless</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="34">MuddyRiver_TURB</variableCode>
+      <variableName>Turbidity</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="NTU" unitsCode="221">nephelometric turbidity units</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="35">MuddyRiver_ZN</variableCode>
+      <variableName>Zinc</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="36">MuddyRiver_CR</variableCode>
+      <variableName>Chromium, total</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="ug/L" unitsCode="204">micrograms per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="38">MuddyRiver_PB</variableCode>
+      <variableName>Lead</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="ug/L" unitsCode="204">micrograms per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="39">MuddyRiver_CU</variableCode>
+      <variableName>Copper</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="ug/L" unitsCode="204">micrograms per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="40">MuddyRiver_CD</variableCode>
+      <variableName>Cadmium</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="ug/L" unitsCode="204">micrograms per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="42">MuddyRiver_AS</variableCode>
+      <variableName>Arsenic</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="ug/L" unitsCode="204">micrograms per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+  </variables>
+</variablesResponse>

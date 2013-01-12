@@ -1,0 +1,86 @@
+<variablesResponse xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wtr="http://www.cuahsi.org/waterML/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cuahsi.org/waterML/1.1/">
+  <queryInfo>
+    <creationTime>2013-01-12T17:07:59.7373988-05:00</creationTime>
+    <criteria MethodCalled="GetVariableInfo">
+      <parameter name="variable"/>
+    </criteria>
+    <note>OD Web Service</note>
+  </queryInfo>
+  <variables>
+    <variable>
+      <variableCode vocabulary="ipswich" default="true" variableID="1">DO</variableCode>
+      <variableName>Oxygen, dissolved</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>milligrams per liter</unitName>
+        <unitType>Concentration</unitType>
+        <unitAbbreviation>mg/L</unitAbbreviation>
+        <unitCode>199</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>month</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>month</unitAbbreviation>
+          <unitCode>106</unitCode>
+        </unit>
+        <timeSupport>0</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="ipswich" default="true" variableID="2">PercDO</variableCode>
+      <variableName>Oxygen, dissolved percent of saturation</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>percent</unitName>
+        <unitType>Dimensionless</unitType>
+        <unitAbbreviation>%</unitAbbreviation>
+        <unitCode>1</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>month</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>month</unitAbbreviation>
+          <unitCode>106</unitCode>
+        </unit>
+        <timeSupport>0</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+    <variable>
+      <variableCode vocabulary="ipswich" default="true" variableID="3">Temp</variableCode>
+      <variableName>Temperature</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <unit>
+        <unitName>degree celsius</unitName>
+        <unitType>Temperature</unitType>
+        <unitAbbreviation>degC</unitAbbreviation>
+        <unitCode>96</unitCode>
+      </unit>
+      <noDataValue>-9999</noDataValue>
+      <timeScale isRegular="true">
+        <unit>
+          <unitName>month</unitName>
+          <unitType>Time</unitType>
+          <unitAbbreviation>month</unitAbbreviation>
+          <unitCode>106</unitCode>
+        </unit>
+        <timeSupport>0</timeSupport>
+      </timeScale>
+      <speciation>Not Applicable</speciation>
+    </variable>
+  </variables>
+</variablesResponse>
