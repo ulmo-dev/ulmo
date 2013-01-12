@@ -6,6 +6,7 @@ import re
 import warnings
 
 import appdirs
+from lxml import etree
 import pandas
 import requests
 
@@ -89,6 +90,16 @@ def parse_datestr(date_string):
 def raise_dependency_error(*args, **kwargs):
     raise DependencyError("Trying to do something that depends on pytables, "
             "but pytables has not been installed.")
+
+
+def save_pretty_printed_xml(filename, response_buffer):
+    """saves a nicely indented version of the xml contained in response_buffer
+    to filename; handy for debugging or saving responses for to include in tests"""
+    with open(filename, 'w') as f:
+        response_buffer.seek(0)
+        parsed = etree.parse(response_buffer)
+        f.write(etree.tostring(parsed, pretty_print=True))
+        response_buffer.seek(0)
 
 
 def _download_file(url, path):

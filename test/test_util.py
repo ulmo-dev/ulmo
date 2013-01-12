@@ -66,15 +66,6 @@ def mocked_suds_client(waterml_version, mocked_service_calls):
                 yield
 
 
-def save_pretty_printed_xml(filename, response_buffer):
-    from lxml import etree
-    with open(filename, 'w') as f:
-        response_buffer.seek(0)
-        parsed = etree.parse(response_buffer)
-        f.write(etree.tostring(parsed, pretty_print=True))
-        response_buffer.seek(0)
-
-
 def _mock_request_side_effect(url_files):
     def _side_effect(url, *args, **kwargs):
         mock_response = requests.Response()
