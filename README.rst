@@ -27,6 +27,7 @@ Currently, ulmo supports the following datasets:
 - United States Geological Survey National Water Information System 
 - National Climatic Data Center Global Summary of the Day
 - National Climatic Data Center Global Historical Climatology Network
+- CUAHSI WaterOneFlow
 
 
 
@@ -35,7 +36,6 @@ Future
 
 The following datasets/services are being developed and will be available soon:
 
-- CUAHSI WaterOneFlow
 - National Weather Service 24-hour Precip (4 km grid)
 - Climate Prediction Center Weekly Drought Monitor
 
