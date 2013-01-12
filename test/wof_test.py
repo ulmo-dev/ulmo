@@ -148,7 +148,9 @@ def test_core_get_variable_info_waterml_1_0():
         'name': 'Acid neutralizing capacity',
         'no_data_value': '-9999',
         'sample_medium': 'Surface Water',
-        'time_support_is_regular': 'false',
+        'time': {
+            'is_regular': False,
+        },
         'units': {
             'abbreviation': 'mg/L',
             'code': '199',
@@ -174,15 +176,15 @@ def test_core_get_variable_info_waterml_1_1():
         'no_data_value': '-9999',
         'sample_medium': 'Surface Water',
         'speciation': 'Not Applicable',
-        'time_support': '0',
         'units': {
             'abbreviation': 'degC',
             'code': '96',
             'name': 'degree celsius',
             'type': 'Temperature',
         },
-        'time_scale': {
-            'is_regular': 'true',
+        'time': {
+            'interval': '0',
+            'is_regular': True,
             'units': {
                 'abbreviation': 'month',
                 'code': '106',
