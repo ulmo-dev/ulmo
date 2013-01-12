@@ -155,6 +155,13 @@ def _element_dict_attribute_name(attribute_name, element_name,
         return element_name + '_' + attribute_only
 
 
+def _find_unit(element, namespace):
+    unit_element = element.find(namespace + 'unit')
+    if unit_element is None:
+        unit_element = element.find(namespace + 'units')
+    return unit_element
+
+
 def _parse_datetime(datetime_str):
     """returns an iso 8601 datetime string; USGS returns fractions of a second
     which are usually all 0s. ISO 8601 does not limit the number of decimal
@@ -288,16 +295,48 @@ def _parse_timezone_info(timezone_info, namespace):
 
     if timezone_info.attrib.get('siteUsesDaylightSavingsTime', "false") == "true":
         return_dict['uses_dst'] = True
-        return_dict['dst_tz'] = _parse_timezone_element(timezone_info.find(namespace + 'daylightSavingsTimeZone'))
+        return_dict['dst_tz'] = _parse_timezone_element(
+             timezone_info.find(namespace + 'daylightSavingsTimeZone'))
 
-    return_dict['default_tz'] = _parse_timezone_element(timezone_info.find(namespace + 'defaultTimeZone'))
+    return_dict['default_tz'] = _parse_timezone_element(
+         timezone_info.find(namespace + 'defaultTimeZone'))
+
+    return return_dict
+
+
+def _parse_time_info(time_info_element, namespace):
+    """returns a dict that represents a parsed WOF 1.0 timeSupport or WOF 1.1
+    timeScale element
+    """
+    return_dict = {}
+
+    is_regular = time_info_element.attrib.get('isRegular')
+    if not is_regular is None:
+        if is_regular.lower() == 'true':
+            is_regular = True
+        elif is_regular.lower() == 'false':
+            is_regular = False
+        return_dict['is_regular'] = is_regular
+
+    if '1.0' in namespace:
+        interval_tag = 'timeInterval'
+    elif '1.1' in namespace:
+        interval_tag = 'timeSupport'
+
+    interval_element = time_info_element.find(namespace + interval_tag)
+    if not interval_element is None:
+        return_dict['interval'] = interval_element.text
+
+    unit_element = _find_unit(time_info_element, namespace)
+    if not unit_element is None:
+        return_dict['units'] = _parse_unit(unit_element, namespace)
 
     return return_dict
 
 
 def _parse_unit(unit_element, namespace):
-    """returns a list of dicts that represent the values for a given etree
-    values element
+    """returns a list of dicts that represent the values for a given unit or
+    units element
     """
     unit_dict = _element_dict(unit_element)
     tag_name = unit_element.tag.split('}')[-1]
@@ -341,8 +380,8 @@ def _parse_values(values_element, namespace):
 def _parse_variable(variable_element, namespace):
     """returns a dict that represents a variable for a given etree variable element"""
     return_dict = _element_dict(variable_element,
-        exclude_children=['unit', 'units', 'variableCode', 'variableName',
-            'variableDescription', 'options'])
+        exclude_children=['options', 'timeScale', 'timeSupport', 'unit', 'units',
+            'variableCode', 'variableDescription', 'variableName'])
     variable_code = variable_element.find(namespace + 'variableCode')
     return_dict.update({
         'code': variable_code.text,
@@ -354,24 +393,29 @@ def _parse_variable(variable_element, namespace):
     if network:
         return_dict['network'] = network
 
-    variable_description = variable_element.find(
-            namespace + 'variableDescription')
-    if not variable_description is None:
-        return_dict['description'] = variable_description.text
-
-    unit_element = variable_element.find(namespace + 'unit')
-    if unit_element is None:
-        unit_element = variable_element.find(namespace + 'units')
-
-    if not unit_element is None:
-        return_dict['units'] = _parse_unit(unit_element, namespace)
-
     statistic = variable_element.find(namespace + 'options/' + namespace + "option[@name='Statistic']")
     if statistic is not None:
         return_dict['statistic'] = {
             'code': statistic.attrib.get('optionCode'),
             'name': statistic.text,
         }
+
+    if '1.0' in namespace:
+        time_info_name = 'timeSupport'
+    elif '1.1' in namespace:
+        time_info_name = 'timeScale'
+    time_info_element = variable_element.find(namespace + time_info_name)
+    if not time_info_element is None:
+        return_dict['time'] = _parse_time_info(time_info_element, namespace)
+
+    unit_element = _find_unit(variable_element, namespace)
+    if not unit_element is None:
+        return_dict['units'] = _parse_unit(unit_element, namespace)
+
+    variable_description = variable_element.find(
+            namespace + 'variableDescription')
+    if not variable_description is None:
+        return_dict['description'] = variable_description.text
 
     return return_dict
 
