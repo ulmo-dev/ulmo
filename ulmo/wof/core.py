@@ -95,7 +95,7 @@ def get_site_info(wsdl_url, site_code):
     return site_info
 
 
-def get_values(wsdl_url, site_code, variable_code):
+def get_values(wsdl_url, site_code, variable_code=None):
     """
     Retrieves site values from a WaterOneFlow service using a GetValues request.
 
@@ -135,7 +135,7 @@ def get_values(wsdl_url, site_code, variable_code):
         return values
 
 
-def get_variable_info(wsdl_url, variable_code):
+def get_variable_info(wsdl_url, variable_code=None):
     """
     Retrieves site values from a WaterOneFlow service using a GetVariableInfo
     request.
@@ -146,30 +146,38 @@ def get_variable_info(wsdl_url, variable_code):
         URL of a service's web service definition language (WSDL) description.
         All WaterOneFlow services publish a WSDL description and this url is the
         entry point to the service.
-    variable_code : str
-        Variable code of the variable you'd like to get more information on.
-        Variable codes MUST contain the network and be of the form
-        <vocabulary>:<variable_code>, as is required by WaterOneFlow.
+    variable_code : `None` or str
+        If `None` (default) then information on all variables will be returned,
+        otherwise, this should be set to the variable code of the variable you'd
+        like to get more information on.  Variable codes MUST contain the
+        network and be of the form <vocabulary>:<variable_code>, as is required
+        by WaterOneFlow.
 
     Returns
     -------
     variable_info : dict
-        a python dict containing variable information
+        a python dict containing variable information. If no variable code is
+        `None` (default) then this will be a nested set of dicts keyed by
+        <vocabulary>:<variable_code>
     """
     suds_client = suds.client.Client(wsdl_url)
 
     waterml_version = _waterml_version(suds_client)
     response = suds_client.service.GetVariableInfo(variable_code)
     response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
+
     if waterml_version == '1.0':
         variable_info = waterml.v1_0.parse_variables(response_buffer)
     elif waterml_version == '1.1':
         variable_info = waterml.v1_1.parse_variables(response_buffer)
 
-    if not variable_code is None:
+    if not variable_code is None and len(variable_info) == 1:
         return variable_info.values()[0]
     else:
-        return variable_info
+        return {
+            '%s:%s' % (var['vocabulary'], var['code']): var
+            for var in variable_info.values()
+        }
 
 
 def _waterml_version(suds_client):

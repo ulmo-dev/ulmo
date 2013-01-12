@@ -8,6 +8,7 @@ from .misc import (
         open_file_for_url,
         parse_datestr,
         raise_dependency_error,
+        save_pretty_printed_xml,
     )
 
 try:

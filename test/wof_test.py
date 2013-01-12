@@ -135,7 +135,7 @@ def test_core_get_values_waterml_1_1():
     }
 
 
-def test_core_get_variable_info_waterml_1_0():
+def test_core_get_variable_info_waterml_single_1_0():
     WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_variable_info_file = 'get_variable_info_1_0_MR_MuddyRiver_ACID.xml'
     with test_util.mocked_suds_client('1.0', dict(GetVariableInfo=get_variable_info_file)):
@@ -161,13 +161,94 @@ def test_core_get_variable_info_waterml_1_0():
     }
 
 
-def test_core_get_variable_info_waterml_1_1():
+def test_core_get_variable_info_waterml_all_1_0():
+    WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    get_variable_info_file = 'get_variable_info_1_0_MR_all.xml'
+    with test_util.mocked_suds_client('1.0', dict(GetVariableInfo=get_variable_info_file)):
+        variable_info = ulmo.wof.core.get_variable_info(WSDL_URL)
+
+    check_includes = [
+        'MR:MuddyRiver_ACID',
+        'MR:MuddyRiver_FC',
+        'MR:MuddyRiver_FCOLOR',
+        'MR:MuddyRiver_pH',
+        ]
+
+    for check in check_includes:
+        assert check in variable_info
+
+    assert variable_info['MR:MuddyRiver_ACID'] == {
+        'code': 'MuddyRiver_ACID',
+        'data_type': 'Sporadic',
+        'general_category': 'Water Quality',
+        'id': '16',
+        'name': 'Acid neutralizing capacity',
+        'no_data_value': '-9999',
+        'sample_medium': 'Surface Water',
+        'time': {
+            'is_regular': False,
+        },
+        'units': {
+            'abbreviation': 'mg/L',
+            'code': '199',
+            'name': 'milligrams per liter',
+        },
+        'value_type': 'Sample',
+        'vocabulary': 'MR'
+    }
+
+
+def test_core_get_variable_info_waterml_single_1_1():
     WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     get_variable_info_file = 'get_variable_info_1_1_ipswich_Temp.xml'
     with test_util.mocked_suds_client('1.1', dict(GetVariableInfo=get_variable_info_file)):
         variable_info = ulmo.wof.core.get_variable_info(WSDL_URL, 'ipswich:Temp')
 
     assert variable_info == {
+        'code': 'Temp',
+        'data_type': 'Sporadic',
+        'general_category': 'Water Quality',
+        'id': '3',
+        'name': 'Temperature',
+        'no_data_value': '-9999',
+        'sample_medium': 'Surface Water',
+        'speciation': 'Not Applicable',
+        'units': {
+            'abbreviation': 'degC',
+            'code': '96',
+            'name': 'degree celsius',
+            'type': 'Temperature',
+        },
+        'time': {
+            'interval': '0',
+            'is_regular': True,
+            'units': {
+                'abbreviation': 'month',
+                'code': '106',
+                'name': 'month',
+                'type': 'Time',
+            },
+        },
+        'value_type': 'Sample',
+        'vocabulary': 'ipswich',
+    }
+
+
+def test_core_get_variable_info_waterml_all_1_1():
+    WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
+    get_variable_info_file = 'get_variable_info_1_1_ipswich_all.xml'
+    with test_util.mocked_suds_client('1.1', dict(GetVariableInfo=get_variable_info_file)):
+        variable_info = ulmo.wof.core.get_variable_info(WSDL_URL)
+
+    check_includes = [
+         'ipswich:DO',
+         'ipswich:PercDO',
+         'ipswich:Temp'
+    ]
+    for check in check_includes:
+        assert check in variable_info
+
+    assert variable_info['ipswich:Temp'] == {
         'code': 'Temp',
         'data_type': 'Sporadic',
         'general_category': 'Water Quality',
