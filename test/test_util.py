@@ -36,8 +36,10 @@ def mocked_requests(mocked_urls):
                     for url, file_path in mocked_urls.iteritems()
                 }
             side_effect = _mock_request_side_effect(url_files)
-
-            with mock.patch('requests.get', side_effect=side_effect):
+            with contextlib.nested(
+                    mock.patch('requests.get', side_effect=side_effect),
+                    mock.patch('requests.head', side_effect=side_effect),
+                    ):
                 yield
 
 
