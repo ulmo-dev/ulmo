@@ -2,12 +2,13 @@
     ulmo.usgs.pytables
     ~~~~~~~~~~~~~~~~~~
 
-    This module provides an interface for fetching, updating and retrieiving
-    cached data from the `USGS National Water Information
-    System`_ web services.
+    This module provides an interface for fetching, updating and retrieiving a
+    fast local cache of data from the `USGS National Water Information System`_
+    web services. `PyTables`_ must be installed to use any of these features.
 
 
     .. _USGS National Water Information System: http://waterdata.usgs.gov/nwis
+    .. _PyTables: http://pytables.github.com
 
 """
 from __future__ import absolute_import
