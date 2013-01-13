@@ -31,10 +31,10 @@ def mocked_requests(mocked_urls):
             if isinstance(mocked_urls, basestring):
                 url_files = open_files.values()[0]
             else:
-                url_files = {
-                    url: open_files.get(file_path)
+                url_files = dict([
+                    (url, open_files.get(file_path))
                     for url, file_path in mocked_urls.iteritems()
-                }
+                ])
             side_effect = _mock_request_side_effect(url_files)
 
             with mock.patch('requests.get', side_effect=side_effect):

@@ -40,10 +40,10 @@ def parse_site_values(content_io, namespace, query_isodate=None):
                     for element in values_element.findall(namespace + tag)
                 ]
                 if len(collection):
-                    collection_dict = {
-                        item[key]: item
+                    collection_dict = dict([
+                        (item[key], item)
                         for item in collection
-                    }
+                    ])
                     data_dict[code][collection_name] = collection_dict
 
             if query_isodate:
@@ -103,10 +103,10 @@ def parse_variables(content_io, namespace):
         _parse_variable(variable_element, namespace)
         for variable_element in variable_elements
     ]
-    variables = {
-        variable_dict['code']: variable_dict
+    variables = dict([
+        (variable_dict['code'], variable_dict)
         for variable_dict in variable_dicts
-    }
+    ])
     return variables
 
 
@@ -132,12 +132,12 @@ def _element_dict(element, exclude_children=None, prepend_attributes=True):
     if len(element) == 0 and not element.text is None:
         element_dict[element_name] = element.text
 
-    element_dict.update({
-        _element_dict_attribute_name(key, element_name,
-            prepend_element_name=prepend_attributes): value
+    element_dict.update(dict([
+        (_element_dict_attribute_name(key, element_name,
+            prepend_element_name=prepend_attributes), value)
         for key, value in element.attrib.iteritems()
         if value.split(':')[0] not in ['xsd', 'xsi']
-    })
+    ]))
 
     for child in element.iterchildren():
         if not child.tag.split('}')[-1] in exclude_children:
@@ -261,18 +261,20 @@ def _parse_site_info(site_info, namespace):
         return_dict['elevation_m'] = elevation_m.text
 
     # WaterML 1.0 notes
-    notes = {
-        util.camel_to_underscore(note.attrib['title'].replace(' ', '')): note.text
+    notes = dict([
+        (util.camel_to_underscore(note.attrib['title'].replace(' ', '')),
+            note.text)
         for note in site_info.findall(namespace + 'note')
-    }
+    ])
     if notes:
         return_dict['notes'] = notes
 
     # WaterML 1.1 siteProperties
-    site_properties = {
-        util.camel_to_underscore(site_property.attrib['name'].replace(' ', '')): site_property.text
+    site_properties = dict([
+        (util.camel_to_underscore(site_property.attrib['name'].replace(' ',
+            '')), site_property.text)
         for site_property in site_info.findall(namespace + 'site_property')
-    }
+    ])
     if site_properties:
         return_dict['site_properties'] = site_properties
 
@@ -422,7 +424,7 @@ def _parse_variable(variable_element, namespace):
 
 def _scrub_prefix(element_dict, prefix):
     "returns a dict with prefix scrubbed from the keys"
-    return {
-        k.split(prefix + '_')[-1]: v
+    return dict([
+        (k.split(prefix + '_')[-1], v)
         for k, v in element_dict.items()
-    }
+    ])
