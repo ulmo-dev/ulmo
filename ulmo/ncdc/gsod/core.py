@@ -2,10 +2,10 @@
     ulmo.ncdc.gsod.core
     ~~~~~~~~~~~~~~~~~~~
 
-    This module provides direct access to `National climatic Data Center`_
+    This module provides direct access to `National Climatic Data Center`_
     `Global Summary of the Day`_ dataset.
 
-    .. _National climatic Data Center: http://www.ncdc.noaa.gov
+    .. _National Climatic Data Center: http://www.ncdc.noaa.gov
     .. _Global Summary of the Day: http://www.ncdc.noaa.gov/oa/gsod.html
 """
 import csv
