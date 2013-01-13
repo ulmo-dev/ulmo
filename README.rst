@@ -45,5 +45,13 @@ A list of future datasets is kept in on the `issue tracker`_. If there's a datas
 you'd like to see added, please open an issue about it.
 
 
+
+Links
+-----
+
+* Documentation: http://ulmo.readthedocs.org
+* Repository: https://github.com/twdb/ulmo
+
+
 .. _more sophisticated tools: http://pandas.pydata.org
 .. _issue tracker: https://github.com/twdb/ulmo/issues?labels=new+dataset&state=open 
