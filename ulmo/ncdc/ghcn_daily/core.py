@@ -112,10 +112,10 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
     if as_dataframe:
         return dataframes
     else:
-        return {
-            key: util.dict_from_dataframe(dataframe)
+        return dict([
+            (key, util.dict_from_dataframe(dataframe))
             for key, dataframe in dataframes.iteritems()
-        }
+        ])
 
 
 def get_stations(country=None, state=None, elements=None, start_year=None,
@@ -247,11 +247,11 @@ def _get_inventory(update=True):
 def _parse_fwf(file_path, columns, na_values=None):
     colspecs = [(start, end) for name, start, end, converter in columns]
     names = [name for name, start, end, converter in columns]
-    converters = {
-        name: converter
+    converters = dict([
+        (name, converter)
         for name, start, end, converter in columns
         if not converter is None
-    }
+    ])
 
     return pandas.io.parsers.read_fwf(file_path,
         colspecs=colspecs, header=None, na_values=na_values, names=names,

@@ -62,7 +62,7 @@ def get_data(station_codes, start_date=None, end_date=None, parameters=None):
     # note: opening tar files and parsing the headers and such is a relatively
     # lengthy operation so you don't want to do it too often, hence try to
     # grab all stations at the same time per tarfile
-    data_dict = {station_code: None for station_code in station_codes}
+    data_dict = dict([(station_code, None) for station_code in station_codes])
 
     for year in range(start_date.year, end_date.year + 1):
         tar_path = _get_gsod_file(year)
@@ -123,10 +123,10 @@ def get_stations(update=True):
 
     with open(NCDC_GSOD_STATIONS_FILE, 'rb') as f:
         reader = csv.DictReader(f)
-        stations = {
-            _station_code(row): _process_station(row)
+        stations = dict([
+            (_station_code(row), _process_station(row))
             for row in reader
-        }
+        ])
     return stations
 
 
@@ -239,7 +239,8 @@ def _read_gsod_file(gsod_tar, station, year):
 def _record_array_to_value_dicts(record_array):
     names = record_array.dtype.names
     value_dicts = [
-        {name: value[name_index] for name_index, name in enumerate(names)}
+        dict([(name, value[name_index])
+                for name_index, name in enumerate(names)])
         for value in record_array]
     return value_dicts
 
