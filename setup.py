@@ -1,10 +1,3 @@
-"""
-ulmo
-----
-
-an open source library for clean, simple and fast access to public hydrology and climatology data
-"""
-
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
@@ -23,6 +16,14 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
+with open('README.rst') as f:
+    # use README for long description but don't include the link to travis-ci;
+    # it seems a bit out of place on pypi since it applies to the development
+    # version
+    long_description = ''.join([
+        line for line in f.readlines()
+        if 'travis-ci' not in line])
+
 setup(
     name='ulmo',
     version='0.2.3-dev',
@@ -30,7 +31,7 @@ setup(
     author='Andy Wilson',
     author_email='wilson.andrew.j@gmail.com',
     description='clean, simple and fast access to public hydrology and climatology data',
-    long_description=__doc__,
+    long_description=long_description,
     keywords='his pyhis ulmo water waterml cuahsi wateroneflow',
     packages=find_packages(),
     platforms='any',
