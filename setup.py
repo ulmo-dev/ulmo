@@ -32,6 +32,7 @@ setup(
     author_email='wilson.andrew.j@gmail.com',
     description='clean, simple and fast access to public hydrology and climatology data',
     long_description=long_description,
+    url='https://github.com/twdb/ulmo/',
     keywords='his pyhis ulmo water waterml cuahsi wateroneflow',
     packages=find_packages(),
     platforms='any',
