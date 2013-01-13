@@ -5,6 +5,7 @@ Changelog
 0.2.3 (in development)
 -----
 - add ghcn daily dataset
+- add preliminary support for CUAHSI WOF
 - add sphinx documentation
 - clean up tests
 - make pytables an optional dependency; pytables-related functionality is just
