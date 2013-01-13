@@ -7,7 +7,7 @@ def test_core_get_sites_waterml_1_0():
     WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_sites_file = 'get_sites_muddyriver_1_0.xml'
     with test_util.mocked_suds_client('1.0', dict(GetSitesXml=get_sites_file)):
-        sites = ulmo.wof.core.get_sites(WSDL_URL)
+        sites = ulmo.wof.get_sites(WSDL_URL)
     assert len(sites) == 14
 
 
@@ -15,7 +15,7 @@ def test_core_get_sites_waterml_1_1():
     WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     get_sites_file = 'get_sites_ipswich_1_1.xml'
     with test_util.mocked_suds_client('1.1', dict(GetSites=get_sites_file)):
-        sites = ulmo.wof.core.get_sites(WSDL_URL)
+        sites = ulmo.wof.get_sites(WSDL_URL)
     assert len(sites) == 34
 
 
@@ -23,7 +23,7 @@ def test_core_get_site_info_waterml_1_0():
     WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     site_info_file = 'get_site_info_muddyriver_14_1_0.xml'
     with test_util.mocked_suds_client('1.0', dict(GetSiteInfo=site_info_file)):
-        site_info = ulmo.wof.core.get_site_info(WSDL_URL, 'MuddyRiver:MuddyRiver_14')
+        site_info = ulmo.wof.get_site_info(WSDL_URL, 'MuddyRiver:MuddyRiver_14')
     assert site_info['code'] == 'MuddyRiver_14'
     assert site_info['network'] == 'MuddyRiver'
     assert 'MR:MuddyRiver_ACID' in site_info['series']
@@ -42,7 +42,7 @@ def test_core_get_site_info_waterml_1_1():
     WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     site_info_file = 'get_site_info_ipswich_MMB_1_1.xml'
     with test_util.mocked_suds_client('1.1', dict(GetSiteInfo=site_info_file)):
-        site_info = ulmo.wof.core.get_site_info(WSDL_URL, 'ipswich:MMB')
+        site_info = ulmo.wof.get_site_info(WSDL_URL, 'ipswich:MMB')
     assert site_info['code'] == 'MMB'
     assert site_info['network'] == 'ipswich'
     assert 'ipswich:Temp' in site_info['series']
@@ -60,7 +60,7 @@ def test_core_get_values_waterml_1_0():
     WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_values_file = 'get_values_1_0_MuddyRiver_MuddyRiver_14_MR_MuddyRiver_ACID.xml'
     with test_util.mocked_suds_client('1.0', dict(GetValues=get_values_file)):
-        values = ulmo.wof.core.get_values(WSDL_URL,
+        values = ulmo.wof.get_values(WSDL_URL,
                 'MuddyRiver:MuddyRiver_14', 'MR:MuddyRiver_ACID')
     assert len(values['values']) == 28
     assert values['methods'] == {
@@ -88,7 +88,7 @@ def test_core_get_values_waterml_1_1():
     WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     get_values_file = 'get_values_1_1_ipswich_MMB_ipswich_Temp.xml'
     with test_util.mocked_suds_client('1.1', dict(GetValues=get_values_file)):
-        values = ulmo.wof.core.get_values(WSDL_URL, 'ipswich:MMB', 'ipswich:Temp')
+        values = ulmo.wof.get_values(WSDL_URL, 'ipswich:MMB', 'ipswich:Temp')
     assert len(values['values']) == 112
     assert values['values'][0] == {
         'censor_code': 'nc',
@@ -139,7 +139,7 @@ def test_core_get_variable_info_waterml_single_1_0():
     WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_variable_info_file = 'get_variable_info_1_0_MR_MuddyRiver_ACID.xml'
     with test_util.mocked_suds_client('1.0', dict(GetVariableInfo=get_variable_info_file)):
-        variable_info = ulmo.wof.core.get_variable_info(WSDL_URL, 'MR:MuddyRiver_ACID')
+        variable_info = ulmo.wof.get_variable_info(WSDL_URL, 'MR:MuddyRiver_ACID')
     assert variable_info == {
         'code': 'MuddyRiver_ACID',
         'data_type': 'Sporadic',
@@ -165,7 +165,7 @@ def test_core_get_variable_info_waterml_all_1_0():
     WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_variable_info_file = 'get_variable_info_1_0_MR_all.xml'
     with test_util.mocked_suds_client('1.0', dict(GetVariableInfo=get_variable_info_file)):
-        variable_info = ulmo.wof.core.get_variable_info(WSDL_URL)
+        variable_info = ulmo.wof.get_variable_info(WSDL_URL)
 
     check_includes = [
         'MR:MuddyRiver_ACID',
@@ -202,7 +202,7 @@ def test_core_get_variable_info_waterml_single_1_1():
     WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     get_variable_info_file = 'get_variable_info_1_1_ipswich_Temp.xml'
     with test_util.mocked_suds_client('1.1', dict(GetVariableInfo=get_variable_info_file)):
-        variable_info = ulmo.wof.core.get_variable_info(WSDL_URL, 'ipswich:Temp')
+        variable_info = ulmo.wof.get_variable_info(WSDL_URL, 'ipswich:Temp')
 
     assert variable_info == {
         'code': 'Temp',
@@ -238,7 +238,7 @@ def test_core_get_variable_info_waterml_all_1_1():
     WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     get_variable_info_file = 'get_variable_info_1_1_ipswich_all.xml'
     with test_util.mocked_suds_client('1.1', dict(GetVariableInfo=get_variable_info_file)):
-        variable_info = ulmo.wof.core.get_variable_info(WSDL_URL)
+        variable_info = ulmo.wof.get_variable_info(WSDL_URL)
 
     check_includes = [
          'ipswich:DO',

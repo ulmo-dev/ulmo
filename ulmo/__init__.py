@@ -6,7 +6,6 @@
 """
 from __future__ import absolute_import
 
-from . import his_central
 from . import ncdc
 from . import usgs
 from . import util

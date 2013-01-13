@@ -211,7 +211,7 @@ def test_core_get_sites_by_state_code():
     }
 
     with test_util.mocked_requests(mocked_urls):
-        sites = ulmo.usgs.core.get_sites(state_code='RI')
+        sites = ulmo.usgs.get_sites(state_code='RI')
     assert len(sites) == 64
 
 
@@ -219,7 +219,7 @@ def test_core_get_sites_single_site():
     site_code = '08068500'
     site_data_file = 'site_%s_daily.xml' % site_code
     with test_util.mocked_requests(site_data_file):
-        sites = ulmo.usgs.core.get_sites(sites=site_code)
+        sites = ulmo.usgs.get_sites(sites=site_code)
     assert len(sites) == 1
 
 
@@ -227,7 +227,7 @@ def test_core_get_sites_multiple_sites():
     site_codes = ['08068500', '08041500']
     sites_data_file = 'sites_%s_daily.xml' % '_'.join(site_codes)
     with test_util.mocked_requests(sites_data_file):
-        sites = ulmo.usgs.core.get_sites(sites=site_codes)
+        sites = ulmo.usgs.get_sites(sites=site_codes)
     assert len(sites) == 2
 
 
