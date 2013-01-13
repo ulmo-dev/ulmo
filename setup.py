@@ -26,7 +26,7 @@ with open('README.rst') as f:
 
 setup(
     name='ulmo',
-    version='0.2.3-dev',
+    version='0.2.3',
     license='BSD',
     author='Andy Wilson',
     author_email='wilson.andrew.j@gmail.com',
@@ -46,7 +46,7 @@ setup(
         'requests==0.14.2',
         'suds>=0.4',
     ],
-    extras_require = {
+    extras_require={
         'pytables_caching': ['tables>=0.2.3']
     },
     classifiers=[
