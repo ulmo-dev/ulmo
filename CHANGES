@@ -7,8 +7,8 @@ Changelog
 - support python 2.6
 
 
-0.2.3
------
+0.2.3 (released 2013-01-13)
+---------------------------
 - add ghcn daily dataset
 - add preliminary support for CUAHSI WOF
 - add sphinx documentation
@@ -17,17 +17,17 @@ Changelog
   disabled if pytables can't be found
 
 
-0.2.2
------
+0.2.2 (released 2012-11-05)
+---------------------------
 - bugfix: broken usgs.pytables last_refresh handling
 
 
-0.2.1
------
+0.2.1 (released 2012-11-04)
+---------------------------
 - turn on compression for pytables cache files
 - minor bugfix and test cleanup
 
 
-0.2.0
------
+0.2.0 (released 2012-10-12)
+---------------------------
 - initial public release as ulmo (formerly pyhis)
