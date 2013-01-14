@@ -40,7 +40,6 @@ setup(
         'appdirs>=1.2.0',
         'isodate>=0.4.6',
         'lxml>=2.3',
-        'numexpr>=2.0.1',
         'numpy>=1.4.0',
         'pandas>=0.9.1',
         'requests==0.14.2',
