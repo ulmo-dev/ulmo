@@ -6,7 +6,7 @@ ulmo
 -----------
 
 .. image:: https://secure.travis-ci.org/twdb/ulmo.png?branch=master
-        :target: https://secure.travis-ci.org/twdb/ulmo
+        :target: https://travis-ci.org/twdb/ulmo
 
 
 Features
