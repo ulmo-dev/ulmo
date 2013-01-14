@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.3.0 (in development)
+----------------------
+- this release includes some backwards incompatible changes
+- moved module for USGS NWIS from ulmo.usgs -> ulmo.nwis.usgs
+- moved module for WaterOneFlow from ulmo.wof -> ulmo.cuahsi.wof
+
+
 0.2.4 (released 2013-01-14)
 ---------------------------
 - core API functions can be called from main dataset modules
