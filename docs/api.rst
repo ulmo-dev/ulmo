@@ -30,5 +30,5 @@ USGS National Water Information System
 
 CUAHSI WaterOneFlow
 ===================
-.. automodule:: ulmo.wof
+.. automodule:: ulmo.cuahsi.wof
    :members: get_sites, get_site_info, get_values, get_variable_info
