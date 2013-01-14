@@ -22,7 +22,7 @@ Features
 Datasets
 --------
 
-Currently, ulmo supports the following datasets:
+Currently, ulmo supports the following datasets / services:
 
 - United States Geological Survey National Water Information System 
 - National Climatic Data Center Global Summary of the Day
@@ -34,7 +34,8 @@ Currently, ulmo supports the following datasets:
 Future
 ------
 
-The following datasets/services are being developed and will be available soon:
+Support for the following datasets is currently under development and they
+should be available soon:
 
 - National Weather Service 24-hour Precip (4 km grid)
 - Climate Prediction Center Weekly Drought Monitor
