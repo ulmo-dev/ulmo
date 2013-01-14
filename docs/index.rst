@@ -22,7 +22,7 @@ API Reference
 -------------
 
 .. toctree::
-   :maxdepth: 
+   :maxdepth: 1
 
    api
 
