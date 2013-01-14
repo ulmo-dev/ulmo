@@ -40,6 +40,8 @@ setup(
         'appdirs>=1.2.0',
         'isodate>=0.4.6',
         'lxml>=2.3',
+        # mock is required for mocking pytables-related functionality when it doesn't exist
+        'mock>=1.0.0',
         'numpy>=1.4.0',
         'pandas>=0.9.1',
         'requests==0.14.2',
@@ -57,7 +59,6 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     tests_require=[
-        'mock>=1.0.0',
         'pytest>=2.3.2',
     ],
     cmdclass={'test': PyTest},
