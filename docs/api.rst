@@ -21,10 +21,10 @@ National Climatic Data Center Global Summary of the Day
 
 USGS National Water Information System
 ======================================
-.. automodule:: ulmo.usgs
+.. automodule:: ulmo.usgs.nwis
    :members: get_sites, get_site_data
 
-.. automodule:: ulmo.usgs.pytables
+.. automodule:: ulmo.usgs.nwis.pytables
    :members:
 
 

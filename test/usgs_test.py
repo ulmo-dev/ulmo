@@ -26,12 +26,12 @@ def test_init():
 def test_update_sites_table():
     test_init()
     sites = waterml_v1_1_test.test_parse_site_infos()
-    ulmo.usgs.pytables._update_sites_table(sites.values(), TEST_FILE_PATH)
+    ulmo.usgs.nwis.pytables._update_sites_table(sites.values(), TEST_FILE_PATH)
     assert _count_rows('/usgs/sites') == 64
 
 
 def test_pytables_get_sites():
-    sites = ulmo.usgs.pytables.get_sites(TEST_FILE_PATH)
+    sites = ulmo.usgs.nwis.pytables.get_sites(TEST_FILE_PATH)
     assert len(sites) == 64
 
 
@@ -39,9 +39,9 @@ def test_pytables_get_site():
     site_code = '08068500'
     site_data_file = 'site_%s_daily.xml' % site_code
     with test_util.mocked_requests(site_data_file):
-        ulmo.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
+        ulmo.usgs.nwis.pytables.get_site(site_code, TEST_FILE_PATH)
 
-    site = ulmo.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
+    site = ulmo.usgs.nwis.pytables.get_site(site_code, TEST_FILE_PATH)
     assert len(site) == 10
 
 
@@ -49,11 +49,11 @@ def test_pytables_get_site_fallback_to_core():
     site_code = '07335390'
     site_data_file = 'site_%s_daily.xml' % site_code
 
-    sites = ulmo.usgs.pytables.get_sites(TEST_FILE_PATH)
+    sites = ulmo.usgs.nwis.pytables.get_sites(TEST_FILE_PATH)
     assert site_code not in sites
 
     with test_util.mocked_requests(site_data_file):
-        site = ulmo.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
+        site = ulmo.usgs.nwis.pytables.get_site(site_code, TEST_FILE_PATH)
 
     assert len(site) == 10
 
@@ -64,12 +64,12 @@ def test_pytables_get_site_raises_lookup():
 
     with test_util.mocked_requests(site_data_file):
         with pytest.raises(LookupError):
-            ulmo.usgs.pytables.get_site(site_code, TEST_FILE_PATH)
+            ulmo.usgs.nwis.pytables.get_site(site_code, TEST_FILE_PATH)
 
 
 def test_update_or_append():
     h5file = tables.openFile(TEST_FILE_PATH, mode="r+")
-    test_table = _create_test_table(h5file, 'update_or_append', ulmo.usgs.pytables.USGSValue)
+    test_table = _create_test_table(h5file, 'update_or_append', ulmo.usgs.nwis.pytables.USGSValue)
     where_filter = '(datetime == "%(datetime)s")'
 
     initial_values = [
@@ -86,14 +86,14 @@ def test_update_or_append():
              'qualifiers': ''}
             for i in [20, 30, 10, 999, 1000, 2000, 399]]
 
-    ulmo.usgs.pytables._update_or_append(test_table, initial_values, where_filter)
+    ulmo.usgs.nwis.pytables._update_or_append(test_table, initial_values, where_filter)
     h5file.close()
 
     assert _count_rows('/test/update_or_append') == 1000
 
     h5file = tables.openFile(TEST_FILE_PATH, mode="r+")
     test_table = h5file.getNode('/test/update_or_append')
-    ulmo.usgs.pytables._update_or_append(test_table, update_values, where_filter)
+    ulmo.usgs.nwis.pytables._update_or_append(test_table, update_values, where_filter)
     h5file.close()
     assert _count_rows('/test/update_or_append') == 1002
 
@@ -103,8 +103,8 @@ def test_non_usgs_site():
     site_data_file = 'site_%s_daily.xml' % site_code
     test_init()
     with test_util.mocked_requests(site_data_file):
-        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
-    site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+        ulmo.usgs.nwis.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+    site_data = ulmo.usgs.nwis.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
     assert len(site_data['00062:32400']['values']) > 1000
 
 
@@ -119,7 +119,7 @@ def test_update_site_list():
     }
 
     with test_util.mocked_requests(mocked_urls):
-        ulmo.usgs.pytables.update_site_list(state_code='RI', path=TEST_FILE_PATH)
+        ulmo.usgs.nwis.pytables.update_site_list(state_code='RI', path=TEST_FILE_PATH)
 
     assert _count_rows('/usgs/sites') == 64
 
@@ -129,8 +129,8 @@ def test_pytables_update_site_data():
     site_code = '01117800'
     site_data_file = 'site_%s_daily.xml' % site_code
     with test_util.mocked_requests(site_data_file):
-        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
-        site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+        ulmo.usgs.nwis.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+        site_data = ulmo.usgs.nwis.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
 
         last_value = site_data['00060:00003']['values'][-1]
 
@@ -143,8 +143,8 @@ def test_pytables_update_site_data():
 
     update_data_file = 'site_%s_daily_update.xml' % site_code
     with test_util.mocked_requests(update_data_file):
-        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
-        site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+        ulmo.usgs.nwis.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+        site_data = ulmo.usgs.nwis.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
 
     last_value = site_data['00060:00003']['values'][-1]
     assert last_value['last_checked'] != original_timestamp
@@ -181,23 +181,23 @@ def test_pytables_last_refresh_gets_updated():
     site_code = '01117800'
     site_data_file = 'site_%s_daily.xml' % site_code
     with test_util.mocked_requests(site_data_file):
-        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
-        site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+        ulmo.usgs.nwis.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+        site_data = ulmo.usgs.nwis.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
 
     # sleep for a second so last_modified changes
     time.sleep(1)
 
     update_data_file = 'site_%s_daily_update.xml' % site_code
     with test_util.mocked_requests(update_data_file):
-        ulmo.usgs.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
-        site_data = ulmo.usgs.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
+        ulmo.usgs.nwis.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+        site_data = ulmo.usgs.nwis.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
 
     last_value = site_data['00060:00003']['values'][-1]
     last_checked = last_value['last_checked']
 
-    site = ulmo.usgs.pytables.get_site(site_code, path=TEST_FILE_PATH)
+    site = ulmo.usgs.nwis.pytables.get_site(site_code, path=TEST_FILE_PATH)
     with ulmo.util.open_h5file(TEST_FILE_PATH, mode="r+") as h5file:
-        last_refresh = ulmo.usgs.pytables._last_refresh(site, h5file)
+        last_refresh = ulmo.usgs.nwis.pytables._last_refresh(site, h5file)
 
     assert last_refresh == last_checked
 
@@ -211,7 +211,7 @@ def test_core_get_sites_by_state_code():
     }
 
     with test_util.mocked_requests(mocked_urls):
-        sites = ulmo.usgs.get_sites(state_code='RI')
+        sites = ulmo.usgs.nwis.get_sites(state_code='RI')
     assert len(sites) == 64
 
 
@@ -219,7 +219,7 @@ def test_core_get_sites_single_site():
     site_code = '08068500'
     site_data_file = 'site_%s_daily.xml' % site_code
     with test_util.mocked_requests(site_data_file):
-        sites = ulmo.usgs.get_sites(sites=site_code)
+        sites = ulmo.usgs.nwis.get_sites(sites=site_code)
     assert len(sites) == 1
 
 
@@ -227,7 +227,7 @@ def test_core_get_sites_multiple_sites():
     site_codes = ['08068500', '08041500']
     sites_data_file = 'sites_%s_daily.xml' % '_'.join(site_codes)
     with test_util.mocked_requests(sites_data_file):
-        sites = ulmo.usgs.get_sites(sites=site_codes)
+        sites = ulmo.usgs.nwis.get_sites(sites=site_codes)
     assert len(sites) == 2
 
 

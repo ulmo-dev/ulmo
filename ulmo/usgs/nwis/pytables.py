@@ -18,7 +18,7 @@ import isodate
 import warnings
 
 from ulmo import util
-from ulmo.usgs import core
+from ulmo.usgs.nwis import core
 
 
 # workaround pytables not being pip installable; this means docs can still be
