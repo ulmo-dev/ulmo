@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.2.4 (in development)
-----------------------
+0.2.4 (released 2013-01-14)
+---------------------------
 - core API functions can be called from main dataset modules
 - support python 2.6
 
