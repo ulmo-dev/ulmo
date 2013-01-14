@@ -45,10 +45,9 @@ def get_sites(wsdl_url):
         response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
         sites = waterml.v1_1.parse_site_infos(response_buffer)
 
-    return {
-        site['network'] + ':' + site['code']: site
-        for site in sites.values()
-    }
+    return dict([ (site['network'] + ':' + site['code'], site)
+                  for site in sites.values()
+                ])
 
 
 def get_site_info(wsdl_url, site_code):
@@ -87,10 +86,11 @@ def get_site_info(wsdl_url, site_code):
     if len(sites) == 0:
         return {}
     site_info = sites.values()[0]
-    series_dict = {
-        series['variable']['vocabulary'] + ':' + series['variable']['code']: series
+    series_dict = dict([
+        (series['variable']['vocabulary'] + ':' + series['variable']['code'],
+            series)
         for series in site_info['series']
-    }
+    ])
     site_info['series'] = series_dict
     return site_info
 
@@ -174,10 +174,10 @@ def get_variable_info(wsdl_url, variable_code=None):
     if not variable_code is None and len(variable_info) == 1:
         return variable_info.values()[0]
     else:
-        return {
-            '%s:%s' % (var['vocabulary'], var['code']): var
+        return dict([
+            ('%s:%s' % (var['vocabulary'], var['code']), var)
             for var in variable_info.values()
-        }
+        ])
 
 
 def _waterml_version(suds_client):

@@ -47,11 +47,11 @@ def update_data(station_codes=None, start_year=None, end_year=None, path=None):
 
     all_stations = get_stations()
     if station_codes:
-        stations = {
-                station_code: all_stations.get(station_code)
+        stations = dict([
+                (station_code, all_stations.get(station_code))
                 for station_code in station_codes
                 if station_code in all_stations
-        }
+        ])
     else:
         stations = all_stations
 
