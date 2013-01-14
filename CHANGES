@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.4 (in development)
+----------------------
+- core API functions can be called from main dataset modules
+- support python 2.6
+
 
 0.2.3
 -----
