@@ -12,12 +12,12 @@ To install a development version, grab a copy of the `source code`_ and run:
 
 .. note::
 
-    If you're using the PyTables backend for USGS NWIS, you will need to install
-    pytables separately as pytables dependency cannot be automatically resolved
-    via the standard python packaging infrastructure. To install pytables, you
-    may need to install numexpr first, then pytables or use a `free scientific
-    python distribution`_ if compiling things is problematic on your platform.
+    If you're using the cache backend for USGS NWIS, you will need to install
+    `PyTables` separately. If you're on Windows, it using a `scientific python
+    distribution`_ that includes PyTables is highly recommended because
+    compiling on Windows is a bit difficult.
 
 
 .. _free scientific python distribution: http://numfocus.org/projects-2/software-distributions/
 .. _source code: https://github.com/twdb/ulmo
+.. _PyTables: http://github.pytables.com
