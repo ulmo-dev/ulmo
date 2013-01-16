@@ -142,10 +142,10 @@ def _date_range_url_params(date_range, service):
     if date_range is None:
         return {}
     if type(date_range) is datetime.datetime:
-        return dict(startDT=isodate.datetime_isoformat(date_range))
+        return dict(startDT=isodate.date_isoformat(date_range))
     if type(date_range) is list or type(date_range) is tuple:
-        return dict(startDT=isodate.datetime_isoformat(date_range[0]),
-                    endDT=isodate.datetime_isoformat(date_range[1]))
+        return dict(startDT=isodate.date_isoformat(date_range[0]),
+                    endDT=isodate.date_isoformat(date_range[1]))
     if type(date_range) is datetime.timedelta:
         return dict(period=isodate.duration_isoformat(date_range))
         #return dict(startDT=isodate.datetime_isoformat(dt.now() - date_range))

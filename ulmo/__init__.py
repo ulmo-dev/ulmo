@@ -60,11 +60,11 @@ def get_data(*param_specs, **kwds):
     for index in param_specs:
         orgabbr, station, param = index.split(',')
         if orgabbr == 'NWISDV':
-            nts = usgs.core.get_site_data(station, service='daily',
+            nts = usgs.nwis.core.get_site_data(station, service='daily',
                     date_range=date_range)
             param_interval = ':00003'
         if orgabbr == 'NWISIV':
-            nts = usgs.core.get_site_data(station, service='instantaneous',
+            nts = usgs.nwis.core.get_site_data(station, service='instantaneous',
                     date_range=date_range)
             param_interval = ':00011'
         dates = [i['datetime'] for i in nts[param + param_interval]['values']]
