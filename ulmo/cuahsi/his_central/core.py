@@ -3,7 +3,7 @@ import suds
 HIS_CENTRAL_WSDL_URL = 'http://hiscentral.cuahsi.org/webservices/hiscentral.asmx?WSDL'
 
 
-def services(x_min=-180, y_min=-90, x_max=180, y_max=90):
+def get_services(x_min=-180, y_min=-90, x_max=180, y_max=90):
     """returns a list of tuples containing (service_name, wsdl_url,
     network_name) for all the services registered to HIS Central
     (http://hiscentral.cuahsi.org). Optional arguments are the x_min,
