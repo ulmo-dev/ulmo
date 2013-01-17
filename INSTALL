@@ -18,6 +18,6 @@ To install a development version, grab a copy of the `source code`_ and run:
     compiling on Windows is a bit difficult.
 
 
-.. _free scientific python distribution: http://numfocus.org/projects-2/software-distributions/
+.. _scientific python distribution: http://numfocus.org/projects-2/software-distributions/
 .. _source code: https://github.com/twdb/ulmo
 .. _PyTables: http://github.pytables.com
