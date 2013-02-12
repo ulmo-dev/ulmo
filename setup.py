@@ -46,6 +46,7 @@ setup(
         'pandas>=0.9.1',
         'requests==0.14.2',
         'suds>=0.4',
+        'baker>=1.3',
     ],
     extras_require={
         'pytables_caching': ['tables>=0.2.3']
@@ -62,4 +63,8 @@ setup(
         'pytest>=2.3.2',
     ],
     cmdclass={'test': PyTest},
+    entry_points={
+        'console_scripts':
+            ['ulmo=ulmo:main']
+    },
 )
