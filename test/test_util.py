@@ -1,7 +1,6 @@
 import contextlib
 import os
 import os.path
-import cStringIO as StringIO
 
 import mock
 import requests
@@ -60,6 +59,7 @@ def mocked_suds_client(waterml_version, mocked_service_calls):
 
             for service_call, filename in mocked_service_calls.iteritems():
                 open_file = open_files[filename]
+
                 def _func(*args, **kwargs):
                     return open_file.read()
                 setattr(client.service, service_call, _func)
