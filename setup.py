@@ -60,6 +60,7 @@ setup(
     ],
     tests_require=[
         'pytest>=2.3.2',
+        'httpretty>=0.5.83<F3',
     ],
     cmdclass={'test': PyTest},
 )

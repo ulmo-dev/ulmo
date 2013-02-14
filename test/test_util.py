@@ -2,6 +2,7 @@ import contextlib
 import os
 import os.path
 
+from httpretty import HTTPretty
 import mock
 import requests
 
@@ -66,6 +67,30 @@ def mocked_suds_client(waterml_version, mocked_service_calls):
 
             with mock.patch('suds.client.Client', return_value=client):
                 yield
+
+
+@contextlib.contextmanager
+def mocked_url(url, response_file_path, request_type='POST'):
+    """mocks the underlying python sockets library to return a given file's
+    content
+    """
+    # if environment variable is set, then don't mock the tests just grab files
+    # over the network. Example:
+    #    env ULMO_DONT_MOCK_TESTS=1 py.test
+    if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
+        yield
+
+    else:
+        with open(os.path.join('files', response_file_path)) as f:
+            response = f.read()
+
+        HTTPretty.enable()
+
+        request_class = getattr(HTTPretty, request_type)
+        HTTPretty.register_uri(request_class, url, body=response)
+
+        yield
+        HTTPretty.disable()
 
 
 def _mock_request_side_effect(url_files):

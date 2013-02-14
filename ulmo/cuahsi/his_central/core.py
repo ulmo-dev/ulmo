@@ -50,6 +50,19 @@ def get_services(bbox=None):
     return services
 
 
+def _cast_if_text(obj):
+    """casts sax.text.Text objects to regular python strings, but leaves other
+    objects unchanged
+    """
+    if isinstance(obj, suds.sax.text.Text):
+        try:
+            return str(obj)
+        except UnicodeEncodeError:
+            return unicode(obj)
+    else:
+        return obj
+
+
 def _service_dict(service_info):
     """converts a ServiceInfo etree object into a service info dict"""
     change_keys = [
@@ -67,8 +80,8 @@ def _service_dict(service_info):
     ]
 
     service_dict = dict([
-        (util.camel_to_underscore(key), value)
-        for key, value in dict(service_info)
+        (util.camel_to_underscore(key), _cast_if_text(value))
+        for key, value in dict(service_info).iteritems()
     ])
 
     for old_key, new_key in change_keys:
