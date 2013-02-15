@@ -145,6 +145,10 @@ def get_data(state=None, climate_division=None, start_date=None, end_date=None,
             # some data are duplicated (e.g. final data from 2011 stretches into
             # prelim data of 2012), so just take those that are new
             data = data.append(year_data.ix[year_data.index - data.index])
+
+    # this does what data.reset_index() should do, but at least as of 0.10.1, that sets
+    # will cast period objects to ints
+    data.index = np.arange(len(data))
     if as_dataframe:
         return data
     else:
@@ -155,7 +159,8 @@ def _as_data_dict(dataframe):
     data_dict = {}
     for state in dataframe['state'].unique():
         state_dict = {}
-        for name, group in dataframe.groupby(['state', 'climate_division']):
+        state_dataframe = dataframe[dataframe['state'] == state]
+        for name, group in state_dataframe.groupby(['state', 'climate_division']):
             s, climate_division = name
             values = [
                 {
