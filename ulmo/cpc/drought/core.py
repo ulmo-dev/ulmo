@@ -105,7 +105,6 @@ def get_data(state=None, climate_division=None, start_date=None, end_date=None,
         A dict or pandas.DataFrame representing the data. See the
         ``as_dataframe`` parameter for more.
     """
-    #XXX: add a non-dataframe option
     start_date = util.parse_datestr(start_date)
     end_date = util.parse_datestr(end_date)
     if not end_date:
