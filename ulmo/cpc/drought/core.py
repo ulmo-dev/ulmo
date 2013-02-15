@@ -122,7 +122,7 @@ def get_data(state=None, climate_division=None, start_date=None, end_date=None,
 
     data = None
     for year in range(start_year, end_year + 1):
-        url =_get_data_url(year)
+        url = _get_data_url(year)
         format_type =_get_data_format(year)
         with _open_data_file(url) as data_file:
             year_data = _parse_data_file(data_file, format_type)
@@ -219,7 +219,7 @@ def _get_data_format(year):
 
 
 def _get_data_url(year):
-    current_year = datetime.date.today().year
+    current_year, current_week = _week_number(datetime.date.today())
     if year == current_year:
         return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data'
     elif year == 2011:
