@@ -45,7 +45,8 @@ def convert_datetime(datetime):
 def dict_from_dataframe(dataframe):
     for column_name in dataframe.columns:
         dataframe[column_name][pandas.isnull(dataframe[column_name])] = None
-    if isinstance(dataframe.index, pandas.PeriodIndex):
+    if isinstance(dataframe.index, pandas.PeriodIndex)\
+            or isinstance(dataframe.index, pandas.DatetimeIndex):
         dataframe.index = [str(i) for i in dataframe.index]
 
     return dataframe.T.to_dict()
