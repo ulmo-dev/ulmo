@@ -4,6 +4,7 @@ Changelog
 **0.3.1 (in development)**
 
 - add support for CUAHSI's HIS Central service: ulmo.cuahsi.his_central
+- add support for CPC's weekly drought monitor dataset
 
 
 **0.3.0 (released 2013-01-14)**
