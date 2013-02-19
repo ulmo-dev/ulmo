@@ -162,13 +162,11 @@ def _as_data_dict(dataframe):
         state_dataframe = dataframe[dataframe['state'] == state]
         for name, group in state_dataframe.groupby(['state', 'climate_division']):
             s, climate_division = name
+            climate_division_data = group.T.drop(['state', 'climate_division'])
             values = [
-                {
-                    'period': str(record['period']),
-                    'cmi': record['cmi'],
-                    'pdsi': record['pdsi'],
-                }
-                for record in group.to_records()]
+                _value_dict(value)
+                for k, value in climate_division_data.iteritems()
+            ]
             state_dict[climate_division] = values
         data_dict[state] = state_dict
     return data_dict
@@ -245,11 +243,24 @@ def _open_data_file(url):
 def _parse_data_file(data_file, palmer_format):
     if palmer_format == 'format5':
         delim_sequence = (2, 2, 4, 2, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6)
-        use_columns = (0, 1, 2, 3, 37, 40)
+        use_columns = (0, 1, 2, 3, 4, 5, 9, 15, 28, 29, 37, 40, 41)
+        dtype = [
+            ('state_code', 'i1'),
+            ('climate_division', 'i1'),
+            ('year', 'i4'),
+            ('week', 'i4'),
+            ('precipitation', 'f8'),
+            ('temperature', 'f8'),
+            ('potential_evap', 'f8'),
+            ('runoff', 'f8'),
+            ('soil_moisture_upper', 'f8'),
+            ('soil_moisture_lower', 'f8'),
+            ('pdsi', 'f8'),
+            ('cmi', 'f8')
+        ]
     else:
         raise NotImplementedError("we have not implemented the format for given date range")
 
-    dtype = [('state_code', 'i1'), ('climate_division', 'i1'), ('year', 'i4'), ('week', 'i4'), ('pdsi', 'f8'), ('cmi', 'f8')]
     data_array = np.genfromtxt(data_file, dtype=dtype, delimiter=delim_sequence, usecols=use_columns)
     dataframe = pandas.DataFrame(data_array)
     return dataframe
@@ -270,6 +281,12 @@ def _reindex_data(dataframe):
     dataframe = _convert_state_codes(dataframe)
     return dataframe.set_index(['state', 'climate_division', 'period'],
             drop=False)
+
+
+def _value_dict(value):
+    value_dict = value.to_dict()
+    value_dict['period'] = str(value_dict['period'])
+    return value_dict
 
 
 def _week_number(date):
