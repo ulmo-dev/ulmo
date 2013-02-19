@@ -38,6 +38,7 @@ setup(
     platforms='any',
     install_requires=[
         'appdirs>=1.2.0',
+        'beautifulsoup4>=4.1.3',
         'isodate>=0.4.6',
         'lxml>=2.3',
         # mock is required for mocking pytables-related functionality when it doesn't exist
