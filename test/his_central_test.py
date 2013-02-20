@@ -8,8 +8,9 @@ def test_get_services():
     wsdl_file = 'his_central/wsdl.xml'
     service_info_url = 'http://hiscentral.cuahsi.org/webservices/hiscentral.asmx'
     service_info_file = 'his_central/get_services.xml'
-    with test_util.mocked_url(wsdl, wsdl_file):
-        with test_util.mocked_url(service_info_url, service_info_file):
+    with test_util.mocked_url(wsdl, wsdl_file, methods=['GET']):
+        with test_util.mocked_url(service_info_url, service_info_file,
+                methods=['POST']):
             services = ulmo.cuahsi.his_central.get_services()
 
     check_services = [
