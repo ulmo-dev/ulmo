@@ -86,10 +86,10 @@ def get_data(state=None, climate_division=None, start_date=None, end_date=None,
         given 2-character state code.
     climate_division : ``None`` or int
         If specified, results will be limited to the climate division.
-    start_date : ``None`` or datetime.date
+    start_date : ``None`` or date
         Results will be limited to those after the given date. Default is the
         start of the current calendar year.
-    end_date : ``None`` or datetime.date
+    end_date : ``None`` or date
         If specified, results will be limited to data before this date.
     as_dataframe: bool
         If ``False`` (default), a dict with a nested set of dicts will be
@@ -105,8 +105,8 @@ def get_data(state=None, climate_division=None, start_date=None, end_date=None,
         A dict or pandas.DataFrame representing the data. See the
         ``as_dataframe`` parameter for more.
     """
-    start_date = util.parse_datestr(start_date)
-    end_date = util.parse_datestr(end_date)
+    start_date = util.convert_date(start_date)
+    end_date = util.convert_date(end_date)
     if not end_date:
         end_date = datetime.date.today()
     if not start_date:

@@ -28,6 +28,20 @@ def camel_to_underscore(s):
     return all_cap_re.sub(r'\1_\2', first_sub).lower()
 
 
+def convert_date(date):
+    """returns a datetime.date object from either a string representation or
+    date-like object (datetime.date, datetime.datetime, or pandas.Timestamp)
+    """
+    return pandas.Timestamp(date).date()
+
+
+def convert_datetime(datetime):
+    """returns a datetime.date object from either a string representation or
+    datetime-like object (datetime.date, datetime.datetime, or pandas.Timestamp)
+    """
+    return pandas.Timestamp(datetime).to_datetime()
+
+
 def dict_from_dataframe(dataframe):
     for column_name in dataframe.columns:
         dataframe[column_name][pandas.isnull(dataframe[column_name])] = None
@@ -79,12 +93,6 @@ def open_file_for_url(url, path, check_modified=True):
     open_file = open(path, 'rb')
     yield open_file
     open_file.close()
-
-
-def parse_datestr(date_string):
-    """returns a datetime.date given a string of the format `YYYY-MM-DD`"""
-    if date_string:
-        return datetime.datetime.strptime(date_string, '%Y-%m-%d').date()
 
 
 def raise_dependency_error(*args, **kwargs):
