@@ -96,9 +96,19 @@ def get_site_data(site_code, service=None, parameter_code=None,
         ``None``, then both services are used.
     parameter_code : str
         Parameter code(s) that will be passed as the parameterCd parameter.
-    date_range : date range
-        Date range to be used for the query. This will be deprecated very soon
-        and replaced with more explicit parameters.
+    start : datetime (see :ref:`dates-and-times`)
+        Start of a date range for a query. This parameter is mutually exclusive
+        with period (you cannot use both).
+    end : datetime (see :ref:`dates-and-times`)
+        End of a date range for a query. This parameter is mutually exclusive
+        with period (you cannot use both).
+    period : str or datetime.timedelta
+        Period of time to use for requesting data. This will be passed along as
+        the period parameter. This can either be 'all' to signal that you'd like
+        the entire period of record, or string in ISO 8601 period format (e.g.
+        'P1Y2M21D' for a period of one year, two months and 21 days) or it can
+        be a datetime.timedelta object representing the period of time. This
+        parameter is mutually exclusive with start/end dates.
     modified_since : ``None`` or datetime.timedelta
         Passed along as the modifiedSince parameter.
 

@@ -35,3 +35,16 @@ CUAHSI WaterOneFlow
 
 .. automodule:: ulmo.cuahsi.wof
    :members: get_sites, get_site_info, get_values, get_variable_info
+
+
+
+.. _dates-and-times:
+
+note on dates and times
+-----------------------
+
+Dates and times can provided a few different ways, depending on what is
+convenient. They can either be a string representation or as instances of date
+and datetime objects from python's datetime standard library module.  For
+strings, the ISO 8061 format ('YYYY-mm-dd HH:MM:SS' or some abbreviated version)
+is accepted, as well dates in 'mm/dd/YYYY' format.
