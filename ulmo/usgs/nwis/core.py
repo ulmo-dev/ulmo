@@ -39,10 +39,8 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
     sites : str, iterable of strings or ``None``
         The site to use or list of sites to use; lists will be joined by a ','.
     state_code : str or ``None``
-    'National Climactic Data Center
         Two-letter state code used in stateCd parameter.
     site_type : str or ``None``
-    'National Climactic Data Center
         Type of site used in siteType parameter.
     service : {``None``, 'individual', 'daily'}
         The service to use, either "individual", "daily", or ``None`` (default). If
