@@ -82,8 +82,8 @@ def get_sites(path=None):
 
     Parameters
     ----------
-    path : `None` or file path
-        Path to the hdf5 file to be queried, if `None` then the default path
+    path : ``None`` or file path
+        Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used.
 
 
@@ -111,8 +111,8 @@ def get_site(site_code, path=None):
     ----------
     site_code : str
         The site code of the site you want to get information for.
-    path : `None` or file path
-        Path to the hdf5 file to be queried, if `None` then the default path
+    path : ``None`` or file path
+        Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used.
 
 
@@ -145,11 +145,11 @@ def get_site_data(site_code, agency_code=None, path=None):
     ----------
     site_code : str
         The site code of the site you want to get data for.
-    agency_code : `None` or str
+    agency_code : ``None`` or str
         The agency code to get data for. This will need to be set if a site code
         is in use by multiple agencies (this is rare).
-    path : `None` or file path
-        Path to the hdf5 file to be queried, if `None` then the default path
+    path : ``None`` or file path
+        Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used.
 
 
@@ -198,23 +198,23 @@ def update_site_list(sites=None, state_code=None, service=None, path=None):
 
     Parameters
     ----------
-    sites : str, iterable of strings or `None`
+    sites : str, iterable of strings or ``None``
         The site to use or list of sites to use; lists will be joined by a ','.
-    state_code : str or `None`
+    state_code : str or ``None``
         Two-letter state code used in stateCd parameter.
-    site_type : str or `None`
+    site_type : str or ``None``
         Type of site used in siteType parameter.
-    service : {`None`, 'individual', 'daily'}
-        The service to use, either "individual", "daily", or `None` (default). If
-        `None`, then both services are used.
-    path : `None` or file path
-        Path to the hdf5 file to be queried, if `None` then the default path
+    service : {``None``, 'individual', 'daily'}
+        The service to use, either "individual", "daily", or ``None`` (default). If
+        ``None``, then both services are used.
+    path : ``None`` or file path
+        Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used.
 
 
     Returns
     -------
-    None : `None`
+    None : ``None``
     """
     if not path:
         path = HDF5_FILE_PATH
@@ -242,13 +242,13 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None):
         'P1Y2M21D' for a period of one year, two months and 21 days) or it can
         be a datetime.timedelta object representing the period of time. This
         parameter is mutually exclusive with start/end dates.
-    modified_since : `None` or datetime.timedelta
+    modified_since : ``None`` or datetime.timedelta
         Passed along as the modifiedSince parameter.
 
 
     Returns
     -------
-    None : `None`
+    None : ``None``
     """
     if not path:
         path = HDF5_FILE_PATH
