@@ -81,7 +81,7 @@ def mocked_url(url, response_file_path, request_type='POST'):
         yield
 
     else:
-        with open(os.path.join('files', response_file_path)) as f:
+        with open(get_test_file_path(response_file_path)) as f:
             response = f.read()
 
         HTTPretty.enable()
