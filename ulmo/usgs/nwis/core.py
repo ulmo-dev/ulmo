@@ -16,6 +16,7 @@ import logging
 import isodate
 import requests
 
+from ulmo import util
 import ulmo.waterml.v1_1 as wml
 
 
@@ -82,7 +83,7 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
 
 
 def get_site_data(site_code, service=None, parameter_code=None,
-                  date_range=None, modified_since=None):
+                  start=None, end=None, period=None, modified_since=None):
     """Fetches site data.
 
 
@@ -114,48 +115,37 @@ def get_site_data(site_code, service=None, parameter_code=None,
     if modified_since:
         url_params['modifiedSince'] = isodate.duration_isoformat(modified_since)
 
+    if not (start is None or end is None) and not period is None:
+        raise ValueError("using date range with start/end AND period is allowed"
+                " because it's ambiguous, use one or the other")
+    if not period is None:
+        if isinstance(period, basestring):
+            if period == 'all':
+                if service in ('iv', 'instantaneous'):
+                    start = datetime.datetime(2007, 10, 1)
+                if service in ('dv', 'daily'):
+                    start = datetime.datetime(1851, 1, 1)
+            else:
+                url_params['period'] = period
+        elif isinstance(period, datetime.timedelta):
+            url_params['period'] = isodate.duration_isoformat(period)
+    if not start is None:
+        start_datetime = util.convert_datetime(start)
+        url_params['startDT'] = isodate.datetime_isoformat(start_datetime)
+    if not end is None:
+        end_datetime = util.convert_datetime(end)
+        url_params['endDT'] = isodate.datetime_isoformat(end_datetime)
+
     if service in ('daily', 'instantaneous'):
-        values = _get_site_values(service, date_range, url_params)
+        values = _get_site_values(service, url_params)
     elif not service:
-        values = _get_site_values('daily', date_range, url_params)
+        values = _get_site_values('daily', url_params)
         values.update(
-            _get_site_values('instantaneous', date_range, url_params))
+            _get_site_values('instantaneous', url_params))
     else:
         raise ValueError("service must either be 'daily', 'instantaneous' or none")
 
     return values
-
-
-def _date_range_url_params(date_range, service):
-    """returns a dict of url parameters that should be used for the
-    date_range, depending on what type of object date_range is. If
-    date_range is a single datetime, returns startDT. If date_range is
-    a pair of datetimes then it returns a startDT and endDT. If
-    date_range is a timedelta then it returns a period. If date_range
-    is the string 'all', then it returns that will get all the
-    available data from the service, depending on the service
-    (instantaneous is only the last 120 days, daily values queries
-    data starting in 1851).
-    """
-    if date_range is None:
-        return {}
-    if type(date_range) is datetime.datetime:
-        return dict(startDT=isodate.datetime_isoformat(date_range))
-    if type(date_range) is list or type(date_range) is tuple:
-        return dict(startDT=isodate.datetime_isoformat(date_range[0]),
-                    endDT=isodate.datetime_isoformat(date_range[1]))
-    if type(date_range) is datetime.timedelta:
-        return dict(period=isodate.duration_isoformat(date_range))
-        #return dict(startDT=isodate.datetime_isoformat(dt.now() - date_range))
-    if date_range == 'all':
-        if service in ('iv', 'instantaneous'):
-            return dict(startDT=isodate.date_isoformat(datetime.datetime(2007, 10, 1)))
-        if service in ('dv', 'daily'):
-            return dict(startDT=isodate.date_isoformat(datetime.datetime(1851, 1, 1)))
-
-    raise(TypeError,
-          "date_range must be either a datetime, a 2-tuple of "
-          "datetimes, a timedelta object, or 'all'")
 
 
 def _get_service_url(service):
@@ -167,12 +157,11 @@ def _get_service_url(service):
         raise "service must be either 'daily' ('dv') or 'instantaneous' ('iv')"
 
 
-def _get_site_values(service, date_range, url_params):
+def _get_site_values(service, url_params):
     """downloads and parses values for a site
 
     returns a values dict containing variable and data values
     """
-    url_params.update(_date_range_url_params(date_range, service))
     service_url = _get_service_url(service)
 
     query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
@@ -184,13 +173,9 @@ def _get_site_values(service, date_range, url_params):
     log.info("processing data from request: %s" % req.request.full_url)
 
     if req.status_code != 200:
-        # try again with period of 120 days if full range doesn't work
-        if service == 'instantaneous' and date_range == 'all':
-            date_range = datetime.timedelta(days=120)
-            return _get_site_values(service, date_range, url_params)
-        else:
-            return {}
+        return {}
     content_io = StringIO.StringIO(str(req.content))
+    util.save_pretty_printed_xml('a.out', content_io)
 
     data_dict = wml.parse_site_values(content_io, query_isodate)
 

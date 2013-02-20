@@ -222,16 +222,24 @@ def update_site_list(sites=None, state_code=None, service=None, path=None):
     _update_sites_table(sites.itervalues(), path)
 
 
-def update_site_data(site_code, date_range=None, path=None):
+def update_site_data(site_code, start=None, end=None, period=None, path=None):
     """Update cached site data.
 
     Parameters
     ----------
     site_code : str
         The site code of the site you want to query data for.
-    date_range : date range
-        Date range to be used for the query. This will be deprecated very soon
-        and replaced with more explicit parameters.
+    start : date
+        Start of a date range for a query. This parameter should be mutually
+        exclusive with period (you cannot use both).
+    end : date
+        End of a date range for a query. This parameter should be mutually
+        exclusive with period (you cannot use both).
+    period : str or datetime.timedelta
+        Period of time to use for requesting data. This will be passed along as
+        the period parameter. This can either be an string in ISO 8601 period
+        format (e.g. 20d for a 20 day period) or it can be a datetime.timedelta
+        object representing the period of time.
     modified_since : `None` or datetime.timedelta
         Passed along as the modifiedSince parameter.
 
@@ -250,14 +258,16 @@ def update_site_data(site_code, date_range=None, path=None):
     # XXX: use some sort of mutex or file lock to guard against concurrent
     # processes writing to the file
     with util.open_h5file(path, mode="r+") as h5file:
-        if not date_range:
+        if start is None and end is None and period is None:
             last_site_refresh = _last_refresh(site, h5file)
             if last_site_refresh:
-                date_range = datetime.datetime.now() - isodate.parse_datetime(last_site_refresh)
+                date_range_params = {'start': last_site_refresh}
             else:
-                date_range = 'all'
+                date_range_params = {'period': 'all'}
+        else:
+            date_range_params = dict(start=start, end=end, period=period)
 
-        site_data = core.get_site_data(site_code, date_range=date_range)
+        site_data = core.get_site_data(site_code, **date_range_params)
 
         for d in site_data.itervalues():
             variable = d['variable']

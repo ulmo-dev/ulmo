@@ -1,0 +1,103 @@
+<ns1:timeSeriesResponse xmlns:ns1="http://www.cuahsi.org/waterML/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cuahsi.org/waterML/1.1/ http://waterservices.usgs.gov/WaterML-1.1.xsd">
+<ns1:queryInfo xmlns:ns2="http://www.cuahsi.org/waterML/1.1/">
+    <ns2:creationTime>2013-02-20T16:11:57</ns2:creationTime>
+    <ns2:queryURL>http://waterservices.usgs.gov/nwis/dv/</ns2:queryURL>
+    <ns2:criteria>
+        <ns2:locationParam>[ALL:01117800]</ns2:locationParam>
+        <ns2:variableParam>ALL</ns2:variableParam>
+    </ns2:criteria>
+    <ns2:note title="filter:sites">[ALL:01117800]</ns2:note>
+    <ns2:note title="filter:timeRange">[mode=PERIOD, period=P45D, modifiedSince=null]</ns2:note>
+    <ns2:note title="filter:methodId">methodIds=[ALL]</ns2:note>
+    <ns2:note title="requestDT">2013-02-20T21:11:57.584Z</ns2:note>
+    <ns2:note title="requestId">28e91ae0-7ba2-11e2-a7f9-6cae8b6642ea</ns2:note>
+    <ns2:note title="disclaimer">Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information.</ns2:note>
+    <ns2:note title="server">sdas01</ns2:note>
+</ns1:queryInfo>
+<ns1:timeSeries xmlns:ns1="http://www.cuahsi.org/waterML/1.1/" name="USGS:01117800:00060:00003">
+    <ns1:sourceInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns1:SiteInfoType">
+        <ns1:siteName>WOOD RIVER NEAR ARCADIA, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117800</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.5739884</ns1:latitude>
+                <ns1:longitude>-71.72062318</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2013-01-06T00:00:00.000">68</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-07T00:00:00.000">67</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-08T00:00:00.000">65</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-09T00:00:00.000">65</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-10T00:00:00.000">65</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-11T00:00:00.000">66</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-12T00:00:00.000">80</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-13T00:00:00.000">87</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-14T00:00:00.000">92</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-15T00:00:00.000">95</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-16T00:00:00.000">91</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-17T00:00:00.000">90</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-18T00:00:00.000">83</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-19T00:00:00.000">76</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-20T00:00:00.000">75</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-21T00:00:00.000">72</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-22T00:00:00.000">69</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-23T00:00:00.000">60</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-24T00:00:00.000">54</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-25T00:00:00.000">52</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-26T00:00:00.000">52</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-27T00:00:00.000">50</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-28T00:00:00.000">50</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-29T00:00:00.000">51</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-30T00:00:00.000">56</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-01-31T00:00:00.000">106</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-01T00:00:00.000">106</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-02T00:00:00.000">88</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-03T00:00:00.000">76</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-04T00:00:00.000">67</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-05T00:00:00.000">61</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-06T00:00:00.000">57</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-07T00:00:00.000">54</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-08T00:00:00.000">51</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-09T00:00:00.000">63</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-10T00:00:00.000">70</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-11T00:00:00.000">76</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-12T00:00:00.000">91</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-13T00:00:00.000">87</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-14T00:00:00.000">84</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-15T00:00:00.000">81</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-16T00:00:00.000">84</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-17T00:00:00.000">81</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-18T00:00:00.000">73</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2013-02-19T00:00:00.000">75</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription/>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries></ns1:timeSeriesResponse>
