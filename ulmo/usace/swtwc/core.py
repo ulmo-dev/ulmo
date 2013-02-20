@@ -3,7 +3,6 @@ import datetime
 import os.path
 
 from bs4 import BeautifulSoup
-import numpy as np
 import pandas
 
 from ulmo import util
@@ -12,8 +11,32 @@ USACE_SWTWC_DIR = os.path.join(util.get_ulmo_dir(), 'usace/swtwc')
 
 
 def get_station_data(station_code, date=None, as_dataframe=False):
-    station_dict = {}
+    """Fetches data for a station at a given date.
 
+
+    Parameters
+    ----------
+    station_code: str
+        The station code to fetch data for. A list of stations can be retrieved with
+        ``get_stations()``
+    date: str or ``None``
+        The date of the data to be queried. If date is ``None`` (default), then
+        data for the current day is retreived.
+    as_dataframe : bool
+        This determines what format values are returned as. If ``False``
+        (default), the values dict will be a dict with timestamps as keys mapped
+        to a dict of gauge variables and values. If ``True`` then the values
+        dict will be a pandas.DataFrame object containing the equivalent
+        information.
+
+
+    Returns
+    -------
+    data_dict : dict
+        A dict containing station information and values.
+    """
+
+    station_dict = {}
     if date is None:
         date_str = 'current'
         year = datetime.date.today().year
@@ -83,6 +106,13 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
 
 def get_stations():
+    """Fetches a list of station codes and descriptions.
+
+    Returns
+    -------
+    stations_dict : dict
+        a python dict with station codes mapped to station information
+    """
     stations_url = 'http://www.swt-wc.usace.army.mil/shefids.htm'
     path = os.path.join(USACE_SWTWC_DIR, 'shefids.htm')
 
