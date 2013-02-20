@@ -229,13 +229,13 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None):
     ----------
     site_code : str
         The site code of the site you want to query data for.
-    start : datetime (see :ref:`dates-and-times`)
+    start : ``None`` or datetime (see :ref:`dates-and-times`)
         Start of a date range for a query. This parameter is mutually exclusive
         with period (you cannot use both).
-    end : datetime (see :ref:`dates-and-times`)
+    end : ``None`` or datetime (see :ref:`dates-and-times`)
         End of a date range for a query. This parameter is mutually exclusive
         with period (you cannot use both).
-    period : str or datetime.timedelta
+    period : {``None``, str, datetime.timedelta}
         Period of time to use for requesting data. This will be passed along as
         the period parameter. This can either be 'all' to signal that you'd like
         the entire period of record, or string in ISO 8601 period format (e.g.
