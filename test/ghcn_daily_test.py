@@ -78,7 +78,7 @@ test_data = {
 def test_get_data_as_dataframes():
     for station_id, sample_data in test_data.iteritems():
         elements = sample_data.keys()
-        with test_util.mocked_requests(station_id + '.dly'):
+        with test_util.mocked_requests('ncdc/ghcnd/%s.dly' % station_id):
             station_data = ghcn_daily.get_data(station_id, elements=elements,
                     as_dataframe=True)
 
@@ -97,7 +97,7 @@ def test_get_data_as_dataframes():
 def test_get_data_as_dicts():
     for station_id, sample_data in test_data.iteritems():
         elements = sample_data.keys()
-        with test_util.mocked_requests(station_id + '.dly'):
+        with test_util.mocked_requests('ncdc/ghcnd/%s.dly' % station_id):
             station_data = ghcn_daily.get_data(station_id, elements=elements)
 
             for element_id, element_test_data in sample_data.iteritems():
@@ -118,7 +118,7 @@ def test_get_data_as_dicts():
 
 
 def test_get_stations_as_dicts():
-    with test_util.mocked_requests('ghcnd-stations.txt'):
+    with test_util.mocked_requests('ncdc/ghcnd/ghcnd-stations.txt'):
         stations = ghcn_daily.get_stations()
     assert len(stations) > 80000
 
@@ -128,7 +128,7 @@ def test_get_stations_as_dicts():
 
 
 def test_get_stations_as_dataframe():
-    with test_util.mocked_requests('ghcnd-stations.txt'):
+    with test_util.mocked_requests('ncdc/ghcnd/ghcnd-stations.txt'):
         stations = ghcn_daily.get_stations(as_dataframe=True)
     assert len(stations) > 80000
 
@@ -141,13 +141,13 @@ def test_get_stations_as_dataframe():
 
 
 def test_get_stations_by_country():
-    with test_util.mocked_requests('ghcnd-stations.txt'):
+    with test_util.mocked_requests('ncdc/ghcnd/ghcnd-stations.txt'):
         stations = ghcn_daily.get_stations(country='US', as_dataframe=True)
     assert 45000 < len(stations) < 47000
 
 
 def test_get_stations_by_state():
-    with test_util.mocked_requests('ghcnd-stations.txt'):
+    with test_util.mocked_requests('ncdc/ghcnd/ghcnd-stations.txt'):
         stations = ghcn_daily.get_stations(state='TX', as_dataframe=True)
     assert 3200 < len(stations) < 3300
 
@@ -210,7 +210,7 @@ def test_get_stations_with_date_range():
         },
     ]
 
-    with test_util.mocked_requests('ghcnd-inventory.txt'):
+    with test_util.mocked_requests('ncdc/ghcnd/ghcnd-inventory.txt'):
         for test_range in test_ranges:
             start = test_range.get('start')
             end = test_range.get('end')
@@ -267,7 +267,7 @@ def test_get_stations_with_elements():
             ],
         },
     ]
-    with test_util.mocked_requests('ghcnd-inventory.txt'):
+    with test_util.mocked_requests('ncdc/ghcnd/ghcnd-inventory.txt'):
         for test_element in test_elements:
             elements = test_element.get('elements')
             stations = ghcn_daily.get_stations(elements=elements,
