@@ -70,7 +70,7 @@ def mocked_suds_client(waterml_version, mocked_service_calls):
 
 
 @contextlib.contextmanager
-def mocked_url(url, response_file_path, request_type='POST'):
+def mocked_url(url, response_file_path, request_methods=None):
     """mocks the underlying python sockets library to return a given file's
     content
     """
@@ -86,8 +86,12 @@ def mocked_url(url, response_file_path, request_type='POST'):
 
         HTTPretty.enable()
 
-        request_class = getattr(HTTPretty, request_type)
-        HTTPretty.register_uri(request_class, url, body=response)
+        if request_methods is None:
+            request_methods = ['GET', 'POST']
+
+        for request_method in request_methods:
+            request_class = getattr(HTTPretty, request_method)
+            HTTPretty.register_uri(request_class, url, body=response)
 
         yield
         HTTPretty.disable()
