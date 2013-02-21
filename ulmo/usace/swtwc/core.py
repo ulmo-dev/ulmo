@@ -19,7 +19,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
     station_code: str
         The station code to fetch data for. A list of stations can be retrieved with
         ``get_stations()``
-    date: str or ``None``
+    start : ``None`` or date (see :ref:`dates-and-times`)
         The date of the data to be queried. If date is ``None`` (default), then
         data for the current day is retreived.
     as_dataframe : bool
@@ -41,7 +41,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
         date_str = 'current'
         year = datetime.date.today().year
     else:
-        date = util.parse_datestr(date)
+        date = util.convert_date(date)
         date_str = date.strftime('%Y%m%d')
         year = date.year
 
