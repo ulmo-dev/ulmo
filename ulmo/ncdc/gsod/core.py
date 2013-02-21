@@ -118,10 +118,8 @@ def get_stations(update=True):
     stations_dict : dict
         A dict with USAF-WBAN codes keyed to station information dicts.
     """
-    if update or not os.path.exists(NCDC_GSOD_STATIONS_FILE):
-        _download_stations_file()
-
-    with open(NCDC_GSOD_STATIONS_FILE, 'rb') as f:
+    stations_url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
+    with util.open_file_for_url(stations_url, NCDC_GSOD_STATIONS_FILE) as f:
         reader = csv.DictReader(f)
         stations = dict([
             (_station_code(row), _process_station(row))
@@ -142,13 +140,10 @@ def _download_stations_file():
 
 
 def _get_gsod_file(year):
-    base_url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/'
-    print 'retrieving ncdc gsod tar data file for {0}'.format(year)
-    url = base_url + '/' + str(year) + '/' + 'gsod_' + str(year) + '.tar'
-    path = os.path.join(NCDC_GSOD_DIR, url.split('/')[-1])
+    url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/%s/gsod_%s.tar' % (year, year)
+    filename = url.split('/')[-1]
+    path = os.path.join(NCDC_GSOD_DIR, filename)
     util.download_if_new(url, path, check_modified=True)
-    #r = requests.get(url)
-    print 'file saved at {0}'.format(path)
     return path
 
 
