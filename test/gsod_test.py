@@ -58,6 +58,61 @@ def test_get_stations():
         assert stations[test_code] == test_station
 
 
+def test_get_stations_with_country():
+    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+        stations = ulmo.ncdc.gsod.get_stations(country='AH')
+        assert 250 <= len(stations) <= 300
+        assert '999032-99999' in stations
+
+        stations = ulmo.ncdc.gsod.get_stations(country=['US', 'MX', 'CN'])
+        assert 9500 <= len(stations) <= 10000
+        assert '768420-99999' in stations
+        assert '720025-99999' in stations
+        assert '729675-99999' in stations
+
+
+def test_get_stations_with_fips():
+    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+        stations = ulmo.ncdc.gsod.get_stations(fips='SW')
+        assert 400 <= len(stations) <= 500
+        assert '026850-99999' in stations
+
+        stations = ulmo.ncdc.gsod.get_stations(fips=['US', 'MX', 'CA'])
+        assert 9500 <= len(stations) <= 10000
+        assert '768420-99999' in stations
+        assert '720025-99999' in stations
+        assert '729675-99999' in stations
+
+
+def test_get_stations_with_state():
+    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+        stations = ulmo.ncdc.gsod.get_stations(state='TX')
+        assert 500 <= len(stations) <= 550
+        assert '999999-93987' in stations
+
+        stations = ulmo.ncdc.gsod.get_stations(state=['TX', 'AR', 'LA'])
+        assert 800 <= len(stations) <= 850
+        assert '999999-93987' in stations
+        assert '999999-13963' in stations
+        assert '994780-99999' in stations
+
+
+def test_get_stations_with_start():
+    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+        stations = ulmo.ncdc.gsod.get_stations(start='2011-3-2')
+    assert 16500 <= len(stations) <= 17000
+    assert '062390-99999' in stations
+    assert '534780-99999' not in stations
+
+
+def test_get_stations_with_end():
+    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+        stations = ulmo.ncdc.gsod.get_stations(end='1960-11-5')
+    assert 12000 <= len(stations) <= 13000
+    assert '534780-99999' in stations
+    assert '062390-99999' not in stations
+
+
 def test_get_station_data():
     test_data = [
         (dict(station_codes='999999-14896', start='1952-01-01',

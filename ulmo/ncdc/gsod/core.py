@@ -101,12 +101,27 @@ def get_data(station_codes, start=None, end=None, parameters=None):
     return data_dict
 
 
-def get_stations(update=True):
+def get_stations(fips=None, country=None, state=None, start=None, end=None, update=True):
     """Retrieve information on the set of available stations.
 
 
     Parameters
     ----------
+    fips : {``None``, str, or iterable}
+        If specified, results will be limited to stations with matching fips
+        codes.
+    country : {``None``, str, or iterable}
+        If specified, results will be limited to stations with matching country
+        codes.
+    state : {``None``, str, or iterable}
+        If specified, results will be limited to stations with matching state
+        codes.
+    start : ``None`` or datetime (see :ref:`dates-and-times`)
+        If specified, results will be limited to stations which have data after
+        this start date.
+    end : ``None`` or datetime (see :ref:`dates-and-times`)
+        If specified, results will be limited to stations which have data before
+        this end date.
     update : bool
         If ``True`` (default), check for a newer copy of the stations file and
         download if it is newer the previously downloaded copy. If ``False``,
@@ -119,12 +134,47 @@ def get_stations(update=True):
     stations_dict : dict
         A dict with USAF-WBAN codes keyed to station information dicts.
     """
+    if start:
+        start_date = util.convert_date(start)
+    else:
+        start_date = None
+    if end:
+        end_date = util.convert_date(end)
+    else:
+        end_date = None
+
+    if isinstance(fips, basestring):
+        fips = [fips]
+    if isinstance(country, basestring):
+        country = [country]
+    if isinstance(state, basestring):
+        state = [state]
+
     stations_url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
     with util.open_file_for_url(stations_url, NCDC_GSOD_STATIONS_FILE) as f:
         reader = csv.DictReader(f)
+
+        if fips is None and country is None and state is None \
+                and start is None and end is None:
+            rows = reader
+        else:
+            if start_date is None:
+                start_str = None
+            else:
+                start_str = start_date.strftime('%Y%m%d')
+            if end_date is None:
+                end_str = None
+            else:
+                end_str = end_date.strftime('%Y%m%d')
+            rows = [
+                row for row in reader
+                if _passes_row_filter(row, fips=fips, country=country,
+                    state=state, start_str=start_str, end_str=end_str)
+            ]
+
         stations = dict([
             (_station_code(row), _process_station(row))
-            for row in reader
+            for row in rows
         ])
     return stations
 
@@ -142,6 +192,21 @@ def _get_gsod_file(year):
     path = os.path.join(NCDC_GSOD_DIR, filename)
     util.download_if_new(url, path, check_modified=True)
     return path
+
+
+def _passes_row_filter(row, fips=None, country=None, state=None, start_str=None,
+        end_str=None):
+    if not fips is None and row['FIPS'] not in fips:
+        return False
+    if not country is None and row['CTRY'] not in country:
+        return False
+    if not state is None and row['STATE'] not in state:
+        return False
+    if not start_str is None and row['END'] != '' and row['END'] <= start_str:
+        return False
+    if not end_str is None and row['BEGIN'] != '' and end_str <= row['BEGIN']:
+        return False
+    return True
 
 
 def _process_station(station_row):
