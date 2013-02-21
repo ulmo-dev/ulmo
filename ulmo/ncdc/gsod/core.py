@@ -8,6 +8,7 @@
     .. _National Climatic Data Center: http://www.ncdc.noaa.gov
     .. _Global Summary of the Day: http://www.ncdc.noaa.gov/oa/gsod.html
 """
+from contextlib import contextmanager
 import csv
 import datetime
 import gzip
@@ -67,7 +68,7 @@ def get_data(station_codes, start=None, end=None, parameters=None):
 
     for year in range(start_date.year, end_date.year + 1):
         tar_path = _get_gsod_file(year)
-        with tarfile.open(tar_path, 'r:') as gsod_tar:
+        with _open_tarfile(tar_path, 'r:') as gsod_tar:
             stations_in_file = [
                 name.split('./')[-1].rsplit('-', 1)[0]
                 for name in gsod_tar.getnames() if len(name) > 1]
@@ -192,6 +193,18 @@ def _get_gsod_file(year):
     path = os.path.join(NCDC_GSOD_DIR, filename)
     util.download_if_new(url, path, check_modified=True)
     return path
+
+
+@contextmanager
+def _open_tarfile(tar_path, mode):
+    """this is replicates the context manager protocol that was added to tarfile
+    module in python 2.7; it is here to support python 2.6
+    """
+    try:
+        f = tarfile.open(tar_path, 'r:')
+        yield f
+    finally:
+        f.close()
 
 
 def _passes_row_filter(row, fips=None, country=None, state=None, start_str=None,
