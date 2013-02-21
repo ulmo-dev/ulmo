@@ -1,3 +1,5 @@
+import pandas
+
 import ulmo
 
 import test_util
@@ -40,3 +42,11 @@ def test_get_data():
 
         for test_value in test_values:
             assert test_value in values
+
+
+def test_get_data_as_dataframe():
+    with test_util.mocked_requests('cpc/drought/palmer10'):
+        data = ulmo.cpc.drought.get_data(start='2010-5-20', end='2010-6-13',
+                as_dataframe=True)
+
+        assert isinstance(data, pandas.DataFrame)
