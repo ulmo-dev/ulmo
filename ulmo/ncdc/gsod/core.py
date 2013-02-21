@@ -30,8 +30,8 @@ def get_data(station_codes, start=None, end=None, parameters=None):
 
     Parameters
     ----------
-    station_codes : list
-        List (or iterable) of station codes to retreive data for.
+    station_codes : str or list
+        Single station code or iterable of station codes to retrieve data for.
     start : ``None`` or date (see :ref:`dates-and-times`)
         If specified, data are limited to values after this date.
     end : ``None`` or date (see :ref:`dates-and-times`)
@@ -56,6 +56,9 @@ def get_data(station_codes, start=None, end=None, parameters=None):
     if parameters and not 'date' in parameters:
         # add date to list of parameters if it's not there already
         parameters.insert(0, 'date')
+
+    if isinstance(station_codes, basestring):
+        station_codes = [station_codes]
 
     # note: opening tar files and parsing the headers and such is a relatively
     # lengthy operation so you don't want to do it too often, hence try to
