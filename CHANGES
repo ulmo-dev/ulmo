@@ -6,7 +6,12 @@ Changelog
 - this release includes some backwards incompatible changes
 - usgs.nwis date_range parameter has been replaced with more explicit
   start, end and period parameters
+- ncdc.gsod.get_data() parameters renamed: start_date -> start
+  and end_date -> end to be consistent with other dataset APIs
+- ncdc.gsod.get_stations() now allows limiting stations to matching parameters
+  (e.g. country='US')
 - added support for CUAHSI's HIS Central service: ulmo.cuahsi.his_central
+
 
 
 **0.3.0 (released 2013-01-14)**
