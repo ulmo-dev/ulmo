@@ -150,13 +150,13 @@ def _process_station(station_row):
         'begin': _convert_date_string(station_row['BEGIN']),
         'call': station_row['CALL'],
         'country': station_row['CTRY'],
-        'elevation': float(station_row['ELEV(.1M)']) * .1 \
+        'elevation': round(float(station_row['ELEV(.1M)']) * .1, 1) \
                 if station_row['ELEV(.1M)'] not in ('', '-99999') else None,
         'end': _convert_date_string(station_row['END']),
         'FIPS': station_row['FIPS'],
-        'latitude': float(station_row['LAT']) * 0.001 \
+        'latitude': round(float(station_row['LAT']) * 0.001, 3) \
                 if station_row['LAT'] not in ('', '-99999') else None,
-        'longitude': float(station_row['LON']) * 0.001 \
+        'longitude': round(float(station_row['LON']) * 0.001, 3) \
                 if station_row['LON'] not in ('', '-999999') else None,
         'name': station_row['STATION NAME'],
         'state': station_row['STATE'],
