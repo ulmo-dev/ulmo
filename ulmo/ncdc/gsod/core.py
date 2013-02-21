@@ -196,9 +196,21 @@ def _get_gsod_file(year):
 
 
 @contextmanager
+def _open_gzip(gzip_path, mode):
+    """this is replicates the context manager protocol that was added to the
+    gzip module in python 2.7; it is here to support python 2.6
+    """
+    try:
+        f = gzip.open(gzip_path, 'r:')
+        yield f
+    finally:
+        f.close()
+
+
+@contextmanager
 def _open_tarfile(tar_path, mode):
-    """this is replicates the context manager protocol that was added to tarfile
-    module in python 2.7; it is here to support python 2.6
+    """this is replicates the context manager protocol that was added to the
+    tarfile module in python 2.7; it is here to support python 2.6
     """
     try:
         f = tarfile.open(tar_path, 'r:')
@@ -256,7 +268,7 @@ def _read_gsod_file(gsod_tar, station, year):
     temp_path = os.path.join(ncdc_temp_dir, tar_station_filename)
 
     gsod_tar.extract('./' + tar_station_filename, ncdc_temp_dir)
-    with gzip.open(temp_path, 'rb') as gunzip_f:
+    with _open_gzip(temp_path, 'rb') as gunzip_f:
         columns = [
             # name, length, # of spaces separating previous column, dtype
             ('USAF', 6, 0, 'S6'),
