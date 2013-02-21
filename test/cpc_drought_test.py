@@ -32,7 +32,7 @@ def test_get_data_by_state():
     assert 'AL' in data
 
 
-def test_get_data():
+def test_get_data_format5():
     with test_util.mocked_requests('cpc/drought/palmer10'):
         data = ulmo.cpc.drought.get_data(start='2010-5-20', end='2010-6-13')
 
