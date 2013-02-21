@@ -116,10 +116,10 @@ def get_stations(fips=None, country=None, state=None, start=None, end=None, upda
     state : {``None``, str, or iterable}
         If specified, results will be limited to stations with matching state
         codes.
-    start : ``None`` or datetime (see :ref:`dates-and-times`)
+    start : ``None`` or date (see :ref:`dates-and-times`)
         If specified, results will be limited to stations which have data after
         this start date.
-    end : ``None`` or datetime (see :ref:`dates-and-times`)
+    end : ``None`` or date (see :ref:`dates-and-times`)
         If specified, results will be limited to stations which have data before
         this end date.
     update : bool
