@@ -19,7 +19,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
     station_code: str
         The station code to fetch data for. A list of stations can be retrieved with
         ``get_stations()``
-    start : ``None`` or date (see :ref:`dates-and-times`)
+    date : ``None`` or date (see :ref:`dates-and-times`)
         The date of the data to be queried. If date is ``None`` (default), then
         data for the current day is retreived.
     as_dataframe : bool
