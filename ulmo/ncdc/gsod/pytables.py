@@ -18,16 +18,16 @@ class NCDCValue(tables.IsDescription):
     last_modified = tables.StringCol(26)
 
 
-def get_data(station_codes, start_date=None, end_date=None, parameters=None,
+def get_data(station_codes, start=None, end=None, parameters=None,
         path=None):
     if isinstance(station_codes, basestring):
-        return _get_station_data(station_codes, start_date, end_date,
+        return _get_station_data(station_codes, start, end,
                 parameters)
     else:
         return_dict = {}
         for station_code in station_codes:
             return_dict[station_code] = _get_station_data(station_codes,
-                    start_date, end_date, parameters)
+                    start, end, parameters)
 
 
 def get_stations(update=True, path=None):
@@ -56,17 +56,16 @@ def update_data(station_codes=None, start_year=None, end_year=None, path=None):
         stations = all_stations
 
     for year in range(start_year, end_year + 1):
-        start_date = datetime.datetime(year, 1, 1)
-        end_date = datetime.datetime(year, 12, 31)
-        data = core.get_data(stations.keys(), start_date=start_date,
-                end_date=end_date)
+        start = datetime.datetime(year, 1, 1)
+        end = datetime.datetime(year, 12, 31)
+        data = core.get_data(stations.keys(), start=start, end=end)
         for station_code, station_data in data.iteritems():
             station = stations.get(station_code)
             if not station_data is None:
                 _update_station_data(station, station_data, path)
 
 
-def _get_station_data(station_code, start_date=None, end_date=None, parameters=None):
+def _get_station_data(station_code, start=None, end=None, parameters=None):
     pass
 
 

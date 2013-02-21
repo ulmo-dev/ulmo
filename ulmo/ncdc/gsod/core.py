@@ -24,7 +24,7 @@ NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'ish-history.csv')
 NCDC_GSOD_START_DATE = datetime.date(1929, 1, 1)
 
 
-def get_data(station_codes, start_date=None, end_date=None, parameters=None):
+def get_data(station_codes, start=None, end=None, parameters=None):
     """Retrieves data for a set of stations.
 
 
@@ -32,9 +32,9 @@ def get_data(station_codes, start_date=None, end_date=None, parameters=None):
     ----------
     station_codes : list
         List (or iterable) of station codes to retreive data for.
-    start_date : ``None``, datetime.date or datetime.datetime
+    start : ``None`` or date (see :ref:`dates-and-times`)
         If specified, data are limited to values after this date.
-    end_date : ``None``, datetime.date or datetime.datetime
+    end : ``None`` or date (see :ref:`dates-and-times`)
         If specified, data are limited to values before this date.
     parameters : ``None``, str or list
         If specified, data are limited to this set of parameter codes.
@@ -45,16 +45,14 @@ def get_data(station_codes, start_date=None, end_date=None, parameters=None):
     data_dict : dict
         Dict with station codes keyed to lists of value dicts.
     """
-    if start_date:
-        if isinstance(start_date, datetime.datetime):
-            start_date = start_date.date()
+    if start:
+        start_date = util.convert_date(start)
     else:
         start_date = NCDC_GSOD_START_DATE
-    if end_date:
-        if isinstance(end_date, datetime.datetime):
-            end_date = end_date.date()
+    if end:
+        end_date = util.convert_date(end)
     else:
-        end_date = datetime.datetime.now().date()
+        end_date = datetime.date.today()
     if parameters and not 'date' in parameters:
         # add date to list of parameters if it's not there already
         parameters.insert(0, 'date')
