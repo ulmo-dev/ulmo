@@ -4,7 +4,7 @@ Changelog
 **0.4.0 (in development)**
 
 - this release includes some backwards incompatible changes
-- usgs.nwis.usgs date_range parameter has been replaced with more explicit
+- usgs.nwis date_range parameter has been replaced with more explicit
   start, end and period parameters
 - added support for CUAHSI's HIS Central service: ulmo.cuahsi.his_central
 
