@@ -133,13 +133,6 @@ def _convert_date_string(date_string):
     return datetime.datetime.strptime(date_string, '%Y%m%d').date()
 
 
-def _download_stations_file():
-    """download current station list"""
-    url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
-    util.download_if_new(url, NCDC_GSOD_STATIONS_FILE, check_modified=True)
-    print 'Saved station list {0}'.format(NCDC_GSOD_STATIONS_FILE)
-
-
 def _get_gsod_file(year):
     url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/%s/gsod_%s.tar' % (year, year)
     filename = url.split('/')[-1]
