@@ -201,7 +201,7 @@ def _open_gzip(gzip_path, mode):
     gzip module in python 2.7; it is here to support python 2.6
     """
     try:
-        f = gzip.open(gzip_path, 'r:')
+        f = gzip.open(gzip_path, mode)
         yield f
     finally:
         f.close()
@@ -213,7 +213,7 @@ def _open_tarfile(tar_path, mode):
     tarfile module in python 2.7; it is here to support python 2.6
     """
     try:
-        f = tarfile.open(tar_path, 'r:')
+        f = tarfile.open(tar_path, mode)
         yield f
     finally:
         f.close()
