@@ -130,6 +130,9 @@ def get_stations(update=True):
 
 
 def _convert_date_string(date_string):
+    if date_string == '':
+        return None
+
     return datetime.datetime.strptime(date_string, '%Y%m%d').date()
 
 
@@ -144,12 +147,12 @@ def _get_gsod_file(year):
 def _process_station(station_row):
     """converts a csv row to a more human-friendly version"""
     station_dict = {
-        'begin': station_row['BEGIN'],
+        'begin': _convert_date_string(station_row['BEGIN']),
         'call': station_row['CALL'],
         'country': station_row['CTRY'],
         'elevation': float(station_row['ELEV(.1M)']) * .1 \
                 if station_row['ELEV(.1M)'] not in ('', '-99999') else None,
-        'end': station_row['END'],
+        'end': _convert_date_string(station_row['END']),
         'FIPS': station_row['FIPS'],
         'latitude': float(station_row['LAT']) * 0.001 \
                 if station_row['LAT'] not in ('', '-99999') else None,
