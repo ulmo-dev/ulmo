@@ -47,13 +47,13 @@ def test_pytables_get_site():
 
 def test_pytables_get_site_fallback_to_core():
     site_code = '07335390'
-    site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    site_data_file = 'usgs/nwis/site_%s_instantaneous.xml' % site_code
 
     sites = ulmo.usgs.nwis.pytables.get_sites(TEST_FILE_PATH)
     assert site_code not in sites
 
     with test_util.mocked_requests(site_data_file):
-        site = ulmo.usgs.nwis.pytables.get_site(site_code, TEST_FILE_PATH)
+        site = ulmo.usgs.nwis.pytables.get_site(site_code, path=TEST_FILE_PATH)
 
     assert len(site) == 10
 
@@ -100,12 +100,13 @@ def test_update_or_append():
 
 def test_non_usgs_site():
     site_code = '07335390'
-    site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    site_data_file = 'usgs/nwis/site_%s_instantaneous.xml' % site_code
     test_init()
     with test_util.mocked_requests(site_data_file):
-        ulmo.usgs.nwis.pytables.update_site_data(site_code, path=TEST_FILE_PATH)
+        ulmo.usgs.nwis.pytables.update_site_data(site_code, period='all', path=TEST_FILE_PATH)
+
     site_data = ulmo.usgs.nwis.pytables.get_site_data(site_code, path=TEST_FILE_PATH)
-    assert len(site_data['00062:32400']['values']) > 1000
+    assert len(site_data['00062:00011']['values']) > 1000
 
 
 def test_update_site_list():
