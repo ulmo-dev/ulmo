@@ -1,3 +1,9 @@
+"""
+    `USGS National Water Information System`_ web services
+
+
+    .. _USGS National Water Information System: http://waterdata.usgs.gov/nwis
+"""
 from __future__ import absolute_import
 
 from . import core

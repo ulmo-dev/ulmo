@@ -1,3 +1,11 @@
+"""
+    ulmo.cuahsi.wof
+    ~~~~~~~~~~~~~~~
+
+    `CUAHSI WaterOneFlow`_ web services
+
+    .. _CUAHSI WaterOneFlow: http://his.cuahsi.org/wofws.html
+"""
 from __future__ import absolute_import
 
 from . import core
