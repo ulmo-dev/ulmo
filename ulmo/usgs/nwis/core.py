@@ -200,7 +200,6 @@ def _get_site_values(service, url_params):
     if req.status_code != 200:
         return {}
     content_io = StringIO.StringIO(str(req.content))
-    util.save_pretty_printed_xml('a.out', content_io)
 
     data_dict = wml.parse_site_values(content_io, query_isodate)
 
