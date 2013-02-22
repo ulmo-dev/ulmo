@@ -1,3 +1,14 @@
+"""
+    ulmo.usace.swtwc.core
+    ~~~~~~~~~~~~~~~~~~~~~
+
+    This module provides access to data provided by the `United States Army
+    Corps of Engineers`_ `Tulsa District Water Control`_ web site.
+
+    .. _United States Army Corps of Engineers: http://www.usace.army.mil/
+    .. _Tulsa District Water Control: http://www.swt-wc.usace.army.mil/
+
+"""
 import cStringIO as StringIO
 import datetime
 import os.path
