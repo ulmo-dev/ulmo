@@ -7,6 +7,16 @@ Climate Prediction Center Weekly Drought
    :members: get_data
 
 
+CUAHSI WaterOneFlow
+===================
+.. automodule:: ulmo.cuahsi.his_central
+   :members: get_services
+
+.. automodule:: ulmo.cuahsi.wof
+   :members: get_sites, get_site_info, get_values, get_variable_info
+
+
+
 National Climatic Data Center Global Historical Climate Network Daily
 =====================================================================
 .. automodule:: ulmo.ncdc.ghcn_daily
@@ -28,14 +38,10 @@ USGS National Water Information System
    :members:
 
 
-CUAHSI WaterOneFlow
-===================
-.. automodule:: ulmo.cuahsi.his_central
-   :members: get_services
-
-.. automodule:: ulmo.cuahsi.wof
-   :members: get_sites, get_site_info, get_values, get_variable_info
-
+USACE Tulsa District Water Control
+==================================
+.. automodule:: ulmo.usace.swtwc
+   :members: get_stations, get_station_data
 
 
 .. _dates-and-times:
