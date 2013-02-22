@@ -45,7 +45,7 @@ setup(
         'mock>=1.0.0',
         'numpy>=1.4.0',
         'pandas>=0.9.1',
-        'requests==0.14.2',
+        'requests>=1.1',
         'suds>=0.4',
     ],
     extras_require={

@@ -100,12 +100,12 @@ def mocked_url(url, response_file_path, methods=None):
 def _mock_request_side_effect(url_files):
     def _side_effect(url, *args, **kwargs):
         mock_response = requests.Response()
-        mock_response.request = requests.Request(url, *args, **kwargs)
+        mock_response.request = requests.Request('GET', url, *args, **kwargs).prepare()
         mock_response.status_code = 200
         mock_response.url = url
         mock_response.mocked = True
         if isinstance(url_files, dict):
-            mock_response.raw = url_files.get(mock_response.request.full_url)
+            mock_response.raw = url_files.get(mock_response.request.url)
         elif hasattr(url_files, 'read'):
             mock_response.raw = url_files
 
