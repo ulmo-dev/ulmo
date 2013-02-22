@@ -13,6 +13,7 @@ Changelog
 - all date and datetime parameters are now consistently parsed
 - added support for CUAHSI's HIS Central service: ulmo.cuahsi.his_central
 - added preliminary support for CPC's weekly drought monitor dataset (>=1997)
+- added preliminary support for data from USACE Tulsa Water District Control
 
 
 **0.3.0 (released 2013-01-14)**
