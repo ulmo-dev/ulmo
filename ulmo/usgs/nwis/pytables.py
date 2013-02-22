@@ -204,9 +204,11 @@ def update_site_list(sites=None, state_code=None, service=None, path=None):
         Two-letter state code used in stateCd parameter.
     site_type : str or ``None``
         Type of site used in siteType parameter.
-    service : {``None``, 'individual', 'daily'}
-        The service to use, either "individual", "daily", or ``None`` (default). If
-        ``None``, then both services are used.
+    service : {``None``, 'instantaneous', 'iv', 'daily', 'dv'}
+        The service to use, either "instantaneous", "daily", or ``None``
+        (default).  If set to ``None``, then both services are used.  The
+        abbreviations "iv" and "dv" can be used for "instantaneous" and "daily",
+        respectively.
     path : ``None`` or file path
         Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used.

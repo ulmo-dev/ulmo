@@ -43,10 +43,11 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
         Two-letter state code used in stateCd parameter.
     site_type : str or ``None``
         Type of site used in siteType parameter.
-    service : {``None``, 'individual', 'daily'}
-        The service to use, either "individual", "daily", or ``None`` (default). If
-        ``None``, then both services are used.
-
+    service : {``None``, 'instantaneous', 'iv', 'daily', 'dv'}
+        The service to use, either "instantaneous", "daily", or ``None``
+        (default).  If set to ``None``, then both services are used.  The
+        abbreviations "iv" and "dv" can be used for "instantaneous" and "daily",
+        respectively.
 
     Returns
     -------
@@ -66,6 +67,11 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
 
     if site_type:
         url_params['siteType'] = site_type
+
+    if service == 'dv':
+        service = 'daily'
+    if service == 'iv':
+        service == 'instantaneous'
 
     if not service:
         return_sites = get_sites(sites=sites, state_code=state_code, site_type=site_type, service="daily")
@@ -91,9 +97,11 @@ def get_site_data(site_code, service=None, parameter_code=None,
     ----------
     site_code : str
         The site code of the site you want to query data for.
-    service : {``None``, 'individual', 'daily'}
-        The service to use, either "individual", "daily", or ``None`` (default). If
-        ``None``, then both services are used.
+    service : {``None``, 'instantaneous', 'iv', 'daily', 'dv'}
+        The service to use, either "instantaneous", "daily", or ``None``
+        (default).  If set to ``None``, then both services are used.  The
+        abbreviations "iv" and "dv" can be used for "instantaneous" and "daily",
+        respectively.
     parameter_code : str
         Parameter code(s) that will be passed as the parameterCd parameter.
     start : ``None`` or datetime (see :ref:`dates-and-times`)
@@ -145,6 +153,11 @@ def get_site_data(site_code, service=None, parameter_code=None,
     if end is not None:
         end_datetime = util.convert_datetime(end)
         url_params['endDT'] = isodate.datetime_isoformat(end_datetime)
+
+    if service == 'dv':
+        service = 'daily'
+    if service == 'iv':
+        service == 'instantaneous'
 
     if service in ('daily', 'instantaneous'):
         values = _get_site_values(service, url_params)
