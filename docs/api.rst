@@ -38,8 +38,8 @@ USGS National Water Information System
    :members:
 
 
-USACE Tulsa District Water Control
-==================================
+US Army Corps of Engineers - Tulsa District Water Control
+=========================================================
 .. automodule:: ulmo.usace.swtwc
    :members: get_stations, get_station_data
 
