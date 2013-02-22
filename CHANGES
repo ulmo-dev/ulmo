@@ -10,7 +10,7 @@ Changelog
   and end_date -> end to be consistent with other dataset APIs
 - ncdc.gsod.get_stations() now allows limiting stations to matching parameters
   (e.g. country='US')
-- all parsing of date and datetime parameters is now consistent
+- all date and datetime parameters are now consistently parsed
 - added support for CUAHSI's HIS Central service: ulmo.cuahsi.his_central
 - added preliminary support for CPC's weekly drought monitor dataset (>=1997)
 
