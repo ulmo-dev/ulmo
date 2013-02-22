@@ -125,33 +125,35 @@ def get_site_data(site_code, service=None, parameter_code=None,
     if modified_since:
         url_params['modifiedSince'] = isodate.duration_isoformat(modified_since)
 
-    if not (start is None or end is None) and not period is None:
+    if not (start is None or end is None) and period is not None:
         raise ValueError("using date range with start/end AND period is allowed"
                 " because it's ambiguous, use one or the other")
-    if not period is None:
+    if period is not None:
         if isinstance(period, basestring):
             if period == 'all':
                 if service in ('iv', 'instantaneous'):
                     start = datetime.datetime(2007, 10, 1)
-                if service in ('dv', 'daily'):
+                elif service in ('dv', 'daily'):
                     start = datetime.datetime(1851, 1, 1)
             else:
                 url_params['period'] = period
         elif isinstance(period, datetime.timedelta):
             url_params['period'] = isodate.duration_isoformat(period)
-    if not start is None:
+    if start is not None:
         start_datetime = util.convert_datetime(start)
         url_params['startDT'] = isodate.datetime_isoformat(start_datetime)
-    if not end is None:
+    if end is not None:
         end_datetime = util.convert_datetime(end)
         url_params['endDT'] = isodate.datetime_isoformat(end_datetime)
 
     if service in ('daily', 'instantaneous'):
         values = _get_site_values(service, url_params)
-    elif not service:
-        values = _get_site_values('daily', url_params)
+    elif service is None:
+        kwargs = dict(parameter_code=parameter_code, start=start, end=end,
+                period=period, modified_since=modified_since)
+        values = get_site_data(site_code, service='daily', **kwargs)
         values.update(
-            _get_site_values('instantaneous', url_params))
+            get_site_data(site_code, service='instantaneous', **kwargs))
     else:
         raise ValueError("service must either be 'daily', 'instantaneous' or none")
 
