@@ -17,8 +17,9 @@ def test_parse_site_infos():
 
 def test_parse_site_values():
     query_isodate = '2000-01-01'
-    value_file = test_util.get_test_file_path('usgs/nwis/site_07335390_daily.xml')
+    value_file = test_util.get_test_file_path(
+            'usgs/nwis/site_07335390_instantaneous.xml')
     with open(value_file, 'rb') as content_io:
         values = ulmo.waterml.v1_1.parse_site_values(content_io, query_isodate)
 
-    assert len(values['00062:32400']['values']) == 3404
+    assert len(values['00062:00011']['values']) > 1000
