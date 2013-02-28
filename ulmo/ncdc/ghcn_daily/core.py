@@ -173,7 +173,7 @@ def _get_ghcn_file(filename, check_modified=True):
         url = base_url + 'all/' + filename
 
     path = os.path.join(GHCN_DAILY_DIR, url.split('/')[-1])
-    util.download_if_new(url, path)
+    util.download_if_new(url, path, check_modified=check_modified)
     return path
 
 
