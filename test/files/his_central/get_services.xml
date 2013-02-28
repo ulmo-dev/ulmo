@@ -1,0 +1,2099 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope>
+   <soap:Body>
+      <GetWaterOneFlowServiceInfoResponse xmlns="http://hiscentral.cuahsi.org/20100205/">
+         <GetWaterOneFlowServiceInfoResult>
+            <ServiceInfo>
+               <servURL>http://river.sdsc.edu/wateroneflow/NWIS/DailyValues.asmx?WSDL</servURL>
+               <Title>NWIS Daily Values</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=1</ServiceDescriptionURL>
+               <Email>valentin@sdsc.edu</Email>
+               <phone/>
+               <organization>USGS</organization>
+               <orgwebsite>http://www.usgs.gov</orgwebsite>
+               <citation>USGS National Water Information System                                                                                                                                                                                                                         </citation>
+               <aabstract> The USGS National Water Information System (NWIS) provides access to millions of sites measuring streamflow, groundwater levels, and water quality. This web service provides methods for retrieving daily values data, such as discharge and water levels, from NWIS. For more information about NWIS, see the NWIS home page at http://waterdata.usgs.gov/nwis</aabstract>
+               <valuecount>311783702</valuecount>
+               <variablecount>427</variablecount>
+               <sitecount>31881</sitecount>
+               <ServiceID>1</ServiceID>
+               <NetworkName>NWISDV</NetworkName>
+               <minx>-176.6633</minx>
+               <miny>-14.3075</miny>
+               <maxx>179.2467</maxx>
+               <maxy>72.701</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://river.sdsc.edu/wateroneflow/NWIS/Data.asmx?WSDL</servURL>
+               <Title>NWIS Instantaneous Irregular Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=2</ServiceDescriptionURL>
+               <Email>valentin@sdsc.edu</Email>
+               <phone/>
+               <organization>USGS</organization>
+               <orgwebsite>http://www.usgs.gov</orgwebsite>
+               <citation>USGS National Water Information System</citation>
+               <aabstract>Developmental service. This service is internal CUAHSI use, and evaluation.
+NWIS Instantaneous Irregular Data</aabstract>
+               <valuecount>86485762</valuecount>
+               <variablecount>6956</variablecount>
+               <sitecount>375831</sitecount>
+               <ServiceID>2</ServiceID>
+               <NetworkName>NWISIID</NetworkName>
+               <minx>-176.6525</minx>
+               <miny>-14.26267</miny>
+               <maxx>179.9098</maxx>
+               <maxy>71.38737</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://river.sdsc.edu/wateroneflow/NWIS/UnitValues.asmx?WSDL</servURL>
+               <Title>NWIS Unit Values</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=3</ServiceDescriptionURL>
+               <Email>valentin@sdsc.edu</Email>
+               <phone/>
+               <organization>USGS</organization>
+               <orgwebsite>http://waterdata.usgs.gov/nwis</orgwebsite>
+               <citation>USGS National Water Information System.</citation>
+               <aabstract>The USGS National Water Information System (NWIS) provides access to millions of sites measuring streamflow, groundwater levels, and water quality. This web service provides methods for retrieving Real Time data from NWIS. For more information about NWIS, see the NWIS home page at http://waterdata.usgs.gov/nwis</aabstract>
+               <valuecount>80093088</valuecount>
+               <variablecount>128</variablecount>
+               <sitecount>11185</sitecount>
+               <ServiceID>3</ServiceID>
+               <NetworkName>NWISUV</NetworkName>
+               <minx>-164.1684</minx>
+               <miny>13.35936</miny>
+               <maxx>144.7057</maxx>
+               <maxy>70.48843</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://river.sdsc.edu/wateroneflow/EPA/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>EPA STORET</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=4</ServiceDescriptionURL>
+               <Email>valentin@sdsc.edu</Email>
+               <phone/>
+               <organization>EPA</organization>
+               <orgwebsite>http://www.epa.gov</orgwebsite>
+               <citation>Environmental Protection Agency, STORET</citation>
+               <aabstract/>
+               <valuecount>88828637</valuecount>
+               <variablecount>19093</variablecount>
+               <sitecount>589065</sitecount>
+               <ServiceID>4</ServiceID>
+               <NetworkName>EPA</NetworkName>
+               <minx>-170.846</minx>
+               <miny>-85.523</miny>
+               <maxx>150.2273</maxx>
+               <maxy>89.34441</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://eddy.ccny.cuny.edu/CIMS/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Chesapeake Bay Information Management System</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=5</ServiceDescriptionURL>
+               <Email>mpiasecki@ccny.cuny.edu</Email>
+               <phone/>
+               <organization>Chesapeake Bay Information Management System</organization>
+               <orgwebsite>http://www.chesapeakebay.net/cims/</orgwebsite>
+               <citation/>
+               <aabstract>The Chesapeake Information Management System (CIMS) is an organized, distributed library of information and software tools designed to increase basin-wide public access to Chesapeake Bay information. The Internet sites in CIMS are maintained by CIMS Partners who have enacted Memoranda of Agreement (MOA) to follow certain guidelines for assembling and publishing Chesapeake Bay related information</aabstract>
+               <valuecount>5418382</valuecount>
+               <variablecount>80</variablecount>
+               <sitecount>894</sitecount>
+               <ServiceID>5</ServiceID>
+               <NetworkName>CIMS</NetworkName>
+               <minx>-79.89764</minx>
+               <miny>36.73611</miny>
+               <maxx>-75.451</maxx>
+               <maxy>41.76535</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://river.sdsc.edu/wateroneflow/NWIS/Groundwater.asmx?WSDL</servURL>
+               <Title>NWIS Ground Water Level</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=8</ServiceDescriptionURL>
+               <Email>valentin@sdsc.edu</Email>
+               <phone/>
+               <organization>USGS</organization>
+               <orgwebsite>http://waterdata.usgs.gov/nwis</orgwebsite>
+               <citation>USGS, NWIS</citation>
+               <aabstract>The USGS National Water Information System (NWIS) provides access to millions of sites measuring streamflow, groundwater levels, and water quality. This web service provides methods for retrieving Ground Water data from NWIS. For more information about NWIS, see the NWIS home page at http://waterdata.usgs.gov/nwis</aabstract>
+               <valuecount>8325633</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>827200</sitecount>
+               <ServiceID>8</ServiceID>
+               <NetworkName>NWISGW</NetworkName>
+               <minx>-171.7361</minx>
+               <miny>-14.33639</miny>
+               <maxx>174.0936</maxx>
+               <maxy>68.87263</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://icewater.usu.edu/MudLake/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Mud Lake, Idaho, USA</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=12</ServiceDescriptionURL>
+               <Email>jeff.horsburgh@usu.edu</Email>
+               <phone>435-797-2946</phone>
+               <organization>Utah Water Research Laboratory, Utah State University</organization>
+               <orgwebsite>http://uwrl.usu.edu</orgwebsite>
+               <citation>Horsburgh, J. S., D. K. Stevens, N. O. Mesner, and C. Allen (2009), Data collected in Mud Lake at the Bear Lake National Wildlife Refuge, Idaho, USA, Utah State University.</citation>
+               <aabstract>Monitoring at the Bear Lake National Wildlife Refuge has been aimed at creating the monitoring infrastructure needed to more accurately assess sediment and nutrient loads entering and leaving Mud Lake, and providing managers with the data and information needed to better understand how Mud Lake affects the sediment and nutrient loads within the system. Continuous water quality monitoring equipment has been installed at 4 sites around the periphery of Mud Lake to monitor the water quality of its major inflows and outflows. These sites include: 1) the Rainbow Inlet Canal where it flows into Mud Lake; 2) the causeway at the north end of Bear Lake where Bear River Water enters Bear Lake from Mud Lake; 3) the Lifton pumping station where water is pumped out of Bear Lake; and 4) the Outlet Canal where water from Bear Lake and Mud Lake leaves the complex and flows North and back into the Bear River. Continuous flow measurements at these locations have been provided by PacifiCorp Energy using existing equipment at those sites.  Utah State University has worked together with the U.S. Fish and Wildlife Service and the State of Idaho Department of Environmental Quality to collect these data.</aabstract>
+               <valuecount>1601388</valuecount>
+               <variablecount>34</variablecount>
+               <sitecount>12</sitecount>
+               <ServiceID>12</ServiceID>
+               <NetworkName>MudLake</NetworkName>
+               <minx>-111.3417</minx>
+               <miny>42.12035</miny>
+               <maxx>-111.2884</maxx>
+               <maxy>42.25035</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://river.sdsc.edu/sdrfp2_ws/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>San Diego River Park Foundation</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=13</ServiceDescriptionURL>
+               <Email>twhitenack@sdsc.edu</Email>
+               <phone>909-794-2758</phone>
+               <organization>San Diego River Park Foundation</organization>
+               <orgwebsite>http://www.sandiegoriver.org/</orgwebsite>
+               <citation>San Diego River Park Foundation, 2008                                                                                                                                                                                                                          </citation>
+               <aabstract>For thousands of years, the San Diego River has provided life to our community.  While it is known as &quot;California&apos;s First River,&quot; in recent years the River has been neglected and largely ignored.  The River Park Foundation is endeavoring to bring people together to work for a healthy river, to protect significant natural and cultural resources, and to celebrate the River with a river-long park system.
+
+Through volunteer programs, outreach activities and specific projects, thousands of people are coming together to make a difference. </aabstract>
+               <valuecount>2424</valuecount>
+               <variablecount>8</variablecount>
+               <sitecount>18</sitecount>
+               <ServiceID>13</ServiceID>
+               <NetworkName>SDRPF</NetworkName>
+               <minx>-117.2037</minx>
+               <miny>32.76131</miny>
+               <maxx>-116.9734</maxx>
+               <maxy>32.84707</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://his03.geol.umt.edu/COTCsnow/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Crown of the Continent Observatory Snow</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=14</ServiceDescriptionURL>
+               <Email/>
+               <phone/>
+               <organization>Crown of the Continent Observatory (Montana State University)</organization>
+               <orgwebsite/>
+               <citation/>
+               <aabstract/>
+               <valuecount>56601</valuecount>
+               <variablecount>10</variablecount>
+               <sitecount>2</sitecount>
+               <ServiceID>14</ServiceID>
+               <NetworkName>COTCsnow</NetworkName>
+               <minx>-113.753</minx>
+               <miny>48.62614</miny>
+               <maxx>-113.753</maxx>
+               <maxy>48.62614</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/santafe-flstoret/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Santa Fe, STORET</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=20</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>(352) 392-5893</phone>
+               <organization>Florida Dept of Environmental Protection </organization>
+               <orgwebsite>http://www.dep.state.fl.us/water/storet/index.htm</orgwebsite>
+               <citation>Florida Dept of Environmental Protection. 2008. Data extracted from the Florida state Storet Database at http://www.dep.state.fl.us/water/storet/ </citation>
+               <aabstract>Only Nitrite_Nitrate, Nitrate and TP are in this network, received from FDEP in custom data request.
+
+Data is said to be more up to date and complete from FDEP storet than from USEPA storet.
+
+</aabstract>
+               <valuecount>2502</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>17</sitecount>
+               <ServiceID>20</ServiceID>
+               <NetworkName>SFe_Storet</NetworkName>
+               <minx>-82.86028</minx>
+               <miny>29.84611</miny>
+               <maxx>-82.21972</maxx>
+               <maxy>29.99806</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/SantaFe-MICROWAVECITRA/cuahsi_1_0.asmx?WSDL </servURL>
+               <Title>Santa Fe MICROWAVECITRA</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=21</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>352-392-5893</phone>
+               <organization>UF Agric and Biol Engineering; Dr. Jasmeet Judge</organization>
+               <orgwebsite>http://www.agen.ufl.edu/contact/directory/detail_person.php?id=23</orgwebsite>
+               <citation>Judge, J., Casanova, J., Lin, T-Y, Tien, K-J C., Jang, M-Y., Lanni, O., Miller, L. 2007. Field Observations During the Microwave Water and Energy Balance Experiments. University of Florida. See http://edis.ifas.ufl.edu/ae360 </citation>
+               <aabstract>The datasets have been collected as part of two projects, NASA-NIP-00050655 and NSF-EAR-0337277 (co-PI Wendy Graham, Jennifer Jacobs, and Jim Jones). Both the CRWR and UF NSF hydrology projects benefit from such data exchanges. 
+
+We have conducted 6 experiments - MicroWEX-1 through MicroWEX-6, three for corn and three for cotton seasons. The datasets provide detailed water and energy balance measurements along with concurrent remote sensing (microwave) signatures of the growing vegetation. The soil and vegetation sampling protocols that were followed ensure that the datasets can be used for interdisciplinary studies, by hydrologists, agronomists and agricultural engineers, and remote sensing scientists.
+The detailed experimental reports are available online at http://edis.ifas.ufl.edu/AE360. This link is for the MicroWEX-2 and contains embedded links to take you to other reports. The two most recent reports are yet to be linked, but are available at
+http://edis.ifas.ufl.edu/AE407 and http://edis.ifas.ufl.edu/AE409.</aabstract>
+               <valuecount>109558</valuecount>
+               <variablecount>4</variablecount>
+               <sitecount>1</sitecount>
+               <ServiceID>21</ServiceID>
+               <NetworkName>SFe_MICROWAVECITRA</NetworkName>
+               <minx>-82.17762</minx>
+               <miny>29.40967</miny>
+               <maxx>-82.17762</maxx>
+               <maxy>29.40967</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://eddy.ccny.cuny.edu/NADP/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>National Atmospheric Deposition Program</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=24</ServiceDescriptionURL>
+               <Email>michael.ppiasecki@drexel.edu</Email>
+               <phone>215-895-1721</phone>
+               <organization>National Atmospheric Deposition Program</organization>
+               <orgwebsite>http://nadp.sws.uiuc.edu/</orgwebsite>
+               <citation/>
+               <aabstract>The National Atmospheric Deposition Program/National Trends Network (NADP/NTN) is a nationwide network of precipitation monitoring sites. The network is a cooperative effort between many different groups, including the State Agricultural Experiment Stations, U.S. Geological Survey, U.S. Department of Agriculture, and numerous other governmental and private entities. The NADP/NTN has grown from 22 stations at the end of 1978, our first year, to over 250 sites spanning the continental United States, Alaska, and Puerto Rico, and the Virgin Islands. The purpose of the network is to collect data on the chemistry of precipitation for monitoring of geographical and temporal long-term trends. The precipitation at each station is collected weekly according to strict clean-handling procedures. It is then sent to the Central Analytical Laboratory where it is analyzed for hydrogen (acidity as pH), sulfate, nitrate, ammonium, chloride, and base cations (such as calcium, magnesium, potassium and sodium). 
+</aabstract>
+               <valuecount>1713885</valuecount>
+               <variablecount>13</variablecount>
+               <sitecount>19</sitecount>
+               <ServiceID>24</ServiceID>
+               <NetworkName>NADP</NetworkName>
+               <minx>-80.5579</minx>
+               <miny>37.1652</miny>
+               <maxx>-75.1529</maxx>
+               <maxy>42.228</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/SantaFe-SRGWL/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Santa Fe Ground Water Level SRWMD</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=25</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>(352) 392-5893</phone>
+               <organization>Suwannee River Water Management District</organization>
+               <orgwebsite>http://www.srwmd.state.fl.us/index.asp?NID=108</orgwebsite>
+               <citation>2007. Suwannee River Water Management District Groundwater Levels. Provided by Carlos Herd, district hydrologist. Current data available online: http://www.mysuwanneeriver.org/groundwater.htm </citation>
+               <aabstract>Groundwater level (GWL) records are available for 1,089 wells. The majority of
+these wells are only measured during record high or record low periods and 396
+wells are inactive. One hundred and eighty-one (181) wells are measured monthly in
+the GWL network; of these, 77 have continuous recorders (Figure 8).
+
+Groundwater levels are stored in the District’s GWL database.
+
+In feet above NGVD29</aabstract>
+               <valuecount>499359</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>1089</sitecount>
+               <ServiceID>25</ServiceID>
+               <NetworkName>SFe-SRGWL</NetworkName>
+               <minx>-84.05655</minx>
+               <miny>29.02692</miny>
+               <maxx>-82.04565</maxx>
+               <maxy>30.65575</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/SantaFe-GWLUSGS/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Santa Fe - USGS Groundwater Data Florida</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=26</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>(352) 392-5893</phone>
+               <organization>USGS Groundwater Data Florida</organization>
+               <orgwebsite>http://waterdata.usgs.gov/fl/nwis/gw</orgwebsite>
+               <citation>US Geological Survey. 2007. National Water Information System(NWIS) data obtained online from: http://waterdata.usgs.gov/nwis</citation>
+               <aabstract>I downloaded groundwater levels - above NGVD29 - for these counties from the USGS groundwater website:
+1.	Alachua
+2.	Baker
+3.	Bradford
+4.	Citrus
+5.	Clay
+6.	Colombia
+7.	Dixie
+8.	Duval
+9.	Gilchrist
+10.	Hamilton
+11.	Hernando
+12.	Jefferson
+13.	Lafayette
+14.	Lake
+15.	Levy
+16.	Madison
+17.	Marion
+18.	Putnam
+19.	Sumter
+20.	Suwannee
+21.	Taylor
+22.	Union
+</aabstract>
+               <valuecount>1196808</valuecount>
+               <variablecount>2</variablecount>
+               <sitecount>184</sitecount>
+               <ServiceID>26</ServiceID>
+               <NetworkName>SFe_GWL_USGS</NetworkName>
+               <minx>-83.96877</minx>
+               <miny>28.37917</miny>
+               <maxx>-81.49703</maxx>
+               <maxy>30.65131</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://eddy.ccny.cuny.edu/SRBHOS/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Susquehanna River Basin Hydrologic Observatory </Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=30</ServiceDescriptionURL>
+               <Email>mpiasecki@ccny.cuny.edu</Email>
+               <phone/>
+               <organization>Susquehanna River Basin Hydrologic Observatory Sys</organization>
+               <orgwebsite>http://www.srbhos.org</orgwebsite>
+               <citation/>
+               <aabstract>Following the guidelines laid out in the Neuse River Prototype, the proposed structure of the proposed observatory has two basic elements:
+
+1) The SRB hydrologic Observing System is formed as a network of testbeds covering the major physiographic regions of the SRB and designed to make nested observations of water, energy and mass.
+2) Cross-cutting science themes will link and synthesize observations across the watershed network and allow a more holistic hydrologic understanding and predictive capability at all scales relevant to the river basin. 
+
+</aabstract>
+               <valuecount>2182460</valuecount>
+               <variablecount>32</variablecount>
+               <sitecount>5</sitecount>
+               <ServiceID>30</ServiceID>
+               <NetworkName>SRBHOS</NetworkName>
+               <minx>-77.90734</minx>
+               <miny>40.06486</miny>
+               <maxx>-77.51886</maxx>
+               <maxy>40.66582</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://icewater.usu.edu/littlebearriver/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Little Bear River Experimental Watershed, Northern Utah, USA</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=52</ServiceDescriptionURL>
+               <Email>jeff.horsburgh@usu.edu</Email>
+               <phone>435-797-2946</phone>
+               <organization>Utah Water Research Laboratory, Utah State University</organization>
+               <orgwebsite>http://littlebearriver.usu.edu</orgwebsite>
+               <citation>Horsburgh, J. S., D. K. Stevens, D. G. Tarboton, N. O. Mesner, A. Spackman Jones, and S. Gurrero (2009) Monitoring data collected within the Little Bear River Experimental Watershed, Utah, USA, Utah State University.</citation>
+               <aabstract>Utah State University is conducting continuous monitoring within the Little Bear River watershed of northern Utah, USA to investiage the use of surrogate measures such as turbidity in creating high frequency load estimates for constituents that cannot be measured continuously.</aabstract>
+               <valuecount>20125077</valuecount>
+               <variablecount>61</variablecount>
+               <sitecount>16</sitecount>
+               <ServiceID>52</ServiceID>
+               <NetworkName>LittleBearRiver</NetworkName>
+               <minx>-111.9464</minx>
+               <miny>41.49541</miny>
+               <maxx>-111.7993</maxx>
+               <maxy>41.71847</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://his08.iihr.uiowa.edu/tippingbucket/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>IIHR Tipping Bucket</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=63</ServiceDescriptionURL>
+               <Email>nicholasjarnold@gmail.com</Email>
+               <phone/>
+               <organization>IIHR - The University of Iowa</organization>
+               <orgwebsite>http://www.iihr.uiowa.edu</orgwebsite>
+               <citation/>
+               <aabstract/>
+               <valuecount>2658596</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>20</sitecount>
+               <ServiceID>63</ServiceID>
+               <NetworkName>IIHRTippingB</NetworkName>
+               <minx>-91.93102</minx>
+               <miny>41.53532</miny>
+               <maxx>-91.4167</maxx>
+               <maxy>41.82426</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://his08.iihr.uiowa.edu/water_quality/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>IIHR Water Quality</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=65</ServiceDescriptionURL>
+               <Email>nicholas-arnold@uiowa.edu</Email>
+               <phone/>
+               <organization>IIHR - The University of Iowa</organization>
+               <orgwebsite>http://www.iihr.uiowa.edu</orgwebsite>
+               <citation/>
+               <aabstract/>
+               <valuecount>1913016</valuecount>
+               <variablecount>7</variablecount>
+               <sitecount>4</sitecount>
+               <ServiceID>65</ServiceID>
+               <NetworkName>IIHRWQ</NetworkName>
+               <minx>-91.931</minx>
+               <miny>41.65823</miny>
+               <maxx>-91.54103</maxx>
+               <maxy>41.736</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro2.umbc.edu/BaltGW/cuahsi_1_0.asmx?WSDL </servURL>
+               <Title>Baltimore Waters Test Bed Ground Water Level Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=68</ServiceDescriptionURL>
+               <Email>jncole@umbc.edu</Email>
+               <phone>410-455-1765</phone>
+               <organization>Baltimore Waters Test Bed</organization>
+               <orgwebsite>http://www.umbc.edu/cuere/BaltimoreWTB</orgwebsite>
+               <citation/>
+               <aabstract/>
+               <valuecount>593546</valuecount>
+               <variablecount>2</variablecount>
+               <sitecount>7</sitecount>
+               <ServiceID>68</ServiceID>
+               <NetworkName>BaltimoreGW</NetworkName>
+               <minx>-76.79023</minx>
+               <miny>39.23548</miny>
+               <maxx>-76.6815</maxx>
+               <maxy>39.46188</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro2.umbc.edu/BESOD/cuahsi_1_0.asmx?WSDL </servURL>
+               <Title>Baltimore Ecosystem Study Stream Chemistry Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=70</ServiceDescriptionURL>
+               <Email>jncole@umbc.edu</Email>
+               <phone>410-455-1765</phone>
+               <organization>Baltimore Ecosystem Study</organization>
+               <orgwebsite>http://beslter.org</orgwebsite>
+               <citation/>
+               <aabstract/>
+               <valuecount>21486</valuecount>
+               <variablecount>6</variablecount>
+               <sitecount>11</sitecount>
+               <ServiceID>70</ServiceID>
+               <NetworkName>BESOD</NetworkName>
+               <minx>-76.81722</minx>
+               <miny>39.27083</miny>
+               <maxx>-76.61639</maxx>
+               <maxy>39.48028</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro2.umbc.edu/BESSoil/cuahsi_1_0.asmx?WSDL </servURL>
+               <Title>Baltimore Ecosystem Study Soils Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=71</ServiceDescriptionURL>
+               <Email>jncole@umbc.edu</Email>
+               <phone>410-455-1765</phone>
+               <organization>Baltimore Ecosystem Study</organization>
+               <orgwebsite>http://beslter.org</orgwebsite>
+               <citation/>
+               <aabstract/>
+               <valuecount>140490</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>28</sitecount>
+               <ServiceID>71</ServiceID>
+               <NetworkName>BESSoil</NetworkName>
+               <minx>-76.82363</minx>
+               <miny>39.23514</miny>
+               <maxx>-76.68404</maxx>
+               <maxy>39.48686</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/SFe_CTDSondes/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Santa Fe Basin, Florida CTD Sondes</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=75</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>(352) 392-5893</phone>
+               <organization>Univ of Florida Water Institute</organization>
+               <orgwebsite>http://waterinstitute.ufl.edu/research/projects/project64889.html</orgwebsite>
+               <citation>Graham, W.G., Martin, J.B., Cohen, M.J., Slatton, K.C., Delfino, J.. 2008. CTD Sonde Dataset from Design and demonstration of a distributed sensor array for predicting water flow and nitrate flux in the Santa Fe basin of N. Central Florida. NSF-Funded project, University of Florida Water Institute, Gainesville, FL. </citation>
+               <aabstract>Data is collected monthly from CTD Sondes in surface streams and 2 GW wells in the Santa Fe basin (HUC= 03110206) in Florida. Instruments measure specific conductivity; units are microSiemens/cm, temperature (degrees C). Depth is reported as water levels for one surface site and 2 wells  in Oleno State park. The instruments are Schlumberger CTD Divers. </aabstract>
+               <valuecount>2144593</valuecount>
+               <variablecount>17</variablecount>
+               <sitecount>19</sitecount>
+               <ServiceID>75</ServiceID>
+               <NetworkName>SFe_CTDSondes</NetworkName>
+               <minx>-82.92778</minx>
+               <miny>29.8233</miny>
+               <maxx>-82.21972</maxx>
+               <maxy>29.99806</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/SantaFe-RainDlySRWMD/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Santa Fe Basin, Florida Daily Rain Tipping Bucket</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=76</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>352-392-5893</phone>
+               <organization>Suwannee River Water Management District</organization>
+               <orgwebsite>http://www.srwmd.state.fl.us/index.asp?NID=99</orgwebsite>
+               <citation>Suwannee River Water Management District. 2011. Daily Rain Data. Automatic Tipping Bucket Rain Recorders. Dataset imported to CUAHSI HIS database on 2011-07-28 from http://www.mysuwanneeriver.org/rainfall.htm</citation>
+               <aabstract>Daily data - the instruments are tipping bucket raingages, model TB3, manufactured by Hydrological Services PTY LTD.  The bucket tips with every 0.01” of precipitation.</aabstract>
+               <valuecount>61636</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>16</sitecount>
+               <ServiceID>76</ServiceID>
+               <NetworkName>SantaFe-RainDlySRWMD</NetworkName>
+               <minx>-82.8679</minx>
+               <miny>29.74135</miny>
+               <maxx>-82.04983</maxx>
+               <maxy>30.21551</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/SFe_SWFGWL/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Santa Fe, Southwest Florida Water Management District</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=77</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>352-392-5893</phone>
+               <organization>Southwest Florida Water Management District</organization>
+               <orgwebsite>http://www.swfwmd.state.fl.us/data/</orgwebsite>
+               <citation>Southwest Florida Water Management District. 2008. Groundwater levels from beginning of record to 12/27/2008. </citation>
+               <aabstract>Groundwater levels in feet relative to NGVD 29 for 4 counties in SW Florida from beginning of recrod to 12/27/2008. Old ODM being used; in process of updating to new ODM version. KM</aabstract>
+               <valuecount>328854</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>118</sitecount>
+               <ServiceID>77</ServiceID>
+               <NetworkName>SFe_SWFGWL</NetworkName>
+               <minx>-82.72314</minx>
+               <miny>28.32872</miny>
+               <maxx>-81.82363</maxx>
+               <maxy>29.43791</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://eddy.ccny.cuny.edu/MPE/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Multi-sensor Precipitation Estimates</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=84</ServiceDescriptionURL>
+               <Email>mpiasecki@ccny.cuny.edu</Email>
+               <phone/>
+               <organization>NOAA National Weather Service Advanced Hydrologic Prediction Service</organization>
+               <orgwebsite>http://water.weather.gov/download.php</orgwebsite>
+               <citation/>
+               <aabstract>The precipitation data are quality-controlled, multi-sensor (radar and rain gauge) precipitation estimates obtained from National Weather Service (NWS) River Forecast Centers (RFCs). The original data are in XMRG format and projected in the Hydrologic Rainfall Analysis Project (HRAP) grid coordinate system, a polar stereographic projection true at 60°N / 105°W. Our software reads each participating RFC&apos;s XMRG file and grabs the 24-hour precipitation estimate for each HRAP grid cell.</aabstract>
+               <valuecount>5010626</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>9308</sitecount>
+               <ServiceID>84</ServiceID>
+               <NetworkName>MPE</NetworkName>
+               <minx>-80.479</minx>
+               <miny>37.0917</miny>
+               <maxx>-74.61</maxx>
+               <maxy>42.9789</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://river.sdsc.edu/renewsd/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Superfund Basic Research Program</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=91</ServiceDescriptionURL>
+               <Email>hsarabia@ucsd.edu</Email>
+               <phone/>
+               <organization>Superfund Basic Research Program, UCSD</organization>
+               <orgwebsite>http://www.niehs.nih.gov/research/supported/sbrp/</orgwebsite>
+               <citation>Urban runoff samples collected by Hiram Sarabia, Keith Pezzoli, Becca Ziegler at University of California, San Diego as part of a Environment and Sustainability Initiave and NIEHS SBRP (Grant #P42 ES010337) funded project.
+</citation>
+               <aabstract>Since its inception in 1987, the SBRP has applied a multidisciplinary approach to basic research focused to provide a solid foundation which environmental managers and risk assessors can draw upon to make sound decisions related to Superfund and other hazardous waste sites. We believe that basic research plays a crucial role in addressing challenges posed by environmental contamination such as health risks, toxicity, exposure predictions, fate and transport, and the need for cost-effective treatments for hazardous waste sites found throughout the United States.</aabstract>
+               <valuecount>3008</valuecount>
+               <variablecount>47</variablecount>
+               <sitecount>32</sitecount>
+               <ServiceID>91</ServiceID>
+               <NetworkName>SBRP</NetworkName>
+               <minx>-117.1753</minx>
+               <miny>32.69</miny>
+               <maxx>-117.0381</maxx>
+               <maxy>32.80592</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://eddy.ccny.cuny.edu/MAST/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>MAST</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=95</ServiceDescriptionURL>
+               <Email>benjamin.cuker@hampton.edu</Email>
+               <phone/>
+               <organization>Multicultural students At Sea Together (MAST)</organization>
+               <orgwebsite>http://www.hamptonu.edu/academics/schools/science/marine/mast/</orgwebsite>
+               <citation/>
+               <aabstract>Students will explore the Chesapeake Bay while living aboard a 53-foot sailboat. They will study marine science, marine policy, the heritage of African Americans and Native Americans on the water, and learn how to sail the vessel.</aabstract>
+               <valuecount>50960</valuecount>
+               <variablecount>8</variablecount>
+               <sitecount>44</sitecount>
+               <ServiceID>95</ServiceID>
+               <NetworkName>MAST</NetworkName>
+               <minx>-76.42</minx>
+               <miny>37.05</miny>
+               <maxx>-76.03</maxx>
+               <maxy>39.14</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/SFe_NitrateSensors/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Nitrate Sensors in Santa Fe Basin Florida</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=112</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>(352)392-5893</phone>
+               <organization>University of Florida Water Institute</organization>
+               <orgwebsite>http://waterinstitute.ufl.edu</orgwebsite>
+               <citation>Graham, W.G., Martin, J.B., Cohen, M.J., Slatton, K.C., Delfino, J.. 2008. YSI Nitrate data from Design and demonstration of a distributed sensor array for predicting water flow and nitrate flux in the Santa Fe basin WATERS Testbed. NSF-Funded project, University of Florida Water Institute, Gainesville, FL.</citation>
+               <aabstract>Data from multiple nitrate sensors being tested by the team including spectral sensor (SUNA, Submersible Ultraviolet Nitrate Analyzer) and lab in a can sensors (e.g. YSI 9600). These were tested in clear spring waters of the Ichetucknee river as well as tannic black waters of the Santa Fe river in N. Central Florida.</aabstract>
+               <valuecount>0</valuecount>
+               <variablecount>0</variablecount>
+               <sitecount>0</sitecount>
+               <ServiceID>112</ServiceID>
+               <NetworkName>SFe_NitrateSensors</NetworkName>
+               <minx>0</minx>
+               <miny>0</miny>
+               <maxx>0</maxx>
+               <maxy>0</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/Santafe-flstoret/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Storet Phosph and Nitr in Surf water</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=113</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>(352)392-5893</phone>
+               <organization>Florida Dept of Enviro Protection, STORET database</organization>
+               <orgwebsite>http://storet.dep.state.fl.us/WrmSpa/</orgwebsite>
+               <citation>Florida Dept of Environmental Protection. 2008. Data extracted from the Florida state Storet Database at http://www.dep.state.fl.us/water/storet/ </citation>
+               <aabstract>Only Nitrite_Nitrate, Nitrate and TP are in this network, received from FDEP in custom data request. Data is said to be more up to date and complete from FDEP storet than from USEPA storet. </aabstract>
+               <valuecount>2502</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>17</sitecount>
+               <ServiceID>113</ServiceID>
+               <NetworkName>SFe-FLStoret</NetworkName>
+               <minx>-82.86028</minx>
+               <miny>29.84611</miny>
+               <maxx>-82.21972</maxx>
+               <maxy>29.99806</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://Cuahsi.lbl.gov/HIS/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Grasslands Ecological Area of the San Joaquin Basin, California</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=119</ServiceDescriptionURL>
+               <Email>cpedersen@lbl.gov</Email>
+               <phone>(510) 486-4207</phone>
+               <organization>Lawrence Berkeley National Laboratory</organization>
+               <orgwebsite>http://Cuahsi.lbl.gov/HIS</orgwebsite>
+               <citation/>
+               <aabstract/>
+               <valuecount>12878946</valuecount>
+               <variablecount>12</variablecount>
+               <sitecount>48</sitecount>
+               <ServiceID>119</ServiceID>
+               <NetworkName>LBL</NetworkName>
+               <minx>-120.9422</minx>
+               <miny>36.95723</miny>
+               <maxx>-120.727</maxx>
+               <maxy>37.17585</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://eddy.ccny.cuny.edu/HydroNEXRAD/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>HydroNEXRAD</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=120</ServiceDescriptionURL>
+               <Email>mpiasecki@ccny.cuny.edu</Email>
+               <phone/>
+               <organization>Hydro_NEXRAD Data Services at the University of Iowa</organization>
+               <orgwebsite>http://hydro-nexrad.net/hydronexrad_v0.7/index.html</orgwebsite>
+               <citation/>
+               <aabstract>Hydro-NEXRAD is a prototype system that allows hydrologists to obtain user-specified rainfall data for their research.  These data are based on observations collected by the national network of WSR-88D radars, known as NEXRAD. Currently, raingauge observations are not available through this website.  Hydro-NEXRAD is developped by researchers from The University of Iowa, Princeton University, UCAR&apos;s Unidata Program Center, and the National Climatic Data Center</aabstract>
+               <valuecount>2147483647</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>215359</sitecount>
+               <ServiceID>120</ServiceID>
+               <NetworkName>HydroNEXRAD</NetworkName>
+               <minx>-80.80833</minx>
+               <miny>36.425</miny>
+               <maxx>-71.59148</maxx>
+               <maxy>44.64183</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://his09.umbc.edu/BaltPrecip/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Baltimore Precipitation</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=121</ServiceDescriptionURL>
+               <Email>jncole@umbc.edu</Email>
+               <phone>410-455-1765</phone>
+               <organization>Center for Urban Environmental Research and Education</organization>
+               <orgwebsite>http://www.umbc.edu/cuere</orgwebsite>
+               <citation/>
+               <aabstract/>
+               <valuecount>562695</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>16</sitecount>
+               <ServiceID>121</ServiceID>
+               <NetworkName>BaltPrecip</NetworkName>
+               <minx>-76.8105</minx>
+               <miny>39.25436</miny>
+               <maxx>-76.64867</maxx>
+               <maxy>39.49658</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://icewater.boisestate.edu/dcew2dataservices/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Dry Creek Experimental Watershed, SW Idaho</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=122</ServiceDescriptionURL>
+               <Email>pamaishlin@boisestate.edu</Email>
+               <phone>208-426-2220</phone>
+               <organization>Boise State University, Hydrologic Sciences Department</organization>
+               <orgwebsite>http://earth.boisestate.edu/jmcnamara/</orgwebsite>
+               <citation>Hydrologic Sciences, Dept of Geosciences, Boise State University, Dr. Jim McNamara</citation>
+               <aabstract>Dry Creek Experimental Watershed was established by Dr. Jim McNamara in 1998 as an outdoor laboratory for student and faculty research toward improving understanding of hydrologic processes in semi-arid mountainous terrain to facilitate testing and improving data integration and hydrologic modeling. Continuous and discrete data collection includes climate, surface water, groundwater and soil parameters, both chemical and physical, over a range of spatial and temporal scales. </aabstract>
+               <valuecount>8763139</valuecount>
+               <variablecount>25</variablecount>
+               <sitecount>100</sitecount>
+               <ServiceID>122</ServiceID>
+               <NetworkName>ODMDCEW2</NetworkName>
+               <minx>-116.1786</minx>
+               <miny>43.68834</miny>
+               <maxx>-116.099</maxx>
+               <maxy>43.74071</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://icewater.civil.uidaho.edu/ParadiseCreek/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Paradise Creek Watershed, Idaho</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=127</ServiceDescriptionURL>
+               <Email>hage0608@vandals.uidaho.edu</Email>
+               <phone>208-621-3551</phone>
+               <organization>University of Idaho - Bio/Ag Engineering/Waters of the West</organization>
+               <orgwebsite>http://pcw.ag.uidaho.edu/index.htm</orgwebsite>
+               <citation>Boll, J. 2011.  Streamflow data. Paradise Creek Watershed. Bio/Ag Engineering/Waters of the West, University of Idaho.  Data retrieved from CUAHSI HIS on July 27, 2011.</citation>
+               <aabstract>This research is conducted o study the effectiveness of conservation practices at the watershed scale using data from an extensively researched watershed. The second is to examine how watershed restoration in a mixed-land use watershed can be optimized by considering its biophysical and socioeconomic characteristics. To show why (or why not) conservation practices are effective at the watershed scale with emphasis on statistical analysis of existing monitoring data, geo-spatial modeling, and integrated physical and socio-economic analyses. Our research includes an outreach plan for information transfer and data storage and retrieval.
+
+The Paradise Creek datasets use the standard topic code of &quot;inlandWaters&quot; (012) which describes inland water features, drainage systems and characteristics in particular water quality and stream flow.  It is published in conjunction with the ICEWATER (INRA Water Resources Consortium Constellation of Experimental Watersheds Network)</aabstract>
+               <valuecount>272853</valuecount>
+               <variablecount>12</variablecount>
+               <sitecount>4</sitecount>
+               <ServiceID>127</ServiceID>
+               <NetworkName>ParadiseCreek</NetworkName>
+               <minx>-117.0346</minx>
+               <miny>46.72261</miny>
+               <maxx>-116.963</maxx>
+               <maxy>46.80556</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://icewater.usu.edu/loganriver/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Logan River Observations, Northern Utah, USA</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=128</ServiceDescriptionURL>
+               <Email>milada_majerova@yahoo.com</Email>
+               <phone/>
+               <organization>Watershed Sciences Department, Utah State University</organization>
+               <orgwebsite>http://www.usu.edu</orgwebsite>
+               <citation>Majerova, M., and J. Schmidt (2009), Logan River Observations Data, Utah State University, Logan, UT, USA.</citation>
+               <aabstract>This dataset contains observations of stage, discharge, and water temperature in the Logan River, which is located in northern Utah, USA.</aabstract>
+               <valuecount>877985</valuecount>
+               <variablecount>5</variablecount>
+               <sitecount>4</sitecount>
+               <ServiceID>128</ServiceID>
+               <NetworkName>LoganRiver</NetworkName>
+               <minx>-111.6579</minx>
+               <miny>41.77034</miny>
+               <maxx>-111.5647</maxx>
+               <maxy>41.93315</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://www.his.npca.ca/waterdataservices_quantity/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Niagara Peninsula Conservation Authority Water Quantity Data Service</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=129</ServiceDescriptionURL>
+               <Email>gverkade@npca.ca</Email>
+               <phone>(905)788-3135</phone>
+               <organization>Niagara Peninsula Conservation Authority</organization>
+               <orgwebsite>http://www.his.npca.ca/hydroserver</orgwebsite>
+               <citation>Niagara Peninsula Conservation Authority, 2011. Water Quantity monitoring data collected within the Niagara Peninsula Conservation Authority Watershed, Ontario.</citation>
+               <aabstract>This database contains historic and near real time water quantity observation data for the Niagara Peninsula Conservation Authority watershed. Variables collected include water level, stream flow, precipitation and air temperature and water temperature.</aabstract>
+               <valuecount>6085792</valuecount>
+               <variablecount>12</variablecount>
+               <sitecount>37</sitecount>
+               <ServiceID>129</ServiceID>
+               <NetworkName>NPCA</NetworkName>
+               <minx>-79.82583</minx>
+               <miny>42.862</miny>
+               <maxx>-79.042</maxx>
+               <maxy>43.23337</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://cbe.cae.drexel.edu/RIMP/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>RIM Program</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=131</ServiceDescriptionURL>
+               <Email>kenhyer@usgs.gov</Email>
+               <phone>804-698-4000</phone>
+               <organization>USGS, Virginia DEQ and Maryland Department of Natural Resources</organization>
+               <orgwebsite>http://va.water.usgs.gov/chesbay/RIMP/</orgwebsite>
+               <citation/>
+               <aabstract>The USGS Chesapeake Bay River Input Monitoring (RIM) Program was established to quantify loads and long-term trends in concentrations of nutrients and suspended material entering the tidal part of the Chesapeake Bay Basin from its nine major tributaries. These nine rivers account for approximately 93% of the streamflow entering Chesapeake Bay from the non-tidal part of its watershed. Results of the RIM program are being used by resource managers, policy makers, and concerned citizens to help evaluate the effectiveness of strategies aimed at reducing nutrients and sediment entering Chesapeake Bay from its tributaries.</aabstract>
+               <valuecount>153070</valuecount>
+               <variablecount>13</variablecount>
+               <sitecount>9</sitecount>
+               <ServiceID>131</ServiceID>
+               <NetworkName>RIMP</NetworkName>
+               <minx>-78.08611</minx>
+               <miny>37.22445</miny>
+               <maxx>-75.78611</maxx>
+               <maxy>39.65861</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/SFe_SRWMD_SurfWater/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Santa Fe Basin, Florida SRWMD select river gages</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=139</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>352-392-5893</phone>
+               <organization>Suwannee River Water Management District </organization>
+               <orgwebsite>http://www.srwmd.org/DocumentCenterii.aspx?FID=49</orgwebsite>
+               <citation/>
+               <aabstract>This river flow or stage data is downloaded from the SRWMD website every 2-3 months for selected stations on the rivers in the basin. The data is compared to specific conductivity data. See our webpage for research information: http://waterinstitute.ufl.edu/research/projects_detail.asp?Contract=63158 </aabstract>
+               <valuecount>80612</valuecount>
+               <variablecount>2</variablecount>
+               <sitecount>4</sitecount>
+               <ServiceID>139</ServiceID>
+               <NetworkName>SFe_SRWMD_SurfWater</NetworkName>
+               <minx>-82.79916</minx>
+               <miny>29.84611</miny>
+               <maxx>-82.21972</maxx>
+               <maxy>29.9325</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://icewater.geology.isu.edu/PortneufWatershed/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Portneuf Watershed Observations, Idaho</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=140</ServiceDescriptionURL>
+               <Email>whittifa@isu.edu</Email>
+               <phone>208-360-7793</phone>
+               <organization>Idaho State University</organization>
+               <orgwebsite>http://gsl.geology.isu.edu/</orgwebsite>
+               <citation>Sigler, J.W. 2011. Monitoring data collected within the Portneuf River, Idaho. Portneuf Watershed Partnership. </citation>
+               <aabstract>Stakeholders within the Portneuf Basin have joined together to form a coalition known as the Portneuf Watershed Partnership (PWP). This group has both a monitoring and outreach/education component and is a cooperative effort of private industry; educational institutions; scientists and government agencies at numerous levels (City; County; State; Tribal and Federal). Support and cooperation for the PWP has been provided by many agencies. In addition to funds and contributions of labor or materials many volunteers and property owners have contributed labor or cooperated by providing access to their lands.</aabstract>
+               <valuecount>794614</valuecount>
+               <variablecount>6</variablecount>
+               <sitecount>5</sitecount>
+               <ServiceID>140</ServiceID>
+               <NetworkName>PWP</NetworkName>
+               <minx>-112.545</minx>
+               <miny>0</miny>
+               <maxx>0</maxx>
+               <maxy>42.93505</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://nmhis.unm.edu/RGET/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Rio-ET: Evapotranspiration Studies in the Middle Rio Grande</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=152</ServiceDescriptionURL>
+               <Email>jcoonrod@unm.edu</Email>
+               <phone>505-277-3233</phone>
+               <organization>University of New Mexico</organization>
+               <orgwebsite>http://bosque.unm.edu/</orgwebsite>
+               <citation>J. Cleverly, C. Dahm, J. Coonrod, K. Vanderbilt, 1999-2008, Evapotranspiration tower and well data, Rio-ET: Evapotranspiration Studies in the Middle Rio Grande, University of New Mexico</citation>
+               <aabstract>Restoration efforts that remove non-native understory vegetation or dense monotypic stands of non-native vegetation from riparian zones (the bosque) are designed to reduce consumption of water. Quantification of the response of evapotranspiration (ET) and water table depths to non-native understory removal or to eradication of dense stands of non-native species like salt cedar or Russian olive is needed to provide defensible estimates of potential water-savings from restoration activities. In addition to restoration assessment, it is also important to monitor the effects the increasing roles of fire and post-burn management have on ET and water tables. We monitored the ET and water table responses of a site with understory removed (Albuquerque South Valley). 
+</aabstract>
+               <valuecount>31485802</valuecount>
+               <variablecount>100</variablecount>
+               <sitecount>8</sitecount>
+               <ServiceID>152</ServiceID>
+               <NetworkName>RioGrandeET</NetworkName>
+               <minx>-107.0394</minx>
+               <miny>33.77303</miny>
+               <maxx>-106.6828</maxx>
+               <maxy>34.95871</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://water.sdsc.edu/czo_arizona/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Jemez River Basin &amp; SCM CZO</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=158</ServiceDescriptionURL>
+               <Email>chorover@cals.arizona.edu</Email>
+               <phone>520-626-5635</phone>
+               <organization>University of Arizona</organization>
+               <orgwebsite>http://www.czo.arizona.edu/</orgwebsite>
+               <citation>Logistical support and/or data were provided by the NSF-supported Jemez River Basin and Santa Catalina Mountains Critical Zone Observatory under the NSF EAR-0724958</citation>
+               <aabstract>This data service provides data collected from Jemez River Basin sites. 
+We are developing an interdisciplinary observatory in the southwestern US that will improve our fundamental understanding of the function, structure and co-evolution of biota, soils, and landforms that comprise the Critical Zone (CZ). The observatory is designed as a natural laboratory for the earth science community to test hypotheses related to CZ function in relation to climatic and water cycle variation. We posit that CZ systems organize and evolve in response to open system fluxes of energy and mass that can be quantified at point to watershed scales. These fluxes include meteoric CZ inputs of radiation, water, and carbon that are modulated by surficial biota to produce fluids and biogeochemical components that undergo biotic and abiotic transformation during gradient-driven transport. We hypothesize that the coupling of physical, chemical and biological processes is related specifically and predictably to the timing and magnitude of these fluxes. Therefore, our CZ Observatory (CZO) is designed to examine the impacts of space-time variability in energy and water flux on coupled CZ processes along two well-constrained climate gradients. The first is on rhyolitic parent material in the Jemez River Basin of northern New Mexico (JRB) and the second is on granite and schist bedrock within the Santa Catalina Mountains in southern Arizona (SCM). Measurement, modeling, and experimentation at sites that vary in parent rock, elevation, aspect, slope, soil development, and vegetation will enable quantification of the feedbacks between energy and mass fluxes (driven by chemical and physical gradients) and measured components of CZ structure. Our team has developed an iterative modeling and measurement strategy, and a management structure that fosters integration among disciplines. The JRB-SCM CZO is organized around broad questions that require an integrated, multi-disciplinary approach including the following two: How does variability in energy input and related mass flux influence CZ structure and function? How do feedbacks between landscape evolution and the cycling of water and carbon alter short- and long-term CZ development? To identify the couplings among physical, chemical, and biological processes, our research integrates four crosscutting science themes that are both multi-disciplinary and multi-scale: Ecohydrology and Hydrologic Partitioning, Subsurface Biogeochemistry, Landscape Evolution and Surface Water Dynamics. We are employing an integrated process-based modeling approach to (i) identify optimal sites for measuring structure and process, (ii) refine hypotheses developed through field-based observation and measurements, (iii) explore feedbacks and emergent system behaviors, and (iv) develop transfer functions that can be used to relate system behavior across scales and modes of observation. Discoveries made at the JRB-SCM CZO will improve our ability to predict CZ response to changes in climate and land cover, which is immediately useful to regional resource managers and will ultimately inform broader-scale decision making. We coordinate closely with other CZOs to support data collection, storage, and dissemination. Our education and outreach activities are built upon other highly effective educational efforts developed and led at UA. We are developing a range of products and activities for K-16 students, the general public, and stakeholders, including summer Observatory field experiences for local high school and undergraduate students, graduate courses, and field camps in earth science, as well as coordination of related efforts by other science centers active in the region. We invite new investigators throughout the global earth sciences community to conduct novel and collaborative research at the JRB-SCM CZO</aabstract>
+               <valuecount>2245403</valuecount>
+               <variablecount>38</variablecount>
+               <sitecount>16</sitecount>
+               <ServiceID>158</ServiceID>
+               <NetworkName>czo_ariz</NetworkName>
+               <minx>-106.5978</minx>
+               <miny>35.8546</miny>
+               <maxx>-106.4958</maxx>
+               <maxy>35.9092</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://192.31.21.100/czo_boulder/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Boulder Creek Critical Zone Observatory</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=159</ServiceDescriptionURL>
+               <Email>markw@snobear.Colorado.edu</Email>
+               <phone/>
+               <organization>University of Colorado at Boulder</organization>
+               <orgwebsite>http://czo.colorado.edu</orgwebsite>
+               <citation>Logistical support and/or data were provided by the NSF-supported Boulder Creek Critical Zone Observatory</citation>
+               <aabstract>The Boulder Creek Critical Zone Observatory (CZO), located in the Front Range of Colorado, is designed to examine the effect of erosion on the development and function of the Critical Zone. The Critical Zone is the near-surface region that supports terrestrial life, extending vertically from the base of groundwater to the upper reaches of the vegetation canopy. The Boulder Creek Watershed is about 1160km2 and drains the Front Range from the Continental Divide (4120m) to the eastern plains (1480) (Murphy, 2000). In the upper reaches of Boulder Creek, it has 3 tributaries – North Boulder Creek, Middle Boulder Creek and South Boulder Creek. The confluence of North Boulder Creek and Middle Boulder Creek is at ?m. South Boulder Creek joins Boulder Creek near the City of Boulder. The large elevation range within the watershed encompasses five climatic zones – alpine, subalpine, montane, foothills and plains. Total annual precipitation generally decreases with elevation, from &gt;100cm at the Continental Divide to about 46cm near the City of Boulder. The project will focus on the upper basin of the Boulder Creek Watershed (above the City of Boulder).</aabstract>
+               <valuecount>30450</valuecount>
+               <variablecount>33</variablecount>
+               <sitecount>13</sitecount>
+               <ServiceID>159</ServiceID>
+               <NetworkName>czo_boulder</NetworkName>
+               <minx>-105.6207</minx>
+               <miny>40.01247</miny>
+               <maxx>-105.3401</maxx>
+               <maxy>40.05479</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://192.31.21.100/czo_luquillo/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Luquillo Critical Zone Observatory</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=160</ServiceDescriptionURL>
+               <Email>leonmi@sas.upenn.edu</Email>
+               <phone/>
+               <organization>University of Pennsylvania</organization>
+               <orgwebsite>http://www.sas.upenn.edu/lczo/</orgwebsite>
+               <citation/>
+               <aabstract>The Luquillo Critical Zone Observatory (LCZO) is located in Luquillo Mountains of northeastern Puerto Rico. The multi-disciplinary team of geoscientists working at the site are addressing a set of specific hypotheses that are related to the following overarching questions: How do critical zone processes and the flow and transformations of material differ in landscapes with contrasting bedrock but similar climates, land use, and geologic histories? What are the implications of these differences for the long term sustainability of water and soil resources? Research Overview Specifically, the observatory is quantifying and comparing critical zone (CZ) processes in landforms and watersheds underlain by three different rock types, granodiorites, volcaniclastics, and their associated contact metamorphic rocks. Previous research has demonstrated that these are some of the most rapidly eroding watersheds in the world. There are also dramatic, but poorly quantified, contrasts in CZ processes between areas underlain by these bedrocks. Individual research project include studies of deep weathering, soil formation and soil carbon accumulation, riparian zone dynamics, fluvial geomorphology, and meteorology. Infrastructure includes weather stations, instrumented soil pits and riparian zones, and stream flow gages. The principal researchers and students involve in the Luquillo Critical Zone Observatory are from the UPENN, the Pennsylvania State University, the University of California at Berkeley, the University of New Hampshire, the University of Puerto Rico, the US Geological Survey, and the US Forest Service International Institute of Tropical Forestry. The Observatory will also provide facilities for collaborators from a host of US and International Universities and Research Centers</aabstract>
+               <valuecount>3671653</valuecount>
+               <variablecount>76</variablecount>
+               <sitecount>10</sitecount>
+               <ServiceID>160</ServiceID>
+               <NetworkName>czo_luquillo</NetworkName>
+               <minx>-65.76384</minx>
+               <miny>18.27971</miny>
+               <maxx>65.74432</maxx>
+               <maxy>18.33111</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://192.31.21.100/czo_merced/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Southern Sierra Critical Zone Observatory</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=161</ServiceDescriptionURL>
+               <Email>rbales@ucmerced.edu</Email>
+               <phone/>
+               <organization>University of California, Merced</organization>
+               <orgwebsite>https://snri.ucmerced.edu/CZO</orgwebsite>
+               <citation>Logistical support and/or data were provided by the NSF-supported Southern Sierra Critical Zone Observatory</citation>
+               <aabstract>The Southern Sierra CZO is a community platform for research on critical-zone processes across the rain-snow transition in the mixed-conifer forest of the Southern Sierra Nevada. While this elevation range has characteristically rapid seasonal changes, going from snow cover to wet soil to dry soil over a 1-2 month period, climate warming will shift this transition period earlier or eliminate it entirely at the current transitional elevation. The characteristic spatial differences along gradients offer the opportunity to substitute space for time, making the CZO an excellent natural laboratory for studying how critical zone processes respond to perturbations, and particularly how the water cycle drives critical zone processes. A team of scientists from multiple institutions is carrying out research at the CZO, which is located in the Kings River Experimental Watershed (KREW), a U.S. Forest Service watershed-level, integrated ecosystem project for long-term research in headwater catchments in the Sierra National Forest.</aabstract>
+               <valuecount>11529775</valuecount>
+               <variablecount>8</variablecount>
+               <sitecount>33</sitecount>
+               <ServiceID>161</ServiceID>
+               <NetworkName>czo_merced</NetworkName>
+               <minx>-119.2033</minx>
+               <miny>37.05776</miny>
+               <maxx>-119.1823</maxx>
+               <maxy>37.06134</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://192.31.21.100/czo_psu/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Shale Hills Susquehanna CZO</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=162</ServiceDescriptionURL>
+               <Email>bbills@eesi.psu.edu</Email>
+               <phone/>
+               <organization>Pennsylvania State University</organization>
+               <orgwebsite>http://www.czo.psu.edu</orgwebsite>
+               <citation>Logistical support and/or data were provided by the NSF-supported Shale Hills Susquehanna Critical Zone Observatory.</citation>
+               <aabstract>The Shale Hills Critical Zone Observatory (CZO) is a forested, small, temperate-climate catchment in central Pennsylvania in which the regolith is developing upon homogeneous shale. The purpose of the observatory and associated interdisciplinary research is to quantitatively predict the creation, evolution, and structure of regolith as a function of the geochemical, hydrologic, biologic, and geomorphologic processes operating in a temperate, forested landscape. By creating an interdisciplinary team working collaboratively in one observatory we aim to advance methods for characterizing regolith, to provide a theoretical basis for predicting the distribution and properties of regolith, and to theoretically and experimentally study the impacts of regolith on fluid pathways, flow rates, and residence times. The research site, the focus of National Science Foundation-supported research since the 1970s, has comprehensive datasets on distributed water budgets (1970-75), has served as a model test bed for hydrological response (1998-present), and will be augmented here by new geochemical, geomorphological, ecological, lidar, and soils datasets, all available to the research community. Shale Hills CZO represents an opportunity to investigate the rates and mechanisms of saprolite and soil formation on a relatively simple but ubiquitous bedrock lithology that has been documented to be important in determining global fluxes of C, P, and platinum–group elements worldwide. Furthermore, the regolith at Shale Hills has experienced at least two potentially significant perturbations in the geologically recent past: a climatic perturbation from periglacial to modern conditions, and a biologic perturbation from anthropogenic clearing of forests during and repeatedly since colonial occupation. The magnitude of these perturbations and their influence on regolith generation afford an opportunity to assess the time scales of response of soil production to both long-term climate change and human activity.</aabstract>
+               <valuecount>1328655</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>12</sitecount>
+               <ServiceID>162</ServiceID>
+               <NetworkName>czo_psu</NetworkName>
+               <minx>-77.90734</minx>
+               <miny>40.66452</miny>
+               <maxx>-77.90315</maxx>
+               <maxy>40.66582</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://192.31.21.100/czo_udel/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Christina River Basin Critical Zone Observatory</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=163</ServiceDescriptionURL>
+               <Email>aufdenkampe@stroudcenter.org</Email>
+               <phone/>
+               <organization>Stroud Research Center / University of Deleware</organization>
+               <orgwebsite>http://www.udel.edu/czo/</orgwebsite>
+               <citation>An NSF supported environmental observatory established to study chemical, physical and biological interactions that shape the Earth&apos;s surface</citation>
+               <aabstract>Spatial and temporal integration of carbon and mineral fluxes: a whole watershed approach to quantifying anthropogenic modification of critical zone carbon sequestration. Earth moving by humans associated with agriculture, urbanization, and excavation re-contours entire landscapes and constitutes a major geological force within the Critical Zone of planet Earth. The Critical Zone, defined as the terrestrial layer extending from tree tops through the groundwater and into stream networks, sustains most terrestrial life on the planet. At a greater rate than ever in Earth’s history, erosion and excavation expose sub-soil materials and unweathered minerals, which mix into and within soils and are transported as sediment loads through river networks, from headwaters to estuaries. To quantify the impacts on the global carbon cycle of humans as geological agents, a multidisciplinary team of scientists from the University of Delaware (UD) and Stroud Water Research Center (SWRC) will establish a Critical Zone Observatory (CZO) within the 1440 km2 Christina River drainage basin (CRB/CZO). Scientific investigations within the CRB/CZO, located in Southeastern Pennsylvania and Northern Delaware and straddling unglaciated Piedmont and Coastal Plain physiographic provinces, will test the following overarching hypothesis: Humans, by accelerating the introduction of minerals into biologically and chemically active zones, significantly enhance the interactions between minerals and organic matter and create globally significant impacts on the exchange of carbon between the land and the atmosphere. The human footprint within the CRB/CZO spans centuries, and current land uses include second-growth forests, agriculture, and suburban and urban development This provides an ideal natural laboratory in which we will investigate fundamental biological, chemical, and geological processes within the Critical Zone along a gradient of human impacts. We will particularly focus on the sources, transport and fates of water, sediments and carbon from uplands to inland waters and from inland waters to the coastal zone. The CRB/CZO will utilize cutting edge technologies for real-time gathering of hydrological, physical and chemical data and advances in cyber-infrastructure that seamlessly merge real-time data with state-of-the-art graphics tools to provide timely open access to quality controlled data and supporting materials. Field installations and data management advances will enhance an extensive existing network of stations used for monitoring water flow and water chemistry within the CRB basin, including Delaware Coastal Waters, and will build upon a solid foundation of decades of research conducted by UD, SWRC, and numerous state, federal, and non-governmental agencies. The CRB/CZO will serve as a resource to the greater scientific community through open access to data and opportunities for research projects that take advantage of the enhanced monitoring network. The new Delaware Environmental Institute (DENIN), located at UD, and Delaware&apos;s National Science Foundation Experimental Program to Stimulate Competitive Research (EPSCoR) will partner with the CRB/CZO on outreach activities. Public outreach to stakeholders within the Christina Basin is a critical step in making CRB/CZO data available to policy makers. Strong ties between UD and Delaware state agencies will enhance the sharing of environmental data and will provide outreach to the public and to policy makers. Some of our outreach will be coordinated through the Water Resources Agency, part of the UD Institute for Public Administration. The Christina Basin Water Quality Management Committee, which includes representatives from 15 federal, state, and local environmental resource agencies, hosts an annual series of public workshops to identify the science needs of policy makers. We will incorporate science results from the CRB/CZO into these workshops with the goal of providing a direct interface between science and public policy. The SWRC maintains 4 full-time staff members to translate our research into educational programs for middle- and high school-aged students, teachers, and citizen/conservation groups. Graduate students who are involved with the CRB/CZO will be advised by multidisciplinary team of scientists associated with the DENIN and with scientists at SWRC. Collaborations with other academic and federal agency personnel will further enhance interdisciplinary research, student education, and public outreach.</aabstract>
+               <valuecount>8710219</valuecount>
+               <variablecount>24</variablecount>
+               <sitecount>31</sitecount>
+               <ServiceID>163</ServiceID>
+               <NetworkName>czo_udel</NetworkName>
+               <minx>-75.79139</minx>
+               <miny>39.8549</miny>
+               <maxx>-75.65321</maxx>
+               <maxy>39.94947</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://www.his.npca.ca/waterdataservices_quality/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Niagara Peninsula Conservation Authority Water Quality Data Service</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=171</ServiceDescriptionURL>
+               <Email>gverkade@npca.ca</Email>
+               <phone>905-788-3135</phone>
+               <organization>Niagara Peninsula Conservation Authority</organization>
+               <orgwebsite>http://www.his.npca.ca/hydroserver</orgwebsite>
+               <citation>Niagara Peninsula Conservation Authority, 2011. Water Quality monitoring data collected within the Niagara Peninsula Conservation Authority Watershed, Ontario.</citation>
+               <aabstract>This database contains historic water quality observation data for the Niagara Peninsula Conservation Authority watershed.</aabstract>
+               <valuecount>148720</valuecount>
+               <variablecount>67</variablecount>
+               <sitecount>71</sitecount>
+               <ServiceID>171</ServiceID>
+               <NetworkName>NPCAQUAL</NetworkName>
+               <minx>-79.95966</minx>
+               <miny>42.84816</miny>
+               <maxx>-78.93753</maxx>
+               <maxy>43.25733</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://icewater.boisestate.edu/rcew2dataservices/cuahsi_1_1.asmx?WSDL </servURL>
+               <Title>Reynolds Creek Experimental Watershed, SW Idaho</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=173</ServiceDescriptionURL>
+               <Email>mark.seyfried@ars.usda.gov</Email>
+               <phone>208-422-0715</phone>
+               <organization>Northwest Watershed Research Center, Agricultural Research Service, U.S. Dept of Agriculture</organization>
+               <orgwebsite>http://www.ars.usda.gov/Main/site_main.htm?modecode=53-62-00-00</orgwebsite>
+               <citation>Seyfried, M. S., M. D. Murdock, C. L. Hanson, G. N. Flerchinger, and S. Van Vactor, Long-term soil water content database, Reynolds Creek Experimental Watershed, Idaho, USA, Water Resources Research, 37, 2847-2851, 2001.
+</citation>
+               <aabstract>The Reynolds Creek Experimental Watershed, Southwest Idaho, USA, funded by the Unites States Department of Agriculture has continuously monitored a large variety of hydrologic parameters since the early 1960&apos;s.
+</aabstract>
+               <valuecount>13058645</valuecount>
+               <variablecount>4</variablecount>
+               <sitecount>136</sitecount>
+               <ServiceID>173</ServiceID>
+               <NetworkName>ODMRCEW2</NetworkName>
+               <minx>-116.8562</minx>
+               <miny>43.06301</miny>
+               <maxx>-116.7025</maxx>
+               <maxy>43.29692</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://icewater.boisestate.edu/pmrw2dataservices/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Panola Mountain Research Watershed, Georgia</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=174</ServiceDescriptionURL>
+               <Email>nepeters@usgs.gov</Email>
+               <phone>770-903-9145</phone>
+               <organization>U.S. Geological Survey, Georgia Water Science Center</organization>
+               <orgwebsite>http://ga.water.usgs.gov/projects/panola/</orgwebsite>
+               <citation>USGS Georgia Water Science Center, Environmental Investigations and Research Section, Panola Mountain Watershed Research Group
+</citation>
+               <aabstract>Research Data Collection for Panola Mountain Research Watershed, since 1985.  U.S. Geological Survey, Georgia Dept of Natural Resources and WEBB Program Cooperators, project number 2503-0021S
+
+</aabstract>
+               <valuecount>7958239</valuecount>
+               <variablecount>2</variablecount>
+               <sitecount>7</sitecount>
+               <ServiceID>174</ServiceID>
+               <NetworkName>ODMPMRW2</NetworkName>
+               <minx>-84.17546</minx>
+               <miny>33.62761</miny>
+               <maxx>-84.17204</maxx>
+               <maxy>33.63176</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://eddy.ccny.cuny.edu/BENTHIC/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Benthic Data in Chesapeake Bay</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=176</ServiceDescriptionURL>
+               <Email>mpiasecki@ccny.cuny.edu</Email>
+               <phone/>
+               <organization>Chesapeake Bay Environmental Observatory</organization>
+               <orgwebsite>http://cbeo.communitymodeling.org/</orgwebsite>
+               <citation/>
+               <aabstract/>
+               <valuecount>299004</valuecount>
+               <variablecount>1285</variablecount>
+               <sitecount>4367</sitecount>
+               <ServiceID>176</ServiceID>
+               <NetworkName>Benthic</NetworkName>
+               <minx>-77.3197</minx>
+               <miny>36.4554</miny>
+               <maxx>-75.6157</maxx>
+               <maxy>39.589</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://water.sdsc.edu/czo_catalina/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>JRB &amp; Santa Catalina Mountains CZO</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=177</ServiceDescriptionURL>
+               <Email>patroch@hwr.arizona.edu</Email>
+               <phone>520-626-1277</phone>
+               <organization>University of Arizona</organization>
+               <orgwebsite>http://www.czo.arizona.edu/</orgwebsite>
+               <citation>Logistical support and/or data were provided by the NSF-supported Jemez River Basin and Santa Catalina Mountains Critical Zone Observatory under the NSF EAR-0724958</citation>
+               <aabstract>This data service provides data collected from Santa Catalina Mountains sites.
+We are developing an interdisciplinary observatory in the southwestern US that will improve our fundamental understanding of the function, structure and co-evolution of biota, soils, and landforms that comprise the Critical Zone (CZ). The observatory is designed as a natural laboratory for the earth science community to test hypotheses related to CZ function in relation to climatic and water cycle variation. We posit that CZ systems organize and evolve in response to open system fluxes of energy and mass that can be quantified at point to watershed scales. These fluxes include meteoric CZ inputs of radiation, water, and carbon that are modulated by surficial biota to produce fluids and biogeochemical components that undergo biotic and abiotic transformation during gradient-driven transport. We hypothesize that the coupling of physical, chemical and biological processes is related specifically and predictably to the timing and magnitude of these fluxes. Therefore, our CZ Observatory (CZO) is designed to examine the impacts of space-time variability in energy and water flux on coupled CZ processes along two well-constrained climate gradients. The first is on rhyolitic parent material in the Jemez River Basin of northern New Mexico (JRB) and the second is on granite and schist bedrock within the Santa Catalina Mountains in southern Arizona (SCM). Measurement, modeling, and experimentation at sites that vary in parent rock, elevation, aspect, slope, soil development, and vegetation will enable quantification of the feedbacks between energy and mass fluxes (driven by chemical and physical gradients) and measured components of CZ structure. Our team has developed an iterative modeling and measurement strategy, and a management structure that fosters integration among disciplines. The JRB-SCM CZO is organized around broad questions that require an integrated, multi-disciplinary approach including the following two: How does variability in energy input and related mass flux influence CZ structure and function? How do feedbacks between landscape evolution and the cycling of water and carbon alter short- and long-term CZ development? To identify the couplings among physical, chemical, and biological processes, our research integrates four crosscutting science themes that are both multi-disciplinary and multi-scale: Ecohydrology and Hydrologic Partitioning, Subsurface Biogeochemistry, Landscape Evolution and Surface Water Dynamics. We are employing an integrated process-based modeling approach to (i) identify optimal sites for measuring structure and process, (ii) refine hypotheses developed through field-based observation and measurements, (iii) explore feedbacks and emergent system behaviors, and (iv) develop transfer functions that can be used to relate system behavior across scales and modes of observation. Discoveries made at the JRB-SCM CZO will improve our ability to predict CZ response to changes in climate and land cover, which is immediately useful to regional resource managers and will ultimately inform broader-scale decision making. We coordinate closely with other CZOs to support data collection, storage, and dissemination. Our education and outreach activities are built upon other highly effective educational efforts developed and led at UA. We are developing a range of products and activities for K-16 students, the general public, and stakeholders, including summer Observatory field experiences for local high school and undergraduate students, graduate courses, and field camps in earth science, as well as coordination of related efforts by other science centers active in the region. We invite new investigators throughout the global earth sciences community to conduct novel and collaborative research at the JRB-SCM CZO.</aabstract>
+               <valuecount>2909613</valuecount>
+               <variablecount>6</variablecount>
+               <sitecount>7</sitecount>
+               <ServiceID>177</ServiceID>
+               <NetworkName>czo_catalina</NetworkName>
+               <minx>-110.8395</minx>
+               <miny>32.4262</miny>
+               <maxx>-110.7404</maxx>
+               <maxy>32.55995</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Muddy River Water Quality Monitoring Project</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=181</ServiceDescriptionURL>
+               <Email>fhellweger@gmail.com</Email>
+               <phone>(617) 373-3992</phone>
+               <organization>Northeastern University</organization>
+               <orgwebsite>http://www.muddyrivermmoc.org/index.html</orgwebsite>
+               <citation>Hellweger, F. L., Wei, I., Mathew, M., Jain, K., 2007. Muddy River water quality monitoring sampling and analysis plan. MuddyRiver. Civil &amp; Environmental Engineering Department, Northeastern University, Boston. Data retrieved from CUAHSI HIS on March 18, 2011. </citation>
+               <aabstract>The Muddy River is located in Brookline and Boston, Massachusetts and is tributary to the lower Charles River. The watershed has drainage area of 6.32 mi2, an average slope of 7.2 percent and mixed land use (46% single family, 14% multi-family, 10%
+commercial, 16% urban open, 7% forest, 7% other, USGS). The river has been altered
+significantly from its natural form. It is part of the Emerald Necklace park system
+designed by Frederick Law Olmsted in the late 1800’s. The Muddy River is designated
+by the MA DEP as Class B (fishable, swimmable)The Muddy River, like many other urban rivers, has been subject to significant pollution,
+including combined sewer discharges, urban runoff discharges, shoreline encroachment,
+culverting, etc. Several recent floods have caused significant property damage and recent studies have identified water quality concerns, which lead to the Muddy River Restoration Project.
+Northeastern University carried out a 3-year water quality monitoring project. Samples were collected three times per quarter, from 14 stations and analyzed for 36 parameters. Details of the procedures were presented previously in the Sampling and Analysis Plan (SAP) (dated April 13, 2007). The historical data were summarized in a Historical Data Report (dated March 7, 2007). Data, including data quality results and discussion were
+submitted on a quarterly basis in 13 Data Reports. The purpose of this final report is to summarize and discuss the data, and to provide recommendations for future studies.</aabstract>
+               <valuecount>9290</valuecount>
+               <variablecount>31</variablecount>
+               <sitecount>14</sitecount>
+               <ServiceID>181</ServiceID>
+               <NetworkName>MuddyRiver</NetworkName>
+               <minx>-71.1179</minx>
+               <miny>42.32238</miny>
+               <maxx>-71.09175</maxx>
+               <maxy>42.34918</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/glacialridge/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Glacial Ridge Project</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=185</ServiceDescriptionURL>
+               <Email>philgerla@mail.und.nodak.edu</Email>
+               <phone>701-777-3305</phone>
+               <organization>University of North Dakota</organization>
+               <orgwebsite>http://www.geology.und.nodak.edu/gerla</orgwebsite>
+               <citation>Gerla, P., R. Whitaker, and S. Trobec. 2011. Water quality data from Judicial Ditch 66 and vicinity, Glacial Ridge Project, Mentor, Minnesota. GlacialRidge. The Nature Conservancy - Minnesota, North Dakota, and South Dakota Chapter and the University of North Dakota. Data retrieved from CUAHSI HIS on April 25, 2011.</citation>
+               <aabstract>In 2000, The Nature Conservancy Minnesota Chapter purchased the 10,000 ha Tilden Farms property near Crookston, northwestern Minnesota. During the following decade, the cultivated and grazed lands that comprised the property were restored to perennial prairie and wetland. These lands are now being turned over to the U.S. Fish and Wildlife Service for inclusion and management within the Glacial Ridge National Wildlife Refuge. As reconstructed tracts mature, on-going monitoring reveals the changes in water quality, runoff, and groundwater recharge at selected locations.
+</aabstract>
+               <valuecount>1771</valuecount>
+               <variablecount>30</variablecount>
+               <sitecount>22</sitecount>
+               <ServiceID>185</ServiceID>
+               <NetworkName>GlacialRidge</NetworkName>
+               <minx>-96.32533</minx>
+               <miny>47.72691</miny>
+               <maxx>-96.26686</maxx>
+               <maxy>47.75981</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydrodb.uta.edu/nws_wgrfc_hourly_mpe/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>NWS-WGRFC Hourly Multi-sensor Precipitation Estimates</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=187</ServiceDescriptionURL>
+               <Email>mcenery@uta.edu</Email>
+               <phone>(817) 272-0234</phone>
+               <organization>NOAA&apos;s National Weather Service West Gulf River Forecast Center</organization>
+               <orgwebsite>http://www.srh.noaa.gov/wgrfc/</orgwebsite>
+               <citation>MPE data  from NWS-WGRFC</citation>
+               <aabstract>The precipitation data are quality-controlled, multi-sensor (radar, satellite, and rain gauge) precipitation estimates from National Weather Service (NWS) West Gulf River Forecast Center (WGRFC). The original data are in XMRG format and projected in the Hydrologic Rainfall Analysis Project (HRAP) grid coordinate system, a polar stereographic projection true at 60°N / 105°W. The data represent the 1-hour precipitation estimates for each HRAP grid cell located within the WGRFC boundaries.</aabstract>
+               <valuecount>2147483647</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>69830</sitecount>
+               <ServiceID>187</ServiceID>
+               <NetworkName>NWS-WGRFC_Hourly_MPE</NetworkName>
+               <minx>-108.7541</minx>
+               <miny>24.8692</miny>
+               <maxx>-93.1711</maxx>
+               <maxy>38.4404</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydrodb.uta.edu/nws_wgrfc_daily_mpe/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>NWS-WGRFC Daily Multi-sensor Precipitation Estimates</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=188</ServiceDescriptionURL>
+               <Email>mcenery@uta.edu</Email>
+               <phone>(817) 272-0234</phone>
+               <organization>NOAA&apos;s National Weather Service West Gulf River Forecast Center</organization>
+               <orgwebsite>http://www.srh.noaa.gov/wgrfc/</orgwebsite>
+               <citation>MPE data from NWS-WGRFC</citation>
+               <aabstract>The precipitation data are quality-controlled, multi-sensor (radar, satellite, and rain gauge) precipitation estimates from National Weather Service (NWS) West Gulf River Forecast Center. The original data are in XMRG format and projected in the Hydrologic Rainfall Analysis Project (HRAP) grid coordinate system, a polar stereographic projection true at 60°N / 105°W. The data represent the 24-hour precipitation estimates for each HRAP grid cell.</aabstract>
+               <valuecount>427150110</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>69830</sitecount>
+               <ServiceID>188</ServiceID>
+               <NetworkName>NWS-WGRFC_Daily_MPE</NetworkName>
+               <minx>-108.7541</minx>
+               <miny>24.8692</miny>
+               <maxx>-93.1711</maxx>
+               <maxy>38.4404</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydrodb.uta.edu/nws_wgrfc_daily_mpe_recent_values/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>NWS-WGRFC Daily Multi-sensor Precipitation Estimates Recent Values</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=189</ServiceDescriptionURL>
+               <Email>mcenery@uta.edu</Email>
+               <phone>(817) 272-0234</phone>
+               <organization>NOAA&apos;s National Weather Service West Gulf River Forecast Center</organization>
+               <orgwebsite>http://www.srh.noaa.gov/wgrfc/</orgwebsite>
+               <citation>MPE data from NWS-WGRFC</citation>
+               <aabstract>The precipitation data are quality-controlled, multi-sensor (radar, satellite, and rain gauge) precipitation estimates from National Weather Service (NWS) West Gulf River Forecast Center. The original data are in XMRG format and projected in the Hydrologic Rainfall Analysis Project (HRAP) grid coordinate system, a polar stereographic projection true at 60°N / 105°W. The data represent the 24-hour precipitation estimates for each HRAP grid cell.</aabstract>
+               <valuecount>20878881</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>69830</sitecount>
+               <ServiceID>189</ServiceID>
+               <NetworkName>NWS_WGRFC_Daily_MPE_Recent_Values</NetworkName>
+               <minx>-108.7541</minx>
+               <miny>24.8692</miny>
+               <maxx>-93.1711</maxx>
+               <maxy>38.4404</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydrodb.uta.edu/nws_wgrfc_hourly_mpe_recent_values/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>NWS-WGRFC Hourly Multi-sensor Precipitation Estimates Recent Values</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=190</ServiceDescriptionURL>
+               <Email>mcenery@uta.edu</Email>
+               <phone>(817) 272-0234</phone>
+               <organization>NOAA&apos;s National Weather Service West Gulf River Forecast Center</organization>
+               <orgwebsite>http://www.srh.noaa.gov/wgrfc/</orgwebsite>
+               <citation>MPE data from NWS-WGRFC</citation>
+               <aabstract>The precipitation data are quality-controlled, multi-sensor (radar, satellite, and rain gauge) precipitation estimates from National Weather Service (NWS) West Gulf River Forecast Center. The original data are in XMRG format and projected in the Hydrologic Rainfall Analysis Project (HRAP) grid coordinate system, a polar stereographic projection true at 60°N / 105°W. The data represent the 1-hour precipitation estimates for each HRAP grid cell.</aabstract>
+               <valuecount>532023388</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>69830</sitecount>
+               <ServiceID>190</ServiceID>
+               <NetworkName>NWS-WGRFC_Hourly_MPE_Recent_Values</NetworkName>
+               <minx>-108.7541</minx>
+               <miny>24.8692</miny>
+               <maxx>-93.1711</maxx>
+               <maxy>38.4404</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://nmhis.unm.edu/RGETWells/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Rio-ET Wells: Groundwater wells in the Middle Rio Grande</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=191</ServiceDescriptionURL>
+               <Email>jcoonrod@unm.edu</Email>
+               <phone>505-277-3233</phone>
+               <organization>University of New Mexico</organization>
+               <orgwebsite>http://bosque.unm.edu/</orgwebsite>
+               <citation>J. Cleverly, C. Dahm, J. Coonrod, K. Vanderbilt, 1999-2008, Evapotranspiration tower and well data, Rio-ET: Evapotranspiration Studies in the Middle Rio Grande, University of New Mexico</citation>
+               <aabstract>Restoration efforts that remove non-native understory vegetation or dense monotypic stands of non-native vegetation from riparian zones (the bosque) are designed to reduce consumption of water. Quantification of the response of evapotranspiration (ET) and water table depths to non-native understory removal or to eradication of dense stands of non-native species like salt cedar or Russian olive is needed to provide defensible estimates of potential water-savings from restoration activities. In addition to restoration assessment, it is also important to monitor the effects the increasing roles of fire and post-burn management have on ET and water tables. We monitored the ET and water table responses of a site with understory removed (Albuquerque South Valley).</aabstract>
+               <valuecount>4239527</valuecount>
+               <variablecount>2</variablecount>
+               <sitecount>28</sitecount>
+               <ServiceID>191</ServiceID>
+               <NetworkName>RioGrandeETWells</NetworkName>
+               <minx>-106.9036</minx>
+               <miny>33.7808</miny>
+               <maxx>-106.6824</maxx>
+               <maxy>35.12675</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://river.sdsc.edu/WaterOneFlow/Coweeta/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Coweeta Hydrologic Laboratory Public Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=192</ServiceDescriptionURL>
+               <Email>goodall@cec.sc.edu</Email>
+               <phone>803-777-8184</phone>
+               <organization>Coweeta Hydrologic Laboratory and LTER</organization>
+               <orgwebsite>http://coweeta.uga.edu</orgwebsite>
+               <citation>Please see the following website for citation information. http://coweeta.uga.edu/policies/publication</citation>
+               <aabstract>A portion of the publicly available data from Coweeta Hydrologic Laboratory included in HIS for testing and demonstration purposes.  Coweeta is one of the oldest continuous environmental studies in North America, Coweeta is based in the eastern deciduous forest of the southern Appalachian Mountains, and the centerpiece of a long-term cooperation between the University of Georgia and the USDA Forest Service. The Coweeta Hydrologic Laboratory is an experimental forest within the USDA Forest Service Southern Research Station.  USFS scientists have monitored streamflow and climate on several gaged watersheds within the Coweeta basin since 1934, and atmospheric deposition and stream chemistry since 1972.   In addition, the Coweeta Hydrologic Lab is a National Science Foundation  LTER site.  The Coweeta LTER has evolved from a site-based to a site- and region-based project centering on the effects of disturbance and environmental gradients on biogeochemical cycling, and the underlying watershed ecosystem processes that regulate and respond to those ecological cycles. The current Coweeta LTER research program, entitled &quot;&quot;Southern Appalachia on the Edge&quot;&quot; focuses on the impacts that exurbanization and climate change are having on water quality, water quantity, and other ecosytem services. </aabstract>
+               <valuecount>129663</valuecount>
+               <variablecount>5</variablecount>
+               <sitecount>2</sitecount>
+               <ServiceID>192</ServiceID>
+               <NetworkName>COWEETA</NetworkName>
+               <minx>-83.436</minx>
+               <miny>35.05116</miny>
+               <maxx>-83.43333</maxx>
+               <maxy>35.06667</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro10.sdsc.edu/cosmos/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Cosmic-ray Soil Moisture Observation System</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=193</ServiceDescriptionURL>
+               <Email>marek@hwr.arizona.edu</Email>
+               <phone>520-621-4072</phone>
+               <organization>University of Arizona</organization>
+               <orgwebsite>http://www.arizona.edu</orgwebsite>
+               <citation>Zreda, M., D. Desilets, T.P.A. Ferre and R.L. Scott, 2008, Measuring soil moisture content non-invasively at intermediate spatial scale using cosmic-ray neutrons. Geophysical Research Letters 35, L21402, doi:10.1029/2008GL035655.</citation>
+               <aabstract>COSMOS is an NSF supported project to measure soil moisture on horizontal scales of ~300 m and depths of 50 cm using cosmic-ray generated neutrons.</aabstract>
+               <valuecount>13177</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>32</sitecount>
+               <ServiceID>193</ServiceID>
+               <NetworkName>COSMOS</NetworkName>
+               <minx>-155.4234</minx>
+               <miny>19.765</miny>
+               <maxx>8.9934</maxx>
+               <maxy>50.503</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydrodata.info/webservices/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Central European Climate Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=196</ServiceDescriptionURL>
+               <Email>jirikadlec2@gmail.com</Email>
+               <phone>208-313-8076</phone>
+               <organization>Charles University Prague</organization>
+               <orgwebsite>http://hydro.natur.cuni.cz</orgwebsite>
+               <citation>Kadlec, J. and Mazanec,L. 2011. Central European Daily Precipitation and Air Temperature Data. Central European Climate Network. Research Group of Hydrology &amp; Climatology, Charles University in Prague, Faculty of Science. Data retrieved fro CUAHSI HIS on July 28, 2011. </citation>
+               <aabstract>The quality controlled daily values come from following sources: NOAA synoptic stations, ECA&amp;D European Climate assessment dataset, GHCN historical climate station network and several volunteer observatories. An automated quality control algorithm is run before publishing the values through the service. Data is available for Czechia, Slovakia, Poland, Hungary, Austria and Germany and is updated on a weekly basis.</aabstract>
+               <valuecount>6387509</valuecount>
+               <variablecount>4</variablecount>
+               <sitecount>354</sitecount>
+               <ServiceID>196</ServiceID>
+               <NetworkName>HCLIMATE</NetworkName>
+               <minx>6.05</minx>
+               <miny>46</miny>
+               <maxx>23.617</maxx>
+               <maxy>54.917</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/UMass_ARM/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>WRRC Acid Rain Monitoring Project</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=198</ServiceDescriptionURL>
+               <Email>esfinn@tei.umass.edu</Email>
+               <phone>413-545-5979</phone>
+               <organization>Massachusetts Water Resources Research Center</organization>
+               <orgwebsite>http://www.umass.edu/tei/wrrc/arm/index.html</orgwebsite>
+               <citation>Hatte, M. and Finn, E. 2011. Acid Rain Monitoring data. State of Massachusetts. Acid Rain Monitoring Project, Water Resources Research Center, University of Massachusetts, Amherst.</citation>
+               <aabstract>The Acid Rain Monitoring Project began at the University of Massachusetts Water Resources Research Center in 1983. The project&apos;s mission was initially to develop a comprehensive picture of the sensitivity of Massachusetts surface waters to acid deposition, and later evolved to determine long-term trends in this sensitivity. </aabstract>
+               <valuecount>14856</valuecount>
+               <variablecount>15</variablecount>
+               <sitecount>321</sitecount>
+               <ServiceID>198</ServiceID>
+               <NetworkName>UMass_ARM</NetworkName>
+               <minx>-73.4244</minx>
+               <miny>41.5469</miny>
+               <maxx>-69.9833</maxx>
+               <maxy>42.8667</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://icewater.boisestate.edu/srbdataservices/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Snake River Basin, Modeled Streamflow</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=199</ServiceDescriptionURL>
+               <Email>vsridhar@boisestate.edu</Email>
+               <phone>208-426-3710</phone>
+               <organization>Boise State University, Civil Engineering</organization>
+               <orgwebsite>http://coen.boisestate.edu/ce/home.asp</orgwebsite>
+               <citation>Dr.Venkataramana Sridhar, 2011, VIC Modeled Streamflow, Idaho, Boise State University.</citation>
+               <aabstract>Preliminary Streamflow simulated by the Variable Infiltration Capacity (VIC) model.  A file is created for each climate model and emission scenario. Daily values of streamflow in this dataset is the routed flow for a specific location using the routing algorithm after the surface runoff is calculated by the hydrology model. The daily dischage is the daily average in cubic feet per second (cfs) at the mid day (1200 hour).  Terrestrial Hydroclimate Simulation Lab (Civil Engineering), Boise State University,Boise, Idaho. </aabstract>
+               <valuecount>32872</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>1</sitecount>
+               <ServiceID>199</ServiceID>
+               <NetworkName>SRB</NetworkName>
+               <minx>-111.905</minx>
+               <miny>43.8258</miny>
+               <maxx>-111.905</maxx>
+               <maxy>43.8258</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://water.sdsc.edu/WaterOneFlow/DEOS/v1_0/cuahsi_1_0.asmx</servURL>
+               <Title>Delaware Environmental Observing System</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=208</ServiceDescriptionURL>
+               <Email/>
+               <phone/>
+               <organization>University of Deleware</organization>
+               <orgwebsite>http://www.deos.udel.edu/</orgwebsite>
+               <citation/>
+               <aabstract>The Delaware Environmental Observing System (DEOS) is a support tool for decision makers involved with emergency management, natural resource monitoring, transportation, and other activities throughout the State of Delaware. Our primary goal is to provide state agencies and the citizens of Delaware with immediate information about environmental conditions in and around the State. DEOS also archives data for historical environmental studies and research.</aabstract>
+               <valuecount>3691045</valuecount>
+               <variablecount>16</variablecount>
+               <sitecount>41</sitecount>
+               <ServiceID>208</ServiceID>
+               <NetworkName>DEOS</NetworkName>
+               <minx>-75.84637</minx>
+               <miny>38.46501</miny>
+               <maxx>-75.05415</maxx>
+               <maxy>39.87167</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ly-uc2.ceas1.uc.edu/EFW/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>EPA - East Fork Watershed in Ohio</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=216</ServiceDescriptionURL>
+               <Email/>
+               <phone/>
+               <organization>EPA-EFW</organization>
+               <orgwebsite>http://www.uc.edu</orgwebsite>
+               <citation>Test Data from the EPA East Fork Watershed in Ohio. Data is not quality controlled. </citation>
+               <aabstract>Test Data from the EPA East Fork Watershed in Ohio. Data is not quality controlled. </aabstract>
+               <valuecount>5587751</valuecount>
+               <variablecount>55</variablecount>
+               <sitecount>128</sitecount>
+               <ServiceID>216</ServiceID>
+               <NetworkName>EFW</NetworkName>
+               <minx>-85</minx>
+               <miny>38.96139</miny>
+               <maxx>-83.68139</maxx>
+               <maxy>40</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/LaSelvastreamdischarge/cuahsi_1_1.asmx?WSDL </servURL>
+               <Title>La Selva Hydrologic Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=217</ServiceDescriptionURL>
+               <Email>genereux@ncsu.edu</Email>
+               <phone>(919) 515-6017</phone>
+               <organization>North Carolina State University, Department of Marine, Earth and Atmospheric Sciences</organization>
+               <orgwebsite>http://www.ots.ac.cr/meteoro/default.php?pestacion=2</orgwebsite>
+               <citation>Genereux, D.P., and C. Zanon.  2011.  Stage and Discharge Data for Two Small Streams in a Costa Rican Rain Forest, La Selva Biological Station, 2006-2010.  Published on-line at http://www.ots.ac.cr/meteoro/default.php?pestacion=2, 14 September 2011.</citation>
+               <aabstract>During the first half of 1998 two sharp-crested V-notch weirs were constructed at La Selva Biological Station in Costa Rica (a research station owned and operated by the Organization for Tropical Studies, OTS) to measure volumetric stream discharge (streamflow).  A 90-degree weir was built on the Taconazo stream, several meters upstream of where the SUR trail (Sendero Sura) crosses the stream.  A 120 degree weir was built on the Arboleda stream, several meters upstream of the confluence of this stream with the Sura stream.  This data set reports 15-minute stage and discharge values for each weir, for the five calendar years 2006-2010.  Complete meta data can be found on the OTS web site at: http://www.ots.ac.cr/meteoro/default.php?pestacion=2</aabstract>
+               <valuecount>678962</valuecount>
+               <variablecount>5</variablecount>
+               <sitecount>2</sitecount>
+               <ServiceID>217</ServiceID>
+               <NetworkName>LaSelvastreamdischarge</NetworkName>
+               <minx>-84.013</minx>
+               <miny>10.42917</miny>
+               <maxx>-84.001</maxx>
+               <maxy>10.43214</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://his.rvca.ca/rvca/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Rideau Valley Conservation Authority Water Quality Data Service</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=218</ServiceDescriptionURL>
+               <Email/>
+               <phone/>
+               <organization/>
+               <orgwebsite/>
+               <citation/>
+               <aabstract/>
+               <valuecount>140299</valuecount>
+               <variablecount>43</variablecount>
+               <sitecount>484</sitecount>
+               <ServiceID>218</ServiceID>
+               <NetworkName>RVCA_WQuality</NetworkName>
+               <minx>-76.8424</minx>
+               <miny>44.6126</miny>
+               <maxx>-75.60982</maxx>
+               <maxy>45.08966</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/TuolumneMdw/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Mountain Meadow Restoration with a Changing Climate</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=219</ServiceDescriptionURL>
+               <Email>jdlund@u.washington.edu</Email>
+               <phone>206-685-7594</phone>
+               <organization>University of Washington - Seattle</organization>
+               <orgwebsite>http://faculty.washington.edu/jdlund/research/</orgwebsite>
+               <citation>Lundquist, J.L., S.P. Loheide, F. C. Lott, C.S. Lowry, and C.E. Moore (2011) Monitoring Data collected in Tuolumne Meadows, Yosemite National Park, CA, USA, University of Washington – Seattle.  </citation>
+               <aabstract>The Mountain Meadow Restoration with a Changing Climate project was initiated in 2007, continuing until 2011. The project was funded by the National Science Foundation under grant no. 0729830. Data was collected on the Tuolumne River and its tributaries, as well as shallow groundwater levels within Tuolumne Meadows in Yosemite National Park. Data was collected manually, as well as with long term loggers at select locations, by the Univ. of WA and WI in collaboration with the National Park Service. The monitoring network consists of water temperature and discharge, and groundwater levels. Most sites are considered low-impact wilderness installations and as of 2011, select sites have been discontinued.</aabstract>
+               <valuecount>536</valuecount>
+               <variablecount>5</variablecount>
+               <sitecount>9</sitecount>
+               <ServiceID>219</ServiceID>
+               <NetworkName>TuolumneMdw</NetworkName>
+               <minx>-119.3814</minx>
+               <miny>37.8693</miny>
+               <maxx>-119.3311</maxx>
+               <maxy>37.88333</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/hassberge/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Hassberge catchment long-Term monitoring data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=220</ServiceDescriptionURL>
+               <Email/>
+               <phone/>
+               <organization>Technische University Manchen</organization>
+               <orgwebsite>http://mds.sommer.at/Web-Service-Admintool/index.php</orgwebsite>
+               <citation>Klaus, J., 2011. Preferential flow in a cultivated lower meso-scale catchment: observation, modelling and implications for solute transport. PhD-thesis, Technical University MŸnchen, MŸnchen, Germany.</citation>
+               <aabstract>In the Hassberge catchment meteorological and hydrological data have been monitored at a high temporal resolution from 2008 to 2011. This project was funded by Deutsche Forschungsgemeinschaft (DFG), project numbers SCHR 1000/3-1 and ZE 533/5-1.</aabstract>
+               <valuecount>899150</valuecount>
+               <variablecount>10</variablecount>
+               <sitecount>1</sitecount>
+               <ServiceID>220</ServiceID>
+               <NetworkName>Hassberge</NetworkName>
+               <minx>10.58601</minx>
+               <miny>50.05576</miny>
+               <maxx>10.58601</maxx>
+               <maxy>50.05576</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/weiherbach/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Weiherbach catchment long-Term monitoring data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=221</ServiceDescriptionURL>
+               <Email/>
+               <phone/>
+               <organization>Karlsruher Institut fur Technologie</organization>
+               <orgwebsite>http://mds.sommer.at/Web-Service-Admintool/index.php</orgwebsite>
+               <citation>Klaus, J. and Zehe, E.: A novel explicit approach to model bromide and pesticide transport in connected soil structures, Hydrol. Earth Syst. Sci., 15, 2127-2144, doi:10.5194/hess-15-2127-2011, 2011. </citation>
+               <aabstract>The Weiherbach catchment is an extensively studied hydrological catchment. Starting from the 1990&apos;s there have been ongoing hydrological measurement campaigns in the Weiherbach area, which is an intensively used agricultural area. Many PhD theses have been written on the hydrological behaviour of the catchment. Future research projects are already planned which will allow for continuation of the monitoring. This project was funded by Deutsche Forschungsgemeinschaft (DFG), project numbers SCHR 1000/3-1 and ZE 533/5-1.</aabstract>
+               <valuecount>1160910</valuecount>
+               <variablecount>10</variablecount>
+               <sitecount>1</sitecount>
+               <ServiceID>221</ServiceID>
+               <NetworkName>Weiherbach</NetworkName>
+               <minx>8.739691</minx>
+               <miny>49.1411</miny>
+               <maxx>8.739691</maxx>
+               <maxy>49.1411</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydrodb.uta.edu/ABRFC_Data/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>NWS-ABRFC Hourly Multi Sensor Precipitation Estimates</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=225</ServiceDescriptionURL>
+               <Email>mcenery@uta.edu</Email>
+               <phone>(817)272-0234</phone>
+               <organization>NOAA&apos;s National Weather Service Arkansas-Red Basin River Forecast Center</organization>
+               <orgwebsite>http://www.srh.noaa.gov/abrfc/</orgwebsite>
+               <citation>MPE data from NWS-ABRFC</citation>
+               <aabstract>The precipitation data are quality-controlled, multi-sensor (radar, satellite, and rain gauge) precipitation estimates from National Weather Service (NWS) Arkansas-Red Basin River Forecast Center. The original data are in XMRG format and projected in the Hydrologic Rainfall Analysis Project (HRAP) grid coordinate system, a polar stereographic projection true at 60°N / 105°W. The data represent the 24-hour precipitation estimates for each HRAP grid cell.</aabstract>
+               <valuecount>414791784</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>33036</sitecount>
+               <ServiceID>225</ServiceID>
+               <NetworkName>ABRFC_Data</NetworkName>
+               <minx>-106.5677</minx>
+               <miny>33.3947</miny>
+               <maxx>-92.0254</maxx>
+               <maxy>39.3723</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydrodb.uta.edu/LMRFC_Data/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>NWS-LMRFC Hourly Multi Sensor Precipitation Estimates</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=226</ServiceDescriptionURL>
+               <Email>mcenery@uta.edu</Email>
+               <phone>(817)272-0234</phone>
+               <organization>NOAA&apos;s National Weather Service Lower Mississippi River Forecast Center</organization>
+               <orgwebsite>http://www.srh.noaa.gov/lmrfc/</orgwebsite>
+               <citation>MPE data from NWS-LMRFC </citation>
+               <aabstract>The precipitation data are quality-controlled, multi-sensor (radar, satellite, and rain gauge) precipitation estimates from National Weather Service (NWS) Lower Missisippi River Forecast Center. The original data are in XMRG format and projected in the Hydrologic Rainfall Analysis Project (HRAP) grid coordinate system, a polar stereographic projection true at 60°N / 105°W. The data represent the 24-hour precipitation estimates for each HRAP grid cell. </aabstract>
+               <valuecount>2164500</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>33300</sitecount>
+               <ServiceID>226</ServiceID>
+               <NetworkName>LMRFC_Data</NetworkName>
+               <minx>-96.2134</minx>
+               <miny>28.9833</miny>
+               <maxx>-81.2691</maxx>
+               <maxy>38.173</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydrodb.uta.edu/USACE_Data/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>USACE Hourly Reservoir Discharges values </Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=227</ServiceDescriptionURL>
+               <Email>mcenery@uta.edu</Email>
+               <phone>(817)272-0234</phone>
+               <organization>US Army Crops of Engineers</organization>
+               <orgwebsite>http://www.usace.army.mil</orgwebsite>
+               <citation>Hydrologic data from NWIS-USACE</citation>
+               <aabstract>Hourly Reservoir Discharges Provided by Ft Worth Reservoir Control Branch USACE.</aabstract>
+               <valuecount>74272</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>42</sitecount>
+               <ServiceID>227</ServiceID>
+               <NetworkName>USACE_Data</NetworkName>
+               <minx>-100.5381</minx>
+               <miny>29.86861</miny>
+               <maxx>-93.92</maxx>
+               <maxy>33.35528</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/shalenetwork/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Shale Network</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=228</ServiceDescriptionURL>
+               <Email>sxb7@psu.edu</Email>
+               <phone>814-865-1619</phone>
+               <organization>Shale Network</organization>
+               <orgwebsite>http://www.shalenetwork.org</orgwebsite>
+               <citation>ShaleNetwork Database</citation>
+               <aabstract>The ShaleNetwork is a group of individuals working together to organize water quality and quantity data in regions where shale gas is being exploited. The Steering Committee of the ShaleNetwork derive from Dickinson College, Pitt University, Penn State, and the Consortium of Universities for the Advancement of Hydrologic Sciences, Inc. This group was funded by the National Science Foundation in October 2011 to put together the database and to run annual workshops between 2012 and 2015. The ShaleNetwork database will connect researchers, agencies, industry representatives, and community organizers together to generate societally-relevant knowledge from data collected by diverse groups of scientists and citizens. The ShaleNetwork acts as an “honest broker” that collates datasets and learns and teaches how to synthesize that data into useful knowledge. The network will be informed by the understanding developed by Dickinson Colleges&apos; ALLARM program over the last 25 years working with citizen scientists. The ALLARM approach stresses that observational data can act like a “canary in a coal mine” to help communities. </aabstract>
+               <valuecount>607587</valuecount>
+               <variablecount>646</variablecount>
+               <sitecount>1244</sitecount>
+               <ServiceID>228</ServiceID>
+               <NetworkName>ShaleNetworkODM</NetworkName>
+               <minx>-82.51318</minx>
+               <miny>37.30058</miny>
+               <maxx>-74.81329</maxx>
+               <maxy>43.05</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydrodata.info/ghcn/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>GHCN Daily Climate Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=229</ServiceDescriptionURL>
+               <Email>kadljiri@isu.edu</Email>
+               <phone/>
+               <organization>Idaho State University</organization>
+               <orgwebsite>http://gsl.geology.isu.edu</orgwebsite>
+               <citation>Peterson, Thomas C. and Russell S. Vose (1997). &quot;An overview of the Global Historical Climatology Network temperature data base&quot;. Bulletin of the American Meteorological Society 78 (12): 2837–2849.</citation>
+               <aabstract>The Global Historical Climate Network (GHCN) provides quality-controlled precipitation and temperature time series data. The goal of this web service is to make the GHCN precipitation data available through the CUAHSI Hydrologic Information system.</aabstract>
+               <valuecount>737500901</valuecount>
+               <variablecount>4</variablecount>
+               <sitecount>12331</sitecount>
+               <ServiceID>229</ServiceID>
+               <NetworkName>GHCN</NetworkName>
+               <minx>-124.73</minx>
+               <miny>25.01</miny>
+               <maxx>-66.99</maxx>
+               <maxy>48.99</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://adventurelearningat.com/his/services/cuahsi_1_1.php?WSDL</servURL>
+               <Title>McCall Outdoor Science School - Testing HydroServer Lite</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=230</ServiceDescriptionURL>
+               <Email>kadljiri@isu.edu</Email>
+               <phone>208-313-8076</phone>
+               <organization>Idaho State University</organization>
+               <orgwebsite>http://gsl.geology.isu.edu/</orgwebsite>
+               <citation>Kadlec, J., Ames, D.P (2012) Development and Deployment of a lightweight hydroserver and data hosting website</citation>
+               <aabstract>MyHydroServer is a lightweight hydrologic data server. Currently we are testing it with data from the Brdy and south east Idaho region.</aabstract>
+               <valuecount>201</valuecount>
+               <variablecount>23</variablecount>
+               <sitecount>9</sitecount>
+               <ServiceID>230</ServiceID>
+               <NetworkName>MOSS2</NetworkName>
+               <minx>-116.0739</minx>
+               <miny>35.78</miny>
+               <maxx>-106.69</maxx>
+               <maxy>44.83144</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://drought.usu.edu/usbrreservoirs/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>USBR Upper Colorado River Basin Reservoir Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=240</ServiceDescriptionURL>
+               <Email>jeff.horsburgh@usu.edu</Email>
+               <phone>435-797-2946</phone>
+               <organization>United States Bureau of Reclamation</organization>
+               <orgwebsite>http://www.usbr.gov</orgwebsite>
+               <citation>USBR, (2012), Reservoir data obtained from the USBR Upper Colorado River basin web service, United States Bureau of Reclamation</citation>
+               <aabstract>This web service provides access to reservoir pool elevation, storage, inflow, and outflow data as published by the United States Bureau of Reclamation for reservoirs in the Upper Colorado River basin.  The web service retrieves data from the USBR website, formats it as WaterML, and returns it to the user.  This web service was developed by Utah State University as part of a National Integrated Droungt Information System Project sponsored by the United States Geological Survey.  </aabstract>
+               <valuecount>2554419</valuecount>
+               <variablecount>7</variablecount>
+               <sitecount>61</sitecount>
+               <ServiceID>240</ServiceID>
+               <NetworkName>UCRB_USBR</NetworkName>
+               <minx>-112.1319</minx>
+               <miny>32.54667</miny>
+               <maxx>-104.3786</maxx>
+               <maxy>42.24917</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://drought.usu.edu/snotel/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>NRCS SNOTEL Standard Variables</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=241</ServiceDescriptionURL>
+               <Email>jeff.horsburgh@usu.edu</Email>
+               <phone>435-797-2946</phone>
+               <organization>Natural Resources Conservation Service</organization>
+               <orgwebsite>http://www.wcc.nrcs.usda.gov/snow/</orgwebsite>
+               <citation>NRCS, (2012), Data obtained from the NRCS SNOTEL WaterOneFlow web service, Natural Resources Conservation Service.</citation>
+               <aabstract>This web service provides access to daily values for the 6 standard variables measured at NRCS SNOTEL sites as published by the NRCS.  These variables include snow water equivalent, precipitation, water year to date precipitation, and daily minimum, maximum, and average air temperature. The web service retrieves data from the NRCS SNOTEL website, formats it as WaterML, and returns it to the user. This web services was developed by Utah State University as part of a National Integrated Drought Information System (NIDIS) project sponsored by the United States Geological Survey.</aabstract>
+               <valuecount>40348234</valuecount>
+               <variablecount>6</variablecount>
+               <sitecount>857</sitecount>
+               <ServiceID>241</ServiceID>
+               <NetworkName>SNOTEL</NetworkName>
+               <minx>-164.2833</minx>
+               <miny>32.91667</miny>
+               <maxx>-103.7833</maxx>
+               <maxy>70.25</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://drought.usu.edu/ncdc_l1/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>NCDC Upper Colorado River Basin Precipitation</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=242</ServiceDescriptionURL>
+               <Email>jeff.horsburgh@usu.edu</Email>
+               <phone>435-797-2946</phone>
+               <organization>National Oceanic and Atmospheric Administration (NOAA ) National Climatic Data Center (NCDC)</organization>
+               <orgwebsite>http://www.ncdc.noaa.gov/oa/ncdc.html</orgwebsite>
+               <citation>NCDC, (2012), Precipitation data obtained from the NCDC WaterOneFlow web service for the Upper Colorado River basin, National Climatic Data Center</citation>
+               <aabstract>This web service provides access to precipitation data for sites within or near the Upper Colorado River basin.  The web services retrieves data from the National Oceanic and Atmospheric Administration (NOAA) National Climatic Data Center (NCDC), formats it as WaterML, and returns it to the user.  This web service was developed by Utah State University as part of a National Integrated Drought Information System (NIDIS) project sponsored by the United States Geological Survey.</aabstract>
+               <valuecount>22175270</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>4111</sitecount>
+               <ServiceID>242</ServiceID>
+               <NetworkName>UCRB_NCDC</NetworkName>
+               <minx>-114.0214</minx>
+               <miny>33.8</miny>
+               <maxx>-103.8404</maxx>
+               <maxy>45.0667</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://drought.usu.edu/SNODAS_HUC8/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>SNODAS HUC 8 Model Results</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=243</ServiceDescriptionURL>
+               <Email>jeff.horsburgh@usu.edu</Email>
+               <phone>435-797-2946</phone>
+               <organization>National Operational Hydrologic Remote Sensing Center</organization>
+               <orgwebsite>http://www.nohrsc.nws.gov/</orgwebsite>
+               <citation>National Operational Hydrologic Remote Sensing Center. 2004. Snow Data Assimilation System (SNODAS) data products at NSIDC. Boulder, CO: National Snow and Ice Data Center. Digital media.</citation>
+               <aabstract>This data set contains output from the NOAA National Weather Service&apos;s National Operational Hydrologic Remote Sensing Center (NOHRSC) SNOw Data Assimilation System (SNODAS). SNODAS is a modeling and data assimilation system developed by NOHRSC to provide the best possible estimates of snow cover and associated parameters to support hydrologic modeling and analysis. The aim of SNODAS is to provide a physically consistent framework to integrate snow data from satellite, airborne platforms, and ground stations with model estimates of snow cover (Carroll et al. 2001). SNODAS includes procedures to ingest and downscale output from the Numerical Weather Prediction (NWP) models, and to simulate snowcover using a physically based, spatially-distributed energy- and mass-balance snow model. SNODAS also includes procedures to assimilate satellite-derived, airborne, and ground-based observations of snow covered area and Snow Water Equivalent (SWE). These data are not suitable for snow fall events or totals for specific regions. For snow fall data, please see the state climatology reports for a particular state. These data are 8-digit USGS Hydrologic Unit (HUC) level summaries of snow cover, snow depth, and snow water equivalent for 8-digit HUC units within the Upper Colorado River basin.  The data were derived from gridded data sets for the continental United States at 1 km spatial resolution and 24 hour temporal resolution.  This WaterOneFlow web service was created by Utah State University as part of a National Integrated Drought Information System (NIDIS) project sponsored by the United States Geological Survey.</aabstract>
+               <valuecount>1050539</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>100</sitecount>
+               <ServiceID>243</ServiceID>
+               <NetworkName>UCRB_SNODAS_HUC8</NetworkName>
+               <minx>-112.5113</minx>
+               <miny>35.10585</miny>
+               <maxx>-105.2492</maxx>
+               <maxy>43.53681</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://drought.usu.edu/SNODAS_HUC10/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>SNODAS HUC 10 Model Results</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=244</ServiceDescriptionURL>
+               <Email>jeff.horsburgh@usu.edu</Email>
+               <phone>435-797-2946</phone>
+               <organization>National Operational Hydrologic Remote Sensing Center</organization>
+               <orgwebsite>http://www.nohrsc.nws.gov/</orgwebsite>
+               <citation>National Operational Hydrologic Remote Sensing Center. 2004. Snow Data Assimilation System (SNODAS) data products at NSIDC. Boulder, CO: National Snow and Ice Data Center. Digital media.</citation>
+               <aabstract>This data set contains output from the NOAA National Weather Service&apos;s National Operational Hydrologic Remote Sensing Center (NOHRSC) SNOw Data Assimilation System (SNODAS). SNODAS is a modeling and data assimilation system developed by NOHRSC to provide the best possible estimates of snow cover and associated parameters to support hydrologic modeling and analysis. The aim of SNODAS is to provide a physically consistent framework to integrate snow data from satellite, airborne platforms, and ground stations with model estimates of snow cover (Carroll et al. 2001). SNODAS includes procedures to ingest and downscale output from the Numerical Weather Prediction (NWP) models, and to simulate snowcover using a physically based, spatially-distributed energy- and mass-balance snow model. SNODAS also includes procedures to assimilate satellite-derived, airborne, and ground-based observations of snow covered area and Snow Water Equivalent (SWE). These data are not suitable for snow fall events or totals for specific regions. For snow fall data, please see the state climatology reports for a particular state. These data are 10-digit USGS Hydrologic Unit (HUC) level summaries of snow cover, snow depth, and snow water equivalent for 10-digit HUC units within the Upper Colorado River basin. The data were derived from gridded data sets for the continental United States at 1 km spatial resolution and 24 hour temporal resolution. This WaterOneFlow web service was created by Utah State University as part of a National Integrated Drought Information System (NIDIS) project sponsored by the United States Geological Survey.</aabstract>
+               <valuecount>6478390</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>632</sitecount>
+               <ServiceID>244</ServiceID>
+               <NetworkName>UCRB_SNODAS_HUC10</NetworkName>
+               <minx>-112.3502</minx>
+               <miny>35.44468</miny>
+               <maxx>-105.455</maxx>
+               <maxy>43.53138</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://drought.usu.edu/SNODAS_HUC12/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>SNODAS HUC 12 Model Results</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=245</ServiceDescriptionURL>
+               <Email>jeff.horsburgh@usu.edu</Email>
+               <phone>435-797-2946</phone>
+               <organization>National Operational Hydrologic Remote Sensing Center</organization>
+               <orgwebsite>http://www.nohrsc.nws.gov/</orgwebsite>
+               <citation>National Operational Hydrologic Remote Sensing Center. 2004. Snow Data Assimilation System (SNODAS) data products at NSIDC. Boulder, CO: National Snow and Ice Data Center. Digital media.</citation>
+               <aabstract>This data set contains output from the NOAA National Weather Service&apos;s National Operational Hydrologic Remote Sensing Center (NOHRSC) SNOw Data Assimilation System (SNODAS). SNODAS is a modeling and data assimilation system developed by NOHRSC to provide the best possible estimates of snow cover and associated parameters to support hydrologic modeling and analysis. The aim of SNODAS is to provide a physically consistent framework to integrate snow data from satellite, airborne platforms, and ground stations with model estimates of snow cover (Carroll et al. 2001). SNODAS includes procedures to ingest and downscale output from the Numerical Weather Prediction (NWP) models, and to simulate snowcover using a physically based, spatially-distributed energy- and mass-balance snow model. SNODAS also includes procedures to assimilate satellite-derived, airborne, and ground-based observations of snow covered area and Snow Water Equivalent (SWE). These data are not suitable for snow fall events or totals for specific regions. For snow fall data, please see the state climatology reports for a particular state. These data are 12-digit USGS Hydrologic Unit (HUC) level summaries of snow cover, snow depth, and snow water equivalent for 12-digit HUC units within the Upper Colorado River basin. The data were derived from gridded data sets for the continental United States at 1 km spatial resolution and 24 hour temporal resolution. This WaterOneFlow web service was created by Utah State University as part of a National Integrated Drought Information System (NIDIS) project sponsored by the United States Geological Survey.</aabstract>
+               <valuecount>18896443</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>3462</sitecount>
+               <ServiceID>245</ServiceID>
+               <NetworkName>UCRB_SNODAS_HUC12</NetworkName>
+               <minx>-112.3631</minx>
+               <miny>35.48411</miny>
+               <maxx>-105.5366</maxx>
+               <maxy>43.50519</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://drought.usu.edu/NIDISTimeSeries/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>NIDIS Upper Colorado River Basin Drought Index Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=246</ServiceDescriptionURL>
+               <Email>jeff.horsburgh@usu.edu</Email>
+               <phone>453-797-2946</phone>
+               <organization>National Integrated Drought Information System</organization>
+               <orgwebsite>http://www.drought.gov</orgwebsite>
+               <citation>NIDIS, (2012), Aggregated time series of hydrologic variables for drought index calculation, National Integrated Drought Information System.</citation>
+               <aabstract>The data provided by this service were downloaded from a number of sources.  These include streamflow data from the United States Geological Survey, reservoir storage data from the United States Bureau of Reclamation, precipitation data from the National Climatic Data Center, snow water equivalent data from the National Operational Hydrologic Remote Sensing Center, and snow water equivalent data from the Natural Resources Conservation Service.  These datasets have been temporally aggregated from thier original time steps to monthly and half-monthly scales and are spatially aggregated to the USGS HUC 10 scale for the purposes of calculating drought index values for HUC 10 units in the Upper Colorado River Basin.  This WaterOneFlow web service was created by Utah State University as part of a National Integrated Drought Information System (NIDIS) project sponsored by the United States Geological Survey.</aabstract>
+               <valuecount>9246406</valuecount>
+               <variablecount>22</variablecount>
+               <sitecount>6109</sitecount>
+               <ServiceID>246</ServiceID>
+               <NetworkName>UCRB_NIDIS</NetworkName>
+               <minx>-114.0214</minx>
+               <miny>32.54667</miny>
+               <maxx>-103.8404</maxx>
+               <maxy>45.0667</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Ipswich River Watershed Association</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=247</ServiceDescriptionURL>
+               <Email>rodonnell@ipswichriver.org</Email>
+               <phone>(978) 412-8200</phone>
+               <organization>Ipswich River Watershed Association</organization>
+               <orgwebsite>http://www.ipswichriver.org/</orgwebsite>
+               <citation>Please cite the appropriate monitoring report(s) available at the following website for the timespan of data used:
+ 
+http://ipswich-river.org/resources/monitoring-data/</citation>
+               <aabstract>The Ipswich River Watershed Association’s (IRWA) RiverWatch water quality monitoring program, in operation since 1997, enlists volunteers to collect data on the health of the Ipswich River and its tributaries. Volunteers monitor according to a state-approved monitoring plan that ensures that the data they collect is of good quality. The goals of the program are to document River conditions in order to identify water quality problems (including adequate river flow) and to use this data to develop solutions to observed problems.</aabstract>
+               <valuecount>10477</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>34</sitecount>
+               <ServiceID>247</ServiceID>
+               <NetworkName>IRWA</NetworkName>
+               <minx>-71.18279</minx>
+               <miny>42.55284</miny>
+               <maxx>-70.83047</maxx>
+               <maxy>42.69818</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro10.sdsc.edu/MeteoFR/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>DRIHM-FRANCE</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=257</ServiceDescriptionURL>
+               <Email>olivier.caumont@meteo.fr</Email>
+               <phone/>
+               <organization>French Ministry of Ecology and Sustainable Development</organization>
+               <orgwebsite>http://www.vigicrues.gouv.fr/</orgwebsite>
+               <citation>French Ministry of Ecology and Sustainable Development</citation>
+               <aabstract>Data collected by hydrometric agencies on behalf of the French Ministry of Ecology and Sustainable Development. These are &apos;real-time&apos; data that were neither controlled nor validated, and are subject to change. They do not have any official value.</aabstract>
+               <valuecount>1346</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>7</sitecount>
+               <ServiceID>257</ServiceID>
+               <NetworkName>Vigicrues Meteo FR</NetworkName>
+               <minx>4.09</minx>
+               <miny>43.15</miny>
+               <maxx>6.453</maxx>
+               <maxy>44.399</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro10.sdsc.edu/cima1/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>CIMA1</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=258</ServiceDescriptionURL>
+               <Email>luca.molini@cimafoundation.org</Email>
+               <phone/>
+               <organization>CIMA Research Foundation</organization>
+               <orgwebsite>http://www.cimafoundation.org</orgwebsite>
+               <citation>CIMA research Foundation</citation>
+               <aabstract>Historical data, related to the severe rainfall period on NW Italy from 25 October to 05 November 2011, from the Italian Civil Protection Department RAWS network (remotely automated weather stations). The data are provided for research purposes in the framework of the FP7 DRIHM (Distributed Research Infrastructure for Hydro-Meteorology, www.drihm.eu) project.)</aabstract>
+               <valuecount>42624</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>888</sitecount>
+               <ServiceID>258</ServiceID>
+               <NetworkName>CIMA1</NetworkName>
+               <minx>6.68583</minx>
+               <miny>43.71111</miny>
+               <maxx>10.49917</maxx>
+               <maxy>45.99805</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro10.sdsc.edu/RHMSS1/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>RHMSS</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=259</ServiceDescriptionURL>
+               <Email>ljiljana.dekic@hidmet.gov.rs</Email>
+               <phone/>
+               <organization>Republic Hydrometeorological Service of Serbia</organization>
+               <orgwebsite>http://www.hidmet.gov.rs</orgwebsite>
+               <citation>Republic Hydrometeorological Service of SerbiaUse</citation>
+               <aabstract>Data observed in national hydrological network</aabstract>
+               <valuecount>31</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>1</sitecount>
+               <ServiceID>259</ServiceID>
+               <NetworkName>RHMSS1</NetworkName>
+               <minx>19.2739</minx>
+               <miny>44.63273</miny>
+               <maxx>19.2739</maxx>
+               <maxy>44.63273</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro.keskari.webfactional.com/services/cuahsi_1_1.php?wsdl</servURL>
+               <Title>Lahti Urban Water Laboratory</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=261</ServiceDescriptionURL>
+               <Email>jirikadlec2@gmail.com</Email>
+               <phone>(208)313-8076</phone>
+               <organization>Aalto university department of environmental informatics</organization>
+               <orgwebsite>http://geoinformatics.aalto.fi</orgwebsite>
+               <citation>Kadlec, J., Jolma, A. Lahti urban water laboratory for sustainable development.</citation>
+               <aabstract>The urban water laboratory experimental site studies the impact of stormwater runoff best management practices on water quality in the lake.</aabstract>
+               <valuecount>75</valuecount>
+               <variablecount>2</variablecount>
+               <sitecount>3</sitecount>
+               <ServiceID>261</ServiceID>
+               <NetworkName>LUWL</NetworkName>
+               <minx>25.60947</minx>
+               <miny>60.99117</miny>
+               <maxx>25.6508</maxx>
+               <maxy>61.02018</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ly-uc2.ceas1.uc.edu/Shepherd/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Shepherd Creek Watershed Ohio</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=264</ServiceDescriptionURL>
+               <Email/>
+               <phone/>
+               <organization>EPA-SC</organization>
+               <orgwebsite>http://www.uc.edu</orgwebsite>
+               <citation>Test Data from the Shepherd Creek Watershed in Ohio. Data is quality controlled. </citation>
+               <aabstract>Test Data from the Shepherd Creek Watershed in Ohio. Data is quality controlled. </aabstract>
+               <valuecount>8312</valuecount>
+               <variablecount>31</variablecount>
+               <sitecount>6</sitecount>
+               <ServiceID>264</ServiceID>
+               <NetworkName>Shepherd</NetworkName>
+               <minx>-84.58141</minx>
+               <miny>39.17329</miny>
+               <maxx>-84.57464</maxx>
+               <maxy>39.18235</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro1.sci.gsfc.nasa.gov/daac-bin/his/1.0/NLDAS_FORA_002.cgi?WSDL</servURL>
+               <Title>NLDAS Hourly Primary Forcing Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=267</ServiceDescriptionURL>
+               <Email>gsfc-help-disc@lists.nasa.gov</Email>
+               <phone>301-614-5224</phone>
+               <organization>NASA Goddard Earth Sciences (GES) Data and Information Services Center</organization>
+               <orgwebsite>http://disc.sci.gsfc.nasa.gov/hydrology/data-holdings</orgwebsite>
+               <citation>Mitchell, K.E., D. Lohmann, P.R. Houser, E.F. Wood, J.C. Schaake, A. Robock, B.A. Cosgrove, J. Sheffield, Q. Duan, L. Luo, R.W. Higgins, R.T. Pinker, J.D. Tarpley, D.P. Lettenmaier, C.H. Marshall, J.K. Entin, M. Pan, W. Shi, V. Koren, J. Meng, B. H. Ramsay, and A.A. Bailey (2004), The multi-institution North American Land Data Assimilation System (NLDAS): Utilizing multiple GCIP products and partners in a continental distributed hydrological modeling system, J. Geophys. Res., 109, D07S90, doi:10.1029/2003JD003823.</citation>
+               <aabstract>The goal of NLDAS is to construct quality-controlled, and spatially and temporally consistent, land-surface model (LSM) datasets from the best available observations and model output to support modeling activities. Specifically, this system is intended to reduce the errors in the stores of soil moisture and energy which are often present in numerical weather prediction models, and which degrade the accuracy of forecasts. NLDAS is currently running in near real-time on a 1/8th-degree grid over central North America; retrospective NLDAS datasets and simulations also extend back to January 1979. NLDAS constructs a forcing dataset from gauge-based observed precipitation data (temporally disaggregated using Stage II radar data), bias-correcting shortwave radiation, and surface meteorology reanalyses to drive several different LSMs to produce model outputs of surface fluxes, soil moisture, and snow cover. NLDAS is a collaboration project among several groups: NOAA/NCEP&apos;s Environmental Modeling Center (EMC), NASA&apos;s Goddard Space Flight Center (GSFC), Princeton University, the University of Washington, the NOAA/NWS Office of Hydrological Development (OHD), and the NOAA/NCEP Climate Prediction Center (CPC). NLDAS is a core project with support from NOAA&apos;s Climate Prediction Program for the Americas (CPPA). Data from the project can be accessed from the NASA Goddard Earth Science Data and Information Services Center (GES DISC) as well as from the NCEP/EMC NLDAS website. This service provides access to NASA&apos;s North American Land Data Assimilation System (NLDAS) hourly Mosaic land surface model data.</aabstract>
+               <valuecount>2147483647</valuecount>
+               <variablecount>4</variablecount>
+               <sitecount>103936</sitecount>
+               <ServiceID>267</ServiceID>
+               <NetworkName>NLDAS_FORA</NetworkName>
+               <minx>-124.9375</minx>
+               <miny>25.0625</miny>
+               <maxx>-67.0625</maxx>
+               <maxy>52.9375</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/KStateWeather/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>Kansas State University Daily Weather Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=269</ServiceDescriptionURL>
+               <Email>auvenshi@ksu.edu</Email>
+               <phone>785-532-5862</phone>
+               <organization>Kansas State University</organization>
+               <orgwebsite>http://www.ksre.ksu.edu/wdl/</orgwebsite>
+               <citation>Kansas Weather Data Library. 2012.</citation>
+               <aabstract>Daily weather data are collected at 14 stations operated by Kansas State University Research and Extension.  Data include maximum air temperature, minimum air temperature, total precipitation, average relative humidity, average wind speed, and solar radiation.</aabstract>
+               <valuecount>777682</valuecount>
+               <variablecount>6</variablecount>
+               <sitecount>14</sitecount>
+               <ServiceID>269</ServiceID>
+               <NetworkName>Kansas Weather Data</NetworkName>
+               <minx>-101.775</minx>
+               <miny>37.369</miny>
+               <maxx>-95.248</maxx>
+               <maxy>39.829</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://ees-his06.ad.ufl.edu/SFe_GWLSRWMD/cuahsi_1_0.asmx?WSDL</servURL>
+               <Title>Santa Fe Basin Florida groundwater levels from SRWMD</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=272</ServiceDescriptionURL>
+               <Email>katmckee@ufl.edu</Email>
+               <phone>352-392-5893</phone>
+               <organization>data collected by Suwannee River Water Management District, published in HIS by Univ of FL</organization>
+               <orgwebsite/>
+               <citation>Data is collected by this regional Florida state agency, the Suwannee River Water Management District.  Contact: Megan Wetherington, hydrologist email: wetherington_m @ srwmd.state.fl.us 
+http://www.srwmd.state.fl.us/index.aspx?NID=345 </citation>
+               <aabstract>Groundwater level monitoring wells in these eight Florida counties: Alachua, Baker, Bradford, Columbia, Gilchrist, Suwannee, Union, Clay.  </aabstract>
+               <valuecount>0</valuecount>
+               <variablecount>0</variablecount>
+               <sitecount>0</sitecount>
+               <ServiceID>272</ServiceID>
+               <NetworkName>SFe_GWLSRWMD </NetworkName>
+               <minx>0</minx>
+               <miny>0</miny>
+               <maxx>0</maxx>
+               <maxy>0</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydro1.sci.gsfc.nasa.gov/daac-bin/his/1.0/NLDAS_NOAH_002.cgi?WSDL</servURL>
+               <Title>NLDAS Hourly NOAH Data</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=274</ServiceDescriptionURL>
+               <Email>gsfc-help-disc@lists.nasa.gov</Email>
+               <phone>301-614-5224</phone>
+               <organization>NASA Goddard Earth Sciences (GES) Data and Information Services Center</organization>
+               <orgwebsite>http://disc.sci.gsfc.nasa.gov/hydrology/data-holdings</orgwebsite>
+               <citation>Mitchell, K.E., D. Lohmann, P.R. Houser, E.F. Wood, J.C. Schaake, A. Robock, B.A. Cosgrove, J. Sheffield, Q. Duan, L. Luo, R.W. Higgins, R.T. Pinker, J.D. Tarpley, D.P. Lettenmaier, C.H. Marshall, J.K. Entin, M. Pan, W. Shi, V. Koren, J. Meng, B. H. Ramsay, and A.A. Bailey (2004), The multi-institution North American Land Data Assimilation System (NLDAS): Utilizing multiple GCIP products and partners in a continental distributed hydrological modeling system, J. Geophys. Res., 109, D07S90, doi:10.1029/2003JD003823.</citation>
+               <aabstract>The goal of NLDAS is to construct quality-controlled, and spatially and temporally consistent, land-surface model (LSM) datasets from the best available observations and model output to support modeling activities. Specifically, this system is intended to reduce the errors in the stores of soil moisture and energy which are often present in numerical weather prediction models, and which degrade the accuracy of forecasts. NLDAS is currently running in near real-time on a 1/8th-degree grid over central North America; retrospective NLDAS datasets and simulations also extend back to January 1979. NLDAS constructs a forcing dataset from gauge-based observed precipitation data (temporally disaggregated using Stage II radar data), bias-correcting shortwave radiation, and surface meteorology reanalyses to drive several different LSMs to produce model outputs of surface fluxes, soil moisture, and snow cover. NLDAS is a collaboration project among several groups: NOAA/NCEP&apos;s Environmental Modeling Center (EMC), NASA&apos;s Goddard Space Flight Center (GSFC), Princeton University, the University of Washington, the NOAA/NWS Office of Hydrological Development (OHD), and the NOAA/NCEP Climate Prediction Center (CPC). NLDAS is a core project with support from NOAA&apos;s Climate Prediction Program for the Americas (CPPA). Data from the project can be accessed from the NASA Goddard Earth Science Data and Information Services Center (GES DISC) as well as from the NCEP/EMC NLDAS website. This service provides access to NASA&apos;s North American Land Data Assimilation System (NLDAS) hourly Mosaic land surface model data.</aabstract>
+               <valuecount>339773900</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>1127</sitecount>
+               <ServiceID>274</ServiceID>
+               <NetworkName>NLDAS_NOAH</NetworkName>
+               <minx>-124.9375</minx>
+               <miny>25.0625</miny>
+               <maxx>-67.4375</maxx>
+               <maxy>52.5625</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://gilllabbyu.net63.net/services/cuahsi_1_1.php?WSDL</servURL>
+               <Title>Gill Ecosystem and Global Change Ecology Lab-BYU</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=276</ServiceDescriptionURL>
+               <Email>connerlg@byu.edu</Email>
+               <phone>801-422-2175</phone>
+               <organization>Gill Ecosystem and Global Change Ecology Lab-BYU</organization>
+               <orgwebsite>http://gilllab.byu.edu</orgwebsite>
+               <citation>Gill Ecosystem and Global Change Ecology Lab, Brigham Young University, Provo, Utah. </citation>
+               <aabstract>These data come from a couple of different ecological/hydrological studies we have been conducting in the subalpine areas of the Wasatch Plateau and the Great Basin and Mojave Deserts. The data are divided into two sources on our HydroServer: Lafe Conner and Gill Lab. 
+
+The data from Lafe Conner come from a snowmelt experiment where we use dust to melt snow more quickly, and compare the hydrological and ecological responses to the timing of snowmelt. These data are collected using Decagon instruments and data loggers. We are measuring soil moisture and temperature at depths of 5 and 30 cm in control and dust-treatment plots. Each experimental plot is 5 by 5 meters. For the dust treatments we apply 50 g/m2 at weekly intervals for 5 or 6 weeks starting on March 15th.     
+
+The data from Gill lab include three rainfall manipulation experiments. The first experiment began in 2009 on the Wasatch Plateau in the upper watershed of Ephraim Canyon. In this experiment we are observing the hydrological and ecological responses to changes in the timing and amount of precipitation. There are treatments that remove 30% and 70% of rainfall, and treatments where all the rain is removed from the plot and then applied at set intervals of 1 and 3 weeks. The experiments in the Mojave and Great Basin Deserts are identical to each other and we have three rainfall treatments in each replicate: 30% reduction in rainfall, control, and 30% addition.  </aabstract>
+               <valuecount>101901</valuecount>
+               <variablecount>3</variablecount>
+               <sitecount>27</sitecount>
+               <ServiceID>276</ServiceID>
+               <NetworkName>GIL_BYU</NetworkName>
+               <minx>-111.3082</minx>
+               <miny>39.62194</miny>
+               <maxx>-111.2992</maxx>
+               <maxy>39.68406</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/JPTEST2/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>CUAHSI Test 2</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=279</ServiceDescriptionURL>
+               <Email>jpollak@cuahsi.org</Email>
+               <phone>339-221-5403</phone>
+               <organization>CUAHSI</organization>
+               <orgwebsite>http://www.cuahsi.org</orgwebsite>
+               <citation/>
+               <aabstract>This is a CUAHSI test service that uses hypothetical data and metadata values.</aabstract>
+               <valuecount>10</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>1</sitecount>
+               <ServiceID>279</ServiceID>
+               <NetworkName>Metadata Test 2</NetworkName>
+               <minx>-70.52422</minx>
+               <miny>41.38922</miny>
+               <maxx>-70.52422</maxx>
+               <maxy>41.38922</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+            <ServiceInfo>
+               <servURL>http://hydroportal.cuahsi.org/JPTEST3/cuahsi_1_1.asmx?WSDL</servURL>
+               <Title>CUAHSI Test 3</Title>
+               <ServiceDescriptionURL>http://hiscentral.cuahsi.org/pub_network.aspx?n=280</ServiceDescriptionURL>
+               <Email>jpollak@cuahsi.org</Email>
+               <phone>339-221-5403</phone>
+               <organization>CUAHSI</organization>
+               <orgwebsite>http://www.cuahsi.org</orgwebsite>
+               <citation/>
+               <aabstract>This is a CUAHSI test service that uses hypothetical data and metadata values.</aabstract>
+               <valuecount>10</valuecount>
+               <variablecount>1</variablecount>
+               <sitecount>1</sitecount>
+               <ServiceID>280</ServiceID>
+               <NetworkName>Metadata Test 3</NetworkName>
+               <minx>-70.52422</minx>
+               <miny>41.38922</miny>
+               <maxx>-70.52422</maxx>
+               <maxy>41.38922</maxy>
+               <serviceStatus/>
+            </ServiceInfo>
+         </GetWaterOneFlowServiceInfoResult>
+      </GetWaterOneFlowServiceInfoResponse>
+   </soap:Body>
+</soap:Envelope>

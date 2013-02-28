@@ -5,8 +5,8 @@ ulmo
 
 -----------
 
-.. image:: https://secure.travis-ci.org/swtools/ulmo.png?branch=master
-        :target: https://secure.travis-ci.org/swtools/ulmo
+.. image:: https://secure.travis-ci.org/twdb/ulmo.png?branch=master
+        :target: https://travis-ci.org/twdb/ulmo
 
 
 Features
@@ -22,20 +22,21 @@ Features
 Datasets
 --------
 
-Currently, ulmo supports the following datasets:
+Currently, ulmo supports the following datasets / services:
 
 - United States Geological Survey National Water Information System 
 - National Climatic Data Center Global Summary of the Day
 - National Climatic Data Center Global Historical Climatology Network
+- CUAHSI WaterOneFlow
 
 
 
 Future
 ------
 
-The following datasets/services are being developed and will be available soon:
+Support for the following datasets is currently under development and they
+should be available soon:
 
-- CUAHSI WaterOneFlow
 - National Weather Service 24-hour Precip (4 km grid)
 - Climate Prediction Center Weekly Drought Monitor
 
@@ -45,5 +46,13 @@ A list of future datasets is kept in on the `issue tracker`_. If there's a datas
 you'd like to see added, please open an issue about it.
 
 
+
+Links
+-----
+
+* Documentation: http://ulmo.readthedocs.org
+* Repository: https://github.com/twdb/ulmo
+
+
 .. _more sophisticated tools: http://pandas.pydata.org
-.. _issue tracker: https://github.com/swtools/ulmo/issues?labels=new+dataset&state=open 
+.. _issue tracker: https://github.com/twdb/ulmo/issues?labels=new+dataset&state=open 

@@ -1,0 +1,2494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.cuahsi.org/his/1.0/ws/" xmlns:s1="http://www.cuahsi.org/waterML/1.0/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.cuahsi.org/his/1.0/ws/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.cuahsi.org/his/1.0/ws/">
+      <s:import namespace="http://www.cuahsi.org/waterML/1.0/" />
+      <s:element name="GetValues">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="location" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="variable" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="startDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="endDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetValuesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetValuesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetValuesObject">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="location" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="variable" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="startDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="endDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetValuesObjectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:timeSeriesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSitesXml">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="site" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetSitesXmlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSitesXmlResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSiteInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="site" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSiteInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSiteInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVariableInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="variable" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVariableInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetVariableInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSites">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="site" type="tns:ArrayOfString" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSitesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:sitesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSiteInfoObject">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="site" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSiteInfoObjectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:sitesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVariableInfoObject">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="variable" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="authToken" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVariableInfoObjectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:variablesResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.cuahsi.org/waterML/1.0/">
+      <s:element name="timeSeriesResponse" type="s1:TimeSeriesResponseType" />
+      <s:element name="sitesResponse" type="s1:SiteInfoResponseType" />
+      <s:element name="variablesResponse" type="s1:VariablesResponseType" />
+      <s:annotation>
+        <s:documentation> 
+Changes: 
+2006-07-10 valentine 
+            removed choice. Replaced with Types
+            defined TimePeriodType
+                TimeIntervalType
+                TimeSingleType
+            added GeogLocationType to hold the geometry
+                redefined LatLongPoint as a type
+                defined LatLongBox to hold
+                 defined simpleTypes Latitude and Longitude
+            added DataSetLocation Element (type GeogLocationType) to dataset info
+            removed xlink namespace. Just used the xlink concept (problems getting it to compile with xlink schema)
+2006-08-30 valentine
+    MANY CHANGES to:
+         sync with the Observations Database terminolog
+         simplify. Removed many unneeded types. (initial version was Type happy)
+         types mostly used only when needed (Geometry, SourceInfo, TimeSeries, Notes, Enumerations).
+       *** Element Case Standardize  ****
+           All types are PascalCase
+           All CUAHSI elements and attributes are camelCase
+       * All root response elements are now elements, and not types
+          ** SitesResponse
+          ** TimeSeriesResponse (not timeSeriesType)
+          ** VariablesResponse
+       * extension elements added.
+           ** These are extension points for groups like
+              the USGS that wish to include more information than the normal community uses.
+       * enumerations added
+          * unitType
+          * censorCode  (characters used because symbols make for unmaintainable source code)
+             * lt  - less than
+             * gt  - greater than
+             * nc  - no code
+       * variable types consolidated
+       * units element added
+       * consistent siteID/variableID pattern (both include a XXXCode)
+       * Remove many types
+          ** too many to list.
+       * values == TsValuesType renamed from TsValuesSingleVariableType
+          ** split values element out to type  ValueSingleVar (c# change tsValuesTypeValueType to ValueSingleVar).
+          ** qualifier elements can be added after the final value element in the Values element.
+          *** we don't know the full list of included qualifiers until we get done with the values.
+          *** at present, qualifiers attribute in the value element is an aggregated field.
+          element block looks like:
+          = values
+          == value qualifers=&amp;quot;A&amp;quot;
+          == value qualifers=&amp;quot;Ae&amp;quot;
+          == qualifier qualifierCode=&amp;quot;A&amp;quot;      &amp;quot;Approved&amp;quot;
+          == qualifier qualifierCode=&amp;quot;e&amp;quot;      &amp;quot;Estimated. This value has been estimated.&amp;quot;
+2006-09-08
+   variableID renamed variableCode
+   siteID renamed siteCode
+      siteID and variableID attributes added, xxCode removed
+   siteCode name moved into siteInfo
+
+2006-09-15
+   variable/name to variable/variableName
+   variablePeriod to variablePeriodOfObservation
+
+2006-09-17
+   added QualityControlLevelEnum
+   added attribute qualityControlLevel to valueAttribute group. (affects ValueSingleVariable)
+   added qualityControlLevel element, and element to the TSValuesSingleVariableType
+   namespace changed to http://www.cuahsi.org/waterML/1.0/
+   return to types for top level elements, without this they get named getValuesResponse
+   added note to siteInfoElement. We need to put the URL or Retireved from DB not in this block.
+   added TimePeriodRealTime. Need to represent real time data.
+2006-0920
+   variablePeriodofRecorr to seriesCatalog
+   variablePeriodOfObservation to series
+   variableObservationCount to valueCount (to match the OD)
+   added enumerations from the OD
+      valueTypeEnum
+      generalCategoryEnum
+      sampleMediumEnum
+      dataTypeEnum
+2006-09-24
+   queryInfo/criteria/timeParam is now a sequence, since a start or end time can be null
+   The community wants it to be easy, and VB and other .net have problems with some values:
+      converted xsd:decimal to xsd:double. decimal is not well handled by VB
+      converted tsValuesSingleVaribaleType/count from xsd:nonNegativeInteger to xsd:int.
+2006-09-28
+   API signature has been changed to strings.
+   queryInfo/timeInterval/... changed to strings
+2007-07-09
+   ODM seriesCatalog table added columns. Columns now added
+   DataValue element was missing: DataType(eg statistic), Method, Source, and QualityControlLevel.
+2007-08-28
+  added to values method[](methodType), source[](SourceType)
+  added &amp;quot;Unknown&amp;quot; to many enumerations.
+  contactInformation in sourceType changed to unbounded
+2007-08-29
+  DT/DM believes that including an offsetDescription on every element is verbose
+  offsetTypeID attribute added to offsetAttr
+  offsetType Type added, Designed to be a bit more extensible, and handle
+2007-08-30
+  restored attributes that had the offset information on the values
+  offsetAttr restored attr
+    offsetUnitsAbbreviation
+    offsetUnitsCode
+    offsetDescription
+2007-11-14
+   Many services use agency (aka EPA, and USGS)
+     added attributes agencyCode and AgencyName to siteCode.
+ 2007-11-29
+    SiteInfo/TimezoneInfo min occurs 0 max 1
+    Series/QualityControlLevel min occurs 0 max 1
+  2009-07
+		added back attributeGroup vocabulary attributes got dropp drop VariableInfoType. 
+		changes to min/max occurs in several locations
+	</s:documentation>
+      </s:annotation>
+      <s:complexType name="SiteInfoType">
+        <s:annotation>
+          <s:documentation>A sampling station is any place where data are collected.
+
+SiteInfoType is the Element that for the core information about a point sampling location. The core information includes SiteName, SiteCode(s), location, elevation, timeZone information and note(s).
+
+SiteInfoType is &lt;siteInfo&gt; in a &lt;site&gt; of a   &lt;sitesResponse&gt;.  It is derived from SourceType so that other geographic location descriptions can be utilized in the &lt;sourceInfo&gt; of  the &lt;timeSeriesResponse&gt;
+</s:documentation>
+        </s:annotation>
+        <s:complexContent mixed="false">
+          <s:extension base="s1:SourceInfoType">
+            <s:sequence>
+              <s:element minOccurs="0" name="siteName" type="s:string">
+                <s:annotation>
+                  <s:documentation>Full name of the sampling site. eg “LOGAN RIVER ABOVE STATE DAM, NEAR LOGAN,UT”</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element maxOccurs="unbounded" name="siteCode">
+                <s:annotation>
+                  <s:documentation>A siteCode is an identifier that this site is referred to as. This Code used by organization that collects the data to identify the site.
+
+A siteCode has a reference to it's source or network as the @network. For waterWebServices, a site/location is the network plus the value of the sitecode, eg '@network:siteCode'
+					siteCode identifiers often change, so multiple siteCode elements are allowed There may be multiple siteCode elements. Only one should be labeled as the default using @defaultID (set attribute defaultID=true)
+					
+Multiple siteCode elements can utilize different observation networks may refer to the same site with different identifiers.</s:documentation>
+                </s:annotation>
+                <s:complexType>
+                  <s:simpleContent>
+                    <s:extension base="s:string">
+                      <s:attribute name="defaultId" type="s:boolean">
+                        <s:annotation>
+                          <s:documentation>
+								True if this is the main identifier that this service uses to access this site.
+				default value is false.
+							</s:documentation>
+                        </s:annotation>
+                      </s:attribute>
+                      <s:attribute name="network" type="s:normalizedString" use="required">
+                        <s:annotation>
+                          <s:documentation>The abbreviation for the datasource or observation network that this site code is associated with.
+
+A siteCode has a reference to it's source or network as the @network. For waterWebServices, a site/location is the network plus the value of the sitecode, eg '@network:siteCode'</s:documentation>
+                        </s:annotation>
+                      </s:attribute>
+                      <s:attribute name="siteID" type="s:normalizedString">
+                        <s:annotation>
+                          <s:documentation>An internal numeric identifier of the site.
+							</s:documentation>
+                        </s:annotation>
+                      </s:attribute>
+                      <s:attribute name="agencyCode" type="s:normalizedString">
+                        <s:annotation>
+                          <s:documentation>Code used to differentiate sites in a datasource. Agency codes are specific to a data source, and are not required nor do they need to be understood by a web service client.</s:documentation>
+                        </s:annotation>
+                      </s:attribute>
+                      <s:attribute name="agencyName" type="s:normalizedString">
+                        <s:annotation>
+                          <s:documentation>optional name to provide more detail about an agency code</s:documentation>
+                        </s:annotation>
+                      </s:attribute>
+                    </s:extension>
+                  </s:simpleContent>
+                </s:complexType>
+              </s:element>
+              <s:element minOccurs="0" ref="s1:timeZoneInfo">
+                <s:annotation>
+                  <s:documentation>Specifies the time zone information about a site. 
+
+The default time zone for this site (+00:00) and if this site shifts to daylight savings time (attribute: usesDaylightSavingsTime)</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="geoLocation">
+                <s:annotation>
+                  <s:documentation>The geoLocation speficies the details of the geographic location. It contains two portions, a geographic locaiton &amp;amp;lt;geogLocation&amp;amp;gt;, and a local location &amp;amp;lt;localSiteXY&amp;amp;gt;.
+
+In order to be discovered spatially, geogLocation is required. The geogLocation can be of GeogLocationType, which at present is either a latLonPoint or a latLongBox.
+
+There may be multiple localSiteXY, which might be used by data sources to provide other coordinated system information, like UTM and State Plane coordinates.</s:documentation>
+                </s:annotation>
+                <s:complexType>
+                  <s:sequence>
+                    <s:element name="geogLocation" type="s1:GeogLocationType">
+                      <s:annotation>
+                        <s:documentation>Geographic location:
+A geographic location is required as part of the site information (siteInfoType or siteInfo element)
+
+At present this can be elements of GeogLocationType: LatLonPointType and LatLonBoxType. an xml schema type attribute can be used to determine which type is contained in this element (xsi:type="LatLonPointType" or xsi:type="LatLonBoxType")</s:documentation>
+                      </s:annotation>
+                    </s:element>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="localSiteXY">
+                      <s:annotation>
+                        <s:documentation>Site information can contain one or more other locations using the localSiteXY element. The projection string  should be stored in projectionInformation.
+
+Lat or Northing = Y
+Lon or Easting = X
+
+
+
+</s:documentation>
+                      </s:annotation>
+                      <s:complexType>
+                        <s:sequence>
+                          <s:element name="X" type="s:double" />
+                          <s:element name="Y" type="s:double" />
+                          <s:element minOccurs="0" maxOccurs="1" name="Z" type="s:double" />
+                          <s:element minOccurs="0" maxOccurs="unbounded" name="note" type="s1:NoteType">
+                            <s:annotation>
+                              <s:documentation>Additional information should be encoded in zero or more note elmements.
+The name of the property should be @title, and the value should be inside the note value. Attribute @type is provided so that notes can be grouped.</s:documentation>
+                            </s:annotation>
+                          </s:element>
+                        </s:sequence>
+                        <s:attribute name="projectionInformation" type="s:string">
+                          <s:annotation>
+                            <s:documentation>Spatial Reference System of the local coordinates.
+This should use the PROJ4 projection string standard</s:documentation>
+                          </s:annotation>
+                        </s:attribute>
+                      </s:complexType>
+                    </s:element>
+                  </s:sequence>
+                </s:complexType>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="elevation_m" type="s:double">
+                <s:annotation>
+                  <s:documentation>Elevation in meters. 
+A vertical datum should also be provided.</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="verticalDatum" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="unbounded" name="note" type="s1:NoteType">
+                <s:annotation>
+                  <s:documentation>Additional information, like state, county, or other properties like HUC codes should be encoded in zero or more &amp;lt;note&amp;gt; elmements.
+The name of the property should be @title, and the value should be inside the &lt;note&gt;value&lt;/note&gt;. Attribute @type is provided so that notes can be grouped.</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" ref="s1:extension">
+                <s:annotation>
+                  <s:documentation>In order to simplify comprehension, data sources are encouraged to put additional informaiton in the extension area, using thier own namespace. Clients need not understand information in &lt;extension?</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="altname" type="s:string">
+                <s:annotation>
+                  <s:documentation>Alternate name</s:documentation>
+                </s:annotation>
+              </s:element>
+            </s:sequence>
+            <s:attributeGroup ref="s1:DbIdentifiers" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="TsValuesSingleVariableType">
+        <s:annotation>
+          <s:documentation>TsValuesSingleVariableTypea aggregates the list of values and associated metadata. It is the values element in the timeSereisResponse
+
+Attributes are optional, but use @count is encouraged. 
+
+The atrributes @unitsAreConverted, @untsCode,@unitsAbbreviation, and @unitsType were originally included to allow for translation from orignal variable units.  Thier use is not encouraged. Get unit information from the Variable element.</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="unbounded" name="value" type="s1:ValueSingleVariable">
+            <s:annotation>
+              <s:documentation>Multiple  &lt;value&gt;s  represent the data series. 
+</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" ref="s1:qualifier">
+            <s:annotation>
+              <s:documentation>multiple &lt;qualifier&gt;s containg the data qualifying comments that accompany the data.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" ref="s1:qualityControlLevel">
+            <s:annotation>
+              <s:documentation>&lt;qualityControlLevel&gt; contains the quality control levels that are used for versioning data within the data values</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="method" type="s1:MethodType">
+            <s:annotation>
+              <s:documentation>Multiple &amp;amp;amp;lt;method&amp;amp;amp;gt;s  lists the methods used to collect the data and any additional information about the method.
+
+@methodID is the link between the values, and method.
+
+Different instruments should be represented as different methods, according to ODM best practices</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="source" type="s1:SourceType">
+            <s:annotation>
+              <s:documentation>The Sources the original sources of the data, providing information sufficient to retrieve the data value.
+
+@sourceID is the link bewteen source  the values.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="offset" type="s1:OffsetType">
+            <s:annotation>
+              <s:documentation>&lt;offset&gt; is of type OffsetType. offset lists full descriptive information for each of the measurement offsets.
+
+@offsetID is the link between offset, and values.</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+        <s:attribute name="timeZoneShiftApplied" type="s:boolean" use="optional">
+          <s:annotation>
+            <s:documentation>If a webservice has transformed the time zone from the original data.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attributeGroup ref="s1:unitsAttr">
+          <s:annotation>
+            <s:documentation>the measurment units of the value elements in this values element
+          </s:documentation>
+          </s:annotation>
+        </s:attributeGroup>
+        <s:attribute name="count" type="s:nonNegativeInteger">
+          <s:annotation>
+            <s:documentation />
+          </s:annotation>
+        </s:attribute>
+        <s:attribute default="false" name="unitsAreConverted" type="s:boolean">
+          <s:annotation>
+            <s:documentation>True if a webservice has transformed the data from the original units.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+      </s:complexType>
+      <s:complexType name="VariableInfoType">
+        <s:annotation>
+          <s:documentation>VariableInfoType is a complex type containting full descriptive information about a variable, as described by the ODM. This includes one or more variable codes, the short variable name, a detailed variable description, and suggest
+
+It also extends the ODM model, in several methods:
+- options contain extended reuqest information. 
+- note(s) are for generic extenstion.
+- extension is an element where additional namespace information should be placed.
+- related allows for parent and child relationships between variables to be communicated.
+
+</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="unbounded" ref="s1:variableCode">
+            <s:annotation>
+              <s:documentation>One of more elements representing the Text code used by the organization that collects the data to identify the variable.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="variableName" type="s:string">
+            <s:annotation>
+              <s:documentation>A brief name of the variable that could be shown in a menu</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="variableDescription" type="s:string">
+            <s:annotation>
+              <s:documentation>A detailed description of the variable. May include processing information and other details.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="valueType" type="s1:valueTypeEnum">
+            <s:annotation>
+              <s:documentation>Text value indicating what type of data value is being recorded.  For 1.0 this must be from the valueTypeEnum type.
+A default value of “Unknown” can be used where the value type is unknown.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="dataType" type="s1:dataTypeEnum">
+            <s:annotation>
+              <s:documentation>Text value that identifies the data values as one of several types from the dataTypeEnum 
+A default value of “Unknown” can be used where the data type is unknown.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="generalCategory" type="s1:generalCategoryEnum">
+            <s:annotation>
+              <s:documentation>General category of the data values from the generalCategoryEnum.
+A default value of “Unknown” can be used where the general category is unknown.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="sampleMedium" type="s1:SampleMediumEnum">
+            <s:annotation>
+              <s:documentation>Only terms from the SampleMediumEnume can be used to populate the sampleMedium element. 
+ A default value of “Unknown” is used where the sample medium is unknown.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" ref="s1:units">
+            <s:annotation>
+              <s:documentation>The units of the measurements asociated withthe variable.
+
+This will be changed to UnitsType in WaterML 1.1</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:options">
+            <s:annotation>
+              <s:documentation>A list of options. Option elements are key-value pair elements that control how a variable maght be utilized in a service.
+            Examples:
+ MODIS web service. Information is aggreated over land or ocean or both. The plotarea option can include: plotarea=land, plotarea=land, plotarea=landocean
+
+USGS uses a statistic code, 0003, to repesent a  value type of 'Average'. The USGS statistic codes also several options that do not fit the ODM data model. </s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="note" type="s1:NoteType">
+            <s:annotation>
+              <s:documentation>Additional information, properties like should be encoded in zero or more &amp;amp;lt;note&amp;amp;gt; elmements.
+The name of the property should be @title, and the value should be inside the &amp;lt;note&amp;gt;value&amp;lt;/note&amp;gt;. Attribute @type is provided so that notes can be grouped.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="related">
+            <s:annotation>
+              <s:documentation>This can be used to build up relationships between variables.</s:documentation>
+            </s:annotation>
+            <s:complexType>
+              <s:sequence maxOccurs="unbounded">
+                <s:element name="parentID">
+                  <s:annotation>
+                    <s:documentation>variableCode for the parent</s:documentation>
+                  </s:annotation>
+                  <s:complexType>
+                    <s:simpleContent>
+                      <s:extension base="s:string">
+                        <s:attributeGroup ref="s1:VocabularyAttributes" />
+                      </s:extension>
+                    </s:simpleContent>
+                  </s:complexType>
+                </s:element>
+                <s:element name="relatedID">
+                  <s:annotation>
+                    <s:documentation>Child or other relationships can be encoded using the related element.</s:documentation>
+                  </s:annotation>
+                  <s:complexType>
+                    <s:simpleContent>
+                      <s:extension base="s:string">
+                        <s:attributeGroup ref="s1:VocabularyAttributes" />
+                      </s:extension>
+                    </s:simpleContent>
+                  </s:complexType>
+                </s:element>
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" ref="s1:extension">
+            <s:annotation>
+              <s:documentation>In order to simplify comprehension, data sources are encouraged to put additional informaiton in the extension area, using thier own namespace. Clients need not understand information in &amp;lt;extension?</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="NoDataValue" type="s:string">
+            <s:annotation>
+              <s:documentation>Numeric value used to encode no data values for this variable.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="timeSupport" nillable="true">
+            <s:annotation>
+              <s:documentation>Element containing the time support (or temporal footprint) of the data values.  
+@isRegular indicates if the spacing is regular.
+In waterML 1.0, there is a divergence of mean between ODM, and WaterML.
+WaterML only communcates the regularity, and the spacing of the observations (timeInterval). Whereas timesupport in the ODM is associated with the dataType, and time support. This will be addressed in 1.1
+</s:documentation>
+            </s:annotation>
+            <s:complexType>
+              <s:sequence>
+                <s:annotation>
+                  <s:documentation>
+0 is used to indicate data values that are instantaneous.  Other values indicate the time over which the data values are implicitly or explicitly averaged or aggregated.
+
+The default for the TimeSupport field is 0.  This corresponds to instantaneous values.  If the TimeSupport field is set to a value other than 0, an appropriate TimeUnitsID must be specified.  The TimeUnitsID field can only reference valid UnitsID values from the Units controlled vocabulary table.  If the TimeSupport field is set to 0, any time units can be used (i.e., seconds, minutes, hours, etc.), however a default value of 103 has been used, which corresponds with hours</s:documentation>
+                </s:annotation>
+                <s:element minOccurs="0" maxOccurs="1" name="unit" type="s1:UnitsType" />
+                <s:element minOccurs="0" maxOccurs="1" name="timeInterval" type="s:int" />
+              </s:sequence>
+              <s:attribute name="isRegular" type="s:boolean" />
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+        <s:attributeGroup ref="s1:DbIdentifiers" />
+        <s:attributeGroup ref="s1:VocabularyAttributes" />
+      </s:complexType>
+      <s:complexType name="QueryInfoType">
+        <s:annotation>
+          <s:documentation>This contains information about the request, and is used to enable the XML responses (timeSeriesResponse, variablesResponse,siteResponse) to be stored on disk.</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" name="creationTime" type="s:dateTime">
+            <s:annotation>
+              <s:documentation>When was this response originally created.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="queryURL" type="s:string">
+            <s:annotation>
+              <s:documentation>The URL of the web page that was used as the original source for the response. Often requests scrap HTML pages. This should be the URL of that page.
+If the response is retreive from a rest URL. This is also a the location for the URL.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="querySQL" type="s:string">
+            <s:annotation>
+              <s:documentation>For debugging, the SQL used to generate this request may be placed in this element.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="criteria">
+            <s:annotation>
+              <s:documentation>The criteria are the actual parameters that are passed into the method. If you are generate this without a XML helper class, be sure to properly encode these elements.</s:documentation>
+            </s:annotation>
+            <s:complexType>
+              <s:sequence minOccurs="0">
+                <s:element minOccurs="0" name="locationParam" type="s:string">
+                  <s:annotation>
+                    <s:documentation>the location or site parameter passed into the site</s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element minOccurs="0" name="variableParam" type="s:string">
+                  <s:annotation>
+                    <s:documentation>the variable paramter passed into the service</s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element minOccurs="0" name="timeParam">
+                  <s:annotation>
+                    <s:documentation>the begin and end time of the GetValues request used to generate a timeSeriesResponse.</s:documentation>
+                  </s:annotation>
+                  <s:complexType>
+                    <s:sequence>
+                      <s:element minOccurs="0" maxOccurs="1" name="beginDateTime" type="s:string">
+                        <s:annotation>
+                          <s:documentation>The string submited as startDate to the GetValues method</s:documentation>
+                        </s:annotation>
+                      </s:element>
+                      <s:element minOccurs="0" maxOccurs="1" name="endDateTime" type="s:string">
+                        <s:annotation>
+                          <s:documentation>The string submited a startDate to the GetValues method</s:documentation>
+                        </s:annotation>
+                      </s:element>
+                    </s:sequence>
+                  </s:complexType>
+                </s:element>
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="note" type="s1:NoteType">
+            <s:annotation>
+              <s:documentation>Additional information, properties like should be encoded in zero or more &amp;amp;lt;note&amp;amp;gt; elmements.
+The name of the property should be @title, and the value should be inside the &amp;lt;note&amp;gt;value&amp;lt;/note&amp;gt;. Attribute @type is provided so that notes can be grouped.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:extension">
+            <s:annotation>
+              <s:documentation>In order to simplify comprehension, data sources are encouraged to put additional informaiton in the extension area, using thier own namespace. Clients need not understand information in &amp;lt;extension?</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="variables">
+        <s:annotation>
+          <s:documentation>variables is a list of variable elements (VariableInfoType).</s:documentation>
+        </s:annotation>
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="unbounded" name="variable" type="s1:VariableInfoType">
+              <s:annotation>
+                <s:documentation>zero or more variable elements are contained in a variables element.
+See VariableInfoType for more details on the information in the variable element</s:documentation>
+              </s:annotation>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:attributeGroup name="VocabularyAttributes">
+        <s:annotation>
+          <s:documentation>Tthe attribute group vocabularyAttributes contains common attributes used to differentiate data source codes. 
+A network should be provided with a siteCode, and a vocabular should be provided with a variableCode.
+If there is more than one code, one code should be provided as the default code for the service.
+</s:documentation>
+        </s:annotation>
+        <s:attribute name="network" type="s:string">
+          <s:annotation>
+            <s:documentation>@netowrk codespace for the siteCode datasource.
+Submitted to webservice as 'network:sitecode'</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="vocabulary" type="s:string">
+          <s:annotation>
+            <s:documentation>@vocabulary codespace for the variableCode for a datasource.
+Submitted to webservice as 'vocabulary:vocabularyCode'</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="default" type="s:boolean" />
+      </s:attributeGroup>
+      <s:attributeGroup name="DbIdentifiers">
+        <s:annotation>
+          <s:documentation>this attribute group provides provenance information for when an object is retrieved from a database.</s:documentation>
+        </s:annotation>
+        <s:attribute name="oid" type="s:normalizedString">
+          <s:annotation>
+            <s:documentation>object identifier, or guid for an object</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="metadataDateTime" type="s:dateTime">
+          <s:annotation>
+            <s:documentation>time object was created in the database.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+      </s:attributeGroup>
+      <s:element name="timeZoneInfo">
+        <s:annotation>
+          <s:documentation>The default time zone for this site (+00:00) and if this site shifts to daylight savings time (attribute: usesDaylightSavingsTime)</s:documentation>
+        </s:annotation>
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="defaultTimeZone">
+              <s:annotation>
+                <s:documentation>The default time zone for a site, specified in hours and minutes: "hh:mm"</s:documentation>
+              </s:annotation>
+              <s:complexType>
+                <s:attributeGroup ref="s1:timeZoneAttr" />
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="daylightSavingsTimeZone">
+              <s:annotation>
+                <s:documentation>The daylight savings time zone for a site, specified in hours and minutes: "hh:mm"</s:documentation>
+              </s:annotation>
+              <s:complexType>
+                <s:attributeGroup ref="s1:timeZoneAttr" />
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+          <s:attribute default="false" name="siteUsesDaylightSavingsTime" type="s:boolean" use="optional">
+            <s:annotation>
+              <s:documentation>If the location shifts it's data sources to Daylight Savings Time, this flag should be true.</s:documentation>
+            </s:annotation>
+          </s:attribute>
+        </s:complexType>
+      </s:element>
+      <s:attributeGroup name="ValueAttr">
+        <s:annotation>
+          <s:documentation>valueAttr contains the possible attributes that can be associated with a data value element.</s:documentation>
+        </s:annotation>
+        <s:attribute name="qualifiers" type="s:string">
+          <s:annotation>
+            <s:documentation>@qualifier contains a qualifier code whose details are described in the values/ qualifier element(s)
+Space delimit multiple qualifier codes.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="censorCode" type="s1:CensorCodeEnum">
+          <s:annotation>
+            <s:documentation>indication of whether the data value is censored
+@censorCode codelist is censorCodeEnum.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="dateTime" type="s:dateTime" use="required">
+          <s:annotation>
+            <s:documentation>XML date and time at which the data value was observed. This is an ISO specified string, that can contain a time zone offset, if apprpriate. If no time offset is specificed, the data is in the local time zone of the station.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="qualityControlLevel" type="s1:QualityControlLevelEnum">
+          <s:annotation>
+            <s:documentation>text string giving the level of quality control that the value has been subjected to.
+Codelist is from qualityControlLevelEnum.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="methodID" type="s:int">
+          <s:annotation>
+            <s:documentation>@qualifier contains a identifier whose details are described in the values/method element(s)
+</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="sourceID" type="s:int">
+          <s:annotation>
+            <s:documentation>@methodID contains an identifier whose details are described in the values/method element(s)
+</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="accuracyStdDev" type="s:double">
+          <s:annotation>
+            <s:documentation>Numeric value that describes the measurement accuracy of the data value. If not given, it is interpreted as unknown.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="codedVocabulary" type="s:boolean">
+          <s:annotation>
+            <s:documentation>If a value is categorical, then @codedVocabulary is set to true, and the categorical term is placed in@codedVocabularyTerm, and a numeric value put in the value.
+
+While not a good practice, allows for categorical and numeric values to be intermixed.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="codedVocabularyTerm" type="s:string" />
+        <s:attribute name="sampleID" type="s:int">
+          <s:annotation>
+            <s:documentation>@sampleId contains a n identifier whose details are described in the values/samples element(s) 
+This is required only if the data value resulted from a physical sample processed in a lab.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+      </s:attributeGroup>
+      <s:attributeGroup name="timeZoneAttr">
+        <s:attribute name="ZoneAbbreviation" type="s:normalizedString" use="optional">
+          <s:annotation>
+            <s:documentation>the standard abbreviation for this time zone (GMT; EST)</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="ZoneOffset" type="s:string" use="required">
+          <s:annotation>
+            <s:documentation>Hours and minutes offset for this time zone  (+00:00).</s:documentation>
+          </s:annotation>
+        </s:attribute>
+      </s:attributeGroup>
+      <s:element name="optionGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="unbounded" ref="s1:option" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DocumentationType" mixed="true">
+        <s:attribute name="type" type="s1:DocumentationEnumTypes" />
+        <s:attributeGroup ref="s1:XLinkAttr" />
+      </s:complexType>
+      <s:simpleType name="DocumentationEnumTypes">
+        <s:union memberTypes="s:token">
+          <s:simpleType>
+            <s:restriction base="s:token">
+              <s:enumeration value="funding" />
+              <s:enumeration value="history" />
+              <s:enumeration value="processing_level" />
+              <s:enumeration value="rights" />
+              <s:enumeration value="summary" />
+            </s:restriction>
+          </s:simpleType>
+        </s:union>
+      </s:simpleType>
+      <s:attributeGroup name="XLinkAttr">
+        <s:attribute name="href" type="s:string" />
+        <s:attribute name="title" type="s:string" />
+        <s:attribute name="show" type="s:string" />
+      </s:attributeGroup>
+      <s:element name="options">
+        <s:annotation>
+          <s:documentation>A list of options. Option elements are key-value pair elements that control how a variable maght be utilized in a service.
+            Examples:
+ MODIS web service. Information is aggreated over land or ocean or both. The plotarea option can include: plotarea=land, plotarea=land, plotarea=landocean
+
+USGS uses a statistic code, 0003, to repesent a  value type of 'Average'. The USGS statistic codes also several options that do not fit the ODM data model. </s:documentation>
+        </s:annotation>
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="unbounded" ref="s1:option">
+              <s:annotation>
+                <s:documentation>Option elements are key-value pair elements that control how a variable maght be utilized in a service.
+            Examples:
+ MODIS web service. Information is aggreated over land or ocean or both. The plotarea option can include: plotarea=land, plotarea=land, plotarea=landocean
+
+USGS uses a statistic code, 0003, to repesent a  value type of 'Average'. The USGS statistic codes also several options that do not fit the ODM data model. </s:documentation>
+              </s:annotation>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SourceInfoType">
+        <s:annotation>
+          <s:documentation>SourceInfoType is used to describe the data source in the timeSeriesResponse.
+SourceInfoType is the base type for data source information. At present, two types are derived from SourceInfoType: SiteInfoType, and DataSetInfoType. SiteInfoType describes tlocation for  a timeseries where that time series is located at a site or a DataSetInfoType describes time series derived from a dataset, such as a netCDF file, or a gridded model.
+</s:documentation>
+        </s:annotation>
+      </s:complexType>
+      <s:complexType name="DataSetInfoType">
+        <s:annotation>
+          <s:documentation>DataSetInfoType describes time series derived from a dataset, such as a netCDF file, or a gridded model.</s:documentation>
+        </s:annotation>
+        <s:complexContent mixed="false">
+          <s:extension base="s1:SourceInfoType">
+            <s:sequence>
+              <s:element name="dataSetIdentifier" type="s:string">
+                <s:annotation>
+                  <s:documentation>The indentifier which the original source uses to identify this dataset. This may be a unique indentifier, or  a URL from which the data source was retireved</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" ref="s1:timeZoneInfo">
+                <s:annotation>
+                  <s:documentation>the default time zone for this site (+00:00) and if this site shifts to daylight savings time (attribute: usesDaylightSavingsTime)</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="dataSetDescription" type="s:string">
+                <s:annotation>
+                  <s:documentation>Text description describing the data source. </s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="note" type="s1:NoteType">
+                <s:annotation>
+                  <s:documentation>Additional information, about a dataset, or  other properties should be encoded in zero or more &amp;amp;lt;note&amp;amp;gt; elmements.
+The name of the property should be @title, and the value should be inside the &amp;lt;note&amp;gt;value&amp;lt;/note&amp;gt;. Attribute @type is provided so that notes can be grouped.</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" name="dataSetLocation" type="s1:GeogLocationType">
+                <s:annotation>
+                  <s:documentation>geolocation describing the spatial coverage of a gridded dataset.</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element minOccurs="0" maxOccurs="1" ref="s1:extension">
+                <s:annotation>
+                  <s:documentation>In order to simplify comprehension, data sources are encouraged to put additional informaiton in the extension area, using thier own namespace. Clients need not understand information in extension element</s:documentation>
+                </s:annotation>
+              </s:element>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="datasetInfo" type="s1:DataSetInfoType">
+        <s:annotation>
+          <s:documentation>dataSetInfo element describes time series derived from a dataset, such as a netCDF file, or a gridded model.</s:documentation>
+        </s:annotation>
+      </s:element>
+      <s:complexType name="TimePeriodType">
+        <s:annotation>
+          <s:documentation>time series (site-variable-observation) can have three types of time periods:
+1) definite start and end time, or TimeIntervalType,
+2) single observation, or TimeSingleType
+3) Real Time station with moving window of data available, or TimeRealTimeType
+
+In order to simplify client development, all types now include beginDateTime, and endDateTime.
+
+A fourth type should be added:
+4) continuing site, where start is known, and site is still collecting data. This could be a realTimeType, or rename the real time type to TimeDefinedPeriodType.
+</s:documentation>
+        </s:annotation>
+        <s:sequence />
+      </s:complexType>
+      <s:complexType name="TimeIntervalType">
+        <s:annotation>
+          <s:documentation>For where a series has multiple observations, and a define beingDateTime as dateTime of  the first data value in the series,  and endDateTime dateTime of the last data value in the series.  </s:documentation>
+        </s:annotation>
+        <s:complexContent mixed="false">
+          <s:extension base="s1:TimePeriodType">
+            <s:sequence>
+              <s:element name="beginDateTime" type="s:dateTime">
+                <s:annotation>
+                  <s:documentation>dateTime of the first data value in the series.  
+
+The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:
+
+    * YYYY indicates the year
+    * MM indicates the month
+    * DD indicates the day
+    * T indicates the start of the required time section
+    * hh indicates the hour
+    * mm indicates the minute
+    * ss indicates the second
+
+Note: All components are required!</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element name="endDateTime" type="s:dateTime">
+                <s:annotation>
+                  <s:documentation>Date of the last data value in the series.  
+
+The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:
+
+    * YYYY indicates the year
+    * MM indicates the month
+    * DD indicates the day
+    * T indicates the start of the required time section
+    * hh indicates the hour
+    * mm indicates the minute
+    * ss indicates the second
+
+Note: All components are required!</s:documentation>
+                </s:annotation>
+              </s:element>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="TimeSingleType">
+        <s:annotation>
+          <s:documentation>For where a series is a single observation.
+
+timeSingle, beginDateTime, and endDateTime will have the same value. The beginDateTime and endDateTime are provided to simplify usage by clients.They should be be calculated based on the duration stored in realTimeDataPeriod</s:documentation>
+        </s:annotation>
+        <s:complexContent mixed="false">
+          <s:extension base="s1:TimePeriodType">
+            <s:sequence>
+              <s:element name="timeSingle" type="s:dateTime" />
+              <s:element name="beginDateTime" type="s:dateTime">
+                <s:annotation>
+                  <s:documentation>dateTime of the first data value in the series.  
+
+The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:
+
+    * YYYY indicates the year
+    * MM indicates the month
+    * DD indicates the day
+    * T indicates the start of the required time section
+    * hh indicates the hour
+    * mm indicates the minute
+    * ss indicates the second
+
+Note: All components are required!</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element name="endDateTime" type="s:dateTime">
+                <s:annotation>
+                  <s:documentation>Date of the last data value in the series.  
+
+The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:
+
+    * YYYY indicates the year
+    * MM indicates the month
+    * DD indicates the day
+    * T indicates the start of the required time section
+    * hh indicates the hour
+    * mm indicates the minute
+    * ss indicates the second
+
+Note: All components are required!</s:documentation>
+                </s:annotation>
+              </s:element>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="TimePeriodRealTimeType">
+        <s:annotation>
+          <s:documentation>Use where a site has an evolving period where data is available.
+The US Geological Survey real time data is available for 30 days, the realTimeDataPeriod element is an XML duration and woudl be "30d"
+
+The beginDateTime and endDateTime are provided to simplify usage by clients.They should be be calculated based on the duration stored in realTimeDataPeriod</s:documentation>
+        </s:annotation>
+        <s:complexContent mixed="false">
+          <s:extension base="s1:TimePeriodType">
+            <s:sequence>
+              <s:element name="realTimeDataPeriod" type="s:duration">
+                <s:annotation>
+                  <s:documentation>Duration Data Type
+
+The duration data type is used to specify a time interval.
+
+The time interval is specified in the following form "PnYnMnDTnHnMnS" where:
+
+    * P indicates the period (required)
+    * nY indicates the number of years
+    * nM indicates the number of months
+    * nD indicates the number of days
+    * T indicates the start of a time section (required if you are going to specify hours, minutes, or seconds)
+    * nH indicates the number of hours
+    * nM indicates the number of minutes
+    * nS indicates the number of seconds
+</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element name="beginDateTime" type="s:dateTime">
+                <s:annotation>
+                  <s:documentation>dateTime of the first data value in the series.  
+This should be be calculated based on the duration stored in realTimeDataPeriod
+
+The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:
+
+    * YYYY indicates the year
+    * MM indicates the month
+    * DD indicates the day
+    * T indicates the start of the required time section
+    * hh indicates the hour
+    * mm indicates the minute
+    * ss indicates the second
+
+Note: All components are required!</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element name="endDateTime" type="s:dateTime">
+                <s:annotation>
+                  <s:documentation>Date of the last data value in the series.  
+This should be be calculated based on the duration stored in realTimeDataPeriod
+
+The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:
+
+    * YYYY indicates the year
+    * MM indicates the month
+    * DD indicates the day
+    * T indicates the start of the required time section
+    * hh indicates the hour
+    * mm indicates the minute
+    * ss indicates the second
+
+Note: All components are required!</s:documentation>
+                </s:annotation>
+              </s:element>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GeogLocationType">
+        <s:annotation>
+          <s:documentation>GeogLocationType is the base class for the two geometry types: LatLonPointType, and LatLonBoxType.
+Any additional types should derive from this type.
+The default spatial reference system is  @srs is EPSG:4326  or Geographic lat long.
+</s:documentation>
+        </s:annotation>
+        <s:sequence />
+        <s:attribute default="EPSG:4326" name="srs" type="s:string" use="optional" />
+      </s:complexType>
+      <s:complexType name="LatLonPointType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:GeogLocationType">
+            <s:sequence>
+              <s:element name="latitude" type="s1:Latitude">
+                <s:annotation>
+                  <s:documentation>
+            The latitude of the site in a decimal degrees as calculated in terms of the given datum.
+          </s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element name="longitude" type="s1:Longitude">
+                <s:annotation>
+                  <s:documentation>
+            The longitude of the site in a decimal degrees as calculated in terms of the given datum.
+          </s:documentation>
+                </s:annotation>
+              </s:element>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="latLonPoint" type="s1:LatLonPointType">
+        <s:annotation>
+          <s:documentation>Point type for describing a geographic location</s:documentation>
+        </s:annotation>
+      </s:element>
+      <s:complexType name="LatLonBoxType">
+        <s:complexContent mixed="false">
+          <s:extension base="s1:GeogLocationType">
+            <s:sequence>
+              <s:element name="south" type="s1:Latitude">
+                <s:annotation>
+                  <s:documentation>South Latitude</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element name="west" type="s1:Longitude">
+                <s:annotation>
+                  <s:documentation>West Longitude</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element name="north" type="s1:Latitude">
+                <s:annotation>
+                  <s:documentation>North Latitude</s:documentation>
+                </s:annotation>
+              </s:element>
+              <s:element name="east" type="s1:Longitude">
+                <s:annotation>
+                  <s:documentation>East longitude.</s:documentation>
+                </s:annotation>
+              </s:element>
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="latLonBox" type="s1:LatLonBoxType">
+        <s:annotation>
+          <s:documentation>Box type describing a geographic location.</s:documentation>
+        </s:annotation>
+      </s:element>
+      <s:simpleType name="Longitude">
+        <s:annotation>
+          <s:documentation>The longitude of the site in a decimal degrees as calculated in terms of the given datum.</s:documentation>
+        </s:annotation>
+        <s:restriction base="s:double">
+          <s:minInclusive value="-180.00" />
+          <s:maxInclusive value="180.00" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="Latitude">
+        <s:annotation>
+          <s:documentation>The latitude of the site in a decimal degrees as calculated in terms of the given datum.
+          </s:documentation>
+        </s:annotation>
+        <s:restriction base="s:double">
+          <s:minInclusive value="-90.00" />
+          <s:maxInclusive value="90.00" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="seriesCatalogType">
+        <s:annotation>
+          <s:documentation>Series catalog represents a list of series, where each  separate data series are for the purposes of identifying or displaying what data are available at each site. </s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="note" type="s1:NoteType">
+            <s:annotation>
+              <s:documentation>Additional information, properties like should be encoded in zero or more 
+In seriesCatalog note elements are placed at the top, to simplify human identification, since there  can be tens, or hundred of series for a location. 
+
+The name of the property should be @title, and the value should be inside the note
+element. Attribute @type is provided so that notes can be grouped.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="series">
+            <s:annotation>
+              <s:documentation>Separate data series are for the purposes of identifying or displaying what data are available at each site.  
+
+Site information is a parent of the series so that it does not need to be repeated (difference from the ODM. ). A Site contains one or more seriesCatalogs which contain one or more series.
+
+Assotiated with site, a series is a unique combination of the textual repesentation of ODM series: Variable,Method,Source,QualityControlLevel.
+
+An ODM series is a unique site/variable combinations are defined by unique combinations of SiteID, VariableID, MethodID, SourceID, and QualityControlLevelID.  </s:documentation>
+            </s:annotation>
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="1" name="dataType" type="s1:dataTypeEnum">
+                  <s:annotation>
+                    <s:documentation>Text value that identifies the data as one of several types as found ing dataTypeEnum</s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element name="variable" type="s1:VariableInfoType" />
+                <s:element name="valueCount">
+                  <s:complexType>
+                    <s:simpleContent>
+                      <s:extension base="s:int">
+                        <s:attribute name="countIsEstimated" type="s:boolean" />
+                      </s:extension>
+                    </s:simpleContent>
+                  </s:complexType>
+                </s:element>
+                <s:element name="variableTimeInterval" type="s1:TimePeriodType">
+                  <s:annotation>
+                    <s:documentation>this describes the time period that ana variable or observed parameter are available for.
+This is of TimePeriodType, which is presently:
+TimeIntervalType - definite begin and end
+TimeSingleType - single observation/datavalue
+TimePeriodRealTime - a floating time period for when data is available.
+
+This will have a xml schema type attribute:
+xsi:type="TimeIntervalType" 
+xsi:type="TimeSingleType" 
+xsi:type="TimePeriodRealTime" </s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element minOccurs="0" maxOccurs="1" name="valueType" type="s1:valueTypeEnum">
+                  <s:annotation>
+                    <s:documentation>Text value indicating what type of data value is being recorded as listed in valueTypeEnum</s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element minOccurs="0" maxOccurs="1" name="generalCategory" type="s1:generalCategoryEnum">
+                  <s:annotation>
+                    <s:documentation>General category of the variable as listed in generalCategoryEnum</s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element minOccurs="0" maxOccurs="1" name="sampleMedium" type="s1:SampleMediumEnum">
+                  <s:annotation>
+                    <s:documentation>The medium of the sample as listed in SampleTypeEnum</s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element minOccurs="0" maxOccurs="1" name="Method" type="s1:MethodType">
+                  <s:annotation>
+                    <s:documentation>Method description. 
+Optional, since many sources do not have detailed methods. 
+
+ODM datasources require methods.</s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element minOccurs="0" maxOccurs="1" name="Source" type="s1:SourceType">
+                  <s:annotation>
+                    <s:documentation>Source of the data values and reference information to recover/discover the data from the source. </s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element minOccurs="0" maxOccurs="1" name="QualityControlLevel" type="s1:QualityControlLevelType">
+                  <s:annotation>
+                    <s:documentation>Code used to identify the level of quality control to which data values have been subjected.
+
+</s:documentation>
+                  </s:annotation>
+                </s:element>
+                <s:element minOccurs="0" maxOccurs="1" ref="s1:extension" />
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:extension" />
+        </s:sequence>
+        <s:attribute name="menuGroupName" type="s:string" use="optional">
+          <s:annotation>
+            <s:documentation>For clients, this is the list of the html select group element.
+This would allow for groups or seriesCatalogs to appear in an HTML select menu.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+        <s:attribute name="serviceWsdl" type="s:anyURI" use="optional">
+          <s:annotation>
+            <s:documentation>(depreciated) 
+location of the WaterOneFlow service that the client should execute GetValues call on.
+
+
+All services now proxy getValues methods from other sources.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+      </s:complexType>
+      <s:attributeGroup name="offsetAttr">
+        <s:attribute name="offsetValue" type="s:double" />
+        <s:attribute name="offsetTypeID" type="s:int" />
+        <s:attribute name="offsetDescription" type="s:string" />
+        <s:attribute name="offsetUnitsAbbreviation" type="s:string" />
+        <s:attribute name="offsetUnitsCode" type="s:string" />
+      </s:attributeGroup>
+      <s:simpleType name="CensorCodeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="lt" />
+          <s:enumeration value="gt" />
+          <s:enumeration value="nc" />
+          <s:enumeration value="nd" />
+          <s:enumeration value="pnq" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="QualifiersType">
+        <s:annotation>
+          <s:documentation>qualifying comments that accompany the data</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element name="qualifier">
+            <s:annotation>
+              <s:documentation>qualifying comments that accompany the data. value/@qaulifier is a space delimted list of qualifiers for a data value. @qualifierCode is the link to the value/@qualifier for a single value
+
+The value inside provides the textual description. @qualifierCode is the reference code.
+
+@qualifierCode=A
+qualifier value=Approved
+
+@vocabulary and @network are suggested. For example a value from the USGS may qualifiers from multiple vocabularies, and the network would be the data service.</s:documentation>
+            </s:annotation>
+            <s:complexType>
+              <s:sequence>
+                <s:element name="qualifierCode" type="s:token">
+                  <s:annotation>
+                    <s:documentation>Text code used by organization that collects the data.
+value/@qaulifier is a space delimted list of qualifiers for a data value. @qualifierCode is the link to the value/@qualifier for a single value</s:documentation>
+                  </s:annotation>
+                </s:element>
+              </s:sequence>
+              <s:attribute name="qualifierID" type="s:int" />
+              <s:attributeGroup ref="s1:VocabularyAttributes" />
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TimeSeriesType">
+        <s:annotation>
+          <s:documentation>Contains the source of the time series, the variable, and values element which is an array of value elements and thier associated metadata (qualifiers, methods, sources, quality control level, samples)</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element name="sourceInfo" type="s1:SourceInfoType" />
+          <s:element name="variable" type="s1:VariableInfoType">
+            <s:annotation>
+              <s:documentation>Contains full descriptive information about a variable, as described by the ODM. This includes one or more variable codes, the short variable name, a detailed variable description, and suggest.
+See VariableInforType for full details.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element name="values" type="s1:TsValuesSingleVariableType">
+            <s:annotation>
+              <s:documentation>A list of values and associated metadata. It is the values element in the timeSerissResponse</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+        <s:attribute name="name" type="s:string" use="optional">
+          <s:annotation>
+            <s:documentation>Name of the time series. optional.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+      </s:complexType>
+      <s:complexType name="NoteType">
+        <s:annotation>
+          <s:documentation>NoteType defines the note element available in many defined types.
+
+the value should the description of the note.
+@title should be the brief name that might be displayed as a lable
+@type can be used to allow for grouping of elements.</s:documentation>
+        </s:annotation>
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="type" type="s:string" />
+            <s:attributeGroup ref="s1:XLinkAttr" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:element name="option">
+        <s:annotation>
+          <s:documentation>Option elements are key-value pair elements that control how a variable maght be utilized in a service.
+            Examples:
+ MODIS web service. Information is aggreated over land or ocean or both. The plotarea option can include: plotarea=land, plotarea=land, plotarea=landocean
+
+USGS uses a statistic code, 0003, to repesent a  value type of 'Average'. The USGS statistic codes also several options that do not fit the ODM data model. </s:documentation>
+        </s:annotation>
+        <s:complexType>
+          <s:simpleContent>
+            <s:extension base="s:string">
+              <s:attribute name="name" type="s:normalizedString" />
+              <s:attribute name="optionID" type="s:integer" />
+              <s:attribute name="optionCode" type="s:token" />
+            </s:extension>
+          </s:simpleContent>
+        </s:complexType>
+      </s:element>
+      <s:element name="variableCode">
+        <s:annotation>
+          <s:documentation>Text code used by the organization that collects the data to identify the variable. The attribute @vocabulary must be set to the data source name, so the clients can subbumit variable requests to a web service (net
+
+USGS discharge
+
+variableCode
+  @vocabularyk=NWISDV
+  @default=true
+  “00060”</s:documentation>
+        </s:annotation>
+        <s:complexType>
+          <s:simpleContent>
+            <s:extension base="s:token">
+              <s:attributeGroup ref="s1:VocabularyAttributes" />
+              <s:attribute name="variableID" type="s:integer" />
+            </s:extension>
+          </s:simpleContent>
+        </s:complexType>
+      </s:element>
+      <s:element name="units">
+        <s:complexType>
+          <s:simpleContent>
+            <s:extension base="s:string">
+              <s:attributeGroup ref="s1:unitsAttr" />
+            </s:extension>
+          </s:simpleContent>
+        </s:complexType>
+      </s:element>
+      <s:attributeGroup name="unitsAttr">
+        <s:attribute name="unitsAbbreviation" type="s:normalizedString" />
+        <s:attribute name="unitsCode" type="s:token" use="optional" />
+        <s:attribute name="unitsType" type="s1:UnitsTypeEnum" use="optional" />
+      </s:attributeGroup>
+      <s:simpleType name="UnitsTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Angle" />
+          <s:enumeration value="Area" />
+          <s:enumeration value="Dimensionless" />
+          <s:enumeration value="Energy" />
+          <s:enumeration value="Energy Flux" />
+          <s:enumeration value="Flow" />
+          <s:enumeration value="Force" />
+          <s:enumeration value="Frequency" />
+          <s:enumeration value="Length" />
+          <s:enumeration value="Light" />
+          <s:enumeration value="Mass" />
+          <s:enumeration value="Permeability" />
+          <s:enumeration value="Power" />
+          <s:enumeration value="Pressure/Stress" />
+          <s:enumeration value="Resolution" />
+          <s:enumeration value="Scale" />
+          <s:enumeration value="Temperature" />
+          <s:enumeration value="Time" />
+          <s:enumeration value="Velocity" />
+          <s:enumeration value="Volume" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ValueSingleVariable">
+        <s:simpleContent>
+          <s:extension base="s:decimal">
+            <s:attributeGroup ref="s1:ValueAttr" />
+            <s:attributeGroup ref="s1:offsetAttr" />
+            <s:attributeGroup ref="s1:DbIdentifiers" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:element name="qualifier">
+        <s:annotation>
+          <s:documentation>qualifying comments that accompany the data</s:documentation>
+        </s:annotation>
+        <s:complexType>
+          <s:simpleContent>
+            <s:extension base="s:string">
+              <s:attribute name="qualifierCode" type="s:token" />
+              <s:attribute name="qualifierID" type="s:integer" />
+              <s:attributeGroup ref="s1:DbIdentifiers" />
+              <s:attributeGroup ref="s1:VocabularyAttributes" />
+            </s:extension>
+          </s:simpleContent>
+        </s:complexType>
+      </s:element>
+      <s:element name="extension" type="s:anyType">
+        <s:annotation>
+          <s:documentation>In order to simplify comprehension, data sources are encouraged to put additional informaiton in the extension area, using thier own namespace. Clients need not understand information in &amp;lt;extension?</s:documentation>
+        </s:annotation>
+      </s:element>
+      <s:complexType name="VariablesResponseType">
+        <s:annotation>
+          <s:documentation>VariablesResponseType is object type returned by the method GetVariableInfo. The elemnt name is variablesResponse.  The request will contain a variables element containing a list of variable elements.</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" name="queryInfo" type="s1:QueryInfoType">
+            <s:annotation>
+              <s:documentation>the parameter information passed to GetVariableInfo(variable) should be placed in QueryInfoType/criteria/variableParam
+See QueryInfoType for more details.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="1" ref="s1:variables">
+            <s:annotation>
+              <s:documentation>variables element contains a list of variable elements</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TimeSeriesResponseType">
+        <s:sequence>
+          <s:element minOccurs="0" name="queryInfo" type="s1:QueryInfoType">
+            <s:annotation>
+              <s:documentation>the parameter information passed to Getvalues(location,variable,beginDate,endDate) should be placed in QueryInfoType/criteria/
+See QueryInfoType for more details.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element name="timeSeries" type="s1:TimeSeriesType">
+            <s:annotation>
+              <s:documentation>Contains the source of the time series, the variable, and values element which is an array of value elements and thier associated metadata (qualifiers, methods, sources, quality control level, samples)</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SiteInfoResponseType">
+        <s:annotation>
+          <s:documentation>A sitesResponse contains a list of zero or more site elements.
+
+The siteInfo element contains the basic site information, siteName, location, siteCodes, properties.
+The seriesCatalog contains the list of observation series conducted at a site.
+
+A site element can have two parts: siteInfo, and one or more seriesCatalogs.
+Rules:
+GetSites(site[]) or GetSites(null), return no seriesCatalogs elements
+
+GetSiteInfo(site) return all information about a site, including the seriesCatalog.</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" name="queryInfo" type="s1:QueryInfoType">
+            <s:annotation>
+              <s:documentation>The parameter information passed to GetSiteInfo(site) or GetSites(site[]) should be placed in QueryInfoType/criteria/locationParam
+See QueryInfoType for more details.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="unbounded" ref="s1:site">
+            <s:annotation>
+              <s:documentation>A sitesResponse contains a list of zero or more site elements. A site element is</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="site">
+        <s:annotation>
+          <s:documentation>A site element can have two parts: siteInfo, and one or more seriesCatalogs.
+The siteInfo element contains the basic site information, siteName, location, siteCodes, properties.
+The seriesCatalog contains the list of observation series conducted at a site.
+
+Rules:
+GetSites(site[]) or GetSites(null), return no seriesCatalogs elements
+
+GetSiteInfo(site) return all information about a site, including the seriesCatalog.</s:documentation>
+        </s:annotation>
+        <s:complexType>
+          <s:sequence>
+            <s:element name="siteInfo" type="s1:SiteInfoType">
+              <s:annotation>
+                <s:documentation>siteInfo element contains  a list of information about a site.
+See SiteInfoType</s:documentation>
+              </s:annotation>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="unbounded" name="seriesCatalog" type="s1:seriesCatalogType" />
+            <s:element minOccurs="0" maxOccurs="1" ref="s1:extension">
+              <s:annotation>
+                <s:documentation>In order to simplify comprehension, data sources are encouraged to put additional informaiton in the extension area, using thier own namespace. Clients need not understand information in extension element</s:documentation>
+              </s:annotation>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="QualityControlLevelEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Raw data" />
+          <s:enumeration value="Quality controlled data" />
+          <s:enumeration value="Derived products" />
+          <s:enumeration value="Interpreted products" />
+          <s:enumeration value="Knowledge products" />
+          <s:enumeration value="Unknown" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="qualityControlLevel">
+        <s:annotation>
+          <s:documentation>quality control levels that are used for versioning data within the database. </s:documentation>
+        </s:annotation>
+        <s:complexType>
+          <s:sequence>
+            <s:element name="qualityControlLevelID" type="s:normalizedString">
+              <s:annotation>
+                <s:documentation>Unique integer identifying the quality control level. </s:documentation>
+              </s:annotation>
+            </s:element>
+          </s:sequence>
+          <s:attribute name="qualityControlLevelCode" type="s:string">
+            <s:annotation>
+              <s:documentation>Code used to identify the level of quality control to which data values have been subjected.</s:documentation>
+            </s:annotation>
+          </s:attribute>
+          <s:attributeGroup ref="s1:DbIdentifiers" />
+          <s:attributeGroup ref="s1:VocabularyAttributes" />
+        </s:complexType>
+      </s:element>
+      <s:complexType name="QualityControlLevelType">
+        <s:annotation>
+          <s:documentation>Value is the text Code used to identify the level of quality control to which data values have been subjected.</s:documentation>
+        </s:annotation>
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="qualityControlLevelID" type="s:int">
+              <s:annotation>
+                <s:documentation>Integer identifier that indicates the level of quality control that the data values have been subjected to.</s:documentation>
+              </s:annotation>
+            </s:attribute>
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:simpleType name="SampleMediumEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Surface Water" />
+          <s:enumeration value="Ground Water" />
+          <s:enumeration value="Sediment" />
+          <s:enumeration value="Soil" />
+          <s:enumeration value="Air" />
+          <s:enumeration value="Tissue" />
+          <s:enumeration value="Precipitation" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Other" />
+          <s:enumeration value="Snow" />
+          <s:enumeration value="Not Relevant" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="generalCategoryEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Water Quality" />
+          <s:enumeration value="Climate" />
+          <s:enumeration value="Hydrology" />
+          <s:enumeration value="Geology" />
+          <s:enumeration value="Biota" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Instrumentation" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="dataTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Continuous" />
+          <s:enumeration value="Instantaneous" />
+          <s:enumeration value="Cumulative" />
+          <s:enumeration value="Incremental" />
+          <s:enumeration value="Average" />
+          <s:enumeration value="Maximum" />
+          <s:enumeration value="Minimum" />
+          <s:enumeration value="Constant Over Interval" />
+          <s:enumeration value="Categorical" />
+          <s:enumeration value="Best Easy Systematic Estimator " />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Variance" />
+          <s:enumeration value="Median" />
+          <s:enumeration value="Mode" />
+          <s:enumeration value="Best Easy Systematic Estimator" />
+          <s:enumeration value="Standard Deviation" />
+          <s:enumeration value="Skewness" />
+          <s:enumeration value="Equivalent Mean" />
+          <s:enumeration value="Sporadic" />
+          <s:enumeration value="Unknown" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="sampleTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="FD" />
+          <s:enumeration value="FF" />
+          <s:enumeration value="FL" />
+          <s:enumeration value="LF" />
+          <s:enumeration value="GW" />
+          <s:enumeration value="PB" />
+          <s:enumeration value="PD" />
+          <s:enumeration value="PE" />
+          <s:enumeration value="PI" />
+          <s:enumeration value="PW" />
+          <s:enumeration value="RE" />
+          <s:enumeration value="SE" />
+          <s:enumeration value="SR" />
+          <s:enumeration value="SS" />
+          <s:enumeration value="SW" />
+          <s:enumeration value="TE" />
+          <s:enumeration value="TI" />
+          <s:enumeration value="TW" />
+          <s:enumeration value="VE" />
+          <s:enumeration value="VI" />
+          <s:enumeration value="VW" />
+          <s:enumeration value="Grab" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="No Sample" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="valueTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Field Observation" />
+          <s:enumeration value="Sample" />
+          <s:enumeration value="Model Simulation Result" />
+          <s:enumeration value="Derived Value" />
+          <s:enumeration value="Unknown" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="UnitsType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UnitName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UnitDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UnitType" type="s1:UnitsTypeEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="UnitAbbreviation" type="s:string" />
+        </s:sequence>
+        <s:attribute name="UnitID" type="s:int" use="optional" />
+      </s:complexType>
+      <s:complexType name="MethodType">
+        <s:annotation>
+          <s:documentation>Method used to collect the data and any additional information about the method.
+
+@methodId is the link to value/@method
+
+As per communication from the ODM designers, multiple instruments observing the same variable, should be different methods.
+
+Methods should describe the manner in which the observation was collected (i.e., collected manually, or collected using an automated sampler) or measured (i.e., measured using a temperature sensor or measured using a turbidity sensor).  Details about the specific sensor models and manufacturers can be included in the MethodDescription</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element name="MethodDescription" type="s:string">
+            <s:annotation>
+              <s:documentation>Text description of each method.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="MethodLink" type="s:string">
+            <s:annotation>
+              <s:documentation>Link to additional reference material on the method.</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+        <s:attribute name="methodID" type="s:int" />
+      </s:complexType>
+      <s:complexType name="SampleType">
+        <s:annotation>
+          <s:documentation>information about physical samples analyzed in a laboratory.
+
+@sampleID is the link to the datavalues/@sampleID
+
+LabSampleCode is the sample code. In WaterML 1.1 this will be the link to the dataValue
+
+SampleType describes the the sample type 
+
+LabMethod is a LabMethodType containing infomration about lab methods
+</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element name="labSampleCode" type="s:string">
+            <s:annotation>
+              <s:documentation>Code or label used to identify and track lab sample or sample container (e.g. bottle) during lab analysis.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element name="SampleType" type="s1:sampleTypeEnum">
+            <s:annotation>
+              <s:documentation>Controlled vocabulary specifying the sample type from the SampleTypeEnum.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="LabMethod" type="s1:LabMethodType">
+            <s:annotation>
+              <s:documentation>LabMethod is a LabMethodType containing infomration about lab methods</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+        <s:attribute name="sampleID" type="s:int" />
+      </s:complexType>
+      <s:complexType name="LabMethodType">
+        <s:annotation>
+          <s:documentation>contains descriptions of the laboratory methods used to analyze physical samples for specific constituents.</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" name="labName" type="s:string">
+            <s:annotation>
+              <s:documentation>Name of the laboratory responsible for processing the sample.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="labOrganization" type="s:string">
+            <s:annotation>
+              <s:documentation>Organization responsible for sample analysis.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="LabMethodName" type="s:string">
+            <s:annotation>
+              <s:documentation>Name of the method and protocols used for sample analysis.
+
+Suggest using nemi names and codes
+http://www.nemi.gov/
+
+“USEPA-365.1”</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="labMethodDescription" type="s:string">
+            <s:annotation>
+              <s:documentation>Description of the method and protocols used for sample analysis.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="labMethodLink" type="s:string">
+            <s:annotation>
+              <s:documentation>Link to additional reference material on the analysis method.</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+        <s:attribute name="labMethodID" type="s:int">
+          <s:annotation>
+            <s:documentation>Unique integer identifier for each laboratory method. This is the key used by the Samples table to reference a laboratory method.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+      </s:complexType>
+      <s:complexType name="SourceType">
+        <s:annotation>
+          <s:documentation>original sources of the data, providing information sufficient to retrieve and reconstruct the data value from the original data files if necessary</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Organization" type="s:string">
+            <s:annotation>
+              <s:documentation>Name of the organization that collected the data. This should be the agency or organization that collected the data, even if it came out of a database consolidated from many sources such as STORET.
+
+“Utah Division of Water Quality”</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="SourceDescription" type="s:string">
+            <s:annotation>
+              <s:documentation>Full text description of the source of the data.
+
+“Text file retrieved from the EPA STORET system indicating data originally from Utah Division of Water Quality”</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="Metadata" type="s1:MetaDataType">
+            <s:annotation>
+              <s:documentation>MetadataType contains the information from the ODM table IsoMetadata. It is anticpated that many data sources may not have this fully available.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="ContactInformation" type="s1:ContactInformationType">
+            <s:annotation>
+              <s:documentation>Contact information about source.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="SourceLink" type="s:anyURI">
+            <s:annotation>
+              <s:documentation>Link that can be pointed at the original data file and/or associated metadata stored in the digital library or URL of data source.</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+        <s:attribute name="sourceID" type="s:int">
+          <s:annotation>
+            <s:documentation>Unique integer identifier that identifies each data source.
+
+link to datavalues/@sourceID</s:documentation>
+          </s:annotation>
+        </s:attribute>
+      </s:complexType>
+      <s:complexType name="ContactInformationType">
+        <s:annotation>
+          <s:documentation>Contains information about a contact.
+A contact can be a person or an agency.
+The name of the contact is required.
+
+And address, email or phone is suggested. (in 1.1 one of these will be required.</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ContactName" type="s:string">
+            <s:annotation>
+              <s:documentation>name of contact, or title of organization</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="TypeOfContact" type="s:string">
+            <s:annotation>
+              <s:documentation>Type of contact, in open terms:
+Project Contact
+Data source contact
+HIS Admin
+Data Source Admin
+Data Base Admin</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="Phone" type="s:string">
+            <s:annotation>
+              <s:documentation>phone</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="Email" type="s:string">
+            <s:annotation>
+              <s:documentation>email address</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" name="Address" type="s:anyType">
+            <s:annotation>
+              <s:documentation>Any address element structure that can be used to communicate contact information.
+</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MetaDataType">
+        <s:annotation>
+          <s:documentation>MetadataType contains the information from the ODM table IsoMetadata. It is anticpated that many data sources may not have this fully available.
+
+ IsoMetadata table contains dataset and project level metadata required by the CUAHSI HIS metadata system (http://www.cuahsi.org/his/documentation.html) for compliance with standards such as the draft ISO 19115 or ISO 8601.  The mandatory fields in this table must be populated to provide a complete set of ISO compliant metadata in the database.  </s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TopicCategory" type="s:string">
+            <s:annotation>
+              <s:documentation>Topic category keyword that gives the broad ISO19115 metadata topic category for data from this source.  The controlled vocabulary of topic category keywords is given in the TopicCategoryCV table.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string">
+            <s:annotation>
+              <s:documentation>Title of data from a specific data source.
+
+Title field should be populated with a brief text description of what the referenced data represent.  This field can be populated with “Unknown” if there is no title for the data.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="Abstract" type="s:string">
+            <s:annotation>
+              <s:documentation>Abstract of data from a specific data source.
+
+Abstract field should be populated with a more complete text description of the data that the metadata record references. This field can be populated with “Unknown” if there is no abstract for the data.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="ProfileVersion" type="s:string">
+            <s:annotation>
+              <s:documentation>Name of metadata profile used by the data source</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="MetadataLink" type="s:anyURI">
+            <s:annotation>
+              <s:documentation>Link to additional metadata reference material.</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OffsetType">
+        <s:annotation>
+          <s:documentation>OffsetType  contains full descriptive information for each of the measurement offsets.
+A set of observations may be done at an offset for the central location.
+
+offsetTypeID links to dataValue/@offsetTypeId</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="offsetValue" type="s:float">
+            <s:annotation>
+              <s:documentation>offsetValue element is value of offset.
+If 0, then offset is not needed, and offsetTypeId should not be included on the dataValue
+</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="offsetDescription" type="s:string">
+            <s:annotation>
+              <s:documentation>Full text description of the offset type.
+
+Field should be filled in with a complete text description of the offset that provides enough information to interpret the type of offset being used.  For example, “Distance from stream bank” is ambiguous because it is not known which bank is being referred to.  </s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element ref="s1:units">
+            <s:annotation>
+              <s:documentation>Units of the offsetValue</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" default="true" name="offsetIsVertical" type="s:boolean">
+            <s:annotation>
+              <s:documentation>By default, the offset is vertical. 
+If the offset is horizontal, then this becomes a direction, and distance from the observation point</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="offsetHorizDirectionDegrees" type="s:int">
+            <s:annotation>
+              <s:documentation>if offsetIsVertical=false, then this is the direction of the offset</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+        <s:attribute name="offsetTypeID" type="s:int" use="optional">
+          <s:annotation>
+            <s:documentation>Unique integer identifier that identifies the type of measurement offset.
+
+Suggested that this is offsetType from ODM database.</s:documentation>
+          </s:annotation>
+        </s:attribute>
+      </s:complexType>
+      <s:annotation>
+        <s:documentation> 
+Changes: 
+2006-07-10 valentine 
+            removed choice. Replaced with Types
+            defined TimePeriodType
+                TimeIntervalType
+                TimeSingleType
+            added GeogLocationType to hold the geometry
+                redefined LatLongPoint as a type
+                defined LatLongBox to hold
+                 defined simpleTypes Latitude and Longitude
+            added DataSetLocation Element (type GeogLocationType) to dataset info
+            removed xlink namespace. Just used the xlink concept (problems getting it to compile with xlink schema)
+2006-08-30 valentine
+    MANY CHANGES to:
+         sync with the Observations Database terminolog
+         simplify. Removed many unneeded types. (initial version was Type happy)
+         types mostly used only when needed (Geometry, SourceInfo, TimeSeries, Notes, Enumerations).
+       *** Element Case Standardize  ****
+           All types are PascalCase
+           All CUAHSI elements and attributes are camelCase
+       * All root response elements are now elements, and not types
+          ** SitesResponse
+          ** TimeSeriesResponse (not timeSeriesType)
+          ** VariablesResponse
+       * extension elements added.
+           ** These are extension points for groups like
+              the USGS that wish to include more information than the normal community uses.
+       * enumerations added
+          * unitType
+          * censorCode  (characters used because symbols make for unmaintainable source code)
+             * lt  - less than
+             * gt  - greater than
+             * nc  - no code
+       * variable types consolidated
+       * units element added
+       * consistent siteID/variableID pattern (both include a XXXCode)
+       * Remove many types
+          ** too many to list.
+       * values == TsValuesType renamed from TsValuesSingleVariableType
+          ** split values element out to type  ValueSingleVar (c# change tsValuesTypeValueType to ValueSingleVar).
+          ** qualifier elements can be added after the final value element in the Values element.
+          *** we don't know the full list of included qualifiers until we get done with the values.
+          *** at present, qualifiers attribute in the value element is an aggregated field.
+          element block looks like:
+          = values
+          == value qualifers=&amp;quot;A&amp;quot;
+          == value qualifers=&amp;quot;Ae&amp;quot;
+          == qualifier qualifierCode=&amp;quot;A&amp;quot;      &amp;quot;Approved&amp;quot;
+          == qualifier qualifierCode=&amp;quot;e&amp;quot;      &amp;quot;Estimated. This value has been estimated.&amp;quot;
+2006-09-08
+   variableID renamed variableCode
+   siteID renamed siteCode
+      siteID and variableID attributes added, xxCode removed
+   siteCode name moved into siteInfo
+
+2006-09-15
+   variable/name to variable/variableName
+   variablePeriod to variablePeriodOfObservation
+
+2006-09-17
+   added QualityControlLevelEnum
+   added attribute qualityControlLevel to valueAttribute group. (affects ValueSingleVariable)
+   added qualityControlLevel element, and element to the TSValuesSingleVariableType
+   namespace changed to http://www.cuahsi.org/waterML/1.0/
+   return to types for top level elements, without this they get named getValuesResponse
+   added note to siteInfoElement. We need to put the URL or Retireved from DB not in this block.
+   added TimePeriodRealTime. Need to represent real time data.
+2006-0920
+   variablePeriodofRecorr to seriesCatalog
+   variablePeriodOfObservation to series
+   variableObservationCount to valueCount (to match the OD)
+   added enumerations from the OD
+      valueTypeEnum
+      generalCategoryEnum
+      sampleMediumEnum
+      dataTypeEnum
+2006-09-24
+   queryInfo/criteria/timeParam is now a sequence, since a start or end time can be null
+   The community wants it to be easy, and VB and other .net have problems with some values:
+      converted xsd:decimal to xsd:double. decimal is not well handled by VB
+      converted tsValuesSingleVaribaleType/count from xsd:nonNegativeInteger to xsd:int.
+2006-09-28
+   API signature has been changed to strings.
+   queryInfo/timeInterval/... changed to strings
+2007-07-09
+   ODM seriesCatalog table added columns. Columns now added
+   DataValue element was missing: DataType(eg statistic), Method, Source, and QualityControlLevel.
+2007-08-28
+  added to values method[](methodType), source[](SourceType)
+  added &amp;quot;Unknown&amp;quot; to many enumerations.
+  contactInformation in sourceType changed to unbounded
+2007-08-29
+  DT/DM believes that including an offsetDescription on every element is verbose
+  offsetTypeID attribute added to offsetAttr
+  offsetType Type added, Designed to be a bit more extensible, and handle
+2007-08-30
+  restored attributes that had the offset information on the values
+  offsetAttr restored attr
+    offsetUnitsAbbreviation
+    offsetUnitsCode
+    offsetDescription
+2007-11-14
+   Many services use agency (aka EPA, and USGS)
+     added attributes agencyCode and AgencyName to siteCode.
+ 2007-11-29
+    SiteInfo/TimezoneInfo min occurs 0 max 1
+    Series/QualityControlLevel min occurs 0 max 1
+  2009-07
+		added back attributeGroup vocabulary attributes got dropp drop VariableInfoType. 
+		changes to min/max occurs in several locations
+	</s:documentation>
+      </s:annotation>
+      <s:annotation>
+        <s:documentation> 
+Changes: 
+2006-07-10 valentine 
+            removed choice. Replaced with Types
+            defined TimePeriodType
+                TimeIntervalType
+                TimeSingleType
+            added GeogLocationType to hold the geometry
+                redefined LatLongPoint as a type
+                defined LatLongBox to hold
+                 defined simpleTypes Latitude and Longitude
+            added DataSetLocation Element (type GeogLocationType) to dataset info
+            removed xlink namespace. Just used the xlink concept (problems getting it to compile with xlink schema)
+2006-08-30 valentine
+    MANY CHANGES to:
+         sync with the Observations Database terminolog
+         simplify. Removed many unneeded types. (initial version was Type happy)
+         types mostly used only when needed (Geometry, SourceInfo, TimeSeries, Notes, Enumerations).
+       *** Element Case Standardize  ****
+           All types are PascalCase
+           All CUAHSI elements and attributes are camelCase
+       * All root response elements are now elements, and not types
+          ** SitesResponse
+          ** TimeSeriesResponse (not timeSeriesType)
+          ** VariablesResponse
+       * extension elements added.
+           ** These are extension points for groups like
+              the USGS that wish to include more information than the normal community uses.
+       * enumerations added
+          * unitType
+          * censorCode  (characters used because symbols make for unmaintainable source code)
+             * lt  - less than
+             * gt  - greater than
+             * nc  - no code
+       * variable types consolidated
+       * units element added
+       * consistent siteID/variableID pattern (both include a XXXCode)
+       * Remove many types
+          ** too many to list.
+       * values == TsValuesType renamed from TsValuesSingleVariableType
+          ** split values element out to type  ValueSingleVar (c# change tsValuesTypeValueType to ValueSingleVar).
+          ** qualifier elements can be added after the final value element in the Values element.
+          *** we don't know the full list of included qualifiers until we get done with the values.
+          *** at present, qualifiers attribute in the value element is an aggregated field.
+          element block looks like:
+          = values
+          == value qualifers=&amp;quot;A&amp;quot;
+          == value qualifers=&amp;quot;Ae&amp;quot;
+          == qualifier qualifierCode=&amp;quot;A&amp;quot;      &amp;quot;Approved&amp;quot;
+          == qualifier qualifierCode=&amp;quot;e&amp;quot;      &amp;quot;Estimated. This value has been estimated.&amp;quot;
+2006-09-08
+   variableID renamed variableCode
+   siteID renamed siteCode
+      siteID and variableID attributes added, xxCode removed
+   siteCode name moved into siteInfo
+
+2006-09-15
+   variable/name to variable/variableName
+   variablePeriod to variablePeriodOfObservation
+
+2006-09-17
+   added QualityControlLevelEnum
+   added attribute qualityControlLevel to valueAttribute group. (affects ValueSingleVariable)
+   added qualityControlLevel element, and element to the TSValuesSingleVariableType
+   namespace changed to http://www.cuahsi.org/waterML/1.0/
+   return to types for top level elements, without this they get named getValuesResponse
+   added note to siteInfoElement. We need to put the URL or Retireved from DB not in this block.
+   added TimePeriodRealTime. Need to represent real time data.
+2006-0920
+   variablePeriodofRecorr to seriesCatalog
+   variablePeriodOfObservation to series
+   variableObservationCount to valueCount (to match the OD)
+   added enumerations from the OD
+      valueTypeEnum
+      generalCategoryEnum
+      sampleMediumEnum
+      dataTypeEnum
+2006-09-24
+   queryInfo/criteria/timeParam is now a sequence, since a start or end time can be null
+   The community wants it to be easy, and VB and other .net have problems with some values:
+      converted xsd:decimal to xsd:double. decimal is not well handled by VB
+      converted tsValuesSingleVaribaleType/count from xsd:nonNegativeInteger to xsd:int.
+2006-09-28
+   API signature has been changed to strings.
+   queryInfo/timeInterval/... changed to strings
+2007-07-09
+   ODM seriesCatalog table added columns. Columns now added
+   DataValue element was missing: DataType(eg statistic), Method, Source, and QualityControlLevel.
+2007-08-28
+  added to values method[](methodType), source[](SourceType)
+  added &amp;quot;Unknown&amp;quot; to many enumerations.
+  contactInformation in sourceType changed to unbounded
+2007-08-29
+  DT/DM believes that including an offsetDescription on every element is verbose
+  offsetTypeID attribute added to offsetAttr
+  offsetType Type added, Designed to be a bit more extensible, and handle
+2007-08-30
+  restored attributes that had the offset information on the values
+  offsetAttr restored attr
+    offsetUnitsAbbreviation
+    offsetUnitsCode
+    offsetDescription
+2007-11-14
+   Many services use agency (aka EPA, and USGS)
+     added attributes agencyCode and AgencyName to siteCode.
+ 2007-11-29
+    SiteInfo/TimezoneInfo min occurs 0 max 1
+    Series/QualityControlLevel min occurs 0 max 1
+  2009-07
+		added back attributeGroup vocabulary attributes got dropp drop VariableInfoType. 
+		changes to min/max occurs in several locations
+	</s:documentation>
+      </s:annotation>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetValuesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetValues" />
+  </wsdl:message>
+  <wsdl:message name="GetValuesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetValuesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetValuesObjectSoapIn">
+    <wsdl:part name="parameters" element="tns:GetValuesObject" />
+  </wsdl:message>
+  <wsdl:message name="GetValuesObjectSoapOut">
+    <wsdl:part name="parameters" element="tns:GetValuesObjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesXmlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSitesXml" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesXmlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSitesXmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSiteInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSiteInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSiteInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSiteInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVariableInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetVariableInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetVariableInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetVariableInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSites" />
+  </wsdl:message>
+  <wsdl:message name="GetSitesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSitesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSiteInfoObjectSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSiteInfoObject" />
+  </wsdl:message>
+  <wsdl:message name="GetSiteInfoObjectSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSiteInfoObjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVariableInfoObjectSoapIn">
+    <wsdl:part name="parameters" element="tns:GetVariableInfoObject" />
+  </wsdl:message>
+  <wsdl:message name="GetVariableInfoObjectSoapOut">
+    <wsdl:part name="parameters" element="tns:GetVariableInfoObjectResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WaterOneFlowSoap">
+    <wsdl:operation name="GetValues">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a site number, a variable, a start date, and an end date, this method returns a time series. Pass in the sitecode and variable in this format: 'NetworkName:SiteCode' and 'NetworkName:Variable'. Sending a null BeginDate and EndDate will return all values for the given parameters. This may not work with all services.</wsdl:documentation>
+      <wsdl:input message="tns:GetValuesSoapIn" />
+      <wsdl:output message="tns:GetValuesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValuesObject">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a site number, a variable, a start date, and an end date, this method returns a time series. Pass in the sitecode and variable in this format: 'NetworkName:SiteCode' and 'NetworkName:Variable'. Sending a null BeginDate and EndDate will return all values for the given parameters. This may not work with all services.</wsdl:documentation>
+      <wsdl:input message="tns:GetValuesObjectSoapIn" />
+      <wsdl:output message="tns:GetValuesObjectSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSitesXml">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given an array of site numbers, this method returns the site metadata for each one. Send the array of site codes in this format: 'NetworkName:SiteCode'. Sending an empty array will return all sites, up to a limit of 50,000.</wsdl:documentation>
+      <wsdl:input message="tns:GetSitesXmlSoapIn" />
+      <wsdl:output message="tns:GetSitesXmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a site number, this method returns the site's metadata. Send the site code in this format: 'NetworkName:SiteCode'</wsdl:documentation>
+      <wsdl:input message="tns:GetSiteInfoSoapIn" />
+      <wsdl:output message="tns:GetSiteInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a variable code, this method returns the variable's name. Pass in the variable in this format: 'NetworkName:Variable'. Sending no variable, or an empty variable will return a list of all variables.</wsdl:documentation>
+      <wsdl:input message="tns:GetVariableInfoSoapIn" />
+      <wsdl:output message="tns:GetVariableInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given an array of site numbers, this method returns the site metadata for each one. Send the array of site codes in this format: 'NetworkName:SiteCode'. Sending an empty array will return all sites, up to a limit of 50,000.</wsdl:documentation>
+      <wsdl:input message="tns:GetSitesSoapIn" />
+      <wsdl:output message="tns:GetSitesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfoObject">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a site number, this method returns the site's metadata. Send the site code in this format: 'NetworkName:SiteCode'</wsdl:documentation>
+      <wsdl:input message="tns:GetSiteInfoObjectSoapIn" />
+      <wsdl:output message="tns:GetSiteInfoObjectSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfoObject">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Given a variable code, this method returns the variable's siteName. Pass in the variable in this format: 'NetworkName:Variable'. Sending no variable, or an empty variable will return a list of all variables.</wsdl:documentation>
+      <wsdl:input message="tns:GetVariableInfoObjectSoapIn" />
+      <wsdl:output message="tns:GetVariableInfoObjectSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WaterOneFlowSoap" type="tns:WaterOneFlowSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetValues">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetValues" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValuesObject">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetValuesObject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSitesXml">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSitesXml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfo">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSiteInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfo">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetVariableInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSites" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfoObject">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSiteInfoObject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfoObject">
+      <soap:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetVariableInfoObject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WaterOneFlowSoap12" type="tns:WaterOneFlowSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetValues">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetValues" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValuesObject">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetValuesObject" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSitesXml">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSitesXml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfo">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSiteInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfo">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetVariableInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSites">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSites" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSiteInfoObject">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetSiteInfoObject" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVariableInfoObject">
+      <soap12:operation soapAction="http://www.cuahsi.org/his/1.0/ws/GetVariableInfoObject" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WaterOneFlow">
+    <wsdl:port name="WaterOneFlowSoap" binding="tns:WaterOneFlowSoap">
+      <soap:address location="http://river.sdsc.edu/wateroneflow/NWIS/DailyValues.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WaterOneFlowSoap12" binding="tns:WaterOneFlowSoap12">
+      <soap12:address location="http://river.sdsc.edu/wateroneflow/NWIS/DailyValues.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

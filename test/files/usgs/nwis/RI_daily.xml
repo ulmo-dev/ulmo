@@ -1,0 +1,2490 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:timeSeriesResponse xsi:schemaLocation="http://www.cuahsi.org/waterML/1.1/ http://waterservices.usgs.gov/WaterML-1.1.xsd" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ns1:queryInfo xmlns:ns2="http://www.cuahsi.org/waterML/1.1/">
+    <ns2:creationTime>2012-12-11T12:50:49</ns2:creationTime>
+    <ns2:queryURL>http://waterservices.usgs.gov/nwis/dv/</ns2:queryURL>
+    <ns2:criteria>
+        <ns2:locationParam>[]</ns2:locationParam>
+        <ns2:variableParam>ALL</ns2:variableParam>
+    </ns2:criteria>
+    <ns2:note title="filter:stateCd">[ri]</ns2:note>
+    <ns2:note title="filter:timeRange">[mode=LATEST, modifiedSince=null]</ns2:note>
+    <ns2:note title="filter:methodId">methodIds=[ALL]</ns2:note>
+    <ns2:note title="requestDT">2012-12-11T17:50:49.097Z</ns2:note>
+    <ns2:note title="requestId">4c273740-43bb-11e2-8cbe-00144f2bed4a</ns2:note>
+    <ns2:note title="disclaimer">Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information.</ns2:note>
+    <ns2:note title="server">caas01</ns2:note>
+</ns1:queryInfo>
+<ns1:timeSeries name="USGS:01106000:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>ADAMSVILLE BROOK AT ADAMSVILLE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01106000</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.5584366</ns1:latitude>
+                <ns1:longitude>-71.12921047</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090002</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44005</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1987-09-30T00:00:00.000">1.5</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01109403:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>TEN MILE R., PAWTUCKET AVE. AT E. PROVIDENCE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01109403</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.83093376</ns1:latitude>
+                <ns1:longitude>-71.3511649</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">94</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01111300:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>NIPMUC RIVER NEAR HARRISVILLE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01111300</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.9812093</ns1:latitude>
+                <ns1:longitude>-71.68590049</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">19</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01111400:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>CHEPACHET RIVER AT CHEPACHET, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01111400</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.92287638</ns1:latitude>
+                <ns1:longitude>-71.6575662</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1973-03-12T00:00:00.000">53</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01111410:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>CHEPACHET RIVER WEST OF GAZZA RD AT GAZZAVILLE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01111410</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="false">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.9409318</ns1:latitude>
+                <ns1:longitude>-71.6481214</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A e" dateTime="2005-11-03T00:00:00.000">41</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>e</ns1:qualifierCode>
+            <ns1:qualifierDescription>Value has been edited or estimated by USGS personnel and is write protected.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:qualifier qualifierID="1" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01111500:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>BRANCH RIVER AT FORESTDALE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01111500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.99648716</ns1:latitude>
+                <ns1:longitude>-71.5625632</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">74</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01112268:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>MILL RIVER AT HARRIS PD OUTLET AT WOONSOCKET RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01112268</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="false">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>42.01593146</ns1:latitude>
+                <ns1:longitude>-71.5072837</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="2005-11-07T00:00:00.000">68</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01112382:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>PETERS RIVER RT 114 BRIDGE AT WOONSOCKET, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01112382</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="false">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>42.01537595</ns1:latitude>
+                <ns1:longitude>-71.49283879</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="2005-11-07T00:00:00.000">47</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01112500:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>BLACKSTONE RIVER AT WOONSOCKET, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01112500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>42.00620936</ns1:latitude>
+                <ns1:longitude>-71.5031168</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">466</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01112700:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>BLACKSTONE RIVER TRIBUTARY AT WOONSOCKET, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01112700</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>42.0050983</ns1:latitude>
+                <ns1:longitude>-71.4892275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1974-09-30T00:00:00.000">2.4</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01113695:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>CATAMINT BROOK AT CUMBERLAND, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01113695</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.98509878</ns1:latitude>
+                <ns1:longitude>-71.41366908</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A e" dateTime="2009-10-13T00:00:00.000">0.74</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>e</ns1:qualifierCode>
+            <ns1:qualifierDescription>Value has been edited or estimated by USGS personnel and is write protected.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:qualifier qualifierID="1" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01113760:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>ABBOTT RUN AT VALLEY FALLS, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01113760</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="false">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.9139884</ns1:latitude>
+                <ns1:longitude>-71.3842228</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="2005-11-06T00:00:00.000">64</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01113895:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>BLACKSTONE R AT ROOSEVELT ST AT PAWTUCKET RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01113895</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.88871088</ns1:latitude>
+                <ns1:longitude>-71.38144468</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090003</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">695</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01114000:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>MOSHASSUCK RIVER AT PROVIDENCE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01114000</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.833989</ns1:latitude>
+                <ns1:longitude>-71.41061208</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">59</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01114500:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>WOONASQUATUCKET RIVER AT CENTERDALE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01114500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.8589884</ns1:latitude>
+                <ns1:longitude>-71.4872823</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">35</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115098:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>PEEPTOAD BROOK AT ELMDALE RD NR NORTH SCITUATE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115098</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.8525992</ns1:latitude>
+                <ns1:longitude>-71.6061754</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">6.9</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="3">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115100:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>MOSQUITOHAWK BROOK NEAR NORTH SCITUATE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115100</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.85148805</ns1:latitude>
+                <ns1:longitude>-71.6228426</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1974-09-30T00:00:00.000">3.5</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115183:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>QUONAPAUG BK AT RT 116 NR NORTH SCITUATE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115183</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.79759966</ns1:latitude>
+                <ns1:longitude>-71.5847857</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">4.7</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="4">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115184:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>SPRUCE BROOK NR NORTH SCITUATE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115184</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.7887107</ns1:latitude>
+                <ns1:longitude>-71.6200647</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">2.3</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115187:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>PONAGANSET RIVER AT SOUTH FOSTER, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115187</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.8187102</ns1:latitude>
+                <ns1:longitude>-71.7050677</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">20</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="3">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115190:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>DOLLY COLE BK AT OLD DANIELSON PK AT S FOSTER, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115190</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.8223213</ns1:latitude>
+                <ns1:longitude>-71.70034528</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">5.5</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="4">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115275:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>BEAR TREE BROOK NR CLAYVILLE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115275</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.7825994</ns1:latitude>
+                <ns1:longitude>-71.67478879</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">1.5</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="4">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115276:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>WESTCONNAUG STREAM AT PLAINFIELD PIKE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115276</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.7853772</ns1:latitude>
+                <ns1:longitude>-71.6672885</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">5.9</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115280:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>CORK BK AT ROCKLAND SCITUATE RD NR CLAYVILLE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115280</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.80398827</ns1:latitude>
+                <ns1:longitude>-71.6497879</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">2.7</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="4">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115297:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>WILBUR HOLLOW BK AT OLD PLAINFIELD PK NR CLAYVILLE</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115297</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.7648219</ns1:latitude>
+                <ns1:longitude>-71.6356207</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">6.3</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="4">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115500:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>PAWTUXET RIVER AT FISKEVILLE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.73287798</ns1:latitude>
+                <ns1:longitude>-71.5497842</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="2001-05-16T00:00:00.000">38</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115630:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>NOOSENECK RIVER AT NOOSENECK, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115630</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.6267667</ns1:latitude>
+                <ns1:longitude>-71.6325646</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44003</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">17</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01115900:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>FLAT RIVER NEAR COVENTRY, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01115900</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.7145442</ns1:latitude>
+                <ns1:longitude>-71.6525656</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44003</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1964-01-31T00:00:00.000">40</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01116000:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>SOUTH BRANCH PAWTUXET RIVER AT WASHINGTON, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01116000</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.69010026</ns1:latitude>
+                <ns1:longitude>-71.5658958</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44003</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">55</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01116300:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>FURNACE HILL BROOK AT CRANSTON, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01116300</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.7564892</ns1:latitude>
+                <ns1:longitude>-71.4972824</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1974-09-30T00:00:00.000">16</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01116500:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>PAWTUXET RIVER AT CRANSTON, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01116500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.75093399</ns1:latitude>
+                <ns1:longitude>-71.4450575</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44007</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">239</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01116905:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>HUNT R 250 FT DS FRY BRK AT FRENCHTOWN, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01116905</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.63</ns1:latitude>
+                <ns1:longitude>-71.47888889</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">44</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117000:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>HUNT RIVER NEAR EAST GREENWICH, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117000</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.6412122</ns1:latitude>
+                <ns1:longitude>-71.4445016</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">40</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117100:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>ANNAQUATUCKET RIVER AT BELLEVILLE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117100</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.55704576</ns1:latitude>
+                <ns1:longitude>-71.4647801</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090004</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1964-09-30T00:00:00.000">17</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117350:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>CHIPUXET RIVER AT WEST KINGSTON, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117350</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.4823233</ns1:latitude>
+                <ns1:longitude>-71.5511719</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">17</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:011173545:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>QUEEN R 1400 FT UPSTR WM REYNOLDS RD AT EXETER RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">011173545</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.5658333</ns1:latitude>
+                <ns1:longitude>-71.5475</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A e" dateTime="2004-12-14T00:00:00.000">15</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>e</ns1:qualifierCode>
+            <ns1:qualifierDescription>Value has been edited or estimated by USGS personnel and is write protected.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:qualifier qualifierID="1" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117370:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>QUEEN R AT LIBERTY RD AT LIBERTY RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117370</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.53898957</ns1:latitude>
+                <ns1:longitude>-71.568673</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">22</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117410:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>USQUEPAUG RIVER AT RT 138 AT USQUEPAUG, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117410</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.50260047</ns1:latitude>
+                <ns1:longitude>-71.607841</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A e" dateTime="2004-12-15T00:00:00.000">109</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>e</ns1:qualifierCode>
+            <ns1:qualifierDescription>Value has been edited or estimated by USGS personnel and is write protected.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:qualifier qualifierID="1" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117420:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>USQUEPAUG RIVER NEAR USQUEPAUG, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117420</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.4767673</ns1:latitude>
+                <ns1:longitude>-71.6047849</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">58</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117424:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>CHICKASHEEN BROOK AT WEST KINGSTON, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117424</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.48037868</ns1:latitude>
+                <ns1:longitude>-71.5733949</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A e" dateTime="2004-12-14T00:00:00.000">18</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>e</ns1:qualifierCode>
+            <ns1:qualifierDescription>Value has been edited or estimated by USGS personnel and is write protected.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:qualifier qualifierID="1" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117430:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>PAWCATUCK RIVER AT KENYON, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117430</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.44621186</ns1:latitude>
+                <ns1:longitude>-71.6211738</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">79</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117468:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>BEAVER RIVER NEAR USQUEPAUG, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117468</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.49260037</ns1:latitude>
+                <ns1:longitude>-71.6281194</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">16</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117471:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>BEAVER RIVER SHANNOCK HILL RD, NEAR SHANNOCK, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117471</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.4642672</ns1:latitude>
+                <ns1:longitude>-71.62784109</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A e" dateTime="2004-12-08T00:00:00.000">61</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>e</ns1:qualifierCode>
+            <ns1:qualifierDescription>Value has been edited or estimated by USGS personnel and is write protected.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:qualifier qualifierID="1" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117472:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>BEAVER RIVER AT KENYON, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117472</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.45232287</ns1:latitude>
+                <ns1:longitude>-71.6281187</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1978-12-31T00:00:00.000">20</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117500:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>PAWCATUCK RIVER AT WOOD RIVER JUNCTION, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.44510024</ns1:latitude>
+                <ns1:longitude>-71.68089828</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">106</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117600:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>MEADOW BROOK NEAR CAROLINA, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117600</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.4664889</ns1:latitude>
+                <ns1:longitude>-71.69006567</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A e" dateTime="2004-12-15T00:00:00.000">20</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>e</ns1:qualifierCode>
+            <ns1:qualifierDescription>Value has been edited or estimated by USGS personnel and is write protected.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:qualifier qualifierID="1" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="3">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01117800:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>WOOD RIVER NEAR ARCADIA, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01117800</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.5739884</ns1:latitude>
+                <ns1:longitude>-71.72062318</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">57</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01118000:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>WOOD RIVER AT HOPE VALLEY, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01118000</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.49815516</ns1:latitude>
+                <ns1:longitude>-71.7164561</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">123</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01118010:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>PAWCATUCK RIVER AT BURDICKVILLE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01118010</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.4162111</ns1:latitude>
+                <ns1:longitude>-71.7289551</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A e" dateTime="2004-12-15T00:00:00.000">734</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>e</ns1:qualifierCode>
+            <ns1:qualifierDescription>Value has been edited or estimated by USGS personnel and is write protected.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:qualifier qualifierID="1" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01118360:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>ASHAWAY RIVER AT ASHAWAY, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01118360</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.42343288</ns1:latitude>
+                <ns1:longitude>-71.7917351</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A e" dateTime="2004-12-15T00:00:00.000">96</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>e</ns1:qualifierCode>
+            <ns1:qualifierDescription>Value has been edited or estimated by USGS personnel and is write protected.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:qualifier qualifierID="1" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01118500:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>PAWCATUCK RIVER AT WESTERLY, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01118500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.38371065</ns1:latitude>
+                <ns1:longitude>-71.8331247</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">312</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:01126200:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>BUCKS HORN BROOK AT GREENE, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01126200</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.6931549</ns1:latitude>
+                <ns1:longitude>-71.7434021</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01100001</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44003</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1974-09-30T00:00:00.000">16</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:412154071462901:72019:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>RI-WEW  522 WESTERLY, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">412154071462901</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.36509999</ns1:latitude>
+                <ns1:longitude>-71.7742336</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">GW</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="52331280">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="52331280">72019</ns1:variableCode>
+        <ns1:variableName>Depth to water level, ft below land surface</ns1:variableName>
+        <ns1:variableDescription>Depth to water level, feet below land surface</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>ft</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">13.94</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:412844071422802:72019:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>RI-RIW  600 RICHMOND, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">412844071422802</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.47898869</ns1:latitude>
+                <ns1:longitude>-71.7072888</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">GW</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="52331280">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="52331280">72019</ns1:variableCode>
+        <ns1:variableName>Depth to water level, ft below land surface</ns1:variableName>
+        <ns1:variableDescription>Depth to water level, feet below land surface</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>ft</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">35.66</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:412918071321001:72019:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>RI-SNW    6 SOUTH KINGSTOWN, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">412918071321001</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.48843449</ns1:latitude>
+                <ns1:longitude>-71.5356159</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">GW</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="52331280">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="52331280">72019</ns1:variableCode>
+        <ns1:variableName>Depth to water level, ft below land surface</ns1:variableName>
+        <ns1:variableDescription>Depth to water level, feet below land surface</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>ft</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-04-29T00:00:00.000">11.86</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:412932071374302:72019:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>RI-RIW  417 RICHMOND, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">412932071374302</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.49232259</ns1:latitude>
+                <ns1:longitude>-71.6281194</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">GW</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="52331280">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="52331280">72019</ns1:variableCode>
+        <ns1:variableName>Depth to water level, ft below land surface</ns1:variableName>
+        <ns1:variableDescription>Depth to water level, feet below land surface</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>ft</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">7.83</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:413252071323601:72019:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>RI-EXW  554 EXETER, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">413252071323601</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.5478786</ns1:latitude>
+                <ns1:longitude>-71.5428388</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">GW</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="52331280">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="52331280">72019</ns1:variableCode>
+        <ns1:variableName>Depth to water level, ft below land surface</ns1:variableName>
+        <ns1:variableDescription>Depth to water level, feet below land surface</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>ft</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">11.19</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:413358071433801:72019:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>RI-EXW  475 EXETER, RI</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">413358071433801</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.56621059</ns1:latitude>
+                <ns1:longitude>-71.72673449</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">GW</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090005</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44009</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="52331280">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="52331280">72019</ns1:variableCode>
+        <ns1:variableName>Depth to water level, ft below land surface</ns1:variableName>
+        <ns1:variableDescription>Depth to water level, feet below land surface</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>ft</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">16.09</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries></ns1:timeSeriesResponse>

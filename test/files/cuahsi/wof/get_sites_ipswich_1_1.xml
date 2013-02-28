@@ -1,0 +1,483 @@
+<sitesResponse xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wtr="http://www.cuahsi.org/waterML/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cuahsi.org/waterML/1.1/">
+  <queryInfo>
+    <creationTime>2013-01-05T16:35:07.993-05:00</creationTime>
+    <criteria MethodCalled="GetSites"/>
+    <note>ALL Sites(empty request)</note>
+  </queryInfo>
+  <site>
+    <siteInfo>
+      <siteName>Egypt River, Route 1A, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="1">ER-1A</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.698179</latitude>
+          <longitude>-70.869172</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Fish Brook, Brookview Rd, Boxford</siteName>
+      <siteCode network="ipswich" siteID="2">FB-BV</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.662897</latitude>
+          <longitude>-71.030072</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Fish Brook, Middleton Rd., Boxford</siteName>
+      <siteCode network="ipswich" siteID="3">FB-MI</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.658294</latitude>
+          <longitude>-71.143658</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Fish Brook, Washington St., Topsfield</siteName>
+      <siteCode network="ipswich" siteID="4">FB-WA</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.630628</latitude>
+          <longitude>-70.973783</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Gravelly Brook, Willowdale State Forest, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="5">GB</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.661817</latitude>
+          <longitude>-70.903883</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Greenwood Creek, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="6">GC</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.692494</latitude>
+          <longitude>-70.8398</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Howlett Brook, Ipswich Road, Topsfield</siteName>
+      <siteCode network="ipswich" siteID="7">HB</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.654839</latitude>
+          <longitude>-70.917539</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Woburn St., Wilmington</siteName>
+      <siteCode network="ipswich" siteID="8">IP00</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.55375</latitude>
+          <longitude>-71.110653</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Reading Town Forest</siteName>
+      <siteCode network="ipswich" siteID="9">IP00.5</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.554464</latitude>
+          <longitude>-71.107633</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Mill St., Reading</siteName>
+      <siteCode network="ipswich" siteID="10">IP01</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.561361</latitude>
+          <longitude>-71.110653</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Rt. 28, Reading/North Reading</siteName>
+      <siteCode network="ipswich" siteID="11">IP02</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.564583</latitude>
+          <longitude>-71.107633</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Central St., North Reading</siteName>
+      <siteCode network="ipswich" siteID="12">IP03</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.570047</latitude>
+          <longitude>-71.029386</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Route 62, North Reading</siteName>
+      <siteCode network="ipswich" siteID="13">IP04</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.576553</latitude>
+          <longitude>-71.069583</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Boston Street, Middleton</siteName>
+      <siteCode network="ipswich" siteID="14">IP06</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.570047</latitude>
+          <longitude>-71.029236</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Log Bridge Road, Middleton</siteName>
+      <siteCode network="ipswich" siteID="15">IP08</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.577892</latitude>
+          <longitude>-70.996964</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Route 62, Middleton</siteName>
+      <siteCode network="ipswich" siteID="16">IP10</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.595131</latitude>
+          <longitude>-70.997014</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Peabody Street, Middleton</siteName>
+      <siteCode network="ipswich" siteID="17">IP11</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.616442</latitude>
+          <longitude>-70.996964</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>East Street, Middleton</siteName>
+      <siteCode network="ipswich" siteID="18">IP12</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.619575</latitude>
+          <longitude>-70.988239</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Rowley Bridge Road, Topsfield</siteName>
+      <siteCode network="ipswich" siteID="19">IP13</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.627017</latitude>
+          <longitude>-70.966953</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Salem Road, Topsfield</siteName>
+      <siteCode network="ipswich" siteID="20">IP14</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.625722</latitude>
+          <longitude>-70.949758</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Ipswich River Wildlife Sanctuary Canoe Launch</siteName>
+      <siteCode network="ipswich" siteID="21">IP16</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.627197</latitude>
+          <longitude>-70.917922</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Asbury Street, Topsfield</siteName>
+      <siteCode network="ipswich" siteID="22">IP18</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.653761</latitude>
+          <longitude>-70.911933</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Below Willowdale Dam, Topsfield Road. Ipswich</siteName>
+      <siteCode network="ipswich" siteID="23">IP19</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.659864</latitude>
+          <longitude>-70.894367</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>300' upstream of Willowdale Dam, Topsfield Road, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="24">IP19A</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.659917</latitude>
+          <longitude>-70.894683</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Winthrop Street, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="25">IP20</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.658706</latitude>
+          <longitude>-70.890539</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>MIll Road, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="26">IP22</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.658372</latitude>
+          <longitude>-70.861939</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>EBSCO Dam, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="27">IP24</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.677539</latitude>
+          <longitude>-70.837686</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Green Street, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="28">IP25</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.679883</latitude>
+          <longitude>-70.831222</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Town Wharf, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="29">IP26</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.683522</latitude>
+          <longitude>-70.830467</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Lubber's Brook, Glen Rd., Wilmington</siteName>
+      <siteCode network="ipswich" siteID="30">LB</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.565944</latitude>
+          <longitude>-71.182792</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Martin's Brook, Rt. 62, Wilmington</siteName>
+      <siteCode network="ipswich" siteID="31">MB-62</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.579774</latitude>
+          <longitude>-71.138944</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Martin's Brook, Park St., North Reading</siteName>
+      <siteCode network="ipswich" siteID="32">MB-PS</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.571475</latitude>
+          <longitude>-71.101233</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Maple Meadow Brook, Wildwood St., Wilmington</siteName>
+      <siteCode network="ipswich" siteID="33">MMB</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.552842</latitude>
+          <longitude>-71.156567</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Middlesex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+  <site>
+    <siteInfo>
+      <siteName>Miles River at Route 1A, Ipswich</siteName>
+      <siteCode network="ipswich" siteID="34">MR-1A</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.6578</latitude>
+          <longitude>-70.843431</longitude>
+        </geogLocation>
+      </geoLocation>
+      <siteProperty name="County">Essex</siteProperty>
+      <siteProperty name="State">Massachusetts</siteProperty>
+    </siteInfo>
+  </site>
+</sitesResponse>

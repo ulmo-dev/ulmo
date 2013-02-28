@@ -2,8 +2,14 @@ import contextlib
 import os
 import os.path
 
+from httpretty import HTTPretty
 import mock
 import requests
+
+
+def get_test_file_path(file_path):
+    """translates a file path to be relative to the test files directory"""
+    return os.path.join(os.path.dirname(__file__), 'files', file_path)
 
 
 @contextlib.contextmanager
@@ -25,30 +31,81 @@ def mocked_requests(mocked_urls):
             if isinstance(mocked_urls, basestring):
                 url_files = open_files.values()[0]
             else:
-                url_files = {
-                    url: open_files.get(file_path)
+                url_files = dict([
+                    (url, open_files.get(file_path))
                     for url, file_path in mocked_urls.iteritems()
-                }
-            side_effect = _mock_side_effect(url_files)
-
-            with mock.patch('requests.get', side_effect=side_effect):
+                ])
+            side_effect = _mock_request_side_effect(url_files)
+            with contextlib.nested(
+                    mock.patch('requests.get', side_effect=side_effect),
+                    mock.patch('requests.head', side_effect=side_effect),
+                    ):
                 yield
 
 
-def get_test_file_path(file_path):
-    """translates a file path to be relative to the test files directory"""
-    return os.path.join(os.path.dirname(__file__), 'files', file_path)
+@contextlib.contextmanager
+def mocked_suds_client(waterml_version, mocked_service_calls):
+    """mocks the suds library to return a given file's content"""
+    # if environment variable is set, then don't mock the tests just grab files
+    # over the network. Example:
+    #    env ULMO_DONT_MOCK_TESTS=1 py.test
+    if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
+        yield
+
+    else:
+        tns_str = 'http://www.cuahsi.org/his/%s/ws/' % waterml_version
+        with _open_multiple(mocked_service_calls.values()) as open_files:
+            client = mock.MagicMock()
+            client.wsdl.tns = ('tns', tns_str)
+
+            for service_call, filename in mocked_service_calls.iteritems():
+                open_file = open_files[filename]
+
+                def _func(*args, **kwargs):
+                    return open_file.read()
+                setattr(client.service, service_call, _func)
+
+            with mock.patch('suds.client.Client', return_value=client):
+                yield
 
 
-def _mock_side_effect(url_files):
+@contextlib.contextmanager
+def mocked_url(url, response_file_path, methods=None):
+    """mocks the underlying python sockets library to return a given file's
+    content
+    """
+    # if environment variable is set, then don't mock the tests just grab files
+    # over the network. Example:
+    #    env ULMO_DONT_MOCK_TESTS=1 py.test
+    if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
+        yield
+
+    else:
+        with open(get_test_file_path(response_file_path)) as f:
+            response = f.read()
+
+        HTTPretty.enable()
+
+        if methods is None:
+            methods = ['GET', 'POST']
+
+        for method in methods:
+            request_class = getattr(HTTPretty, method)
+            HTTPretty.register_uri(request_class, url, body=response)
+
+        yield
+        HTTPretty.disable()
+
+
+def _mock_request_side_effect(url_files):
     def _side_effect(url, *args, **kwargs):
         mock_response = requests.Response()
-        mock_response.request = requests.Request(url, *args, **kwargs)
+        mock_response.request = requests.Request('GET', url, *args, **kwargs).prepare()
         mock_response.status_code = 200
         mock_response.url = url
         mock_response.mocked = True
         if isinstance(url_files, dict):
-            mock_response.raw = url_files.get(mock_response.request.full_url)
+            mock_response.raw = url_files.get(mock_response.request.url)
         elif hasattr(url_files, 'read'):
             mock_response.raw = url_files
 

@@ -1,5 +1,6 @@
 language: python
 python:
+  - "2.6"
   - "2.7"
 # install libhdf5 so pytables can link against it
 before_install:
@@ -9,6 +10,7 @@ before_install:
 install: 
   - "pip install numexpr"
   - "pip install cython"
+  - "pip install tables"
   - "pip install ."
 # command to run tests
 script: "python setup.py test"

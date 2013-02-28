@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:timeSeriesResponse xsi:schemaLocation="http://www.cuahsi.org/waterML/1.1/ http://waterservices.usgs.gov/WaterML-1.1.xsd" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ns1:queryInfo xmlns:ns2="http://www.cuahsi.org/waterML/1.1/">
+    <ns2:creationTime>2012-12-11T13:14:40</ns2:creationTime>
+    <ns2:queryURL>http://waterservices.usgs.gov/nwis/dv/</ns2:queryURL>
+    <ns2:criteria>
+        <ns2:locationParam>[ALL:08068500]</ns2:locationParam>
+        <ns2:variableParam>ALL</ns2:variableParam>
+    </ns2:criteria>
+    <ns2:note title="filter:sites">[ALL:08068500]</ns2:note>
+    <ns2:note title="filter:timeRange">[mode=LATEST, modifiedSince=null]</ns2:note>
+    <ns2:note title="filter:methodId">methodIds=[ALL]</ns2:note>
+    <ns2:note title="requestDT">2012-12-11T18:14:40.710Z</ns2:note>
+    <ns2:note title="requestId">a1823b10-43be-11e2-86bf-00144f2c470d</ns2:note>
+    <ns2:note title="disclaimer">Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information.</ns2:note>
+    <ns2:note title="server">sdas01</ns2:note>
+</ns1:queryInfo>
+<ns1:timeSeries name="USGS:08068500:00010:00001" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807042">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807042">00010</ns1:variableCode>
+        <ns1:variableName>Temperature, water, &amp;#176;C</ns1:variableName>
+        <ns1:variableDescription>Temperature, water, degrees Celsius</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>deg C</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00001">Maximum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">21.3</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="14">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00010:00002" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807042">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807042">00010</ns1:variableCode>
+        <ns1:variableName>Temperature, water, &amp;#176;C</ns1:variableName>
+        <ns1:variableDescription>Temperature, water, degrees Celsius</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>deg C</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00002">Minimum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">14.6</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="14">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00010:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807042">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807042">00010</ns1:variableCode>
+        <ns1:variableName>Temperature, water, &amp;#176;C</ns1:variableName>
+        <ns1:variableDescription>Temperature, water, degrees Celsius</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>deg C</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">17.6</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="14">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">11</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="1">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00065:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807202">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807202">00065</ns1:variableCode>
+        <ns1:variableName>Gage height, ft</ns1:variableName>
+        <ns1:variableDescription>Gage height, feet</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>ft</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">1.30</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00095:00001" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807295">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807295">00095</ns1:variableCode>
+        <ns1:variableName>Specific conductance, water, unfiltered, &amp;#181;S/cm at 25 &amp;#176;C</ns1:variableName>
+        <ns1:variableDescription>Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>uS/cm @25C</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00001">Maximum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">647</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="15">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00095:00002" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807295">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807295">00095</ns1:variableCode>
+        <ns1:variableName>Specific conductance, water, unfiltered, &amp;#181;S/cm at 25 &amp;#176;C</ns1:variableName>
+        <ns1:variableDescription>Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>uS/cm @25C</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00002">Minimum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">572</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="15">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00095:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807295">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807295">00095</ns1:variableCode>
+        <ns1:variableName>Specific conductance, water, unfiltered, &amp;#181;S/cm at 25 &amp;#176;C</ns1:variableName>
+        <ns1:variableDescription>Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>uS/cm @25C</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">616</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="15">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00300:00001" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45809894">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45809894">00300</ns1:variableCode>
+        <ns1:variableName>Dissolved oxygen, water, unfiltered, mg/L</ns1:variableName>
+        <ns1:variableDescription>Dissolved oxygen, water, unfiltered, milligrams per liter</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>mg/l</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00001">Maximum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">10.1</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="16">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00300:00002" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45809894">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45809894">00300</ns1:variableCode>
+        <ns1:variableName>Dissolved oxygen, water, unfiltered, mg/L</ns1:variableName>
+        <ns1:variableDescription>Dissolved oxygen, water, unfiltered, milligrams per liter</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>mg/l</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00002">Minimum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">6.2</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="16">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00300:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45809894">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45809894">00300</ns1:variableCode>
+        <ns1:variableName>Dissolved oxygen, water, unfiltered, mg/L</ns1:variableName>
+        <ns1:variableDescription>Dissolved oxygen, water, unfiltered, milligrams per liter</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>mg/l</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">8.1</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="16">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00400:00001" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45810855">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45810855">00400</ns1:variableCode>
+        <ns1:variableName>pH, water, unfiltered, field, standard units</ns1:variableName>
+        <ns1:variableDescription>pH, water, unfiltered, field, standard units</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>std units</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00001">Maximum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">7.8</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="17">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:00400:00002" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45810855">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45810855">00400</ns1:variableCode>
+        <ns1:variableName>pH, water, unfiltered, field, standard units</ns1:variableName>
+        <ns1:variableDescription>pH, water, unfiltered, field, standard units</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>std units</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00002">Minimum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">7.3</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="17">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:63680:00001" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="51443524">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="51443524">63680</ns1:variableCode>
+        <ns1:variableName>Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +/-2.5 degrees, FNU</ns1:variableName>
+        <ns1:variableDescription>Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +-2.5 degrees, formazin nephelometric units (FNU)</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>FNU</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00001">Maximum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">23</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="18">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:63680:00002" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="51443524">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="51443524">63680</ns1:variableCode>
+        <ns1:variableName>Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +/-2.5 degrees, FNU</ns1:variableName>
+        <ns1:variableDescription>Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +-2.5 degrees, formazin nephelometric units (FNU)</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>FNU</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00002">Minimum</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">14</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="18">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries><ns1:timeSeries name="USGS:08068500:63680:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>Spring Ck nr Spring, TX</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">08068500</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-06:00" zoneAbbreviation="CST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-05:00" zoneAbbreviation="CDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>30.11049517</ns1:latitude>
+                <ns1:longitude>-95.4363275</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">12040102</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">48</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">48339</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="51443524">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="51443524">63680</ns1:variableCode>
+        <ns1:variableName>Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +/-2.5 degrees, FNU</ns1:variableName>
+        <ns1:variableDescription>Turbidity, water, unfiltered, monochrome near infra-red LED light, 780-900 nm, detection angle 90 +-2.5 degrees, formazin nephelometric units (FNU)</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>FNU</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="P" dateTime="2012-12-10T00:00:00.000">17</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>P</ns1:qualifierCode>
+            <ns1:qualifierDescription>Provisional data subject to revision.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="18">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries></ns1:timeSeriesResponse>

@@ -1,6 +1,14 @@
 """
-drought index data from the National Weather Service Climatic Predicition Center
+    ulmo.cpc.drought.core
+    ~~~~~~~~~~~~~~~~~~~~~
+
+    This module provides direct access to `Climate Predicition Center`_ `Weekly
+    Drought Index`_ dataset.
+
+    .. _Climate Prediction Center: http://www.cpc.ncep.noaa.gov/
+    .. _Weekly Drought Index: http://www.cpc.ncep.noaa.gov/products/analysis_monitoring/cdus/palmer_drought/
 """
+
 import datetime
 import os
 
@@ -66,24 +74,46 @@ STATE_CODES = {
 }
 
 
-def get_data(state=None, climate_division=None, start_date=None, end_date=None,
+def get_data(state=None, climate_division=None, start=None, end=None,
              as_dataframe=False):
-    """returns requested data
+    """Retreives data.
+
 
     Parameters
     ----------
-    state : optionally limits data selection to a given state
-    climate_division: optionally limits data selection to a climate division
-    start_date: default is the start of the current calendar year
-    end_date: default is the current date
-    as_dataframe: if True, will return a pandas.DataFrame object, otherwise a
-            a nested set of dicts will be returned, with data indexed by
-            state, then climate division; setting this to True will return
-            much faster if querying large amounts of data
+    state : ``None`` or str
+        If specified, results will be limited to the state corresponding to the
+        given 2-character state code.
+    climate_division : ``None`` or int
+        If specified, results will be limited to the climate division.
+    start : ``None`` or date (see :ref:`dates-and-times`)
+        Results will be limited to those after the given date. Default is the
+        start of the current calendar year.
+    end : ``None`` or date (see :ref:`dates-and-times`)
+        If specified, results will be limited to data before this date.
+    as_dataframe: bool
+        If ``False`` (default), a dict with a nested set of dicts will be
+        returned with data indexed by state, then climate division. If ``True``
+        then a pandas.DataFrame object will be returned.  The pandas dataframe
+        is used internally, so setting this to ``True`` is a little bit faster
+        as it skips a serialization step.
+
+
+    Returns
+    -------
+    data : dict or pandas.Dataframe
+        A dict or pandas.DataFrame representing the data. See the
+        ``as_dataframe`` parameter for more.
     """
-    #XXX: add a non-dataframe option
-    start_date = util.parse_datestr(start_date)
-    end_date = util.parse_datestr(end_date)
+    if not start is None:
+        start_date = util.convert_date(start)
+    else:
+        start_date = None
+    if not end is None:
+        end_date = util.convert_date(end)
+    else:
+        end_date = None
+
     if not end_date:
         end_date = datetime.date.today()
     if not start_date:
@@ -99,7 +129,7 @@ def get_data(state=None, climate_division=None, start_date=None, end_date=None,
 
     data = None
     for year in range(start_year, end_year + 1):
-        url =_get_data_url(year)
+        url = _get_data_url(year)
         format_type =_get_data_format(year)
         with _open_data_file(url) as data_file:
             year_data = _parse_data_file(data_file, format_type)
@@ -122,6 +152,10 @@ def get_data(state=None, climate_division=None, start_date=None, end_date=None,
             # some data are duplicated (e.g. final data from 2011 stretches into
             # prelim data of 2012), so just take those that are new
             data = data.append(year_data.ix[year_data.index - data.index])
+
+    # this does what data.reset_index() should do, but at least as of 0.10.1, that sets
+    # will cast period objects to ints
+    data.index = np.arange(len(data))
     if as_dataframe:
         return data
     else:
@@ -132,15 +166,14 @@ def _as_data_dict(dataframe):
     data_dict = {}
     for state in dataframe['state'].unique():
         state_dict = {}
-        for name, group in dataframe.groupby(['state', 'climate_division']):
+        state_dataframe = dataframe[dataframe['state'] == state]
+        for name, group in state_dataframe.groupby(['state', 'climate_division']):
             s, climate_division = name
+            climate_division_data = group.T.drop(['state', 'climate_division'])
             values = [
-                {
-                    'period': str(record['period']),
-                    'cmi': record['cmi'],
-                    'pdsi': record['pdsi'],
-                }
-                for record in group.to_records()]
+                _value_dict(value)
+                for k, value in climate_division_data.iteritems()
+            ]
             state_dict[climate_division] = values
         data_dict[state] = state_dict
     return data_dict
@@ -196,7 +229,7 @@ def _get_data_format(year):
 
 
 def _get_data_url(year):
-    current_year = datetime.date.today().year
+    current_year, current_week = _week_number(datetime.date.today())
     if year == current_year:
         return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data'
     elif year == 2011:
@@ -217,11 +250,24 @@ def _open_data_file(url):
 def _parse_data_file(data_file, palmer_format):
     if palmer_format == 'format5':
         delim_sequence = (2, 2, 4, 2, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6)
-        use_columns = (0, 1, 2, 3, 37, 40)
+        use_columns = (0, 1, 2, 3, 4, 5, 9, 15, 28, 29, 37, 40, 41)
+        dtype = [
+            ('state_code', 'i1'),
+            ('climate_division', 'i1'),
+            ('year', 'i4'),
+            ('week', 'i4'),
+            ('precipitation', 'f8'),
+            ('temperature', 'f8'),
+            ('potential_evap', 'f8'),
+            ('runoff', 'f8'),
+            ('soil_moisture_upper', 'f8'),
+            ('soil_moisture_lower', 'f8'),
+            ('pdsi', 'f8'),
+            ('cmi', 'f8')
+        ]
     else:
         raise NotImplementedError("we have not implemented the format for given date range")
 
-    dtype = [('state_code', 'i1'), ('climate_division', 'i1'), ('year', 'i4'), ('week', 'i4'), ('pdsi', 'f8'), ('cmi', 'f8')]
     data_array = np.genfromtxt(data_file, dtype=dtype, delimiter=delim_sequence, usecols=use_columns)
     dataframe = pandas.DataFrame(data_array)
     return dataframe
@@ -242,6 +288,12 @@ def _reindex_data(dataframe):
     dataframe = _convert_state_codes(dataframe)
     return dataframe.set_index(['state', 'climate_division', 'period'],
             drop=False)
+
+
+def _value_dict(value):
+    value_dict = value.to_dict()
+    value_dict['period'] = str(value_dict['period'])
+    return value_dict
 
 
 def _week_number(date):

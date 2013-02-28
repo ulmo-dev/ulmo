@@ -1,0 +1,22 @@
+<variablesResponse xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wtr="http://www.cuahsi.org/waterML/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cuahsi.org/waterML/1.0/">
+  <queryInfo>
+    <creationTime>2013-01-11T15:14:08.5933988Z</creationTime>
+    <criteria>
+      <variableParam>MR:MuddyRiver_ACID</variableParam>
+    </criteria>
+    <note>OD Web Service</note>
+  </queryInfo>
+  <variables>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="16">MuddyRiver_ACID</variableCode>
+      <variableName>Acid neutralizing capacity</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+  </variables>
+</variablesResponse>

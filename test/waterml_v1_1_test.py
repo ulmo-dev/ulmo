@@ -3,22 +3,23 @@ import ulmo
 import test_util
 
 
-def test_parse_get_sites():
-    site_files = ['RI_daily.xml', 'RI_instantaneous.xml']
-    sites = {}
+def test_parse_site_infos():
+    site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
+    site_infos = {}
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
         with open(test_site_file, 'r') as f:
-            sites.update(ulmo.waterml.v1_1.parse_sites(f))
+            site_infos.update(ulmo.waterml.v1_1.parse_site_infos(f))
 
-    assert len(sites) == 64
-    return sites
+    assert len(site_infos) == 64
+    return site_infos
 
 
 def test_parse_site_values():
     query_isodate = '2000-01-01'
-    value_file = test_util.get_test_file_path('site_07335390_daily.xml')
+    value_file = test_util.get_test_file_path(
+            'usgs/nwis/site_07335390_instantaneous.xml')
     with open(value_file, 'rb') as content_io:
         values = ulmo.waterml.v1_1.parse_site_values(content_io, query_isodate)
 
-    assert len(values['00062:32400']['values']) == 3404
+    assert len(values['00062:00011']['values']) > 1000
