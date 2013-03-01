@@ -9,7 +9,6 @@
     .. _Tulsa District Water Control: http://www.swt-wc.usace.army.mil/
 
 """
-import cStringIO as StringIO
 import datetime
 import os.path
 
@@ -17,6 +16,11 @@ from bs4 import BeautifulSoup
 import pandas
 
 from ulmo import util
+
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
 
 USACE_SWTWC_DIR = os.path.join(util.get_ulmo_dir(), 'usace/swtwc')
 
