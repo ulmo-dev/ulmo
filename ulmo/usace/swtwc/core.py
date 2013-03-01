@@ -63,7 +63,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
     with util.open_file_for_url(data_url, path) as f:
         soup = BeautifulSoup(f)
         pre = soup.find('pre')
-        sio = StringIO.StringIO(pre.text.strip())
+        sio = StringIO.StringIO(str(pre.text.strip()))
 
     first_line = sio.readline()
     split = first_line[8:].strip().split()
