@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+**0.4.1 (released 2013-03-04)**
+
+- bugfix: interpret missing data ('----') correctly in usace.swtwc.get_stations
+
+
 **0.4.0 (released 2013-03-04)**
 
 - this release includes some backwards incompatible changes
