@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-**0.4.0 (in development)**
+**0.4.0 (released 2013-03-04)**
 
 - this release includes some backwards incompatible changes
 - usgs.nwis date_range parameter has been replaced with more explicit
