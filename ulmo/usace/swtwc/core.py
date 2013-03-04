@@ -13,6 +13,7 @@ import datetime
 import os.path
 
 from bs4 import BeautifulSoup
+import numpy as np
 import pandas
 
 from ulmo import util
@@ -104,13 +105,16 @@ def get_station_data(station_code, date=None, as_dataframe=False):
     column_names = ['datetime'] + variable_names
     widths = [15] + ([10] * len(variable_names))
     converters = dict([
-        (variable_name, lambda x: float(x))
+        (variable_name, lambda x: float(x) if x != '----' else np.nan)
         for variable_name in variable_names
     ])
     date_parser = lambda x: _convert_datetime(x, year)
     dataframe = pandas.read_fwf(sio, names=column_names, widths=widths,
-            index_col=['datetime'], converters=converters, parse_dates=True,
-            date_parser=date_parser)
+            index_col=['datetime'], na_values=['----'], converters=converters,
+            parse_dates=True, date_parser=date_parser)
+
+    # parse out rows that are all nans (e.g. end of "current" page)
+    dataframe = dataframe[~np.isnan(dataframe.T.sum())]
 
     if as_dataframe:
         station_dict['values'] = dataframe

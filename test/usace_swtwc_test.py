@@ -59,6 +59,16 @@ def test_get_station_data():
                 assert station_data[key] == test_data[key]
 
 
+def test_get_station_data_current():
+    # can't easily test current since it is a moving target changes, but mostly
+    # just make sure it parses correctl: current will have '---' values where
+    # previous days do not
+    data_file = 'usace/swtwc/MYST2.current.html'
+    with test_util.mocked_requests(data_file):
+        station_data = ulmo.usace.swtwc.get_station_data('MYST2')
+    assert len(station_data.get('values')) > 0
+
+
 def _compare_values(test_values, station_values):
     for key, test_value in test_values.iteritems():
         assert station_values[key] == test_value
