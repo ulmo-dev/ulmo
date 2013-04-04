@@ -220,12 +220,12 @@ def _first_sunday(year):
 
 
 def _get_data_format(year):
-    if year >= 1997:
+    if year >= 2001:
         return 'format5'
-    elif 1988 <= year <= 1996:
+    elif 1997 <= year <= 2000:
+        return 'format4'
+    else <= 1996:
         return 'format2'
-    else:
-        return 'unknown'
 
 
 def _get_data_url(year):
@@ -248,27 +248,43 @@ def _open_data_file(url):
 
 
 def _parse_data_file(data_file, palmer_format):
+    """
+    based on the fortran format strings:
+        format2: FORMAT(I4,3I2,F4.1,F4.0,10F6.2,4F6.4,F6.3,10F6.2,F4.0,12F6.2)
+        format4: FORMAT(2I4,I2,F4.1,F4.0,10F6.2,4F6.4,F6.3,10F6.2,F4.0,12F6.2)
+        format5: FORMAT(2I4,I2,F5.2,F5.1,10F6.2,4F6.4,F6.3,10F6.2,F4.0,12F6.2)
+    """
+    to_yyyy = 0
     if palmer_format == 'format5':
-        delim_sequence = (2, 2, 4, 2, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6)
+        delim_sequence = (2, 2, 4, 2, 5, 5) + 10*(6,) + 4*(6,) + (6,) + 10*(6,) + (4,) + 12*(6,)
         use_columns = (0, 1, 2, 3, 4, 5, 9, 15, 28, 29, 37, 40, 41)
-        dtype = [
-            ('state_code', 'i1'),
-            ('climate_division', 'i1'),
-            ('year', 'i4'),
-            ('week', 'i4'),
-            ('precipitation', 'f8'),
-            ('temperature', 'f8'),
-            ('potential_evap', 'f8'),
-            ('runoff', 'f8'),
-            ('soil_moisture_upper', 'f8'),
-            ('soil_moisture_lower', 'f8'),
-            ('pdsi', 'f8'),
-            ('cmi', 'f8')
-        ]
+    elif palmer_format == 'format4':
+        delim_sequence = (2, 2, 4, 2, 4, 4) + 10*(6,) + 4*(6,) + (6,) + 10*(6,) + (4,) + 12*(6,)
+        use_columns = (0, 1, 2, 3, 4, 5, 9, 15, 28, 29, 37, 40, 41)
+    elif palmer_format == 'format2':
+        delim_sequence = (2, 2, 2, 2, 2, 4, 4) + 10*(6,) + 4*(6,) + (6,) + 10*(6,) + (4,) + 12*(6,)
+        use_columns = (0, 1, 2, 3, 5, 6, 10, 16, 29, 30, 38, 41, 42)
+        to_yyyy = 1900
     else:
         raise NotImplementedError("we have not implemented the format for given date range")
 
+    dtype = [
+        ('state_code', 'i1'),
+        ('climate_division', 'i1'),
+        ('year', 'i4'),
+        ('week', 'i4'),
+        ('precipitation', 'f8'),
+        ('temperature', 'f8'),
+        ('potential_evap', 'f8'),
+        ('runoff', 'f8'),
+        ('soil_moisture_upper', 'f8'),
+        ('soil_moisture_lower', 'f8'),
+        ('pdsi', 'f8'),
+        ('cmi', 'f8')
+    ]
+
     data_array = np.genfromtxt(data_file, dtype=dtype, delimiter=delim_sequence, usecols=use_columns)
+    data_array['year'] += to_yyyy
     dataframe = pandas.DataFrame(data_array)
     return dataframe
 
