@@ -11,6 +11,7 @@
 
 import datetime
 import os
+import requests
 
 import numpy as np
 import pandas
@@ -224,7 +225,7 @@ def _get_data_format(year):
         return 'format5'
     elif 1997 <= year <= 2000:
         return 'format4'
-    else <= 1996:
+    else:
         return 'format2'
 
 
@@ -232,9 +233,17 @@ def _get_data_url(year):
     current_year, current_week = _week_number(datetime.date.today())
     if year == current_year:
         return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data'
-    elif year == 2011:
-        return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer11-PRELIM'
-    elif 1985 < year <= 2010:
+    elif year == current_year - 1:
+        url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:]
+        if not _url_exists(url):
+            url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data'
+        return url
+    elif year == current_year - 2:
+        url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s' % str(year)[-2:]
+        if not _url_exists(url):
+            url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:]
+        return url
+    elif 1985 < year < current_year - 2:
         return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s' % str(year)[-2:]
     elif year <= 1985:
         return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer73-85'
@@ -304,6 +313,10 @@ def _reindex_data(dataframe):
     dataframe = _convert_state_codes(dataframe)
     return dataframe.set_index(['state', 'climate_division', 'period'],
             drop=False)
+
+
+def _url_exists(url):
+    return requests.head(url).status_code == 200
 
 
 def _value_dict(value):
