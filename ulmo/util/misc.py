@@ -1,8 +1,10 @@
 from contextlib import contextmanager
 import datetime
 import email.utils
+import ftplib
 import os
 import re
+import urlparse
 import warnings
 
 import appdirs
@@ -57,15 +59,20 @@ def download_if_new(url, path, check_modified=True):
     it will only download if the url's last-modified header has a more recent
     date than the filesystem's last modified date for the file
     """
-    head = requests.head(url)
-    if not os.path.exists(path) or not _file_size_matches(head, path):
-        _download_file(url, path)
-    elif check_modified and _request_is_newer_than_file(head, path):
-        _download_file(url, path)
+    parsed = urlparse.urlparse(url)
+
+    if parsed.scheme.startswith('ftp'):
+        _ftp_download_if_new(url, path, check_modified)
+    elif parsed.scheme.startswith('http'):
+        _http_download_if_new(url, path, check_modified)
+    else:
+        raise NotImplementedError("only ftp and http urls are currently implemented")
 
 
-def get_ulmo_dir():
+def get_ulmo_dir(sub_dir=None):
     return_dir = appdirs.user_data_dir('ulmo', 'ulmo')
+    if sub_dir:
+        return_dir = os.path.join(return_dir, sub_dir)
     mkdir_if_doesnt_exist(return_dir)
     return return_dir
 
@@ -111,7 +118,35 @@ def save_pretty_printed_xml(filename, response_buffer):
         response_buffer.seek(0)
 
 
-def _download_file(url, path):
+def _ftp_download_if_new(url, path, check_modified=True):
+    parsed = urlparse.urlparse(url)
+    ftp = ftplib.FTP(parsed.netloc, "anonymous")
+    directory, filename = parsed.path.rsplit('/', 1)
+    ftp_last_modified = _ftp_last_modified(ftp, parsed.path)
+    ftp_file_size = _ftp_file_size(ftp, parsed.path)
+
+    if not os.path.exists(path) or os.path.getsize(path) != ftp_file_size:
+        _ftp_download_file(ftp, parsed.path, path)
+    elif check_modified and _path_last_modified(path) < ftp_last_modified:
+        _ftp_download_file(ftp, parsed.path, path)
+
+
+def _ftp_download_file(ftp, ftp_path, local_path):
+    with open(local_path, 'wb') as f:
+        ftp.retrbinary("RETR " + ftp_path, f.write)
+
+
+def _ftp_file_size(ftp, file_path):
+    ftp.sendcmd('TYPE I')
+    return ftp.size(file_path)
+
+
+def _ftp_last_modified(ftp, file_path):
+    timestamp = ftp.sendcmd("MDTM " + file_path).split()[-1]
+    return datetime.datetime.strptime(timestamp, '%Y%m%d%H%M%S')
+
+
+def _http_download_file(url, path):
     request = requests.get(url)
     mkdir_if_doesnt_exist(os.path.dirname(path))
     chunk_size = 64 * 1024
@@ -120,7 +155,29 @@ def _download_file(url, path):
             f.write(content)
 
 
-def _file_size_matches(request, path):
+def _http_download_if_new(url, path, check_modified):
+    head = requests.head(url)
+    if not os.path.exists(path) or not _request_file_size_matches(head, path):
+        _http_download_file(url, path)
+    elif check_modified and _request_is_newer_than_file(head, path):
+        _http_download_file(url, path)
+
+
+def _parse_rfc_1123_timestamp(timestamp_str):
+    return datetime.datetime(*email.utils.parsedate(timestamp_str)[:6])
+
+
+def _path_last_modified(path):
+    """returns a datetime.datetime object representing the last time the file at
+    a given path was last modified
+    """
+    if not os.path.exists(path):
+        return None
+
+    return datetime.datetime.fromtimestamp(os.path.getmtime(path))
+
+
+def _request_file_size_matches(request, path):
     """returns True if request content-length header matches file size"""
     content_length = request.headers.get('content-length')
     if content_length and int(content_length) == os.path.getsize(path):
@@ -129,15 +186,13 @@ def _file_size_matches(request, path):
         return False
 
 
-def _parse_rfc_1123_timestamp(timestamp_str):
-    return datetime.datetime(*email.utils.parsedate(timestamp_str)[:6])
-
-
 def _request_is_newer_than_file(request, path):
     """returns true if a request's last-modified header is more recent than a
     file's last modified timestamp
     """
-    if not os.path.exists(path):
+    path_last_modified = _path_last_modified(path)
+
+    if path_last_modified is None:
         return True
 
     if not request.headers.get('last-modified'):
@@ -145,7 +200,6 @@ def _request_is_newer_than_file(request, path):
         return True
 
     request_last_modified = _parse_rfc_1123_timestamp(request.headers.get('last-modified'))
-    path_last_modified = datetime.datetime.fromtimestamp(os.path.getmtime(path))
     if request_last_modified > path_last_modified:
         return True
     else:
