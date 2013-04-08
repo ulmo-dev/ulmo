@@ -103,6 +103,26 @@ def open_file_for_url(url, path, check_modified=True):
     open_file.close()
 
 
+def parse_fwf(file_path, columns, na_values=None):
+    """Convenience function for parsing fixed width formats. Wraps the pandas
+    read_fwf parser but allows all column information to be kept together.
+    Columns should be an iterable of lists/tuples with the format (column_name,
+    start_value, end_value, converter). Returns a pandas dataframe.
+    """
+    names, colspecs = zip(*[(name, (start, end))
+        for name, start, end, converter in columns])
+
+    converters = dict([
+        (name, converter)
+        for name, start, end, converter in columns
+        if not converter is None
+    ])
+
+    return pandas.io.parsers.read_fwf(file_path,
+        colspecs=colspecs, header=None, na_values=na_values, names=names,
+        converters=converters)
+
+
 def raise_dependency_error(*args, **kwargs):
     raise DependencyError("Trying to do something that depends on pytables, "
             "but pytables has not been installed.")
@@ -204,3 +224,5 @@ def _request_is_newer_than_file(request, path):
         return True
     else:
         return False
+
+
