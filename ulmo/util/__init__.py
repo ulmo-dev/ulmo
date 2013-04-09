@@ -8,6 +8,7 @@ from .misc import (
         mkdir_if_doesnt_exist,
         module_with_dependency_errors,
         open_file_for_url,
+        parse_fwf,
         raise_dependency_error,
         save_pretty_printed_xml,
     )

@@ -73,7 +73,7 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
 
     station_file_path = _get_ghcn_file(station_id + '.dly',
             check_modified=update)
-    station_data = _parse_fwf(station_file_path, columns, na_values=[-9999])
+    station_data = util.parse_fwf(station_file_path, columns, na_values=[-9999])
 
     dataframes = {}
 
@@ -177,7 +177,7 @@ def get_stations(country=None, state=None, elements=None, start_year=None,
     ]
 
     stations_file = _get_ghcn_file('ghcnd-stations.txt', check_modified=update)
-    stations = _parse_fwf(stations_file, columns)
+    stations = util.parse_fwf(stations_file, columns)
 
     if not country is None:
         stations = stations[stations['country'] == country]
@@ -241,18 +241,4 @@ def _get_inventory(update=True):
 
     inventory_file = _get_ghcn_file('ghcnd-inventory.txt',
             check_modified=update)
-    return _parse_fwf(inventory_file, columns)
-
-
-def _parse_fwf(file_path, columns, na_values=None):
-    colspecs = [(start, end) for name, start, end, converter in columns]
-    names = [name for name, start, end, converter in columns]
-    converters = dict([
-        (name, converter)
-        for name, start, end, converter in columns
-        if not converter is None
-    ])
-
-    return pandas.io.parsers.read_fwf(file_path,
-        colspecs=colspecs, header=None, na_values=na_values, names=names,
-        converters=converters)
+    return util.parse_fwf(inventory_file, columns)
