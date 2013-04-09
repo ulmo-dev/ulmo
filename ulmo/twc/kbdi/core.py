@@ -132,8 +132,8 @@ def _parse_data_file(data_file):
     dtype = [
         ('county', '|S15'),
         ('kbdi_avg', 'i4'),
-        ('kbdi_min', 'i4'),
         ('kbdi_max', 'i4'),
+        ('kbdi_min', 'i4'),
     ]
 
     data_array = np.genfromtxt(data_file, delimiter=[31,11,11,11], dtype=dtype, skip_header=2, skip_footer=1, autostrip=True)
