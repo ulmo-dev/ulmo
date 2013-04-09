@@ -22,7 +22,7 @@ TWC_KBDI_DIR = os.path.join(util.get_ulmo_dir(), 'twc/kbdi')
 
 # fips codes from http://www.census.gov/geo/www/ansi/national.txt
 # adjust names to match twc kbdi
-data = np.genfromtxt('national.txt', delimiter=',', names=True, dtype=['S2', 'S2','S3','S35','S2'])
+data = np.genfromtxt(os.path.join(os.path.dirname(__file__), 'national.txt'), delimiter=',', names=True, dtype=['S2', 'S2','S3','S35','S2'])
 data = data[data['State_ANSI']=='48']
 FIPS = dict((row['County_Name'].split('County')[0].strip().upper(), row['State_ANSI']+row['County_ANSI']) for row in data)
 FIPS['DE WITT'] = FIPS['DEWITT']
