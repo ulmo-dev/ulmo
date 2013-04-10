@@ -29,7 +29,7 @@ def get_data(county=None, start=None, end=None,
     ----------
     county : ``None`` or str
         If specified, results will be limited to the county corresponding to the
-        given 5-character texas county fips code i.e. 48???.
+        given 5-character Texas county fips code i.e. 48???.
     start : ``None`` or date (see :ref:`dates-and-times`)
         Results will be limited to those after the given date. Default is the
         start of the current calendar year.
@@ -38,7 +38,7 @@ def get_data(county=None, start=None, end=None,
         the current date.
     as_dataframe: bool
         If ``False`` (default), a dict with a nested set of dicts will be
-        returned with data indexed by 5-character tecas county fips code. If ``True``
+        returned with data indexed by 5-character Texas county fips code. If ``True``
         then a pandas.DataFrame object will be returned.  The pandas dataframe
         is used internally, so setting this to ``True`` is a little bit faster
         as it skips a serialization step.
