@@ -38,7 +38,7 @@ def get_data(county=None, start=None, end=None,
         the current date.
     as_dataframe: bool
         If ``False`` (default), a dict with a nested set of dicts will be
-        returned with data indexed by state, then climate division. If ``True``
+        returned with data indexed by 5-character tecas county fips code. If ``True``
         then a pandas.DataFrame object will be returned.  The pandas dataframe
         is used internally, so setting this to ``True`` is a little bit faster
         as it skips a serialization step.
