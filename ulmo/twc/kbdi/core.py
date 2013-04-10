@@ -20,14 +20,14 @@ from ulmo import util
 # directory where drought data will be stashed
 TWC_KBDI_DIR = os.path.join(util.get_ulmo_dir(), 'twc/kbdi')
 
-def get_data(county_fips=None, start=None, end=None,
+def get_data(county=None, start=None, end=None,
              as_dataframe=False):
     """Retreives data.
 
 
     Parameters
     ----------
-    county_fips : ``None`` or str
+    county : ``None`` or str
         If specified, results will be limited to the county corresponding to the
         given 5-character texas county fips code i.e. 48???.
     start : ``None`` or date (see :ref:`dates-and-times`)
@@ -74,8 +74,8 @@ def get_data(county_fips=None, start=None, end=None,
         day_data['fips'] = day_data['county'].map(lambda county:FIPS[county])
         day_data = day_data.set_index('date')
 
-        if county_fips:
-            day_data = day_data[day_data['fips'] == county_fips]
+        if county:
+            day_data = day_data[day_data['fips'] == county]
 
         if data is None:
             data = day_data
