@@ -93,10 +93,10 @@ def _as_data_dict(dataframe):
     county_dict = {}
     for county in dataframe['fips'].unique():
         county_dataframe = dataframe[dataframe['fips'] == county]
-        county_data = county_dataframe.reset_index().T.drop(['fips'])
+        county_data = county_dataframe.T.drop(['fips'])
         values = [
-            _value_dict(value)
-            	for k, value in county_data.iteritems()
+            _value_dict(date, value)
+            	for date, value in county_data.iteritems()
             ]
         county_dict[county] = values
 
@@ -404,7 +404,7 @@ def _open_data_file(url):
     return util.open_file_for_url(url, file_path, check_modified=True)
 
 
-def _value_dict(value):
+def _value_dict(date, value):
     value_dict = value.to_dict()
-    value_dict['date'] = str(value_dict['date'])
+    value_dict['date'] = str(date)
     return value_dict

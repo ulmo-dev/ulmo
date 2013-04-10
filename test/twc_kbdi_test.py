@@ -37,7 +37,7 @@ test_sets = [
 def test_get_data_by_county():
     for test_set in test_sets:
         with test_util.mocked_requests(test_set['filename']):
-            data = ulmo.twc.kbdi.get_data(county_fips=test_set['fips'], start=test_set['start'],
+            data = ulmo.twc.kbdi.get_data(county=test_set['fips'], start=test_set['start'],
                 end=test_set['end'])
         assert len(data) == 1
         assert test_set['fips'] in data
