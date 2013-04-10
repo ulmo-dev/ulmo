@@ -97,6 +97,11 @@ def mocked_url(url, response_file_path, methods=None):
         HTTPretty.disable()
 
 
+def use_test_files():
+    """Returns true if tests should be run using test files, false otherwise."""
+    return os.environ.get('ULMO_DONT_MOCK_TESTS', False)
+
+
 def _mock_request_side_effect(url_files):
     def _side_effect(url, *args, **kwargs):
         mock_response = requests.Response()
