@@ -34,7 +34,8 @@ def get_data(county=None, start=None, end=None,
         Results will be limited to those after the given date. Default is the
         start of the current calendar year.
     end : ``None`` or date (see :ref:`dates-and-times`)
-        If specified, results will be limited to data before this date.
+        If specified, results will be limited to data before this date. Default is
+        the current date.
     as_dataframe: bool
         If ``False`` (default), a dict with a nested set of dicts will be
         returned with data indexed by state, then climate division. If ``True``
