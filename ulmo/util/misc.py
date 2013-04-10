@@ -118,14 +118,31 @@ def module_with_deprecation_warnings(functions, warning_message):
 
 
 @contextmanager
-def open_file_for_url(url, path, check_modified=True):
-    """returns an open file handle for a data file; downloading if necessary or
-    otherwise using a previously downloaded file
+def open_file_for_url(url, path, check_modified=True, use_file=None):
+    """Context manager that returns an open file handle for a data file;
+    downloading if necessary or otherwise using a previously downloaded file.
+    File downloading will be short-circuited if use_file is either a file path
+    or an open file-like object (i.e. file handler or StringIO obj), in which
+    case the file handler pointing to use_file is returned - if use_file is a
+    file handler then the handler won't be closed upon exit.
     """
-    download_if_new(url, path, check_modified)
-    open_file = open(path, 'rb')
+    leave_open = False
+
+    if use_file is not None:
+        if isinstance(use_file, basestring):
+            open_path = use_file
+        if hasattr(use_file, 'read'):
+            leave_open = True
+            yield use_file
+    else:
+        download_if_new(url, path, check_modified)
+        open_path = path
+
+    open_file = open(open_path, 'rb')
     yield open_file
-    open_file.close()
+
+    if not leave_open:
+        open_file.close()
 
 
 def parse_fwf(file_path, columns, na_values=None):
