@@ -16,6 +16,12 @@ CUAHSI WaterOneFlow
    :members: get_sites, get_site_info, get_values, get_variable_info
 
 
+National Climatic Data Center Climate Index Reference Sequential (CIRS)
+=======================================================================
+.. automodule:: ulmo.ncdc.cirs
+   :members: get_data
+
+
 National Climatic Data Center Global Historical Climate Network Daily
 =====================================================================
 .. automodule:: ulmo.ncdc.ghcn_daily
