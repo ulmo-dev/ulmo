@@ -69,9 +69,18 @@ def test_get_data_by_climate_division():
 
         use_file = _test_use_file(index)
         data = ulmo.ncdc.cirs.get_data(index, by_state=by_state,
-                use_file=use_file, as_dataframe=False)
+                use_file=use_file, as_dataframe=True)
         for test_value in test_set['values']:
-            assert test_value in data
+            _assert_inclusion(test_value, data)
+
+
+def _assert_inclusion(value_dict, dataframe):
+    "tests that a value_dict is in a dataframe"
+    sub_df = dataframe.copy()
+    for k, v in value_dict.iteritems():
+        sub_df = sub_df[sub_df[k] == v]
+
+    assert len(sub_df) == 1
 
 
 def _test_use_file(index):
@@ -80,4 +89,3 @@ def _test_use_file(index):
         return test_util.get_test_file_path(path)
     else:
         return None
-
