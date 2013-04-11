@@ -1,3 +1,5 @@
+import copy
+
 import ulmo
 import test_util
 
@@ -88,6 +90,19 @@ test_sets = [
                 'value': 34.78,
             },
         ]
+    }, {
+        'index': 'tmp',
+        'by_state': True,
+        'location_names': 'full',
+        'values': [
+            {
+                'location': 'Maine',
+                'location_code': 17,
+                'year': 1895,
+                'month': 1,
+                'value': 14.00,
+            },
+        ]
     },
 ]
 
@@ -102,15 +117,24 @@ def test_get_data_by_climate_division():
     _run_test_sets(division_tests)
 
 
+def test_doesnt_have_locations_if_location_names_is_none():
+    index = 'pdsi'
+    use_file = _test_use_file(index)
+    data = ulmo.ncdc.cirs.get_data(index, location_names=None,
+            use_file=use_file, as_dataframe=True)
+    assert 'location' not in data.columns
+
+
 def _run_test_sets(test_sets):
     for test_set in test_sets:
-        index = test_set['index']
-        by_state = test_set['by_state']
+        test_args = copy.copy(test_set)
+        index = test_args.pop('index')
+        test_values = test_args.pop('values')
 
         use_file = _test_use_file(index)
-        data = ulmo.ncdc.cirs.get_data(index, by_state=by_state,
-                use_file=use_file, as_dataframe=True)
-        for test_value in test_set['values']:
+        data = ulmo.ncdc.cirs.get_data(index, use_file=use_file,
+                as_dataframe=True, **test_args)
+        for test_value in test_values:
             _assert_inclusion(test_value, data)
 
 

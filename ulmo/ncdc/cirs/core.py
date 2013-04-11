@@ -8,13 +8,13 @@ from ulmo import util
 CIRS_DIR = util.get_ulmo_dir('ncdc/cirs')
 
 
-def get_data(index, by_state=False, as_dataframe=False, use_file=None):
+def get_data(index, by_state=False, location_names='abbr', as_dataframe=False, use_file=None):
     url = _get_url(index, by_state)
     filename = url.rsplit('/', 1)[-1]
     path = os.path.join(CIRS_DIR, filename)
 
     with util.open_file_for_url(url, path, use_file=use_file) as f:
-        data = _parse_values(f, by_state)
+        data = _parse_values(f, by_state, location_names)
 
     if as_dataframe:
         return data
@@ -27,7 +27,7 @@ def _get_url(index, by_state):
         index, 'st' if by_state else '')
 
 
-def _parse_values(file_handle, by_state):
+def _parse_values(file_handle, by_state, location_names):
     if by_state:
         id_columns = [
             ('location_code', 0, 3, None),
@@ -50,26 +50,31 @@ def _parse_values(file_handle, by_state):
 
     columns = id_columns + month_columns
 
-    data = util.parse_fwf(file_handle, columns, na_values=["-99.99"])
+    parsed = util.parse_fwf(file_handle, columns, na_values=["-99.99"])
 
     month_columns = [id_column[0] for id_column in id_columns]
-    melted = pandas.melt(data, id_vars=month_columns)\
+    melted = pandas.melt(parsed, id_vars=month_columns)\
         .rename(columns={'variable': 'month'})
 
     melted.month = melted.month.astype(int)
 
-    locations = _states_regions_dataframe()['abbr']
-    with_locations = melted.join(locations, on='location_code')
-
-    if by_state:
-        data = with_locations.rename(columns={
-            'abbr': 'location',
-        })
+    if location_names is None:
+        data = melted
+    elif location_names not in ('abbr', 'full'):
+        raise ValueError("location_names should be set to either None, 'abbr' or 'full'")
     else:
-        data = with_locations.rename(columns={
-            'abbr': 'state',
-            'location_code': 'state_code'
-        })
+        locations = _states_regions_dataframe()[location_names]
+        with_locations = melted.join(locations, on='location_code')
+
+        if by_state:
+            data = with_locations.rename(columns={
+                location_names: 'location',
+            })
+        else:
+            data = with_locations.rename(columns={
+                location_names: 'state',
+                'location_code': 'state_code'
+            })
 
     return data
 
@@ -191,4 +196,4 @@ def _states_regions_dataframe():
         462: ("% Prod: Soybean Belt", "%prod:sb"),
         465: ("% Prod: Cotton Belt", "%prod:cb"),
     }
-    return pandas.DataFrame(STATES_REGIONS).T.rename(columns={0: 'name', 1: 'abbr'})
+    return pandas.DataFrame(STATES_REGIONS).T.rename(columns={0: 'full', 1: 'abbr'})
