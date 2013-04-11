@@ -79,7 +79,7 @@ def _states_regions_dataframe():
     name and abbrevitation (abbr) to use
     """
     STATES_REGIONS = {
-        # (code, full name, abbrevation)
+        # code: (full name, abbrevation)
         1: ("Alabama", "AL"),
         2: ("Arizona", "AZ"),
         3: ("Arkansas", "AR"),
@@ -128,15 +128,67 @@ def _states_regions_dataframe():
         46: ("West Virginia", "WV"),
         47: ("Wisconsin", "WI"),
         48: ("Wyoming", "WY"),
-        101: ("Northeast Region", "northeast"),
-        102: ("East North Central Region", "enc"),
-        103: ("Central Region", "central"),
-        104: ("Southeast Region", "southeast"),
-        105: ("West North Central Region", "wnc"),
-        106: ("South Region", "south"),
-        107: ("Southwest Region", "southwest"),
-        108: ("Northwest Region", "northwest"),
-        109: ("West Region", "west"),
+        101: ("Northeast Region", "ner"),
+        102: ("East North Central Region", "encr"),
+        103: ("Central Region", "cr"),
+        104: ("Southeast Region", "ser"),
+        105: ("West North Central Region", "wncr"),
+        106: ("South Region", "sr"),
+        107: ("Southwest Region", "swr"),
+        108: ("Northwest Region", "nwr"),
+        109: ("West Region", "wr"),
         110: ("National (contiguous 48 States)", "national"),
+
+        # The following are the range of code values for the National Weather Service Regions, river basins, and agricultural regions.
+        111: ("NWS: Great Plains", "nws:gp"),
+        115: ("NWS: Southern Plains and Gulf Coast", "nws:spgc"),
+        120: ("NWS: US Rockies and Westward", "nws:usrw"),
+        121: ("NWS: Eastern Region", "nws:er"),
+        122: ("NWS: Southern Region", "nws:sr"),
+        123: ("NWS: Central Region", "nws:cr"),
+        124: ("NWS: Western Region", "nws:wr"),
+        201: ("NWS: Pacific Northwest Basin", "nws:pnwb"),
+        202: ("NWS: California River Basin", "nws:crb"),
+        203: ("NWS: Great Basin", "nws:gb"),
+        204: ("NWS: Lower Colorado River Basin", "nws:lcrb"),
+        205: ("NWS: Upper Colorado River Basin", "nws:urcb"),
+        206: ("NWS: Rio Grande River Basin", "nws:rgrb"),
+        207: ("NWS: Texas Gulf Coast River Basin", "nws:tgcrb"),
+        208: ("NWS: Arkansas-White-Red Basin", "nws:awrb"),
+        209: ("NWS: Lower Mississippi River Basin", "nws:lmrb"),
+        210: ("NWS: Missouri River Basin", "nws:mrb"),
+        211: ("NWS: Souris-Red-Rainy Basin", "nws:srrb"),
+        212: ("NWS: Upper Mississippi River Basin", "nws:umrb"),
+        213: ("NWS: Great Lakes Basin", "nws:glb"),
+        214: ("NWS: Tennessee River Basin", "nws:trb"),
+        215: ("NWS: Ohio River Basin", "nws:ohrb"),
+        216: ("NWS: South Atlantic-Gulf Basin", "nws:sagb"),
+        217: ("NWS: Mid-Atlantic Basin", "nws:mab"),
+        218: ("NWS: New England Basin", "nws:neb"),
+        220: ("NWS: Mississippi River Basin & Tributaties (N. of Memphis, TN",
+              "nws:mrb&t"),
+
+        # below( codes are weighted by area)
+        250: ("Area: Spring Wheat Belt", "area:swb"),
+        255: ("Area: Primary Hard Red Winter Wheat Belt", "area:phrwwb"),
+        256: ("Area: Winter Wheat Belt", "area:wwb"),
+        260: ("Area: Primary Corn and Soybean Belt", "area:pcsb"),
+        261: ("Area: Corn Belt", "area:cb"),
+        262: ("Area: Soybean Belt", "area:sb"),
+        265: ("Area: Cotton Belt", "area:cb"),
+
+        # below( codes are weighted by productivity)
+        350: ("Prod: Spring Wheat Belt", "prod:swb"),
+        356: ("Prod: Winter Wheat Belt", "prod:wwb"),
+        361: ("Prod: Corn Belt", "prod:cb"),
+        362: ("Prod: Soybean Belt", "prod:sb"),
+        365: ("Prod: Cotton Belt", "prod:cb"),
+
+        # below( codes are for percent productivity in the Palmer Z Index categories)
+        450: ("% Prod: Spring Wheat Belt", "%prod:swb"),
+        456: ("% Prod: Winter Wheat Belt", "%prod:wwb"),
+        461: ("% Prod: Corn Belt", "%prod:cb"),
+        462: ("% Prod: Soybean Belt", "%prod:sb"),
+        465: ("% Prod: Cotton Belt", "%prod:cb"),
     }
     return pandas.DataFrame(STATES_REGIONS).T.rename(columns={0: 'name', 1: 'abbr'})
