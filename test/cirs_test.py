@@ -42,6 +42,20 @@ test_sets = [
                 'year': 1998,
                 'month': 12,
                 'value': 2.96,
+            }, {
+                'state': 'TX',
+                'state_code': 41,
+                'division': 10,
+                'year': 1895,
+                'month': 1,
+                'value': -0.1,
+            }, {
+                'state': 'TX',
+                'state_code': 41,
+                'division': 10,
+                'year': 1895,
+                'month': 12,
+                'value': 1.94,
             },
         ]
     },
