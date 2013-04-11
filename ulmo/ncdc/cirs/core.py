@@ -28,12 +28,20 @@ def _get_url(index, by_state):
 
 
 def _parse_values(file_handle, by_state):
-    id_columns = [
-        ('state_code', 0, 2, None),
-        ('division', 2, 4, None),
-        #('element', 4, 6, None),  # element is redundant
-        ('year', 6, 10, None),
-    ]
+    if by_state:
+        id_columns = [
+            ('location_code', 0, 3, None),
+            #('division', 3, 3, None), # ignored in state files
+            #('element', 4, 6, None),  # element is redundant
+            ('year', 6, 10, None),
+        ]
+    else:
+        id_columns = [
+            ('location_code', 0, 2, None),
+            ('division', 2, 4, None),
+            #('element', 4, 6, None),  # element is redundant
+            ('year', 6, 10, None),
+        ]
 
     month_columns = [
         (str(n), 3 + (7 * n), 10 + (7 * n), None)
@@ -50,9 +58,20 @@ def _parse_values(file_handle, by_state):
 
     melted.month = melted.month.astype(int)
 
-    states = _states_regions_dataframe()\
-        .rename(columns={'abbr': 'state'})['state']
-    return melted.join(states, on='state_code')
+    locations = _states_regions_dataframe()['abbr']
+    with_locations = melted.join(locations, on='location_code')
+
+    if by_state:
+        data = with_locations.rename(columns={
+            'abbr': 'location',
+        })
+    else:
+        data = with_locations.rename(columns={
+            'abbr': 'state',
+            'location_code': 'state_code'
+        })
+
+    return data
 
 
 def _states_regions_dataframe():
