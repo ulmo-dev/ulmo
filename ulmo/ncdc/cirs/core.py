@@ -1,3 +1,13 @@
+"""
+    ulmo.ncdc.cirs.core
+    ~~~~~~~~~~~~~~~~~~~
+
+    This module provides direct access to the `National Climatic Data Center`_
+    `Global Historical Climate Network - Daily`_ dataset
+
+    .. _National Climatic Data Center: http://www.ncdc.noaa.gov
+    .. _Global Historical Climate Network - Daily: http://www.ncdc.noaa.gov/oa/climate/ghcn-daily/
+"""
 import os.path
 
 import pandas
@@ -9,6 +19,55 @@ CIRS_DIR = util.get_ulmo_dir('ncdc/cirs')
 
 
 def get_data(index, by_state=False, location_names='abbr', as_dataframe=False, use_file=None):
+    """Retrieves data.
+
+    Parameters
+    ----------
+    index : str
+        The element for which to get data for. Options are:
+            'ccd': Cooling Degree Days
+            'hdd': Heating Degree Days
+            'pcp': Precipitation
+            'pdsi': Palmer Drought Severity Index
+            'pdhi': Palmer Hydrological Drought Index
+            'pmdi': Modified Palmer Drought Severity Index
+            'sp01': 1-month Standardized Precipitation Index
+            'sp02': 2-month Standardized Precipitation Index
+            'sp03': 3-month Standardized Precipitation Index
+            'sp06': 6-month Standardized Precipitation Index
+            'sp09': 9-month Standardized Precipitation Index
+            'sp12': 12-month Standardized Precipitation Index
+            'sp24': 24-month Standardized Precipitation Index
+            'tmp': Temperature
+            'zndx': ZNDX
+    by_state: bool
+        If False (default), divisional data will be retreived. If True, then
+        regional data will be retreived.
+    location_names: str or ``None``
+        This parameter defines what (if any) type of names will be added to the
+        values. If set to 'abbr' (default), then abbreviated will be used. If
+        'full', then full location names will be used. If set to None, then no
+        location name will be added and the only identifier will be the
+        location_codes (this is the most memory-conservative option).
+    as_dataframe : bool
+        If ``False`` (default), a list of values dicts is returned. If ``True``,
+        a dict with element codes mapped to equivalent pandas.DataFrame objects
+        will be returned. The pandas dataframe is used internally, so setting
+        this to ``True`` is a faster as it skips a somewhat expensive
+        serialization step.
+    use_file: ``None``, file-like object or str
+        If ``None`` (default), then data will be automatically retreived from
+        the web. If a file-like object or a file path string, then the file will
+        be used to read data from. This is intended to be used for reading in
+        previously-downloaded versions of the dataset.
+
+
+    Returns
+    -------
+    data : list or pandas.DataFrame
+        A list of value dicts or a pandas.DataFrame containing data. See
+        the ``as_dataframe`` parameter for more.
+    """
     url = _get_url(index, by_state)
     filename = url.rsplit('/', 1)[-1]
     path = os.path.join(CIRS_DIR, filename)
