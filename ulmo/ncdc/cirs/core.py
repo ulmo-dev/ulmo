@@ -25,21 +25,21 @@ def get_data(index, by_state=False, location_names='abbr', as_dataframe=False, u
     ----------
     index : str
         The element for which to get data for. Options are:
-            'ccd': Cooling Degree Days
-            'hdd': Heating Degree Days
-            'pcp': Precipitation
-            'pdsi': Palmer Drought Severity Index
-            'pdhi': Palmer Hydrological Drought Index
-            'pmdi': Modified Palmer Drought Severity Index
-            'sp01': 1-month Standardized Precipitation Index
-            'sp02': 2-month Standardized Precipitation Index
-            'sp03': 3-month Standardized Precipitation Index
-            'sp06': 6-month Standardized Precipitation Index
-            'sp09': 9-month Standardized Precipitation Index
-            'sp12': 12-month Standardized Precipitation Index
-            'sp24': 24-month Standardized Precipitation Index
-            'tmp': Temperature
-            'zndx': ZNDX
+          * 'ccd': Cooling Degree Days
+          * 'hdd': Heating Degree Days
+          * 'pcp': Precipitation
+          * 'pdsi': Palmer Drought Severity Index
+          * 'pdhi': Palmer Hydrological Drought Index
+          * 'pmdi': Modified Palmer Drought Severity Index
+          * 'sp01': 1-month Standardized Precipitation Index
+          * 'sp02': 2-month Standardized Precipitation Index
+          * 'sp03': 3-month Standardized Precipitation Index
+          * 'sp06': 6-month Standardized Precipitation Index
+          * 'sp09': 9-month Standardized Precipitation Index
+          * 'sp12': 12-month Standardized Precipitation Index
+          * 'sp24': 24-month Standardized Precipitation Index
+          * 'tmp': Temperature
+          * 'zndx': ZNDX
     by_state: bool
         If False (default), divisional data will be retreived. If True, then
         regional data will be retreived.
