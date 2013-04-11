@@ -7,9 +7,9 @@ import test_util
 
 test_sets = [
     {
-    'filename' : 'cpc/drought/palmer94',
-    'start' : '1995-02-19',
-    'end' : '1995-02-25',
+    'filename': 'cpc/drought/palmer94',
+    'start': '1995-02-19',
+    'end': '1995-02-25',
     'state': 'NC',
     'climate_division': 4,
     'values': [{
@@ -25,9 +25,9 @@ test_sets = [
         }]
     },
     {
-    'filename' : 'cpc/drought/palmer99',
-    'start' : '1999-07-25',
-    'end' : '1999-07-31',
+    'filename': 'cpc/drought/palmer99',
+    'start': '1999-07-25',
+    'end': '1999-07-31',
     'state': 'TX',
     'climate_division': 3,
     'values': [{
@@ -43,9 +43,9 @@ test_sets = [
         }]
     },
     {
-    'filename' : 'cpc/drought/palmer10',
-    'start' : '2010-5-20',
-    'end' : '2010-6-13',
+    'filename': 'cpc/drought/palmer10',
+    'start': '2010-5-20',
+    'end': '2010-6-13',
     'state': 'AL',
     'climate_division': 1,
     'values': [{
@@ -62,6 +62,7 @@ test_sets = [
     },
 ]
 
+
 def test_get_data_by_state():
     for test_set in test_sets:
         with test_util.mocked_requests(test_set['filename']):
@@ -72,7 +73,6 @@ def test_get_data_by_state():
 
 
 def test_get_data():
-
     for test_set in test_sets:
         with test_util.mocked_requests(test_set['filename']):
             data = ulmo.cpc.drought.get_data(start=test_set['start'], end=test_set['end'])
