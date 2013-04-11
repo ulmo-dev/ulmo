@@ -194,7 +194,7 @@ def _convert_state_codes(dataframe):
 
 
 def _convert_week_numbers(dataframe):
-    """adds state abbreviations to a dataframe, based on state codes"""
+    """convert a dataframe's week numbers to period objects"""
     weeks = [key for key, group in dataframe.groupby(['year', 'week'])]
     periods = [(week[0], week[1], _period_for_week(*week)) for week in weeks]
     period_dataframe = pandas.DataFrame(periods, columns=['year', 'week', 'period'])
