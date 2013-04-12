@@ -90,3 +90,11 @@ def test_get_data_as_dataframe():
                 as_dataframe=True)
 
         assert isinstance(data, pandas.DataFrame)
+
+
+# TODO: add proper marks to these
+#def test_prelim_overlap_doesnt_break():
+    #data = ulmo.cpc.drought.get_data(start='2012-01-01', end='2013-03-07',
+            #as_dataframe=True)
+    #assert len(data) > 0
+

@@ -152,7 +152,9 @@ def get_data(state=None, climate_division=None, start=None, end=None,
         else:
             # some data are duplicated (e.g. final data from 2011 stretches into
             # prelim data of 2012), so just take those that are new
-            data = data.append(year_data.ix[year_data.index - data.index])
+            append_index = year_data.index - data.index
+            if len(append_index):
+                data = data.append(year_data.ix[append_index])
 
     # this does what data.reset_index() should do, but at least as of 0.10.1, that sets
     # will cast period objects to ints
