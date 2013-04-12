@@ -140,11 +140,6 @@ def get_data(state=None, climate_division=None, start=None, end=None,
         if climate_division:
             year_data = year_data[year_data['climate_division'] == climate_division]
 
-        if start_year == year:
-            year_data = year_data[year_data['week'] >= start_week]
-        if end_year == year:
-            year_data = year_data[year_data['week'] <= end_week]
-
         year_data = _reindex_data(year_data)
 
         if data is None:
@@ -155,6 +150,11 @@ def get_data(state=None, climate_division=None, start=None, end=None,
             append_index = year_data.index - data.index
             if len(append_index):
                 data = data.append(year_data.ix[append_index])
+
+    # restrict results to date range
+    period_index = pandas.PeriodIndex(data['period'])
+    periods_in_range = (period_index >= start_date) & (period_index <= end_date)
+    data = data[periods_in_range]
 
     # this does what data.reset_index() should do, but at least as of 0.10.1, that sets
     # will cast period objects to ints

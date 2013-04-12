@@ -98,3 +98,9 @@ def test_get_data_as_dataframe():
             #as_dataframe=True)
     #assert len(data) > 0
 
+
+#def test_prelim_overlap_start_end_dates_obeyed():
+    #data = ulmo.cpc.drought.get_data(start='2012-01-01', end='2013-03-07',
+            #as_dataframe=True)
+    #assert data['period'][0] == pandas.Period('2012-01-01/2012-01-07', 'W-SAT')
+    #assert data['period'][data.index[-1]] == pandas.Period('2013-03-03/2013-03-09', 'W-SAT')
