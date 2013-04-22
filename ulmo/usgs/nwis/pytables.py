@@ -210,7 +210,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None):
         abbreviations "iv" and "dv" can be used for "instantaneous" and "daily",
         respectively.
     path : ``None`` or file path
-        Path to the hdf5 file to be queried, if ``None`` then the default path
+        Path to the hdf5 file to be updated, if ``None`` then the default path
         will be used.
 
 
@@ -244,8 +244,9 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None):
         'P1Y2M21D' for a period of one year, two months and 21 days) or it can
         be a datetime.timedelta object representing the period of time. This
         parameter is mutually exclusive with start/end dates.
-    modified_since : ``None`` or datetime.timedelta
-        Passed along as the modifiedSince parameter.
+    path : ``None`` or file path
+        Path to the hdf5 file to be updated, if ``None`` then the default path
+        will be used.
 
 
     Returns
