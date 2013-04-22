@@ -488,7 +488,7 @@ def _update_or_append(table, update_values, where_filter):
 
 def _update_or_append_sortable(table, update_values, sortby, query_isodate):
     """updates table with dict representations of rows, appending new rows if
-    need be; sortby should be a completly sortable column (with a CSIndex)
+    need be; sortby should be a completely sortable column (with a CSIndex)
     """
     value_row = table.row
     update_values.sort(key=lambda v: v[sortby])
