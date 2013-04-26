@@ -12,9 +12,10 @@ from .core import (get_sites, get_site_data)
 
 try:
     from . import pytables
+    from . import hdf5
 except ImportError:
     from ulmo import util
-    pytables = util.module_with_dependency_errors([
+    pytables = hdf5 = util.module_with_dependency_errors([
         'get_site',
         'get_site_data',
         'get_sites',
