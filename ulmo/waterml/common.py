@@ -272,8 +272,9 @@ def _parse_site_info(site_info, namespace):
 
     # WaterML 1.1 siteProperties
     site_properties = dict([
-        (util.camel_to_underscore(site_property.attrib['name'].replace(' ',
-            '')), site_property.text)
+        (util.camel_to_underscore(
+            site_property.attrib['name'].replace(' ', '')),
+        site_property.text)
         for site_property in site_info.findall(namespace + 'siteProperty')
     ])
     if site_properties:
