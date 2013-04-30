@@ -30,7 +30,8 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-def get_sites(sites=None, state_code=None, site_type=None, service=None):
+def get_sites(sites=None, state_code=None, site_type=None, service=None,
+        input_file=None):
     """Fetches site information from USGS services. See the USGS waterservices
     documentation for options.
 
@@ -48,6 +49,10 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
         (default).  If set to ``None``, then both services are used.  The
         abbreviations "iv" and "dv" can be used for "instantaneous" and "daily",
         respectively.
+    input_file: ``None``, file path or file object
+        If ``None`` (default), then the NWIS web services will be queried, but
+        if a file is passed then this file will be used instead of requesting
+        data from the NWIS web services.
 
     Returns
     -------
@@ -73,16 +78,28 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
     if service == 'iv':
         service == 'instantaneous'
 
-    if not service:
-        return_sites = get_sites(sites=sites, state_code=state_code, site_type=site_type, service="daily")
-        return_sites.update(get_sites(sites=sites, state_code=state_code, site_type=site_type, service="instantaneous"))
+    leave_open = False
 
-    else:
+    if input_file is None:
+        if not service:
+            return_sites = get_sites(sites=sites, state_code=state_code,
+                    site_type=site_type, service="daily", input_file=input_file)
+            instantaneous_sites = get_sites(sites=sites, state_code=state_code,
+                site_type=site_type, service="instantaneous", input_file=input_file)
+            return_sites.update(instantaneous_sites)
+            return return_sites
+
         url = _get_service_url(service)
         log.info('making request for sites: %s' % url)
         req = requests.get(url, params=url_params)
         log.info("processing data from request: %s" % req.request.url)
         content_io = StringIO.StringIO(str(req.content))
+    else:
+        if isinstance(input_file, basestring):
+            content_io = open(input_file, 'rb')
+        elif hasattr(input_file, 'read'):
+            leave_open = True
+            content_io = input_file
 
         return_sites = wml.parse_site_infos(content_io)
         return_sites = dict([
