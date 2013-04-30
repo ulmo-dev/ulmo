@@ -85,6 +85,13 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None):
         content_io = StringIO.StringIO(str(req.content))
 
         return_sites = wml.parse_site_infos(content_io)
+        return_sites = dict([
+            (code, _extract_site_properties(site))
+            for code, site in return_sites.iteritems()
+        ])
+
+        if not leave_open:
+            content_io.close()
     return return_sites
 
 
@@ -171,6 +178,27 @@ def get_site_data(site_code, service=None, parameter_code=None,
         raise ValueError("service must either be 'daily', 'instantaneous' or none")
 
     return values
+
+
+def _extract_site_properties(site):
+    rename_properties = [
+        ('county_cd', 'county'),
+        ('huc_cd', 'huc'),
+        ('site_type_cd', 'site_type'),
+        ('state_cd', 'state_code'),
+    ]
+    site_properties = site['site_property']
+    for old, new in rename_properties:
+        if old in site_properties:
+            site[new] = site_properties[old]
+            del site_properties[old]
+
+    if len(site_properties) == 0:
+        del site['site_property']
+    else:
+        site['site_property'] = site_properties
+
+    return site
 
 
 def _get_service_url(service):
