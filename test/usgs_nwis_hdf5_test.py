@@ -1,6 +1,7 @@
 import os
 import time
 
+import pandas
 import pytest
 
 import ulmo
@@ -57,6 +58,18 @@ def test_update_site_list(delete_test_file):
 
     for test_code, test_value in test_sites.iteritems():
         assert sites[test_code] == test_value
+
+
+def test_sites_table_remains_unique(delete_test_file):
+    site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
+    for site_file in site_files:
+        test_site_file = test_util.get_test_file_path(site_file)
+        ulmo.usgs.nwis.hdf5.update_site_list(path=TEST_FILE_PATH,
+            input_file=test_site_file)
+
+    store = pandas.io.pytables.HDFStore(TEST_FILE_PATH)
+    sites_df = store.select('sites')
+    assert len(sites_df) == len(set(sites_df.index))
 
 
 def test_get_site(delete_test_file):
