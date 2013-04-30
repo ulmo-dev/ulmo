@@ -103,6 +103,50 @@ def test_update_site_list(delete_test_file):
         assert sites[test_code] == test_value
 
 
+def test_update_site_list_with_changes(delete_test_file):
+    site_files = [
+        ('usgs/nwis/RI_daily.xml', {
+            'agency': 'USGS',
+            'code': '01106000',
+            'county': '44005',
+            'huc': '01090002',
+            'location': {'latitude': '41.5584366',
+                        'longitude': '-71.12921047',
+                        'srs': 'EPSG:4326'},
+            'name': 'ADAMSVILLE BROOK AT ADAMSVILLE, RI',
+            'network': 'NWIS',
+            'site_type': 'ST',
+            'state_code': '44',
+            'timezone_info': {
+                'default_tz': {'abbreviation': 'EST', 'offset': '-05:00'},
+                'dst_tz': {'abbreviation': 'EDT', 'offset': '-04:00'},
+                'uses_dst': True}}),
+        ('usgs/nwis/RI_daily_update.xml', {
+            'agency': 'USGS',
+            'code': '01106000',
+            'county': '44005',
+            'huc': '01090002',
+            'location': {'latitude': '41.5584366',
+                        'longitude': '-71.12921047',
+                        'srs': 'EPSG:4326'},
+            'name': 'UPDATED NAME',
+            'network': 'NWIS',
+            'site_type': 'ST',
+            'state_code': '44',
+            'timezone_info': {
+                'default_tz': {'abbreviation': 'EST', 'offset': '-05:00'},
+                'dst_tz': {'abbreviation': 'EDT', 'offset': '-04:00'},
+                'uses_dst': True}}),
+    ]
+    for test_file, test_site in site_files:
+        test_site_file = test_util.get_test_file_path(test_file)
+        ulmo.usgs.nwis.hdf5.update_site_list(path=TEST_FILE_PATH,
+                input_file=test_site_file)
+        sites = ulmo.usgs.nwis.hdf5.get_sites(path=TEST_FILE_PATH)
+        test_code = test_site['code']
+        assert sites[test_code] == test_site
+
+
 def test_sites_table_remains_unique(delete_test_file):
     site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
     for site_file in site_files:
