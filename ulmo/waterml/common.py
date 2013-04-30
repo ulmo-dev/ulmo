@@ -295,10 +295,15 @@ def _parse_timezone_info(timezone_info, namespace):
     """returns a dict representation of a timeZoneInfo etree element"""
     return_dict = {}
 
-    if timezone_info.attrib.get('siteUsesDaylightSavingsTime', "false") == "true":
+    uses_dst_str = timezone_info.attrib.get('siteUsesDaylightSavingsTime', "false")
+    if uses_dst_str == "true":
         return_dict['uses_dst'] = True
-        return_dict['dst_tz'] = _parse_timezone_element(
-             timezone_info.find(namespace + 'daylightSavingsTimeZone'))
+    else:
+        return_dict['uses_dst'] = False
+
+    dst_element = timezone_info.find(namespace + 'daylightSavingsTimeZone')
+    if not dst_element is None:
+        return_dict['dst_tz'] = _parse_timezone_element(dst_element)
 
     return_dict['default_tz'] = _parse_timezone_element(
          timezone_info.find(namespace + 'defaultTimeZone'))

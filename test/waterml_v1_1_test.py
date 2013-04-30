@@ -12,6 +12,34 @@ def test_parse_site_infos():
             site_infos.update(ulmo.waterml.v1_1.parse_site_infos(f))
 
     assert len(site_infos) == 64
+
+    test_sites = {
+        '01111410': {
+            'agency': 'USGS',
+            'code': '01111410',
+            'location': {
+                'latitude': '41.9409318',
+                'longitude': '-71.6481214',
+                'srs': 'EPSG:4326',
+            },
+            'name': 'CHEPACHET RIVER WEST OF GAZZA RD AT GAZZAVILLE, RI',
+            'network': 'NWIS',
+            'timezone_info': {
+                'default_tz': {
+                    'abbreviation': 'EST',
+                    'offset': '-05:00'
+                },
+                'dst_tz': {
+                    'abbreviation': 'EDT',
+                    'offset': '-04:00',
+                },
+                'uses_dst': False,
+            }
+        }
+    }
+
+    for test_code, test_dict in test_sites.iteritems():
+        assert site_infos[test_code] == test_dict
     return site_infos
 
 
