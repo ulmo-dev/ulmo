@@ -6,6 +6,7 @@ from ulmo import util
 
 
 def parse_site_values(content_io, namespace, query_isodate=None):
+    """parses values out of a waterml file; content_io should be a file-like object"""
     data_dict = {}
     metadata_elements = [
         # (element name, name of collection,
