@@ -28,6 +28,7 @@ def test_update_site_list(delete_test_file):
     assert len(sites) == 64
 
     test_sites = {
+        # uses_dst == False
         '01111410': {
             'agency': 'USGS',
             'code': '01111410',
@@ -53,7 +54,49 @@ def test_update_site_list(delete_test_file):
                 },
                 'uses_dst': False,
             }
-        }
+        },
+        # only in RI_daily
+        '01116300': {
+            'agency': 'USGS',
+            'code': '01116300',
+            'county': '44007',
+            'huc': '01090004',
+            'location': {
+                'latitude': '41.7564892',
+                'longitude': '-71.4972824',
+                'srs': 'EPSG:4326'
+            },
+            'name': 'FURNACE HILL BROOK AT CRANSTON, RI',
+            'network': 'NWIS',
+            'site_type': 'ST',
+            'state_code': '44',
+            'timezone_info': {
+                'default_tz': {'abbreviation': 'EST', 'offset': '-05:00'},
+                'dst_tz': {'abbreviation': 'EDT', 'offset': '-04:00'},
+                'uses_dst': True
+            },
+        },
+        # only in RI_instantaneous
+        '01115170': {
+            'agency': 'USGS',
+            'code': '01115170',
+            'county': '44007',
+            'huc': '01090004',
+            'location': {
+                'latitude': '41.84093269',
+                'longitude': '-71.584508',
+                'srs': 'EPSG:4326',
+            },
+            'name': 'MOSWANSICUT STREAM NR NORTH SCITUATE, RI',
+            'network': 'NWIS',
+            'site_type': 'ST',
+            'state_code': '44',
+            'timezone_info': {
+                'default_tz': {'abbreviation': 'EST', 'offset': '-05:00'},
+                'dst_tz': {'abbreviation': 'EDT', 'offset': '-04:00'},
+                'uses_dst': True
+            },
+        },
     }
 
     for test_code, test_value in test_sites.iteritems():
