@@ -34,6 +34,12 @@ def test_parse_site_infos():
                     'offset': '-04:00',
                 },
                 'uses_dst': False,
+            },
+            'site_property': {
+                'site_type_cd': 'ST',
+                'huc_cd': '01090003',
+                'state_cd': '44',
+                'county_cd': '44007',
             }
         }
     }

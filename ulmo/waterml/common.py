@@ -274,10 +274,10 @@ def _parse_site_info(site_info, namespace):
     site_properties = dict([
         (util.camel_to_underscore(site_property.attrib['name'].replace(' ',
             '')), site_property.text)
-        for site_property in site_info.findall(namespace + 'site_property')
+        for site_property in site_info.findall(namespace + 'siteProperty')
     ])
     if site_properties:
-        return_dict['site_properties'] = site_properties
+        return_dict['site_property'] = site_properties
 
     return return_dict
 
