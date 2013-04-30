@@ -62,22 +62,54 @@ def test_update_site_list(delete_test_file):
 def test_get_site(delete_test_file):
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
-    ulmo.usgs.nwis.hdf5.get_site(site_code, TEST_FILE_PATH,
-            input_file=site_data_file)
+    input_file = test_util.get_test_file_path(site_data_file)
+    ulmo.usgs.nwis.hdf5.update_site_list(path=TEST_FILE_PATH,
+            input_file=input_file)
 
-    site = ulmo.usgs.nwis.hdf5.get_site(site_code, TEST_FILE_PATH)
-    assert len(site) == 10
+    site = ulmo.usgs.nwis.hdf5.get_site(site_code, path=TEST_FILE_PATH)
+    assert site == {
+        'agency': 'USGS',
+        'code': '08068500',
+        'county': '48339',
+        'huc': '12040102',
+        'location': {
+            'latitude': '30.11049517',
+            'longitude': '-95.4363275',
+            'srs': 'EPSG:4326'
+        },
+        'name': 'Spring Ck nr Spring, TX',
+        'network': 'NWIS',
+        'site_type': 'ST',
+        'state_code': '48',
+        'timezone_info': {
+            'default_tz': {'abbreviation': 'CST', 'offset': '-06:00'},
+            'dst_tz': {'abbreviation': 'CDT', 'offset': '-05:00'},
+            'uses_dst': True
+        },
+    }
 
 
-def test_get_site_raises_lookup(delete_test_file):
+def test_empty_update_list_doesnt_error(delete_test_file):
     site_code = '98068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    input_file = test_util.get_test_file_path(site_data_file)
+    ulmo.usgs.nwis.hdf5.update_site_list(path=TEST_FILE_PATH,
+        input_file=input_file)
 
-    ulmo.usgs.nwis.hdf5.get_site(site_code, TEST_FILE_PATH,
-            input_file=site_data_file)
+    sites = ulmo.usgs.nwis.hdf5.get_sites()
+    assert sites == {}
+
+
+def test_get_site_for_missing_raises_lookup(delete_test_file):
+    site_code = '08068500'
+    site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    input_file = test_util.get_test_file_path(site_data_file)
+    ulmo.usgs.nwis.hdf5.update_site_list(path=TEST_FILE_PATH,
+        input_file=input_file)
 
     with pytest.raises(LookupError):
-        ulmo.usgs.nwis.hdf5.get_site(site_code, TEST_FILE_PATH)
+        missing_code = '98068500'
+        ulmo.usgs.nwis.hdf5.get_site(missing_code, path=TEST_FILE_PATH)
 
 
 def test_non_usgs_site(delete_test_file):
