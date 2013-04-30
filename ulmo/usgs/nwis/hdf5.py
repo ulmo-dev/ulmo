@@ -187,7 +187,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
 
 
 def _nans_to_none(df):
-    return df.where((pandas.notnull(df)), None)
+    return df.astype(object).where(pandas.notnull(df), None)
 
 
 def _nest_dataframe_dicts(unnested_df, nested_column, keys):
