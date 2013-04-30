@@ -8,7 +8,9 @@ from ulmo.usgs.nwis import core
 # default hdf5 file path
 HDF5_FILE_PATH = util.get_default_h5file_path()
 
-# define column sizes for strings stored in hdf5
+# define column sizes for strings stored in hdf5 tables
+# note: this is currently not used as we simply read in and write out entire
+# site dataframes to the store (not using tables type)
 SITES_MIN_ITEMSIZE = {
     'agency': 20,
     'code': 20,
@@ -24,6 +26,8 @@ SITES_MIN_ITEMSIZE = {
     'dst_tz_abbreviation': 5,
     'dst_tz_offset': 7,
 }
+
+SITES_TABLE = 'sites'
 
 
 def get_sites(path=None):
@@ -41,9 +45,8 @@ def get_sites(path=None):
     sites_dict : dict
         a python dict with site codes mapped to site information
     """
-    sites_path = 'sites'
     store = pandas.io.pytables.HDFStore(path)
-    sites_df = store[sites_path]
+    sites_df = store[SITES_TABLE]
     sites_dict = _sites_dataframe_to_dict(sites_df)
     return sites_dict
 
@@ -129,13 +132,16 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
     """
     if not path:
         path = HDF5_FILE_PATH
-    sites = core.get_sites(sites=sites, state_code=state_code, service=service,
+    new_sites = core.get_sites(sites=sites, state_code=state_code, service=service,
             input_file=input_file)
-    sites_path = 'sites'
-    store = pandas.io.pytables.HDFStore(path)
+    new_sites_df = _sites_dict_to_dataframe(new_sites)
 
-    sites_df = _sites_dict_to_dataframe(sites)
-    store.append(sites_path, sites_df, min_itemsize=SITES_MIN_ITEMSIZE)
+    store = pandas.io.pytables.HDFStore(path)
+    if SITES_TABLE in store:
+        sites_df = store[SITES_TABLE]
+        new_sites_df = new_sites_df.combine_first(sites_df)
+
+    store[SITES_TABLE] = new_sites_df
 
 
 def update_site_data(site_code, start=None, end=None, period=None, path=None,
