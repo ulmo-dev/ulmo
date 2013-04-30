@@ -1,3 +1,29 @@
+import numpy as np
+import pandas
+
+from ulmo import util
+from ulmo.usgs.nwis import core
+
+
+# default hdf5 file path
+HDF5_FILE_PATH = util.get_default_h5file_path()
+
+# define column sizes for strings stored in hdf5
+SITES_MIN_ITEMSIZE = {
+    'agency': 20,
+    'code': 20,
+    'county': 30,
+    'huc': 20,
+    'name': 250,
+    'network': 20,
+    'site_type': 20,
+    'state_code': 2,
+    'srs': 20,
+    'default_tz_abbreviation': 5,
+    'default_tz_offset': 7,
+    'dst_tz_abbreviation': 5,
+    'dst_tz_offset': 7,
+}
 
 
 def get_sites(path=None):
@@ -15,7 +41,11 @@ def get_sites(path=None):
     sites_dict : dict
         a python dict with site codes mapped to site information
     """
-    pass
+    sites_path = 'sites'
+    store = pandas.io.pytables.HDFStore(path)
+    sites_df = store[sites_path]
+    sites_dict = _sites_dataframe_to_dict(sites_df)
+    return sites_dict
 
 
 def get_site(site_code, path=None):
@@ -61,7 +91,8 @@ def get_site_data(site_code, agency_code=None, path=None):
     pass
 
 
-def update_site_list(sites=None, state_code=None, service=None, path=None):
+def update_site_list(sites=None, state_code=None, service=None, path=None,
+        input_file=None):
     """Update cached site information.
 
     Parameters
@@ -80,16 +111,44 @@ def update_site_list(sites=None, state_code=None, service=None, path=None):
     path : ``None`` or file path
         Path to the hdf5 file to be updated, if ``None`` then the default path
         will be used.
+    input_file: ``None``, file path or file object
+        If ``None`` (default), then the NWIS web services will be queried, but
+        if a file is passed then this file will be used instead of requesting
+        data from the NWIS web services.
 
 
     Returns
     -------
     None : ``None``
     """
-    pass
+    if not path:
+        path = HDF5_FILE_PATH
+    sites = core.get_sites(sites=sites, state_code=state_code, service=service,
+            input_file=input_file)
+    sites_path = 'sites'
+    store = pandas.io.pytables.HDFStore(path)
+
+    sites_df = _sites_dict_to_dataframe(sites)
+    store.append(sites_path, sites_df, min_itemsize=SITES_MIN_ITEMSIZE)
 
 
-def update_site_data(site_code, start=None, end=None, period=None, path=None):
+def _sites_dataframe_to_dict(df):
+    df = _nest_dataframe_dicts(df, 'location', ['latitude', 'longitude', 'srs'])
+    for tz_type in ['default_tz', 'dst_tz']:
+        tz_keys = ['abbreviation', 'offset']
+        rename_dict = dict([
+            (tz_type + '_' + key, key) for key in tz_keys])
+        df = df.rename(columns=rename_dict)
+        df = _nest_dataframe_dicts(df, tz_type,
+                tz_keys)
+    df = _nest_dataframe_dicts(df, 'timezone_info',
+            ['uses_dst', 'default_tz', 'dst_tz'])
+
+    return df.T.to_dict()
+
+
+def update_site_data(site_code, start=None, end=None, period=None, path=None,
+        input_path=None):
     """Update cached site data.
 
     Parameters
@@ -119,3 +178,54 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None):
     None : ``None``
     """
     pass
+
+
+def _nans_to_none(df):
+    return df.where((pandas.notnull(df)), None)
+
+
+def _nest_dataframe_dicts(unnested_df, nested_column, keys):
+    df = unnested_df.copy()
+    df = _nans_to_none(df)
+
+    def _nest_func(row):
+        return dict(zip(keys, row))
+
+    nested_values = map(_nest_func, df[keys].values)
+    df[nested_column] = nested_values
+
+    for key in keys:
+        del df[key]
+
+    return df
+
+
+def _sites_dict_to_dataframe(sites_dict):
+    df = pandas.DataFrame(sites_dict).T.copy()
+    df = _unnest_dataframe_dicts(df, 'location', ['latitude', 'longitude', 'srs'])
+    df = _unnest_dataframe_dicts(df, 'timezone_info',
+            ['uses_dst', 'default_tz', 'dst_tz'])
+    for tz_type in ['default_tz', 'dst_tz']:
+        tz_keys = ['abbreviation', 'offset']
+        df = _unnest_dataframe_dicts(df, tz_type,
+                tz_keys)
+        rename_dict = dict([
+            (key, tz_type + '_' + key) for key in tz_keys])
+        df = df.rename(columns=rename_dict)
+
+    return df
+
+
+def _unnest_dataframe_dicts(df, nested_column, keys):
+    def _unnest_func(nested_dict):
+        if pandas.isnull(nested_dict):
+            return [np.nan] * len(keys)
+        return [nested_dict.get(key, np.nan) for key in keys]
+
+    unzipped_values = zip(*df[nested_column].map(_unnest_func).values)
+
+    for key, values in zip(keys, unzipped_values):
+        df[key] = values
+
+    del df[nested_column]
+    return df
