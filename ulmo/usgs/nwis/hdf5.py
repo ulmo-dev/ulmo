@@ -138,21 +138,6 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
     store.append(sites_path, sites_df, min_itemsize=SITES_MIN_ITEMSIZE)
 
 
-def _sites_dataframe_to_dict(df):
-    df = _nest_dataframe_dicts(df, 'location', ['latitude', 'longitude', 'srs'])
-    for tz_type in ['default_tz', 'dst_tz']:
-        tz_keys = ['abbreviation', 'offset']
-        rename_dict = dict([
-            (tz_type + '_' + key, key) for key in tz_keys])
-        df = df.rename(columns=rename_dict)
-        df = _nest_dataframe_dicts(df, tz_type,
-                tz_keys)
-    df = _nest_dataframe_dicts(df, 'timezone_info',
-            ['uses_dst', 'default_tz', 'dst_tz'])
-
-    return df.T.to_dict()
-
-
 def update_site_data(site_code, start=None, end=None, period=None, path=None,
         input_path=None):
     """Update cached site data.
@@ -204,6 +189,21 @@ def _nest_dataframe_dicts(unnested_df, nested_column, keys):
         del df[key]
 
     return df
+
+
+def _sites_dataframe_to_dict(df):
+    df = _nest_dataframe_dicts(df, 'location', ['latitude', 'longitude', 'srs'])
+    for tz_type in ['default_tz', 'dst_tz']:
+        tz_keys = ['abbreviation', 'offset']
+        rename_dict = dict([
+            (tz_type + '_' + key, key) for key in tz_keys])
+        df = df.rename(columns=rename_dict)
+        df = _nest_dataframe_dicts(df, tz_type,
+                tz_keys)
+    df = _nest_dataframe_dicts(df, 'timezone_info',
+            ['uses_dst', 'default_tz', 'dst_tz'])
+
+    return df.T.to_dict()
 
 
 def _sites_dict_to_dataframe(sites_dict):
