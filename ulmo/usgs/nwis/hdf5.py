@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pandas
 
@@ -6,7 +8,7 @@ from ulmo.usgs.nwis import core
 
 
 # default hdf5 file path
-HDF5_FILE_PATH = util.get_default_h5file_path()
+DEFAULT_HDF5_FILE_PATH = util.get_default_h5file_path()
 
 # define column sizes for strings stored in hdf5 tables
 # note: this is currently not used as we simply read in and write out entire
@@ -45,8 +47,17 @@ def get_sites(path=None):
     sites_dict : dict
         a python dict with site codes mapped to site information
     """
-    store = pandas.io.pytables.HDFStore(path)
-    sites_df = store[SITES_TABLE]
+    if path is None:
+        path = DEFAULT_HDF5_FILE_PATH
+
+    if not os.path.exists(path):
+        return {}
+
+    with pandas.io.pytables.get_store(path, 'r') as store:
+        if SITES_TABLE not in store:
+            return {}
+
+        sites_df = store[SITES_TABLE]
     sites_dict = _sites_dataframe_to_dict(sites_df)
     return sites_dict
 
@@ -68,6 +79,9 @@ def get_site(site_code, path=None):
     site_dict : dict
         a python dict containing site information
     """
+    if path is None:
+        path = DEFAULT_HDF5_FILE_PATH
+
     # XXX: this could be more efficiently implemented by querying the sites
     # table with actual expressions
     sites = get_sites(path=path)
@@ -131,7 +145,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
     None : ``None``
     """
     if not path:
-        path = HDF5_FILE_PATH
+        path = DEFAULT_HDF5_FILE_PATH
     new_sites = core.get_sites(sites=sites, state_code=state_code, service=service,
             input_file=input_file)
 
@@ -140,12 +154,14 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
 
     new_sites_df = _sites_dict_to_dataframe(new_sites)
 
-    store = pandas.io.pytables.HDFStore(path)
-    if SITES_TABLE in store:
-        sites_df = store[SITES_TABLE]
-        new_sites_df = new_sites_df.combine_first(sites_df)
+    with pandas.io.pytables.get_store(path, 'a') as store:
+        if SITES_TABLE in store:
+            sites_df = store[SITES_TABLE]
+            new_sites_df = new_sites_df.combine_first(sites_df)
 
-    store[SITES_TABLE] = new_sites_df
+        store[SITES_TABLE] = new_sites_df
+
+    return None
 
 
 def update_site_data(site_code, start=None, end=None, period=None, path=None,
