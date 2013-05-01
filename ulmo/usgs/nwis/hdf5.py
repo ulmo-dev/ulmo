@@ -71,7 +71,7 @@ def get_site(site_code, path=None):
     # XXX: this could be more efficiently implemented by querying the sites
     # table with actual expressions
     sites = get_sites(path=path)
-    site = sites.get(site_code, None)
+    site = sites.get(site_code, {})
     if site is None:
         raise LookupError("could not find site: %s" % site_code)
     return site
