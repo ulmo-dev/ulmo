@@ -189,10 +189,27 @@ def test_get_site(delete_test_file):
     }
 
 
+def test_get_sites_isnt_cached_between_calls(delete_test_file):
+    site_data_file = 'usgs/nwis/RI_daily.xml'
+    input_file = test_util.get_test_file_path(site_data_file)
+
+    ulmo.usgs.nwis.hdf5.update_site_list(input_file=input_file, path=TEST_FILE_PATH)
+    sites = ulmo.usgs.nwis.hdf5.get_sites(path=TEST_FILE_PATH)
+    assert len(sites) > 0
+
+    if os.path.exists(TEST_FILE_PATH):
+        os.remove(TEST_FILE_PATH)
+    sites = ulmo.usgs.nwis.hdf5.get_sites(path=TEST_FILE_PATH)
+    assert len(sites) == 0
+
+
 def test_empty_update_list_doesnt_error(delete_test_file):
     site_code = '98068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
     input_file = test_util.get_test_file_path(site_data_file)
+
+    sites = ulmo.usgs.nwis.hdf5.get_sites(path=TEST_FILE_PATH)
+    assert sites == {}
     ulmo.usgs.nwis.hdf5.update_site_list(path=TEST_FILE_PATH,
         input_file=input_file)
 
