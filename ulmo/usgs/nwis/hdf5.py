@@ -134,6 +134,10 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
         path = HDF5_FILE_PATH
     new_sites = core.get_sites(sites=sites, state_code=state_code, service=service,
             input_file=input_file)
+
+    if len(new_sites) == 0:
+        return
+
     new_sites_df = _sites_dict_to_dataframe(new_sites)
 
     store = pandas.io.pytables.HDFStore(path)
