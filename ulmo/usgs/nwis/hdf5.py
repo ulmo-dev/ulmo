@@ -111,7 +111,20 @@ def get_site_data(site_code, agency_code=None, path=None):
     data_dict : dict
         a python dict with parameter codes mapped to value dicts
     """
-    pass
+    if not path:
+        path = DEFAULT_HDF5_FILE_PATH
+
+    with pandas.io.pytables.get_store(path, 'r') as store:
+        site_group = store.get_node(site_code)
+        if site_group is None:
+            return {}
+
+        site_data = dict([
+            (variable_group._v_pathname.rsplit('/', 1)[-1],
+            _variable_group_to_dict(store, variable_group))
+            for variable_group in site_group
+        ])
+    return site_data
 
 
 def update_site_list(sites=None, state_code=None, service=None, path=None,
@@ -165,7 +178,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
 
 
 def update_site_data(site_code, start=None, end=None, period=None, path=None,
-        input_path=None):
+        input_file=None):
     """Update cached site data.
 
     Parameters
@@ -188,13 +201,41 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
     path : ``None`` or file path
         Path to the hdf5 file to be updated, if ``None`` then the default path
         will be used.
+    input_file: ``None``, file path or file object
+        If ``None`` (default), then the NWIS web services will be queried, but
+        if a file is passed then this file will be used instead of requesting
+        data from the NWIS web services.
 
 
     Returns
     -------
     None : ``None``
     """
-    pass
+    if not path:
+        path = DEFAULT_HDF5_FILE_PATH
+
+    new_site_data = core.get_site_data(site_code, start=start, end=end,
+            period=period, input_file=input_file)
+
+    with pandas.io.pytables.get_store(path, 'a') as store:
+        for variable_code, data_dict in new_site_data.iteritems():
+            variable_group_path = site_code + '/' + variable_code
+            values_path = variable_group_path + '/values'
+
+            new_values = _values_dicts_to_df(data_dict.pop('values'))
+            if input_file is not None:
+                new_values['last_checked'] = None
+                new_values['last_modified'] = None
+
+            if values_path in store:
+                original_values = store[values_path]
+                new_values.combine_first(original_values)
+
+            store[values_path] = new_values
+
+            variable_group = store.get_node(variable_group_path)
+            for key, value in data_dict.iteritems():
+                setattr(variable_group._v_attrs, key, value)
 
 
 def _nans_to_none(df):
@@ -261,3 +302,27 @@ def _unnest_dataframe_dicts(df, nested_column, keys):
 
     del df[nested_column]
     return df
+
+
+def _values_dicts_to_df(values_dicts):
+    df = pandas.DataFrame(values_dicts)
+    return df.set_index(pandas.DatetimeIndex(df['datetime']))
+
+
+def _values_df_to_dicts(df):
+    dicts = df.T.to_dict().values()
+    dicts.sort(key=lambda d: d['datetime'])
+    return dicts
+
+
+def _variable_group_to_dict(store, variable_group):
+    _v_attrs = variable_group._v_attrs
+    variable_dict = dict([
+        (key, getattr(_v_attrs, key))
+        for key in _v_attrs._f_list()
+    ])
+    values_path = variable_group._v_pathname + '/values'
+    values_df = store[values_path]
+    variable_dict['values'] = _values_df_to_dicts(values_df)
+
+    return variable_dict
