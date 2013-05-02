@@ -9,6 +9,7 @@
     .. _USGS National Water Information System: http://waterdata.usgs.gov/nwis
 
 """
+import contextlib
 import cStringIO as StringIO
 import datetime
 import logging
@@ -73,8 +74,6 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None,
     if site_type:
         url_params['siteType'] = site_type
 
-    leave_open = False
-
     if input_file is None:
         if not service:
             return_sites = get_sites(sites=sites, state_code=state_code,
@@ -88,27 +87,21 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None,
         log.info('making request for sites: %s' % url)
         req = requests.get(url, params=url_params)
         log.info("processing data from request: %s" % req.request.url)
-        content_io = StringIO.StringIO(str(req.content))
-    else:
-        if isinstance(input_file, basestring):
-            content_io = open(input_file, 'rb')
-        elif hasattr(input_file, 'read'):
-            leave_open = True
-            content_io = input_file
+        input_file = StringIO.StringIO(str(req.content))
 
+    with _open_input_file(input_file) as content_io:
         return_sites = wml.parse_site_infos(content_io)
-        return_sites = dict([
-            (code, _extract_site_properties(site))
-            for code, site in return_sites.iteritems()
-        ])
 
-        if not leave_open:
-            content_io.close()
+    return_sites = dict([
+        (code, _extract_site_properties(site))
+        for code, site in return_sites.iteritems()
+    ])
+
     return return_sites
 
 
-def get_site_data(site_code, service=None, parameter_code=None,
-                  start=None, end=None, period=None, modified_since=None):
+def get_site_data(site_code, service=None, parameter_code=None, start=None,
+        end=None, period=None, modified_since=None, input_file=None):
     """Fetches site data.
 
 
@@ -138,6 +131,10 @@ def get_site_data(site_code, service=None, parameter_code=None,
         parameter is mutually exclusive with start/end dates.
     modified_since : ``None`` or datetime.timedelta
         Passed along as the modifiedSince parameter.
+    input_file: ``None``, file path or file object
+        If ``None`` (default), then the NWIS web services will be queried, but
+        if a file is passed then this file will be used instead of requesting
+        data from the NWIS web services.
 
 
     Returns
@@ -173,19 +170,15 @@ def get_site_data(site_code, service=None, parameter_code=None,
         end_datetime = util.convert_datetime(end)
         url_params['endDT'] = isodate.datetime_isoformat(end_datetime)
 
-    if service == 'dv':
-        service = 'daily'
-    if service == 'iv':
-        service == 'instantaneous'
-
-    if service is None:
+    if service is not None:
+        values = _get_site_values(service, url_params, input_file=input_file)
+    else:
         kwargs = dict(parameter_code=parameter_code, start=start, end=end,
-                period=period, modified_since=modified_since)
+                period=period, modified_since=modified_since,
+                input_file=input_file)
         values = get_site_data(site_code, service='daily', **kwargs)
         values.update(
             get_site_data(site_code, service='instantaneous', **kwargs))
-    else:
-        values = _get_site_values(service, url_params)
 
     return values
 
@@ -221,25 +214,41 @@ def _get_service_url(service):
                 "'instantaneous' ('iv')")
 
 
-def _get_site_values(service, url_params):
+def _get_site_values(service, url_params, input_file=None):
     """downloads and parses values for a site
 
     returns a values dict containing variable and data values
     """
-    service_url = _get_service_url(service)
-
     query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
-    try:
-        req = requests.get(service_url, params=url_params)
-    except requests.exceptions.ConnectionError:
-        log.info("There was a connection error with query:\n\t%s\n\t%s" % (service_url, url_params))
-        return {}
-    log.info("processing data from request: %s" % req.request.url)
 
-    if req.status_code != 200:
-        return {}
-    content_io = StringIO.StringIO(str(req.content))
+    if input_file is None:
+        service_url = _get_service_url(service)
 
-    data_dict = wml.parse_site_values(content_io, query_isodate)
+        try:
+            req = requests.get(service_url, params=url_params)
+        except requests.exceptions.ConnectionError:
+            log.info("There was a connection error with query:\n\t%s\n\t%s" % (service_url, url_params))
+            return {}
+        log.info("processing data from request: %s" % req.request.url)
+
+        if req.status_code != 200:
+            return {}
+        input_file = StringIO.StringIO(str(req.content))
+
+    with _open_input_file(input_file) as content_io:
+        data_dict = wml.parse_site_values(content_io, query_isodate)
 
     return data_dict
+
+
+@contextlib.contextmanager
+def _open_input_file(input_file):
+    """helper context manager. If input_file is a string then it yields an open
+    file handler, closing it afterwards. If input_file is already a file handler
+    then it just yields the same file handler without closing.
+    """
+    if isinstance(input_file, basestring):
+        with open(input_file, 'rb') as content_io:
+            yield content_io
+    elif hasattr(input_file, 'read'):
+        yield input_file
