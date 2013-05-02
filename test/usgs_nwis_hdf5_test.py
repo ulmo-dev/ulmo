@@ -5,7 +5,7 @@ import shutil
 import pandas
 import pytest
 
-import ulmo
+from ulmo.usgs import nwis
 import test_util
 
 
@@ -31,10 +31,10 @@ def test_update_site_list(test_file_path):
     site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
-        ulmo.usgs.nwis.hdf5.update_site_list(path=test_file_path,
+        nwis.hdf5.update_site_list(path=test_file_path,
                 input_file=test_site_file)
 
-    sites = ulmo.usgs.nwis.hdf5.get_sites(test_file_path)
+    sites = nwis.hdf5.get_sites(test_file_path)
     assert len(sites) == 64
 
     test_sites = {
@@ -150,9 +150,9 @@ def test_update_site_list_with_changes(test_file_path):
     ]
     for test_file, test_site in site_files:
         test_site_file = test_util.get_test_file_path(test_file)
-        ulmo.usgs.nwis.hdf5.update_site_list(path=test_file_path,
+        nwis.hdf5.update_site_list(path=test_file_path,
                 input_file=test_site_file)
-        sites = ulmo.usgs.nwis.hdf5.get_sites(path=test_file_path)
+        sites = nwis.hdf5.get_sites(path=test_file_path)
         test_code = test_site['code']
         assert sites[test_code] == test_site
 
@@ -161,7 +161,7 @@ def test_sites_table_remains_unique(test_file_path):
     site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
-        ulmo.usgs.nwis.hdf5.update_site_list(path=test_file_path,
+        nwis.hdf5.update_site_list(path=test_file_path,
             input_file=test_site_file)
 
     with pandas.io.pytables.get_store(test_file_path) as store:
@@ -173,10 +173,10 @@ def test_get_site(test_file_path):
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
     input_file = test_util.get_test_file_path(site_data_file)
-    ulmo.usgs.nwis.hdf5.update_site_list(path=test_file_path,
+    nwis.hdf5.update_site_list(path=test_file_path,
             input_file=input_file)
 
-    site = ulmo.usgs.nwis.hdf5.get_site(site_code, path=test_file_path)
+    site = nwis.hdf5.get_site(site_code, path=test_file_path)
     assert site == {
         'agency': 'USGS',
         'code': '08068500',
@@ -203,13 +203,13 @@ def test_get_sites_isnt_cached_between_calls(test_file_path):
     site_data_file = 'usgs/nwis/RI_daily.xml'
     input_file = test_util.get_test_file_path(site_data_file)
 
-    ulmo.usgs.nwis.hdf5.update_site_list(input_file=input_file, path=test_file_path)
-    sites = ulmo.usgs.nwis.hdf5.get_sites(path=test_file_path)
+    nwis.hdf5.update_site_list(input_file=input_file, path=test_file_path)
+    sites = nwis.hdf5.get_sites(path=test_file_path)
     assert len(sites) > 0
 
     if os.path.exists(test_file_path):
         os.remove(test_file_path)
-    sites = ulmo.usgs.nwis.hdf5.get_sites(path=test_file_path)
+    sites = nwis.hdf5.get_sites(path=test_file_path)
     assert len(sites) == 0
 
 
@@ -218,12 +218,12 @@ def test_empty_update_list_doesnt_error(test_file_path):
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
     input_file = test_util.get_test_file_path(site_data_file)
 
-    sites = ulmo.usgs.nwis.hdf5.get_sites(path=test_file_path)
+    sites = nwis.hdf5.get_sites(path=test_file_path)
     assert sites == {}
-    ulmo.usgs.nwis.hdf5.update_site_list(path=test_file_path,
+    nwis.hdf5.update_site_list(path=test_file_path,
         input_file=input_file)
 
-    sites = ulmo.usgs.nwis.hdf5.get_sites(path=test_file_path)
+    sites = nwis.hdf5.get_sites(path=test_file_path)
     assert sites == {}
 
 
@@ -231,21 +231,21 @@ def test_get_site_for_missing_raises_lookup(test_file_path):
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
     input_file = test_util.get_test_file_path(site_data_file)
-    ulmo.usgs.nwis.hdf5.update_site_list(path=test_file_path,
+    nwis.hdf5.update_site_list(path=test_file_path,
         input_file=input_file)
 
     with pytest.raises(LookupError):
         missing_code = '98068500'
-        ulmo.usgs.nwis.hdf5.get_site(missing_code, path=test_file_path)
+        nwis.hdf5.get_site(missing_code, path=test_file_path)
 
 
 def test_non_usgs_site(test_file_path):
     site_code = '07335390'
     site_data_file = 'usgs/nwis/site_%s_instantaneous.xml' % site_code
-    ulmo.usgs.nwis.hdf5.update_site_data(site_code, period='all',
+    nwis.hdf5.update_site_data(site_code, period='all',
             path=test_file_path, input_file=site_data_file)
 
-    site_data = ulmo.usgs.nwis.hdf5.get_site_data(site_code, path=test_file_path)
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
     assert len(site_data['00062:00011']['values']) > 1000
 
 
@@ -253,9 +253,9 @@ def test_update_site_data(test_file_path):
     site_code = '01117800'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
 
-    ulmo.usgs.nwis.hdf5.update_site_data(site_code, path=test_file_path,
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file)
-    site_data = ulmo.usgs.nwis.pytables.get_site_data(site_code, path=test_file_path)
+    site_data = nwis.pytables.get_site_data(site_code, path=test_file_path)
 
     last_value = site_data['00060:00003']['values'][-1]
 
@@ -267,9 +267,9 @@ def test_update_site_data(test_file_path):
     time.sleep(1)
 
     update_data_file = 'usgs/nwis/site_%s_daily_update.xml' % site_code
-    ulmo.usgs.nwis.hdf5.update_site_data(site_code, path=test_file_path,
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=update_data_file)
-    site_data = ulmo.usgs.nwis.pytables.get_site_data(site_code, path=test_file_path)
+    site_data = nwis.pytables.get_site_data(site_code, path=test_file_path)
 
     last_value = site_data['00060:00003']['values'][-1]
     assert last_value['last_checked'] != original_timestamp
@@ -304,21 +304,21 @@ def test_update_site_data(test_file_path):
 def test_last_refresh_gets_updated(test_file_path):
     site_code = '01117800'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
-    ulmo.usgs.nwis.hdf5.update_site_data(site_code, path=test_file_path,
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file)
-    site_data = ulmo.usgs.nwis.pytables.get_site_data(site_code, path=test_file_path)
+    site_data = nwis.pytables.get_site_data(site_code, path=test_file_path)
 
     # sleep for a second so last_modified changes
     time.sleep(1)
 
     update_data_file = 'usgs/nwis/site_%s_daily_update.xml' % site_code
-    ulmo.usgs.nwis.hdf5.update_site_data(site_code, path=test_file_path,
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=update_data_file)
-    site_data = ulmo.usgs.nwis.hdf5.get_site_data(site_code, path=test_file_path)
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     last_value = site_data['00060:00003']['values'][-1]
     last_checked = last_value['last_checked']
 
-    site = ulmo.usgs.nwis.hdf5.get_site(site_code, path=test_file_path)
+    site = nwis.hdf5.get_site(site_code, path=test_file_path)
     last_refresh = site['last_refresh']
     assert last_refresh == last_checked
