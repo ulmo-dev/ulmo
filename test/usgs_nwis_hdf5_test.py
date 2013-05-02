@@ -249,9 +249,18 @@ def test_non_usgs_site(test_file_path):
     assert len(site_data['00062:00011']['values']) > 1000
 
 
-def test_update_site_data(test_file_path):
+def test_site_data_is_sorted(test_file_path):
     site_code = '01117800'
-    site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=site_data_file)
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
+
+    values = site_data['00060:00003']['values']
+    assert all(
+        values[i]['datetime'] < values[i+1]['datetime']
+        for i in xrange(len(values) - 1))
 
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file)
