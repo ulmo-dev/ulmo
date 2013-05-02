@@ -241,7 +241,8 @@ def test_get_site_for_missing_raises_lookup(test_file_path):
 
 def test_non_usgs_site(test_file_path):
     site_code = '07335390'
-    site_data_file = 'usgs/nwis/site_%s_instantaneous.xml' % site_code
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_instantaneous.xml' % site_code)
     nwis.hdf5.update_site_data(site_code, period='all',
             path=test_file_path, input_file=site_data_file)
 
@@ -262,23 +263,50 @@ def test_site_data_is_sorted(test_file_path):
         values[i]['datetime'] < values[i+1]['datetime']
         for i in xrange(len(values) - 1))
 
+
+def test_update_site_data_basic_data_parsing(test_file_path):
+    site_code = '01117800'
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file)
-    site_data = nwis.pytables.get_site_data(site_code, path=test_file_path)
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
+
+    test_values = [
+        dict(datetime="1964-01-23T00:00:00", last_checked=None, last_modified=None, qualifiers="A", value='240'),
+        dict(datetime="1964-08-22T00:00:00", last_checked=None, last_modified=None, qualifiers="A", value='7.9'),
+        dict(datetime="2011-12-15T00:00:00", last_checked=None, last_modified=None, qualifiers="P Eqp", value=None),
+        dict(datetime="2012-01-15T00:00:00", last_checked=None, last_modified=None, qualifiers="P e", value='97'),
+        dict(datetime="2012-06-05T00:00:00", last_checked=None, last_modified=None, qualifiers="P", value='74'),
+    ]
+
+    site_values = site_data['00060:00003']['values']
+
+    for test_value in test_values:
+        assert test_value in site_values
+
+
+def test_site_data_gets_updated(test_file_path):
+    site_code = '01117800'
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+        input_file=site_data_file)
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     last_value = site_data['00060:00003']['values'][-1]
 
-    assert last_value['value'] == '74'
     assert last_value['last_checked'] == last_value['last_modified']
     original_timestamp = last_value['last_checked']
 
     # sleep for a second so last_modified changes
     time.sleep(1)
 
-    update_data_file = 'usgs/nwis/site_%s_daily_update.xml' % site_code
+    update_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily_update.xml' % site_code)
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=update_data_file)
-    site_data = nwis.pytables.get_site_data(site_code, path=test_file_path)
+    updated_site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     last_value = site_data['00060:00003']['values'][-1]
     assert last_value['last_checked'] != original_timestamp
@@ -290,7 +318,10 @@ def test_site_data_is_sorted(test_file_path):
         dict(datetime="1963-01-23T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="A", value='7'),
         dict(datetime="1964-01-23T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="A", value='1017'),
         dict(datetime="1964-01-24T00:00:00", last_checked=original_timestamp, last_modified=original_timestamp, qualifiers="A", value='191'),
+        dict(datetime="1964-08-24T00:00:00", last_checked=original_timestamp, last_modified=original_timestamp, qualifiers="A", value='7.9'),
         dict(datetime="1969-05-26T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="A", value='1080'),
+        dict(datetime="2011-12-15T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P Eqp", value=None),
+        dict(datetime="2012-01-15T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P e", value='97'),
         dict(datetime="2012-05-25T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P", value='56'),
         dict(datetime="2012-05-26T00:00:00", last_checked=modified_timestamp, last_modified=original_timestamp, qualifiers="P", value='55'),
         dict(datetime="2012-05-27T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="A", value='52'),
@@ -307,20 +338,22 @@ def test_site_data_is_sorted(test_file_path):
     ]
 
     for test_value in test_values:
-        assert site_data['00060:00003']['values'].index(test_value) >= 0
+        assert updated_site_data['00060:00003']['values'].index(test_value) >= 0
 
 
 def test_last_refresh_gets_updated(test_file_path):
     site_code = '01117800'
-    site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file)
-    site_data = nwis.pytables.get_site_data(site_code, path=test_file_path)
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     # sleep for a second so last_modified changes
     time.sleep(1)
 
-    update_data_file = 'usgs/nwis/site_%s_daily_update.xml' % site_code
+    update_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily_update.xml' % site_code)
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=update_data_file)
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
