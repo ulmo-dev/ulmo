@@ -73,11 +73,6 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None,
     if site_type:
         url_params['siteType'] = site_type
 
-    if service == 'dv':
-        service = 'daily'
-    if service == 'iv':
-        service == 'instantaneous'
-
     leave_open = False
 
     if input_file is None:
