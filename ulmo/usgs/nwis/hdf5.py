@@ -85,10 +85,10 @@ def get_site(site_code, path=None):
     # XXX: this could be more efficiently implemented by querying the sites
     # table with actual expressions
     sites = get_sites(path=path)
-    site = sites.get(site_code, {})
-    if site is None:
+    try:
+        return sites[site_code]
+    except KeyError:
         raise LookupError("could not find site: %s" % site_code)
-    return site
 
 
 def get_site_data(site_code, agency_code=None, path=None):
