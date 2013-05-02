@@ -232,6 +232,15 @@ def test_core_get_site_data_single_site():
     assert len(site_data) == 16
 
 
+def test_core_get_site_data_bad_service_raises_error():
+    site_code = '08068500'
+    site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    with test_util.mocked_requests(site_data_file):
+        with pytest.raises(ValueError):
+            ulmo.usgs.nwis.get_site_data(site_code,
+                    service="bad_service")
+
+
 def test_core_get_site_data_single_site_with_start_and_end():
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_08068500_instantaneous_2011-11-05_2011-11-18.xml'

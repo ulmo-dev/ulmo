@@ -183,16 +183,14 @@ def get_site_data(site_code, service=None, parameter_code=None,
     if service == 'iv':
         service == 'instantaneous'
 
-    if service in ('daily', 'instantaneous'):
-        values = _get_site_values(service, url_params)
-    elif service is None:
+    if service is None:
         kwargs = dict(parameter_code=parameter_code, start=start, end=end,
                 period=period, modified_since=modified_since)
         values = get_site_data(site_code, service='daily', **kwargs)
         values.update(
             get_site_data(site_code, service='instantaneous', **kwargs))
     else:
-        raise ValueError("service must either be 'daily', 'instantaneous' or none")
+        values = _get_site_values(service, url_params)
 
     return values
 
@@ -224,7 +222,8 @@ def _get_service_url(service):
     elif service in ('instantaneous', 'iv'):
         return INSTANTANEOUS_URL
     else:
-        raise "service must be either 'daily' ('dv') or 'instantaneous' ('iv')"
+        raise ValueError("service must be either 'daily' ('dv') or "
+                "'instantaneous' ('iv')")
 
 
 def _get_site_values(service, url_params):
