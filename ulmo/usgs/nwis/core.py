@@ -153,8 +153,8 @@ def get_site_data(site_code, service=None, parameter_code=None,
         url_params['modifiedSince'] = isodate.duration_isoformat(modified_since)
 
     if not (start is None or end is None) and period is not None:
-        raise ValueError("using date range with start/end AND period is allowed"
-                " because it's ambiguous, use one or the other")
+        raise ValueError("must use either a date range with start/end OR a "
+                "period, but not both")
     if period is not None:
         if isinstance(period, basestring):
             if period == 'all':
