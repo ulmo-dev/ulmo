@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:timeSeriesResponse xsi:schemaLocation="http://www.cuahsi.org/waterML/1.1/ http://waterservices.usgs.gov/WaterML-1.1.xsd" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ns1:queryInfo xmlns:ns2="http://www.cuahsi.org/waterML/1.1/">
+    <ns2:creationTime>2012-12-11T12:50:49</ns2:creationTime>
+    <ns2:queryURL>http://waterservices.usgs.gov/nwis/dv/</ns2:queryURL>
+    <ns2:criteria>
+        <ns2:locationParam>[]</ns2:locationParam>
+        <ns2:variableParam>ALL</ns2:variableParam>
+    </ns2:criteria>
+    <ns2:note title="filter:stateCd">[ri]</ns2:note>
+    <ns2:note title="filter:timeRange">[mode=LATEST, modifiedSince=null]</ns2:note>
+    <ns2:note title="filter:methodId">methodIds=[ALL]</ns2:note>
+    <ns2:note title="requestDT">2012-12-11T17:50:49.097Z</ns2:note>
+    <ns2:note title="requestId">4c273740-43bb-11e2-8cbe-00144f2bed4a</ns2:note>
+    <ns2:note title="disclaimer">Provisional data are subject to revision. Go to http://waterdata.usgs.gov/nwis/help/?provisional for more information.</ns2:note>
+    <ns2:note title="server">caas01</ns2:note>
+</ns1:queryInfo>
+<ns1:timeSeries name="USGS:01106000:00060:00003" xmlns:ns1="http://www.cuahsi.org/waterML/1.1/">
+    <ns1:sourceInfo xsi:type="ns1:SiteInfoType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ns1:siteName>UPDATED NAME</ns1:siteName>
+        <ns1:siteCode network="NWIS" agencyCode="USGS">01106000</ns1:siteCode>
+        <ns1:timeZoneInfo siteUsesDaylightSavingsTime="true">
+            <ns1:defaultTimeZone zoneOffset="-05:00" zoneAbbreviation="EST"/>
+            <ns1:daylightSavingsTimeZone zoneOffset="-04:00" zoneAbbreviation="EDT"/>
+        </ns1:timeZoneInfo>
+        <ns1:geoLocation>
+            <ns1:geogLocation xsi:type="ns1:LatLonPointType" srs="EPSG:4326">
+                <ns1:latitude>41.5584366</ns1:latitude>
+                <ns1:longitude>-71.12921047</ns1:longitude>
+            </ns1:geogLocation>
+        </ns1:geoLocation>
+        <ns1:siteProperty name="siteTypeCd">ST</ns1:siteProperty>
+        <ns1:siteProperty name="hucCd">01090002</ns1:siteProperty>
+        <ns1:siteProperty name="stateCd">44</ns1:siteProperty>
+        <ns1:siteProperty name="countyCd">44005</ns1:siteProperty>
+    </ns1:sourceInfo>
+    <ns1:variable ns1:oid="45807197">
+        <ns1:variableCode network="NWIS" vocabulary="NWIS:UnitValues" default="true" variableID="45807197">00060</ns1:variableCode>
+        <ns1:variableName>Streamflow, ft&amp;#179;/s</ns1:variableName>
+        <ns1:variableDescription>Discharge, cubic feet per second</ns1:variableDescription>
+        <ns1:valueType>Derived Value</ns1:valueType>
+        <ns1:unit>
+            <ns1:unitCode>cfs</ns1:unitCode>
+        </ns1:unit>
+        <ns1:options>
+            <ns1:option name="Statistic" optionCode="00003">Mean</ns1:option>
+        </ns1:options>
+        <ns1:noDataValue>-999999.0</ns1:noDataValue>
+    </ns1:variable>
+    <ns1:values>
+        <ns1:value qualifiers="A" dateTime="1987-09-30T00:00:00.000">1.5</ns1:value>
+        <ns1:qualifier qualifierID="0" ns1:network="NWIS" ns1:vocabulary="uv_rmk_cd">
+            <ns1:qualifierCode>A</ns1:qualifierCode>
+            <ns1:qualifierDescription>Approved for publication -- Processing and review completed.</ns1:qualifierDescription>
+        </ns1:qualifier>
+        <ns1:method methodID="2">
+            <ns1:methodDescription></ns1:methodDescription>
+        </ns1:method>
+    </ns1:values>
+</ns1:timeSeries></ns1:timeSeriesResponse>
