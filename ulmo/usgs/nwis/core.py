@@ -219,9 +219,8 @@ def _get_site_values(service, url_params, input_file=None):
 
     returns a values dict containing variable and data values
     """
-    query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
-
     if input_file is None:
+        query_isodate = isodate.datetime_isoformat(datetime.datetime.now())
         service_url = _get_service_url(service)
 
         try:
@@ -234,6 +233,8 @@ def _get_site_values(service, url_params, input_file=None):
         if req.status_code != 200:
             return {}
         input_file = StringIO.StringIO(str(req.content))
+    else:
+        query_isodate = None
 
     with _open_input_file(input_file) as content_io:
         data_dict = wml.parse_site_values(content_io, query_isodate)

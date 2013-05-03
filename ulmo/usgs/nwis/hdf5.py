@@ -234,8 +234,19 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             new_values['last_checked'] = last_refresh
 
             if values_path in store:
+                compare_cols = ['value', 'qualifiers']
                 original_values = store[values_path]
-                new_values.combine_first(original_values)
+                original_align, new_align = original_values.align(new_values)
+                new_nulls = (new_align[compare_cols] == np.nan).sum(axis=1).astype(bool)
+                modified_mask = ~new_nulls & ((
+                    original_align[compare_cols] == new_align[compare_cols]) \
+                    .sum(axis=1) < len(compare_cols))
+
+                combined = new_values.combine_first(original_values)
+                combined['last_modified'][modified_mask] = last_refresh
+                new_values = combined
+            else:
+                new_values['last_modified'] = last_refresh
 
             store[values_path] = new_values
 
