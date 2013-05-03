@@ -275,7 +275,7 @@ def test_update_site_data_basic_data_parsing(test_file_path):
     test_values = [
         dict(datetime="1964-01-23T00:00:00", last_checked=None, last_modified=None, qualifiers="A", value='240'),
         dict(datetime="1964-08-22T00:00:00", last_checked=None, last_modified=None, qualifiers="A", value='7.9'),
-        dict(datetime="2011-12-15T00:00:00", last_checked=None, last_modified=None, qualifiers="P Eqp", value=None),
+        dict(datetime="2011-12-15T00:00:00", last_checked=None, last_modified=None, qualifiers="P Eqp", value='-999999'),
         dict(datetime="2012-01-15T00:00:00", last_checked=None, last_modified=None, qualifiers="P e", value='97'),
         dict(datetime="2012-06-05T00:00:00", last_checked=None, last_modified=None, qualifiers="P", value='74'),
     ]
