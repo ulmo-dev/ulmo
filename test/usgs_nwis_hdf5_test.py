@@ -345,25 +345,31 @@ def test_site_data_update_site_list_with_multiple_updates(test_file_path):
 
 
 def test_last_refresh_gets_updated(test_file_path):
+    first_timestamp = '2013-01-01T01:01:01'
+    second_timestamp = '2013-02-02T02:02:02'
+    forth_timestamp = '2013-03-03T03:03:03'
     site_code = '01117800'
     site_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_daily.xml' % site_code)
-    nwis.hdf5.update_site_data(site_code, path=test_file_path,
-            input_file=site_data_file)
-    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
-    # sleep for a second so last_modified changes
-    time.sleep(1)
+    with test_util.mocked_requests(site_data_file):
+        with freezegun.freeze_time(first_timestamp):
+            nwis.hdf5.update_site_data(site_code, path=test_file_path)
+        first_refresh = nwis.hdf5._get_last_refresh(site_code, test_file_path)
+        assert first_refresh == first_timestamp
 
-    update_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily_update.xml' % site_code)
-    nwis.hdf5.update_site_data(site_code, path=test_file_path,
-            input_file=update_data_file)
-    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
+        with freezegun.freeze_time(second_timestamp):
+            nwis.hdf5.update_site_data(site_code, path=test_file_path)
+        second_refresh = nwis.hdf5._get_last_refresh(site_code, test_file_path)
+        assert second_refresh == second_timestamp
 
-    last_value = site_data['00060:00003']['values'][-1]
-    last_checked = last_value['last_checked']
+        nwis.hdf5.update_site_data(site_code, path=test_file_path,
+                input_file=site_data_file)
+        third_refresh = nwis.hdf5._get_last_refresh(site_code, test_file_path)
+        assert third_refresh == None
 
-    site = nwis.hdf5.get_site(site_code, path=test_file_path)
-    last_refresh = site['last_refresh']
-    assert last_refresh == last_checked
+        with freezegun.freeze_time(forth_timestamp):
+            nwis.hdf5.update_site_data(site_code, path=test_file_path)
+        forth_refresh = nwis.hdf5._get_last_refresh(site_code, test_file_path)
+        assert forth_refresh is not None
+        assert forth_refresh == forth_timestamp
