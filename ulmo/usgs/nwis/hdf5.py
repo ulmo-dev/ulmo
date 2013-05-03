@@ -214,6 +214,13 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
     if not path:
         path = DEFAULT_HDF5_FILE_PATH
 
+    if input_file is None and start is None and end is None and period is None:
+        prior_last_refresh = _get_last_refresh(site_code, path)
+        if prior_last_refresh is None:
+            period = 'all'
+        else:
+            start = prior_last_refresh
+
     new_site_data = core.get_site_data(site_code, start=start, end=end,
             period=period, input_file=input_file)
 
@@ -223,9 +230,8 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             values_path = variable_group_path + '/values'
 
             new_values = _values_dicts_to_df(data_dict.pop('values'))
-            if input_file is not None:
-                new_values['last_checked'] = None
-                new_values['last_modified'] = None
+            last_refresh = data_dict.get('last_refresh')
+            new_values['last_checked'] = last_refresh
 
             if values_path in store:
                 original_values = store[values_path]
@@ -236,6 +242,18 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             variable_group = store.get_node(variable_group_path)
             for key, value in data_dict.iteritems():
                 setattr(variable_group._v_attrs, key, value)
+
+        site_group = store.get_node(site_code)
+        site_group._v_attrs.last_refresh = last_refresh
+
+
+def _get_last_refresh(site_code, path):
+    try:
+        with pandas.io.pytables.get_store(path, 'r') as store:
+            site_group = store.get_node(site_code)
+            return getattr(site_group._v_attrs, 'last_refresh', None)
+    except IOError:
+        return None
 
 
 def _nans_to_none(df):

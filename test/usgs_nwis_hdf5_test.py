@@ -373,3 +373,37 @@ def test_last_refresh_gets_updated(test_file_path):
         forth_refresh = nwis.hdf5._get_last_refresh(site_code, test_file_path)
         assert forth_refresh is not None
         assert forth_refresh == forth_timestamp
+
+
+def test_update_site_data_updates_site_list(test_file_path):
+    site_code = '01117800'
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=site_data_file)
+    site = nwis.hdf5.get_site(site_code, path=test_file_path)
+
+    test_site = {
+        'agency': 'USGS',
+        'code': '01117800',
+        'location': {
+            'latitude': '41.5739884',
+            'longitude': '-71.72062318',
+            'srs': 'EPSG:4326'
+        },
+        'name': 'WOOD RIVER NEAR ARCADIA, RI',
+        'network': 'NWIS',
+        'site_property': {
+            'county_cd': '44009',
+            'huc_cd': '01090005',
+            'site_type_cd': 'ST',
+            'state_cd': '44'
+        },
+        'timezone_info': {
+            'default_tz': {'abbreviation': 'EST', 'offset': '-05:00'},
+            'dst_tz': {'abbreviation': 'EDT', 'offset': '-04:00'},
+            'uses_dst': True
+        }
+    }
+
+    assert site == test_site
