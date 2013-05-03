@@ -51,6 +51,7 @@
         <ns1:value qualifiers="A" dateTime="1963-01-23T00:00:00.000">7</ns1:value>
         <ns1:value qualifiers="A" dateTime="1964-01-23T00:00:00.000">1017</ns1:value>
         <ns1:value qualifiers="A" dateTime="1969-05-26T00:00:00.000">1080</ns1:value>
+        <ns1:value qualifiers="P" dateTime="2011-12-06T00:00:00.000">222</ns1:value>
         <ns1:value qualifiers="P" dateTime="2012-05-25T00:00:00.000">56</ns1:value>
         <ns1:value qualifiers="P" dateTime="2012-05-26T00:00:00.000">55</ns1:value>
         <ns1:value qualifiers="A" dateTime="2012-05-27T00:00:00.000">52</ns1:value>
