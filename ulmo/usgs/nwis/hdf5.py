@@ -165,14 +165,8 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
     if len(new_sites) == 0:
         return
 
-    new_sites_df = _sites_dict_to_dataframe(new_sites)
-
     with pandas.io.pytables.get_store(path, 'a') as store:
-        if SITES_TABLE in store:
-            sites_df = store[SITES_TABLE]
-            new_sites_df = new_sites_df.combine_first(sites_df)
-
-        store[SITES_TABLE] = new_sites_df
+        _update_stored_sites(store, new_sites)
 
     return None
 
@@ -227,8 +221,11 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
     with pandas.io.pytables.get_store(path, 'a') as store:
         for variable_code, data_dict in new_site_data.iteritems():
             variable_group_path = site_code + '/' + variable_code
-            values_path = variable_group_path + '/values'
 
+            site_dict = data_dict.pop('site')
+            _update_stored_sites(store, {site_dict['code']: site_dict})
+
+            values_path = variable_group_path + '/values'
             new_values = _values_dicts_to_df(data_dict.pop('values'))
             last_refresh = data_dict.get('last_refresh')
             new_values['last_checked'] = last_refresh
@@ -355,3 +352,14 @@ def _variable_group_to_dict(store, variable_group):
     variable_dict['values'] = _values_df_to_dicts(values_df)
 
     return variable_dict
+
+
+def _update_stored_sites(store, sites_dict):
+    new_sites_df = _sites_dict_to_dataframe(sites_dict)
+    if SITES_TABLE in store:
+        sites_df = store[SITES_TABLE]
+        new_sites_df = new_sites_df.combine_first(sites_df)
+
+    store[SITES_TABLE] = new_sites_df
+
+

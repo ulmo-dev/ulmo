@@ -20,6 +20,8 @@ def parse_site_values(content_io, namespace, query_isodate=None):
     ]
     for (event, ele) in etree.iterparse(content_io):
         if ele.tag == namespace + "timeSeries":
+            source_info_element = ele.find(namespace + 'sourceInfo')
+            site_info = _parse_site_info(source_info_element, namespace)
             values_element = ele.find(namespace + 'values')
             values = _parse_values(values_element, namespace)
             var_element = ele.find(namespace + 'variable')
@@ -29,6 +31,7 @@ def parse_site_values(content_io, namespace, query_isodate=None):
             if 'statistic' in variable:
                 code += ":" + variable['statistic']['code']
             data_dict[code] = {
+                'site': site_info,
                 'values': values,
                 'variable': variable,
             }

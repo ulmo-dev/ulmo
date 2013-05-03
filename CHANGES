@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+**0.4.2 (in development)**
+
+- parsed timeseries data dicts from waterml-based datasets (cuahsi.wof and usgs.nwis)
+  contain parsed site info mapped to the 'site' key
+
+
 **0.4.1 (released 2013-03-04)**
 
 - bugfix: interpret missing data ('----') correctly in usace.swtwc.get_stations
