@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 import pandas
+import tables
 
 from ulmo import util
 from ulmo.usgs.nwis import core
@@ -32,7 +33,7 @@ SITES_MIN_ITEMSIZE = {
 SITES_TABLE = 'sites'
 
 
-def get_sites(path=None):
+def get_sites(path=None, complevel=None, complib=None):
     """Fetches previously-cached site information from an hdf5 file.
 
     Parameters
@@ -40,6 +41,16 @@ def get_sites(path=None):
     path : ``None`` or file path
         Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used.
+    complevel : ``None`` or int {0-9}
+        Open hdf5 file with this level of compression. If ``None` (default),
+        then a minimum compression level will be used if a compression library
+        can be found. If set to 0 then no compression will be used regardless of
+        what complib is.
+    complib : ``None`` or str {'zlib', 'bzip2', 'lzo', 'blosc'}
+        Open hdf5 file with this type of compression. If ``None`` (default) then
+        the best available compression library available on your system will be
+        selected. If complevel argument is set to 0 then no compression will be
+        used.
 
 
     Returns
@@ -62,7 +73,7 @@ def get_sites(path=None):
     return sites_dict
 
 
-def get_site(site_code, path=None):
+def get_site(site_code, path=None, complevel=None, complib=None):
     """Fetches previously-cached site information from an hdf5 file.
 
     Parameters
@@ -72,6 +83,16 @@ def get_site(site_code, path=None):
     path : ``None`` or file path
         Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used.
+    complevel : ``None`` or int {0-9}
+        Open hdf5 file with this level of compression. If ``None` (default),
+        then a minimum compression level will be used if a compression library
+        can be found. If set to 0 then no compression will be used regardless of
+        what complib is.
+    complib : ``None`` or str {'zlib', 'bzip2', 'lzo', 'blosc'}
+        Open hdf5 file with this type of compression. If ``None`` (default) then
+        the best available compression library available on your system will be
+        selected. If complevel argument is set to 0 then no compression will be
+        used.
 
 
     Returns
@@ -84,14 +105,15 @@ def get_site(site_code, path=None):
 
     # XXX: this could be more efficiently implemented by querying the sites
     # table with actual expressions
-    sites = get_sites(path=path)
+    sites = get_sites(path=path, complevel=complevel, complib=complib)
     try:
         return sites[site_code]
     except KeyError:
         raise LookupError("could not find site: %s" % site_code)
 
 
-def get_site_data(site_code, agency_code=None, path=None):
+def get_site_data(site_code, agency_code=None, path=None, complevel=None,
+        complib=None):
     """Fetches previously-cached site data from an hdf5 file.
 
     Parameters
@@ -104,6 +126,16 @@ def get_site_data(site_code, agency_code=None, path=None):
     path : ``None`` or file path
         Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used.
+    complevel : ``None`` or int {0-9}
+        Open hdf5 file with this level of compression. If ``None` (default),
+        then a minimum compression level will be used if a compression library
+        can be found. If set to 0 then no compression will be used regardless of
+        what complib is.
+    complib : ``None`` or str {'zlib', 'bzip2', 'lzo', 'blosc'}
+        Open hdf5 file with this type of compression. If ``None`` (default) then
+        the best available compression library available on your system will be
+        selected. If complevel argument is set to 0 then no compression will be
+        used.
 
 
     Returns
@@ -114,7 +146,9 @@ def get_site_data(site_code, agency_code=None, path=None):
     if not path:
         path = DEFAULT_HDF5_FILE_PATH
 
-    with pandas.io.pytables.get_store(path, 'r') as store:
+    comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
+
+    with pandas.io.pytables.get_store(path, 'r', **comp_kwargs) as store:
         site_group = store.get_node(site_code)
         if site_group is None:
             return {}
@@ -128,7 +162,7 @@ def get_site_data(site_code, agency_code=None, path=None):
 
 
 def update_site_list(sites=None, state_code=None, service=None, path=None,
-        input_file=None):
+        input_file=None, complevel=None, complib=None):
     """Update cached site information.
 
     Parameters
@@ -151,6 +185,16 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
         If ``None`` (default), then the NWIS web services will be queried, but
         if a file is passed then this file will be used instead of requesting
         data from the NWIS web services.
+    complevel : ``None`` or int {0-9}
+        Open hdf5 file with this level of compression. If ``None` (default),
+        then a minimum compression level will be used if a compression library
+        can be found. If set to 0 then no compression will be used regardless of
+        what complib is.
+    complib : ``None`` or str {'zlib', 'bzip2', 'lzo', 'blosc'}
+        Open hdf5 file with this type of compression. If ``None`` (default) then
+        the best available compression library available on your system will be
+        selected. If complevel argument is set to 0 then no compression will be
+        used.
 
 
     Returns
@@ -165,14 +209,15 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
     if len(new_sites) == 0:
         return
 
-    with pandas.io.pytables.get_store(path, 'a') as store:
+    comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
+    with pandas.io.pytables.get_store(path, 'a', **comp_kwargs) as store:
         _update_stored_sites(store, new_sites)
 
     return None
 
 
 def update_site_data(site_code, start=None, end=None, period=None, path=None,
-        input_file=None):
+        input_file=None, complevel=None, complib=None):
     """Update cached site data.
 
     Parameters
@@ -218,7 +263,8 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
     new_site_data = core.get_site_data(site_code, start=start, end=end,
             period=period, input_file=input_file)
 
-    with pandas.io.pytables.get_store(path, 'a') as store:
+    comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
+    with pandas.io.pytables.get_store(path, 'a', **comp_kwargs) as store:
         for variable_code, data_dict in new_site_data.iteritems():
             variable_group_path = site_code + '/' + variable_code
 
@@ -255,9 +301,30 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
         site_group._v_attrs.last_refresh = last_refresh
 
 
-def _get_last_refresh(site_code, path):
+def _compression_kwargs(complevel=None, complib=None):
+    """returns a dict containing the compression settings to use"""
+    if complib is None and complevel is None:
+        possible_compressions = ('blosc', 'zlib')
+        for possible_compression in possible_compressions:
+            try:
+                try_kwargs = dict(complevel=1, complib=possible_compression)
+                tables.Filters(**try_kwargs)
+                return try_kwargs
+            except tables.FiltersWarning:
+                pass
+
+        complevel = 0
+
+    elif complib is not None and complevel is None:
+        complevel = 1
+
+    return dict(complevel=complevel, complib=complib)
+
+
+def _get_last_refresh(site_code, path, complevel=None, complib=None):
+    comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
     try:
-        with pandas.io.pytables.get_store(path, 'r') as store:
+        with pandas.io.pytables.get_store(path, 'r', **comp_kwargs) as store:
             site_group = store.get_node(site_code)
             return getattr(site_group._v_attrs, 'last_refresh', None)
     except IOError:
@@ -361,5 +428,3 @@ def _update_stored_sites(store, sites_dict):
         new_sites_df = new_sites_df.combine_first(sites_df)
 
     store[SITES_TABLE] = new_sites_df
-
-
