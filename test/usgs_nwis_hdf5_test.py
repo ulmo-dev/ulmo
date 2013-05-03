@@ -1,7 +1,7 @@
 import os
-import time
 import shutil
 
+import freezegun
 import pandas
 import pytest
 
@@ -287,33 +287,34 @@ def test_update_site_data_basic_data_parsing(test_file_path):
 
 
 def test_site_data_update_site_list_with_multiple_updates(test_file_path):
+    first_timestamp = '2013-01-01T01:01:01'
+    second_timestamp = '2013-02-02T02:02:02'
     site_code = '01117800'
     site_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_daily.xml' % site_code)
     with test_util.mocked_requests(site_data_file):
-        nwis.hdf5.update_site_data(site_code, path=test_file_path)
+        with freezegun.freeze_time(first_timestamp):
+            nwis.hdf5.update_site_data(site_code, path=test_file_path)
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     last_value = site_data['00060:00003']['values'][-1]
 
-    assert last_value['last_checked'] == last_value['last_modified']
-    original_timestamp = last_value['last_checked']
-
-    # sleep for a second so last_modified changes
-    time.sleep(1)
+    assert first_timestamp == last_value['last_checked'] == last_value['last_modified']
 
     update_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_daily_update.xml' % site_code)
     with test_util.mocked_requests(update_data_file):
-        nwis.hdf5.update_site_data(site_code, path=test_file_path)
+        with freezegun.freeze_time(second_timestamp):
+            nwis.hdf5.update_site_data(site_code, path=test_file_path)
     updated_site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     updated_values = updated_site_data['00060:00003']['values']
     last_value = updated_values[-1]
-    assert last_value['last_checked'] != original_timestamp
-    assert last_value['last_checked'] == last_value['last_modified']
+    assert last_value['last_checked'] != first_timestamp
+    assert second_timestamp == last_value['last_checked'] == last_value['last_modified']
 
-    modified_timestamp = last_value['last_checked']
+    original_timestamp = first_timestamp
+    modified_timestamp = second_timestamp
 
     test_values = [
         dict(datetime="1963-01-23T00:00:00", last_checked=modified_timestamp, last_modified=modified_timestamp, qualifiers="A", value='7'),

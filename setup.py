@@ -60,6 +60,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     tests_require=[
+        'freezegun>=0.1.4',
         'pytest>=2.3.2',
         'httpretty>=0.5.8',
     ],
