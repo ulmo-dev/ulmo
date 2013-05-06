@@ -1,8 +1,19 @@
 Changelog
 ---------
 
-**0.4.2 (in development)**
+**0.5.0 (in development)**
 
+- nwis.pytables has been replaced with nwis.hdf5 which uses the
+  pandas.io.pytables backend; things should generally run a bit faster now and
+  the code is much cleaner. There is one backwards-incompatible change:
+  nwis.hdf5.get_site() is now thread-safe. There was an undocumented behavior
+  where if a site could not be found in the hdf5 file during a
+  nwis.pytables.get_site() call, then a request to the NWIS service would be
+  made and the site table would be updated but no longer happens. You must
+  explicitly run nwis.hdf5.update_site_list() to update the site list first.
+- the nwis.pytables namespace is deprecated in favor of nwis.hdf5 because it is
+  shorter and more recognizable but pytables is still powering things under the
+  hood (via the pandas HDFStore)
 - parsed timeseries data dicts from waterml-based datasets (cuahsi.wof and usgs.nwis)
   contain parsed site info mapped to the 'site' key
 
