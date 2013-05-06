@@ -163,12 +163,17 @@ def get_site_data(site_code, service=None, parameter_code=None, start=None,
                 url_params['period'] = period
         elif isinstance(period, datetime.timedelta):
             url_params['period'] = isodate.duration_isoformat(period)
+
+    if service in ('dv', 'daily'):
+        datetime_formatter = isodate.date_isoformat
+    else:
+        datetime_formatter = isodate.datetime_isoformat
     if start is not None:
         start_datetime = util.convert_datetime(start)
-        url_params['startDT'] = isodate.datetime_isoformat(start_datetime)
+        url_params['startDT'] = datetime_formatter(start_datetime)
     if end is not None:
         end_datetime = util.convert_datetime(end)
-        url_params['endDT'] = isodate.datetime_isoformat(end_datetime)
+        url_params['endDT'] = datetime_formatter(end_datetime)
 
     if service is not None:
         values = _get_site_values(service, url_params, input_file=input_file)
