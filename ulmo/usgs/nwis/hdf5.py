@@ -69,7 +69,7 @@ def get_sites(path=None, complevel=None, complib=None):
             return {}
 
         sites_df = store[SITES_TABLE]
-    sites_dict = _sites_dataframe_to_dict(sites_df)
+    sites_dict = _sites_df_to_dict(sites_df)
     return sites_dict
 
 
@@ -351,7 +351,7 @@ def _nest_dataframe_dicts(unnested_df, nested_column, keys):
     return df
 
 
-def _sites_dataframe_to_dict(df):
+def _sites_df_to_dict(df):
     df = _nest_dataframe_dicts(df, 'location', ['latitude', 'longitude', 'srs'])
     for tz_type in ['default_tz', 'dst_tz']:
         tz_keys = ['abbreviation', 'offset']
@@ -366,7 +366,7 @@ def _sites_dataframe_to_dict(df):
     return df.T.to_dict()
 
 
-def _sites_dict_to_dataframe(sites_dict):
+def _sites_dict_to_df(sites_dict):
     df = pandas.DataFrame(sites_dict).T.copy()
     df = _unnest_dataframe_dicts(df, 'location', ['latitude', 'longitude', 'srs'])
     df = _unnest_dataframe_dicts(df, 'timezone_info',
@@ -422,7 +422,7 @@ def _variable_group_to_dict(store, variable_group):
 
 
 def _update_stored_sites(store, sites_dict):
-    new_sites_df = _sites_dict_to_dataframe(sites_dict)
+    new_sites_df = _sites_dict_to_df(sites_dict)
     if SITES_TABLE in store:
         sites_df = store[SITES_TABLE]
         new_sites_df = new_sites_df.combine_first(sites_df)

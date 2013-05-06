@@ -239,6 +239,9 @@ def _get_site_values(service, url_params, input_file=None):
     with _open_input_file(input_file) as content_io:
         data_dict = wml.parse_site_values(content_io, query_isodate)
 
+        for variable_dict in data_dict.values():
+            variable_dict['site'] = _extract_site_properties(variable_dict['site'])
+
     return data_dict
 
 

@@ -386,6 +386,8 @@ def test_update_site_data_updates_site_list(test_file_path):
     test_site = {
         'agency': 'USGS',
         'code': '01117800',
+        'county': '44009',
+        'huc': '01090005',
         'location': {
             'latitude': '41.5739884',
             'longitude': '-71.72062318',
@@ -393,12 +395,8 @@ def test_update_site_data_updates_site_list(test_file_path):
         },
         'name': 'WOOD RIVER NEAR ARCADIA, RI',
         'network': 'NWIS',
-        'site_property': {
-            'county_cd': '44009',
-            'huc_cd': '01090005',
-            'site_type_cd': 'ST',
-            'state_cd': '44'
-        },
+        'site_type': 'ST',
+        'state_code': '44',
         'timezone_info': {
             'default_tz': {'abbreviation': 'EST', 'offset': '-05:00'},
             'dst_tz': {'abbreviation': 'EDT', 'offset': '-04:00'},
