@@ -2,6 +2,7 @@ from contextlib import contextmanager
 import datetime
 import email.utils
 import ftplib
+import functools
 import os
 import re
 import urlparse
@@ -90,6 +91,26 @@ def module_with_dependency_errors(method_names):
     for method_name in method_names:
         setattr(fake_module, method_name, raise_dependency_error)
     return fake_module
+
+
+def module_with_deprecation_warnings(functions, warning_message):
+    warnings.filterwarnings("always", warning_message, DeprecationWarning)
+
+    class DeprecatedModule(object):
+        pass
+    deprecated_module = DeprecatedModule()
+
+    def warning_decorator(f):
+        @functools.wraps(f)
+        def warning_wrapper(*args, **kwargs):
+            warnings.warn(warning_message, DeprecationWarning)
+            return f(*args, **kwargs)
+        return warning_wrapper
+
+    for function in functions:
+        wrapped_function = warning_decorator(function)
+        setattr(deprecated_module, function.__name__, wrapped_function)
+    return deprecated_module
 
 
 @contextmanager
@@ -224,5 +245,3 @@ def _request_is_newer_than_file(request, path):
         return True
     else:
         return False
-
-

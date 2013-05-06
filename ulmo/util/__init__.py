@@ -7,6 +7,7 @@ from .misc import (
         get_ulmo_dir,
         mkdir_if_doesnt_exist,
         module_with_dependency_errors,
+        module_with_deprecation_warnings,
         open_file_for_url,
         parse_fwf,
         raise_dependency_error,
