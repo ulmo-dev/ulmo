@@ -1,4 +1,6 @@
+import contextlib
 import os
+import warnings
 
 import numpy as np
 import pandas
@@ -64,7 +66,7 @@ def get_sites(path=None, complevel=None, complib=None):
     if not os.path.exists(path):
         return {}
 
-    with pandas.io.pytables.get_store(path, 'r') as store:
+    with _get_store(path, 'r') as store:
         if SITES_TABLE not in store:
             return {}
 
@@ -148,7 +150,7 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
 
-    with pandas.io.pytables.get_store(path, 'r', **comp_kwargs) as store:
+    with _get_store(path, 'r', **comp_kwargs) as store:
         site_group = store.get_node(site_code)
         if site_group is None:
             return {}
@@ -210,7 +212,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
         return
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
-    with pandas.io.pytables.get_store(path, 'a', **comp_kwargs) as store:
+    with _get_store(path, 'a', **comp_kwargs) as store:
         _update_stored_sites(store, new_sites)
 
     return None
@@ -264,7 +266,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             period=period, input_file=input_file)
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
-    with pandas.io.pytables.get_store(path, 'a', **comp_kwargs) as store:
+    with _get_store(path, 'a', **comp_kwargs) as store:
         for variable_code, data_dict in new_site_data.iteritems():
             variable_group_path = site_code + '/' + variable_code
 
@@ -321,6 +323,14 @@ def _compression_kwargs(complevel=None, complib=None):
     return dict(complevel=complevel, complib=complib)
 
 
+@contextlib.contextmanager
+def _filter_warnings():
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", pandas.io.pytables.PerformanceWarning)
+        warnings.simplefilter("ignore", tables.NaturalNameWarning)
+        yield
+
+
 def _get_last_refresh(site_code, path, complevel=None, complib=None):
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
     try:
@@ -329,6 +339,13 @@ def _get_last_refresh(site_code, path, complevel=None, complib=None):
             return getattr(site_group._v_attrs, 'last_refresh', None)
     except IOError:
         return None
+
+
+@contextlib.contextmanager
+def _get_store(*args, **kwargs):
+    with pandas.io.pytables.get_store(*args, **kwargs) as store:
+        with _filter_warnings():
+            yield store
 
 
 def _nans_to_none(df):
