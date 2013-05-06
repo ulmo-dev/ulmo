@@ -405,3 +405,31 @@ def test_update_site_data_updates_site_list(test_file_path):
     }
 
     assert site == test_site
+
+
+def test_handles_empty_updates(test_file_path):
+    site_code = '01117800'
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    empty_site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily_empty.xml' % site_code)
+
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=empty_site_data_file)
+    empty_site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
+    assert empty_site_data['00060:00003']['values'] == []
+
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=site_data_file)
+
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=empty_site_data_file)
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
+
+    values = site_data['00060:00003']['values']
+    test_values = [
+        dict(datetime="1964-01-23T00:00:00", last_checked=None, last_modified=None, qualifiers="A", value='240'),
+    ]
+
+    for test_value in test_values:
+        assert values.index(test_value) >= 0

@@ -274,10 +274,11 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             _update_stored_sites(store, {site_dict['code']: site_dict})
 
             values_path = variable_group_path + '/values'
-            new_values = _values_dicts_to_df(data_dict.pop('values'))
+            new_values = _values_dicts_to_df(data_dict.pop('values', {}))
             last_refresh = data_dict.get('last_refresh')
+            if last_refresh is None:
+                last_refresh = np.nan
             new_values['last_checked'] = last_refresh
-
             if values_path in store:
                 compare_cols = ['value', 'qualifiers']
                 original_values = store[values_path]
@@ -334,9 +335,14 @@ def _filter_warnings():
 def _get_last_refresh(site_code, path, complevel=None, complib=None):
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
     try:
-        with pandas.io.pytables.get_store(path, 'r', **comp_kwargs) as store:
+        with _get_store(path, 'r', **comp_kwargs) as store:
             site_group = store.get_node(site_code)
-            return getattr(site_group._v_attrs, 'last_refresh', None)
+            if site_group is None:
+                return None
+            last_refresh = getattr(site_group._v_attrs, 'last_refresh')
+            if pandas.isnull(last_refresh):
+                last_refresh = None
+            return last_refresh
     except IOError:
         return None
 
@@ -415,11 +421,17 @@ def _unnest_dataframe_dicts(df, nested_column, keys):
 
 
 def _values_dicts_to_df(values_dicts):
-    df = pandas.DataFrame(values_dicts)
-    return df.set_index(pandas.DatetimeIndex(df['datetime']))
+    df = pandas.DataFrame(values_dicts, dtype=object)
+    if len(df) == 0:
+        df = pandas.DataFrame(columns=['datetime', 'value', 'qualifiers', 'last_checked',
+            'last_modified'])
+    else:
+        df = df.set_index(pandas.DatetimeIndex(df['datetime']))
+    return df
 
 
-def _values_df_to_dicts(df):
+def _values_df_to_dicts(values_df):
+    df = values_df.where(pandas.notnull(values_df), None)
     dicts = df.T.to_dict().values()
     dicts.sort(key=lambda d: d['datetime'])
     return dicts
