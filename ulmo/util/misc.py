@@ -88,8 +88,12 @@ def module_with_dependency_errors(method_names):
     class FakeModule(object):
         pass
     fake_module = FakeModule()
+
     for method_name in method_names:
-        setattr(fake_module, method_name, raise_dependency_error)
+        def f(*args, **kwargs):
+            raise_dependency_error()
+        f.__name__ = method_name
+        setattr(fake_module, method_name, f)
     return fake_module
 
 
