@@ -9,7 +9,7 @@ from ulmo.usgs.nwis import core
 
 
 # default hdf5 file path
-DEFAULT_HDF5_FILE_PATH = util.get_default_h5file_path()
+DEFAULT_HDF5_FILE_PATH = util.get_default_h5file_path('usgs')
 
 # define column sizes for strings stored in hdf5 tables
 # note: this is currently not used as we simply read in and write out entire

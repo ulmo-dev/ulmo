@@ -13,9 +13,9 @@ import tables
 from . import misc as util_misc
 
 
-def get_default_h5file_path():
+def get_default_h5file_path(dataset):
     default_dir = util_misc.get_ulmo_dir()
-    return os.path.join(default_dir, 'ulmo.h5')
+    return os.path.join(default_dir, 'ulmo_%s.h5' % dataset)
 
 
 def get_or_create_group(h5file, path, title, *args, **kwargs):
