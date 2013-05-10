@@ -8,6 +8,7 @@ before_install:
  - sudo apt-get install -qq libhdf5-serial-dev
 # commands to install ulmo
 install: 
+  - "pip install 'python-dateutil<2'"
   - "pip install numexpr"
   - "pip install cython"
   - "pip install tables"
