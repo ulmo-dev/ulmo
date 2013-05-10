@@ -68,7 +68,7 @@ def get_sites(path=None, complevel=None, complib=None):
     """
     sites_store_path = _get_store_path(path, 'sites.h5')
 
-    if not os.path.exists(path):
+    if not os.path.exists(sites_store_path):
         return {}
 
     with _get_store(sites_store_path, 'r') as store:
