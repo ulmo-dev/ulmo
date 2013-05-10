@@ -1,10 +1,15 @@
 import contextlib
+import copy
 import os
+import shutil
+import sys
+import tempfile
 import warnings
 
 import numpy as np
 import pandas
 import tables
+from tables.scripts import ptrepack
 
 from ulmo import util
 from ulmo.usgs.nwis import core
@@ -161,6 +166,14 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
             for variable_group in site_group
         ])
     return site_data
+
+
+def repack(path):
+    """repacks the hdf5 file at path to conserve space"""
+    with tempfile.NamedTemporaryFile() as temp_f:
+        temp_path = temp_f.name
+        _ptrepack(path, temp_path)
+        shutil.copyfile(temp_path, path)
 
 
 def update_site_list(sites=None, state_code=None, service=None, path=None,
@@ -374,6 +387,14 @@ def _nest_dataframe_dicts(unnested_df, nested_column, keys):
     return df
 
 
+def _ptrepack(src, dst):
+    """run ptrepack to repack from src to dst"""
+    with _sysargs_hacks():
+        sys.argv = ['', src, dst]
+        with _filter_warnings():
+            ptrepack.main()
+
+
 def _sites_df_to_dict(df):
     df = _nest_dataframe_dicts(df, 'location', ['latitude', 'longitude', 'srs'])
     for tz_type in ['default_tz', 'dst_tz']:
@@ -403,6 +424,14 @@ def _sites_dict_to_df(sites_dict):
         df = df.rename(columns=rename_dict)
 
     return df
+
+
+@contextlib.contextmanager
+def _sysargs_hacks():
+    """temporarily replace sys.argv without leaking global state"""
+    orig_sysargv = copy.copy(sys.argv)
+    yield
+    sys.argv = orig_sysargv
 
 
 def _unnest_dataframe_dicts(df, nested_column, keys):
