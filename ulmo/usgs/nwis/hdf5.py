@@ -305,6 +305,8 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             period=period, input_file=input_file)
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
+
+    something_changed = False
     with _get_store(site_data_path, 'a', **comp_kwargs) as store:
         for variable_code, data_dict in new_site_data.iteritems():
             variable_group_path = site_code + '/' + variable_code
@@ -313,11 +315,15 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
 
             values_path = variable_group_path + '/values'
             new_values = _values_dicts_to_df(data_dict.pop('values', {}))
+
             last_refresh = data_dict.get('last_refresh')
             if last_refresh is None:
                 last_refresh = np.nan
             new_values['last_checked'] = last_refresh
             if values_path in store:
+                if len(new_values) == 0:
+                    continue
+
                 compare_cols = ['value', 'qualifiers']
                 original_values = store[values_path]
                 original_align, new_align = original_values.align(new_values)
@@ -333,6 +339,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
                 new_values['last_modified'] = last_refresh
 
             store[values_path] = new_values
+            something_changed = True
 
             variable_group = store.get_node(variable_group_path)
             for key, value in data_dict.iteritems():
@@ -347,7 +354,8 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             _update_stored_sites(store, {site_dict['code']: site_dict})
 
     if autorepack:
-        repack(site_data_path)
+        if something_changed:
+            repack(site_data_path)
         if site_data_path != sites_store_path:
             repack(sites_store_path)
 
