@@ -174,7 +174,7 @@ def repack(path):
 
 
 def update_site_list(sites=None, state_code=None, service=None, path=None,
-        input_file=None, complevel=None, complib=None):
+        input_file=None, complevel=None, complib=None, autorepack=True):
     """Update cached site information.
 
     Parameters
@@ -207,7 +207,13 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
         the best available compression library available on your system will be
         selected. If complevel argument is set to 0 then no compression will be
         used.
-
+    autorepack : bool
+        Whether or not to automatically repack the h5 file after updating.
+        There is a tradeoff between performance and disk space here: large files
+        take a longer time to repack but also tend to grow larger faster, the
+        default of True conserves disk space because untamed file growth can
+        become quite destructive.  If you set this to False, you can manually
+        repack files with repack().
 
     Returns
     -------
@@ -225,11 +231,12 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
     with _get_store(sites_store_path, 'a', **comp_kwargs) as store:
         _update_stored_sites(store, new_sites)
 
-    return None
+    if autorepack:
+        repack(sites_store_path)
 
 
 def update_site_data(site_code, start=None, end=None, period=None, path=None,
-        input_file=None, complevel=None, complib=None):
+        input_file=None, complevel=None, complib=None, autorepack=True):
     """Update cached site data.
 
     Parameters
@@ -256,6 +263,13 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
         If ``None`` (default), then the NWIS web services will be queried, but
         if a file is passed then this file will be used instead of requesting
         data from the NWIS web services.
+    autorepack : bool
+        Whether or not to automatically repack the h5 file(s) after updating.
+        There is a tradeoff between performance and disk space here: large files
+        take a longer time to repack but also tend to grow larger faster, the
+        default of True conserves disk space because untamed file growth can
+        become quite destructive.  If you set this to False, you can manually
+        repack files with repack().
 
 
     Returns
@@ -315,6 +329,11 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
         sites_store_path = _get_store_path(path, 'sites.h5')
         with _get_store(sites_store_path, 'a', **comp_kwargs) as store:
             _update_stored_sites(store, {site_dict['code']: site_dict})
+
+    if autorepack:
+        repack(site_data_path)
+        if site_data_path != sites_store_path:
+            repack(sites_store_path)
 
 
 def _compression_kwargs(complevel=None, complib=None):

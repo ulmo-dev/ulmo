@@ -32,7 +32,7 @@ def test_update_site_list(test_file_path):
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
         nwis.hdf5.update_site_list(path=test_file_path,
-                input_file=test_site_file)
+                input_file=test_site_file, autorepack=False)
 
     sites = nwis.hdf5.get_sites(test_file_path)
     assert len(sites) == 64
@@ -151,7 +151,7 @@ def test_update_site_list_with_changes(test_file_path):
     for test_file, test_site in site_files:
         test_site_file = test_util.get_test_file_path(test_file)
         nwis.hdf5.update_site_list(path=test_file_path,
-                input_file=test_site_file)
+                input_file=test_site_file, autorepack=False)
         sites = nwis.hdf5.get_sites(path=test_file_path)
         test_code = test_site['code']
         assert sites[test_code] == test_site
@@ -163,7 +163,7 @@ def test_sites_table_remains_unique(test_file_path):
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
         nwis.hdf5.update_site_list(path=test_file_path,
-            input_file=test_site_file)
+            input_file=test_site_file, autorepack=False)
 
     with pandas.io.pytables.get_store(test_file_path) as store:
         sites_df = store.select('sites')
@@ -175,7 +175,7 @@ def test_get_site(test_file_path):
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
     input_file = test_util.get_test_file_path(site_data_file)
     nwis.hdf5.update_site_list(path=test_file_path,
-            input_file=input_file)
+            input_file=input_file, autorepack=False)
 
     site = nwis.hdf5.get_site(site_code, path=test_file_path)
     assert site == {
@@ -206,7 +206,8 @@ def test_get_sites_isnt_cached_between_calls(test_file_path):
     site_data_file = 'usgs/nwis/RI_daily.xml'
     input_file = test_util.get_test_file_path(site_data_file)
 
-    nwis.hdf5.update_site_list(input_file=input_file, path=test_file_path)
+    nwis.hdf5.update_site_list(input_file=input_file, path=test_file_path,
+            autorepack=False)
     sites = nwis.hdf5.get_sites(path=test_file_path)
     assert len(sites) > 0
 
@@ -224,7 +225,7 @@ def test_empty_update_list_doesnt_error(test_file_path):
     sites = nwis.hdf5.get_sites(path=test_file_path)
     assert sites == {}
     nwis.hdf5.update_site_list(path=test_file_path,
-        input_file=input_file)
+        input_file=input_file, autorepack=False)
 
     sites = nwis.hdf5.get_sites(path=test_file_path)
     assert sites == {}
@@ -235,7 +236,7 @@ def test_get_site_for_missing_raises_lookup(test_file_path):
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
     input_file = test_util.get_test_file_path(site_data_file)
     nwis.hdf5.update_site_list(path=test_file_path,
-        input_file=input_file)
+        input_file=input_file, autorepack=False)
 
     with pytest.raises(LookupError):
         missing_code = '98068500'
@@ -247,7 +248,7 @@ def test_non_usgs_site(test_file_path):
     site_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_instantaneous.xml' % site_code)
     nwis.hdf5.update_site_data(site_code, period='all',
-            path=test_file_path, input_file=site_data_file)
+            path=test_file_path, input_file=site_data_file, autorepack=False)
 
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
     assert len(site_data['00062:00011']['values']) > 1000
@@ -258,7 +259,7 @@ def test_site_data_is_sorted(test_file_path):
     site_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_daily.xml' % site_code)
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
-            input_file=site_data_file)
+            input_file=site_data_file, autorepack=False)
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     values = site_data['00060:00003']['values']
@@ -272,7 +273,7 @@ def test_update_site_data_basic_data_parsing(test_file_path):
     site_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_daily.xml' % site_code)
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
-            input_file=site_data_file)
+            input_file=site_data_file, autorepack=False)
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     test_values = [
@@ -297,7 +298,8 @@ def test_site_data_update_site_list_with_multiple_updates(test_file_path):
         'usgs/nwis/site_%s_daily.xml' % site_code)
     with test_util.mocked_requests(site_data_file):
         with freezegun.freeze_time(first_timestamp):
-            nwis.hdf5.update_site_data(site_code, path=test_file_path)
+            nwis.hdf5.update_site_data(site_code, path=test_file_path,
+                    autorepack=False)
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     last_value = site_data['00060:00003']['values'][-1]
@@ -308,7 +310,8 @@ def test_site_data_update_site_list_with_multiple_updates(test_file_path):
         'usgs/nwis/site_%s_daily_update.xml' % site_code)
     with test_util.mocked_requests(update_data_file):
         with freezegun.freeze_time(second_timestamp):
-            nwis.hdf5.update_site_data(site_code, path=test_file_path)
+            nwis.hdf5.update_site_data(site_code, path=test_file_path,
+                    autorepack=False)
     updated_site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     updated_values = updated_site_data['00060:00003']['values']
@@ -359,22 +362,25 @@ def test_last_refresh_gets_updated(test_file_path):
 
     with test_util.mocked_requests(site_data_file):
         with freezegun.freeze_time(first_timestamp):
-            nwis.hdf5.update_site_data(site_code, path=test_file_path)
+            nwis.hdf5.update_site_data(site_code, path=test_file_path,
+                    autorepack=False)
         first_refresh = nwis.hdf5._get_last_refresh(site_code, test_file_path)
         assert first_refresh == first_timestamp
 
         with freezegun.freeze_time(second_timestamp):
-            nwis.hdf5.update_site_data(site_code, path=test_file_path)
+            nwis.hdf5.update_site_data(site_code, path=test_file_path,
+                    autorepack=False)
         second_refresh = nwis.hdf5._get_last_refresh(site_code, test_file_path)
         assert second_refresh == second_timestamp
 
         nwis.hdf5.update_site_data(site_code, path=test_file_path,
-                input_file=site_data_file)
+                input_file=site_data_file, autorepack=False)
         third_refresh = nwis.hdf5._get_last_refresh(site_code, test_file_path)
         assert third_refresh == None
 
         with freezegun.freeze_time(forth_timestamp):
-            nwis.hdf5.update_site_data(site_code, path=test_file_path)
+            nwis.hdf5.update_site_data(site_code, path=test_file_path,
+                    autorepack=False)
         forth_refresh = nwis.hdf5._get_last_refresh(site_code, test_file_path)
         assert forth_refresh is not None
         assert forth_refresh == forth_timestamp
@@ -385,7 +391,7 @@ def test_update_site_data_updates_site_list(test_file_path):
     site_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_daily.xml' % site_code)
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
-            input_file=site_data_file)
+            input_file=site_data_file, autorepack=False)
     site = nwis.hdf5.get_site(site_code, path=test_file_path)
 
     test_site = {
@@ -420,15 +426,15 @@ def test_handles_empty_updates(test_file_path):
         'usgs/nwis/site_%s_daily_empty.xml' % site_code)
 
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
-            input_file=empty_site_data_file)
+            input_file=empty_site_data_file, autorepack=False)
     empty_site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
     assert empty_site_data['00060:00003']['values'] == []
 
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
-            input_file=site_data_file)
+            input_file=site_data_file, autorepack=False)
 
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
-            input_file=empty_site_data_file)
+            input_file=empty_site_data_file, autorepack=False)
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
 
     values = site_data['00060:00003']['values']
