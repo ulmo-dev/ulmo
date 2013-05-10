@@ -16,7 +16,7 @@ from ulmo.usgs.nwis import core
 
 
 # default hdf5 file path
-DEFAULT_HDF5_FILE_PATH = util.get_default_h5file_path('usgs')
+DEFAULT_HDF5_FILE_PATH = util.get_default_h5file_path('usgs/')
 
 # define column sizes for strings stored in hdf5 tables
 # note: this is currently not used as we simply read in and write out entire
@@ -65,13 +65,12 @@ def get_sites(path=None, complevel=None, complib=None):
     sites_dict : dict
         a python dict with site codes mapped to site information
     """
-    if path is None:
-        path = DEFAULT_HDF5_FILE_PATH
+    sites_store_path = _get_store_path(path, 'sites.h5')
 
     if not os.path.exists(path):
         return {}
 
-    with _get_store(path, 'r') as store:
+    with _get_store(sites_store_path, 'r') as store:
         if SITES_TABLE not in store:
             return {}
 
@@ -107,12 +106,11 @@ def get_site(site_code, path=None, complevel=None, complib=None):
     site_dict : dict
         a python dict containing site information
     """
-    if path is None:
-        path = DEFAULT_HDF5_FILE_PATH
+    sites_store_path = _get_store_path(path, 'sites.h5')
 
     # XXX: this could be more efficiently implemented by querying the sites
     # table with actual expressions
-    sites = get_sites(path=path, complevel=complevel, complib=complib)
+    sites = get_sites(path=sites_store_path, complevel=complevel, complib=complib)
     try:
         return sites[site_code]
     except KeyError:
@@ -150,12 +148,11 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
     data_dict : dict
         a python dict with parameter codes mapped to value dicts
     """
-    if not path:
-        path = DEFAULT_HDF5_FILE_PATH
+    site_data_path = _get_store_path(path, site_code + '.h5')
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
 
-    with _get_store(path, 'r', **comp_kwargs) as store:
+    with _get_store(site_data_path, 'r', **comp_kwargs) as store:
         site_group = store.get_node(site_code)
         if site_group is None:
             return {}
@@ -216,8 +213,8 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
     -------
     None : ``None``
     """
-    if not path:
-        path = DEFAULT_HDF5_FILE_PATH
+    sites_store_path = _get_store_path(path, 'sites.h5')
+
     new_sites = core.get_sites(sites=sites, state_code=state_code, service=service,
             input_file=input_file)
 
@@ -225,7 +222,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
         return
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
-    with _get_store(path, 'a', **comp_kwargs) as store:
+    with _get_store(sites_store_path, 'a', **comp_kwargs) as store:
         _update_stored_sites(store, new_sites)
 
     return None
@@ -265,8 +262,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
     -------
     None : ``None``
     """
-    if not path:
-        path = DEFAULT_HDF5_FILE_PATH
+    site_data_path = _get_store_path(path, site_code + '.h5')
 
     if input_file is None and start is None and end is None and period is None:
         prior_last_refresh = _get_last_refresh(site_code, path)
@@ -279,12 +275,11 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             period=period, input_file=input_file)
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
-    with _get_store(path, 'a', **comp_kwargs) as store:
+    with _get_store(site_data_path, 'a', **comp_kwargs) as store:
         for variable_code, data_dict in new_site_data.iteritems():
             variable_group_path = site_code + '/' + variable_code
 
             site_dict = data_dict.pop('site')
-            _update_stored_sites(store, {site_dict['code']: site_dict})
 
             values_path = variable_group_path + '/values'
             new_values = _values_dicts_to_df(data_dict.pop('values', {}))
@@ -315,6 +310,11 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
 
         site_group = store.get_node(site_code)
         site_group._v_attrs.last_refresh = last_refresh
+
+    if len(site_dict):
+        sites_store_path = _get_store_path(path, 'sites.h5')
+        with _get_store(sites_store_path, 'a', **comp_kwargs) as store:
+            _update_stored_sites(store, {site_dict['code']: site_dict})
 
 
 def _compression_kwargs(complevel=None, complib=None):
@@ -361,10 +361,24 @@ def _get_last_refresh(site_code, path, complevel=None, complib=None):
 
 
 @contextlib.contextmanager
-def _get_store(*args, **kwargs):
-    with pandas.io.pytables.get_store(*args, **kwargs) as store:
+def _get_store(path, *args, **kwargs):
+    dir_path = os.path.dirname(path)
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+    with pandas.io.pytables.get_store(path, *args, **kwargs) as store:
         with _filter_warnings():
             yield store
+
+
+def _get_store_path(path, default_file_name):
+    if path is None:
+        path = DEFAULT_HDF5_FILE_PATH
+    if isinstance(path, basestring) and (path.endswith('/') or
+            path.endswith('\\')):
+        return os.path.join(path, default_file_name)
+    else:
+        return path
 
 
 def _nans_to_none(df):

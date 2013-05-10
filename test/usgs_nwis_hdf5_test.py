@@ -14,7 +14,7 @@ TEST_FILE_DIR = os.path.abspath('tmp/')
 
 @pytest.fixture
 def test_file_path(request):
-    return os.path.join(TEST_FILE_DIR, request.function.__name__ + '.h5')
+    return os.path.join(TEST_FILE_DIR, request.function.__name__ + '/')
 
 
 def setup_module(module):
@@ -158,6 +158,7 @@ def test_update_site_list_with_changes(test_file_path):
 
 
 def test_sites_table_remains_unique(test_file_path):
+    test_file_path = test_file_path + "test.h5"
     site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
@@ -200,6 +201,8 @@ def test_get_site(test_file_path):
 
 
 def test_get_sites_isnt_cached_between_calls(test_file_path):
+    test_file_path = test_file_path + "test.h5"
+
     site_data_file = 'usgs/nwis/RI_daily.xml'
     input_file = test_util.get_test_file_path(site_data_file)
 
@@ -345,6 +348,8 @@ def test_site_data_update_site_list_with_multiple_updates(test_file_path):
 
 
 def test_last_refresh_gets_updated(test_file_path):
+    test_file_path = test_file_path + "test.h5"
+
     first_timestamp = '2013-01-01T01:01:01'
     second_timestamp = '2013-02-02T02:02:02'
     forth_timestamp = '2013-03-03T03:03:03'
