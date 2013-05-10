@@ -13,5 +13,6 @@ install:
   - "pip install cython"
   - "pip install tables"
   - "pip install ."
+  - "pip install sure"
 # command to run tests
 script: "python setup.py test"
