@@ -11,6 +11,6 @@ def test_pytables_raises_deprecation_warnings(recwarn):
 
 
 def test_hdf5_doesnt_raise_deprecation_warnings(recwarn):
-    nwis.pytables.get_sites()
+    nwis.hdf5.get_sites()
     with pytest.raises(AssertionError):
         recwarn.pop(DeprecationWarning)
