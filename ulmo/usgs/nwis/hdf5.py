@@ -47,7 +47,8 @@ def get_sites(path=None, complevel=None, complib=None):
     ----------
     path : ``None`` or file path
         Path to the hdf5 file to be queried, if ``None`` then the default path
-        will be used.
+        will be used. If a file path is a directory, then multiple hdf5 files
+        will be kept so that file sizes remain small for faster repacking.
     complevel : ``None`` or int {0-9}
         Open hdf5 file with this level of compression. If ``None` (default),
         then a minimum compression level will be used if a compression library
@@ -88,7 +89,8 @@ def get_site(site_code, path=None, complevel=None, complib=None):
         The site code of the site you want to get information for.
     path : ``None`` or file path
         Path to the hdf5 file to be queried, if ``None`` then the default path
-        will be used.
+        will be used. If a file path is a directory, then multiple hdf5 files
+        will be kept so that file sizes remain small for faster repacking.
     complevel : ``None`` or int {0-9}
         Open hdf5 file with this level of compression. If ``None` (default),
         then a minimum compression level will be used if a compression library
@@ -130,7 +132,8 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
         is in use by multiple agencies (this is rare).
     path : ``None`` or file path
         Path to the hdf5 file to be queried, if ``None`` then the default path
-        will be used.
+        will be used. If a file path is a directory, then multiple hdf5 files
+        will be kept so that file sizes remain small for faster repacking.
     complevel : ``None`` or int {0-9}
         Open hdf5 file with this level of compression. If ``None` (default),
         then a minimum compression level will be used if a compression library
@@ -191,8 +194,9 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
         abbreviations "iv" and "dv" can be used for "instantaneous" and "daily",
         respectively.
     path : ``None`` or file path
-        Path to the hdf5 file to be updated, if ``None`` then the default path
-        will be used.
+        Path to the hdf5 file to be queried, if ``None`` then the default path
+        will be used. If a file path is a directory, then multiple hdf5 files
+        will be kept so that file sizes remain small for faster repacking.
     input_file: ``None``, file path or file object
         If ``None`` (default), then the NWIS web services will be queried, but
         if a file is passed then this file will be used instead of requesting
@@ -257,8 +261,9 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
         be a datetime.timedelta object representing the period of time. This
         parameter is mutually exclusive with start/end dates.
     path : ``None`` or file path
-        Path to the hdf5 file to be updated, if ``None`` then the default path
-        will be used.
+        Path to the hdf5 file to be queried, if ``None`` then the default path
+        will be used. If a file path is a directory, then multiple hdf5 files
+        will be kept so that file sizes remain small for faster repacking.
     input_file: ``None``, file path or file object
         If ``None`` (default), then the NWIS web services will be queried, but
         if a file is passed then this file will be used instead of requesting
