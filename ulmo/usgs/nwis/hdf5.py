@@ -295,7 +295,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
     site_data_path = _get_store_path(path, site_code + '.h5')
 
     if input_file is None and start is None and end is None and period is None:
-        prior_last_refresh = _get_last_refresh(site_code, path)
+        prior_last_refresh = _get_last_refresh(site_code, site_data_path)
         if prior_last_refresh is None:
             period = 'all'
         else:
