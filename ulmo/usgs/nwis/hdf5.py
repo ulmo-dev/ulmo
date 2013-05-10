@@ -169,7 +169,18 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
 
 
 def repack(path):
-    """repacks the hdf5 file at path to conserve space"""
+    """Repack the hdf5 file at path. This is the same as running the pytables
+    ptrepack command on the file.
+
+    Parameters
+    ----------
+    path : file path
+        Path to the hdf5 file.
+
+    Returns
+    -------
+    None : ``None``
+    """
     with tempfile.NamedTemporaryFile() as temp_f:
         temp_path = temp_f.name
         _ptrepack(path, temp_path)
