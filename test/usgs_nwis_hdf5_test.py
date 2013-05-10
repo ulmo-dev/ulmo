@@ -438,3 +438,40 @@ def test_handles_empty_updates(test_file_path):
 
     for test_value in test_values:
         assert values.index(test_value) >= 0
+
+
+def test_file_size_doesnt_balloon_with_update_site_data(test_file_path):
+    test_file_path += 'test.h5'
+    site_code = '01117800'
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    update_site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily_update.xml' % site_code)
+
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=site_data_file)
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=update_site_data_file)
+    original_size = os.path.getsize(test_file_path)
+    for i in range(20):
+        nwis.hdf5.update_site_data(site_code, path=test_file_path,
+                input_file=update_site_data_file)
+
+    expected_size = original_size * 1.01
+    assert os.path.getsize(test_file_path) <= expected_size
+
+
+def test_file_size_doesnt_balloon_with_update_site_list(test_file_path):
+    test_file_path += 'test.h5'
+    site_list_file = test_util.get_test_file_path('usgs/nwis/RI_daily.xml')
+    updated_site_list_file = test_util.get_test_file_path('usgs/nwis/RI_daily.xml')
+    nwis.hdf5.update_site_list(path=test_file_path,
+        input_file=site_list_file)
+    nwis.hdf5.update_site_list(path=test_file_path,
+            input_file=updated_site_list_file)
+    original_size = os.path.getsize(test_file_path)
+    for i in range(3):
+        nwis.hdf5.update_site_list(path=test_file_path,
+                input_file=updated_site_list_file)
+    expected_size = original_size * 1.01
+    assert os.path.getsize(test_file_path) <= expected_size
