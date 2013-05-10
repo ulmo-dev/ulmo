@@ -397,7 +397,8 @@ def _get_last_refresh(site_code, path, complevel=None, complib=None):
 
 @contextlib.contextmanager
 def _get_store(path, *args, **kwargs):
-    dir_path = os.path.dirname(path)
+    abs_path = os.path.abspath(path)
+    dir_path = os.path.dirname(abs_path)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
