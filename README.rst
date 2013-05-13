@@ -40,6 +40,7 @@ Future
 Support for the following datasets is currently under development and they
 should be available soon:
 
+- National Climatic Data Center Climate Index Reference Sequential (CIRS)
 - National Weather Service 24-hour Precip (4 km grid)
 
 
