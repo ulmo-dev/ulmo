@@ -24,11 +24,13 @@ Datasets
 
 Currently, ulmo supports the following datasets / services:
 
+- Climate Prediction Center Weekly Drought Monitor
 - CUAHSI WaterOneFlow
 - National Climatic Data Center Global Summary of the Day
 - National Climatic Data Center Global Historical Climatology Network
 - Texas Weather Connection's Daily Keetch-Byram Drought Index
 - United States Geological Survey National Water Information System 
+
 
 
 Future
@@ -38,8 +40,6 @@ Support for the following datasets is currently under development and they
 should be available soon:
 
 - National Weather Service 24-hour Precip (4 km grid)
-- Climate Prediction Center Weekly Drought Monitor
-
 
 
 A list of future datasets is kept in on the `issue tracker`_. If there's a dataset
