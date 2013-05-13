@@ -29,6 +29,12 @@ National Climatic Data Center Global Summary of the Day
    :members: get_data, get_stations
 
 
+Texas Weather Connection Daily Keetch-Byram Drought Index (KBDI)
+================================================================
+.. automodule:: ulmo.twc.kbdi
+   :members: get_data
+
+
 USGS National Water Information System
 ======================================
 .. automodule:: ulmo.usgs.nwis
