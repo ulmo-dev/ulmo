@@ -14,8 +14,11 @@ Changelog
 - the nwis.pytables namespace is deprecated in favor of nwis.hdf5 because it is
   shorter and more recognizable but pytables is still powering things under the
   hood (via the pandas HDFStore)
-- parsed timeseries data dicts from waterml-based datasets (cuahsi.wof and usgs.nwis)
-  contain parsed site info mapped to the 'site' key
+- parsed timeseries data dicts from waterml-based datasets (cuahsi.wof and
+  usgs.nwis) now contain parsed site info mapped to the 'site' key
+- add support for pre-1997 data from CPC's weekly drought monitor dataset
+- bugfix: some related to change of the "current" agricultural year for CPC
+  weekly drought data
 
 
 **0.4.1 (released 2013-03-04)**
