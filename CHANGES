@@ -19,6 +19,8 @@ Changelog
 - add support for pre-1997 data from CPC's weekly drought monitor dataset
 - bugfix: some related to change of the "current" agricultural year for CPC
   weekly drought data
+- add support for Texas Weather Connection's Daily Keetch-Byram Drought Index
+  (KBDI) dataset
 
 
 **0.4.1 (released 2013-03-04)**
