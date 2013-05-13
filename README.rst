@@ -24,11 +24,11 @@ Datasets
 
 Currently, ulmo supports the following datasets / services:
 
-- United States Geological Survey National Water Information System 
+- CUAHSI WaterOneFlow
 - National Climatic Data Center Global Summary of the Day
 - National Climatic Data Center Global Historical Climatology Network
-- CUAHSI WaterOneFlow
 - Texas Weather Connection's Daily Keetch-Byram Drought Index
+- United States Geological Survey National Water Information System 
 
 
 Future
