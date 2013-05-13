@@ -20,8 +20,8 @@ Installation
 Quick Start
 -----------
 
-The easiest way to get a flavor ulmo is by checking out this brief but awesome
-`tutorial`_ by Nikolay Koldunov.
+Check out this brief but awesome `tutorial`_ by Nikolay Koldunov to get a sense
+of what Ulmo is about.
 
 
 .. _tutorial: http://earthpy.org/ulmo.html
