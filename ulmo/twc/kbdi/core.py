@@ -50,19 +50,14 @@ def get_data(county=None, start=None, end=None, as_dataframe=False):
         A dict or pandas.DataFrame representing the data. See the
         ``as_dataframe`` parameter for more.
     """
-    if not start is None:
-        start_date = util.convert_date(start)
-    else:
-        start_date = None
-    if not end is None:
-        end_date = util.convert_date(end)
-    else:
-        end_date = None
-
-    if not end_date:
+    if end is None:
         end_date = datetime.date.today()
-    if not start_date:
+    else:
+        end_date = util.convert_date(end)
+    if start is None:
         start_date = datetime.date(end_date.year, 1, 1)
+    else:
+        start_date = util.convert_date(start)
 
     data = None
     FIPS = _fips()
