@@ -51,7 +51,7 @@ def get_sites(path=None, complevel=None, complib=None):
         will be kept so that file sizes remain small for faster repacking.
     complevel : ``None`` or int {0-9}
         Open hdf5 file with this level of compression. If ``None` (default),
-        then a minimum compression level will be used if a compression library
+        then a maximum compression level will be used if a compression library
         can be found. If set to 0 then no compression will be used regardless of
         what complib is.
     complib : ``None`` or str {'zlib', 'bzip2', 'lzo', 'blosc'}
@@ -67,11 +67,12 @@ def get_sites(path=None, complevel=None, complib=None):
         a python dict with site codes mapped to site information
     """
     sites_store_path = _get_store_path(path, 'sites.h5')
+    comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
 
     if not os.path.exists(sites_store_path):
         return {}
 
-    with _get_store(sites_store_path, 'r') as store:
+    with _get_store(sites_store_path, 'r', **comp_kwargs) as store:
         if SITES_TABLE not in store:
             return {}
 
@@ -93,7 +94,7 @@ def get_site(site_code, path=None, complevel=None, complib=None):
         will be kept so that file sizes remain small for faster repacking.
     complevel : ``None`` or int {0-9}
         Open hdf5 file with this level of compression. If ``None` (default),
-        then a minimum compression level will be used if a compression library
+        then a maximum compression level will be used if a compression library
         can be found. If set to 0 then no compression will be used regardless of
         what complib is.
     complib : ``None`` or str {'zlib', 'bzip2', 'lzo', 'blosc'}
@@ -120,7 +121,7 @@ def get_site(site_code, path=None, complevel=None, complib=None):
 
 
 def get_site_data(site_code, agency_code=None, path=None, complevel=None,
-        complib=None):
+                  complib=None):
     """Fetches previously-cached site data from an hdf5 file.
 
     Parameters
@@ -136,7 +137,7 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
         will be kept so that file sizes remain small for faster repacking.
     complevel : ``None`` or int {0-9}
         Open hdf5 file with this level of compression. If ``None` (default),
-        then a minimum compression level will be used if a compression library
+        then a maximum compression level will be used if a compression library
         can be found. If set to 0 then no compression will be used regardless of
         what complib is.
     complib : ``None`` or str {'zlib', 'bzip2', 'lzo', 'blosc'}
@@ -154,7 +155,6 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
     site_data_path = _get_store_path(path, site_code + '.h5')
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
-
     with _get_store(site_data_path, 'r', **comp_kwargs) as store:
         site_group = store.get_node(site_code)
         if site_group is None:
@@ -226,7 +226,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
         data from the NWIS web services.
     complevel : ``None`` or int {0-9}
         Open hdf5 file with this level of compression. If ``None` (default),
-        then a minimum compression level will be used if a compression library
+        then a maximum compression level will be used if a compression library
         can be found. If set to 0 then no compression will be used regardless of
         what complib is.
     complib : ``None`` or str {'zlib', 'bzip2', 'lzo', 'blosc'}
@@ -378,7 +378,7 @@ def _compression_kwargs(complevel=None, complib=None):
         possible_compressions = ('blosc', 'zlib')
         for possible_compression in possible_compressions:
             try:
-                try_kwargs = dict(complevel=1, complib=possible_compression)
+                try_kwargs = dict(complevel=9, complib=possible_compression)
                 tables.Filters(**try_kwargs)
                 return try_kwargs
             except tables.FiltersWarning:
@@ -387,7 +387,7 @@ def _compression_kwargs(complevel=None, complib=None):
         complevel = 0
 
     elif complib is not None and complevel is None:
-        complevel = 1
+        complevel = 9
 
     return dict(complevel=complevel, complib=complib)
 
