@@ -16,7 +16,6 @@ CUAHSI WaterOneFlow
    :members: get_sites, get_site_info, get_values, get_variable_info
 
 
-
 National Climatic Data Center Global Historical Climate Network Daily
 =====================================================================
 .. automodule:: ulmo.ncdc.ghcn_daily
@@ -35,6 +34,12 @@ Texas Weather Connection Daily Keetch-Byram Drought Index (KBDI)
    :members: get_data
 
 
+US Army Corps of Engineers - Tulsa District Water Control
+=========================================================
+.. automodule:: ulmo.usace.swtwc
+   :members: get_stations, get_station_data
+
+
 USGS National Water Information System
 ======================================
 .. automodule:: ulmo.usgs.nwis
@@ -42,12 +47,6 @@ USGS National Water Information System
 
 .. automodule:: ulmo.usgs.nwis.hdf5
    :members:
-
-
-US Army Corps of Engineers - Tulsa District Water Control
-=========================================================
-.. automodule:: ulmo.usace.swtwc
-   :members: get_stations, get_station_data
 
 
 .. _dates-and-times:
