@@ -17,6 +17,16 @@ Installation
 .. include:: ../INSTALL
 
 
+Quick Start
+-----------
+
+The easiest way to get a flavor ulmo is by checking out this brief but awesome
+`tutorial`_ by Nikolay Koldunov.
+
+
+.. _tutorial: http://earthpy.org/ulmo.html
+
+
 
 API Reference
 -------------
