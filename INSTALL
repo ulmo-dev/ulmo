@@ -1,6 +1,13 @@
+Ulmo depends on a lot of libraries from the scientific python stack (namely:
+numpy, pytables and pandas). There are a couple of ways to get these
+dependencies installed but it can be tricky if doing it by hand. The simplest
+way to get things up and running is to use a scientific python distribution that
+will install everything together. A full list is available on `numfocus.org`_
+but `Anaconda`_ is recommended as it is the easiest to set up.
 
-The most recent release of ulmo can be installed from pypi. Pip is a good way to
-do that:
+
+Once you've got The most recent release of ulmo can be installed from pypi. Pip
+is a good way to do that:
 
     pip install ulmo
 
@@ -10,13 +17,7 @@ To install a development version, grab a copy of the `source code`_ and run:
     python setup.py develop
 
 
-.. note::
 
-    If you're using the cache backend for USGS NWIS, you will need to install
-    `PyTables`_ separately. For Windows users, a `scientific python
-    distribution`_ that includes PyTables is recommended.
-
-
-.. _scientific python distribution: http://numfocus.org/projects-2/software-distributions/
+.. _Anaconda: http://continuum.io/downloads.html 
+.. _numfocus.org: http://numfocus.org/projects-2/software-distributions/
 .. _source code: https://github.com/twdb/ulmo
-.. _PyTables: http://pytables.github.com/downloads.html
