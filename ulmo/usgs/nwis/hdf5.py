@@ -168,7 +168,7 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
     return site_data
 
 
-def repack(path):
+def repack(path, complevel=None, complib=None):
     """Repack the hdf5 file at path. This is the same as running the pytables
     ptrepack command on the file.
 
@@ -176,14 +176,26 @@ def repack(path):
     ----------
     path : file path
         Path to the hdf5 file.
+    complevel : ``None`` or int {0-9}
+        Open hdf5 file with this level of compression. If ``None` (default),
+        then a maximum compression level will be used if a compression library
+        can be found. If set to 0 then no compression will be used regardless of
+        what complib is.
+    complib : ``None`` or str {'zlib', 'bzip2', 'lzo', 'blosc'}
+        Open hdf5 file with this type of compression. If ``None`` (default) then
+        the best available compression library available on your system will be
+        selected. If complevel argument is set to 0 then no compression will be
+        used.
 
     Returns
     -------
     None : ``None``
     """
+    comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
+
     with tempfile.NamedTemporaryFile() as temp_f:
         temp_path = temp_f.name
-        _ptrepack(path, temp_path)
+        _ptrepack(path, temp_path, **comp_kwargs)
         shutil.copyfile(temp_path, path)
 
 
@@ -247,7 +259,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
         _update_stored_sites(store, new_sites)
 
     if autorepack:
-        repack(sites_store_path)
+        repack(sites_store_path, complevel=complevel, complib=complib)
 
 
 def update_site_data(site_code, start=None, end=None, period=None, path=None,
@@ -355,9 +367,9 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
 
     if autorepack:
         if something_changed:
-            repack(site_data_path)
+            repack(site_data_path, complevel=complevel, complib=complib)
         if site_data_path != sites_store_path:
-            repack(sites_store_path)
+            repack(sites_store_path, complevel=complevel, complib=complib)
 
 
 def _compression_kwargs(complevel=None, complib=None):
@@ -445,10 +457,10 @@ def _nest_dataframe_dicts(unnested_df, nested_column, keys):
     return df
 
 
-def _ptrepack(src, dst):
+def _ptrepack(src, dst, complevel, complib):
     """run ptrepack to repack from src to dst"""
     with _sysargs_hacks():
-        sys.argv = ['', src, dst]
+        sys.argv = ['', '--complevel=%s' % complevel, '--complib=%s' % complib, src, dst]
         with _filter_warnings():
             ptrepack.main()
 
