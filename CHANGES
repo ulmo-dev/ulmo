@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-**0.5.0 (in development)**
+**0.5.0 (released 2013-05-14)**
 
 - nwis.pytables has been replaced with nwis.hdf5 which uses the
   pandas.io.pytables backend; things should generally run a bit faster now and
