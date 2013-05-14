@@ -553,5 +553,8 @@ def _update_stored_sites(store, sites_dict):
     if SITES_TABLE in store:
         sites_df = store[SITES_TABLE]
         new_sites_df = new_sites_df.combine_first(sites_df)
+        # explicitly cast 'uses_dst' column back to bool, it gets converted to
+        # object dtype in pandas <= 0.11 (s/b fixed in later versions)
+        new_sites_df['uses_dst'] = new_sites_df['uses_dst'].astype(bool)
 
     store[SITES_TABLE] = new_sites_df
