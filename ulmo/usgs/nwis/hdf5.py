@@ -395,7 +395,6 @@ def _compression_kwargs(complevel=None, complib=None):
 @contextlib.contextmanager
 def _filter_warnings():
     with warnings.catch_warnings():
-        warnings.simplefilter("ignore", pandas.io.pytables.PerformanceWarning)
         warnings.simplefilter("ignore", tables.NaturalNameWarning)
         yield
 
