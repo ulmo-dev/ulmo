@@ -119,7 +119,7 @@ def test_get_data_by_climate_division():
 
 def test_doesnt_have_locations_if_location_names_is_none():
     index = 'pdsi'
-    use_file = _test_use_file(index)
+    use_file = _test_use_file(index, False)
     data = ulmo.ncdc.cirs.get_data(index, location_names=None,
             use_file=use_file, as_dataframe=True)
     assert 'location' not in data.columns
@@ -130,8 +130,9 @@ def _run_test_sets(test_sets):
         test_args = copy.copy(test_set)
         index = test_args.pop('index')
         test_values = test_args.pop('values')
+        by_state = test_args['by_state']
 
-        use_file = _test_use_file(index)
+        use_file = _test_use_file(index, by_state)
         data = ulmo.ncdc.cirs.get_data(index, use_file=use_file,
                 as_dataframe=True, **test_args)
         for test_value in test_values:
@@ -147,9 +148,12 @@ def _assert_inclusion(value_dict, dataframe):
     assert len(sub_df) == 1
 
 
-def _test_use_file(index):
+def _test_use_file(index, by_state):
     if test_util.use_test_files():
-        path = 'ncdc/cirs/drd964x.%s.txt' % index
+        if by_state:
+            path = 'ncdc/cirs/drd964x.%sst.txt' % index
+        else:
+            path = 'ncdc/cirs/drd964x.%s.txt' % index
         return test_util.get_test_file_path(path)
     else:
         return None
