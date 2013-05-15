@@ -81,13 +81,13 @@ test_sets = [
                 'location_code': 110,
                 'year': 2013,
                 'month': 1,
-                'value': 31.90,
+                'value': 31.91,
             }, {
                 'location': 'national',
                 'location_code': 110,
                 'year': 2013,
                 'month': 2,
-                'value': 34.78,
+                'value': 34.77,
             },
         ]
     }, {
