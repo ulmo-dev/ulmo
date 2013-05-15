@@ -45,15 +45,16 @@ def get_data(index, by_state=False, location_names='abbr', as_dataframe=False, u
         regional data will be retreived.
     location_names: str or ``None``
         This parameter defines what (if any) type of names will be added to the
-        values. If set to 'abbr' (default), then abbreviated will be used. If
-        'full', then full location names will be used. If set to None, then no
-        location name will be added and the only identifier will be the
-        location_codes (this is the most memory-conservative option).
+        values. If set to 'abbr' (default), then abbreviated location names
+        will be used. If 'full', then full location names will be used. If set
+        to None, then no location name will be added and the only identifier
+        will be the location_codes (this is the most memory-conservative
+        option).
     as_dataframe : bool
         If ``False`` (default), a list of values dicts is returned. If ``True``,
         a dict with element codes mapped to equivalent pandas.DataFrame objects
         will be returned. The pandas dataframe is used internally, so setting
-        this to ``True`` is a faster as it skips a somewhat expensive
+        this to ``True`` is faster as it skips a somewhat expensive
         serialization step.
     use_file: ``None``, file-like object or str
         If ``None`` (default), then data will be automatically retreived from
