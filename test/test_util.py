@@ -99,7 +99,7 @@ def mocked_url(url, response_file_path, methods=None):
 
 def use_test_files():
     """Returns true if tests should be run using test files, false otherwise."""
-    return os.environ.get('ULMO_DONT_MOCK_TESTS', False)
+    return os.environ.get('ULMO_DONT_MOCK_TESTS', True)
 
 
 def _mock_request_side_effect(url_files):
