@@ -40,10 +40,10 @@ def get_data(index, by_state=False, location_names='abbr', as_dataframe=False, u
           * 'sp24': 24-month Standardized Precipitation Index
           * 'tmp': Temperature
           * 'zndx': ZNDX
-    by_state: bool
-        If False (default), divisional data will be retreived. If True, then
-        regional data will be retreived.
-    location_names: str or ``None``
+    by_state : bool
+        If False (default), divisional data will be retrieved. If True, then
+        regional data will be retrieved.
+    location_names : str or ``None``
         This parameter defines what (if any) type of names will be added to the
         values. If set to 'abbr' (default), then abbreviated location names
         will be used. If 'full', then full location names will be used. If set
@@ -56,8 +56,8 @@ def get_data(index, by_state=False, location_names='abbr', as_dataframe=False, u
         will be returned. The pandas dataframe is used internally, so setting
         this to ``True`` is faster as it skips a somewhat expensive
         serialization step.
-    use_file: ``None``, file-like object or str
-        If ``None`` (default), then data will be automatically retreived from
+    use_file : ``None``, file-like object or str
+        If ``None`` (default), then data will be automatically retrieved from
         the web. If a file-like object or a file path string, then the file will
         be used to read data from. This is intended to be used for reading in
         previously-downloaded versions of the dataset.
