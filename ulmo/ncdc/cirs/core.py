@@ -116,10 +116,11 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
 
     for element in elements:
         element_file = _get_element_file(use_file, element, elements, by_state)
+
         element_df = _get_element_data(element, by_state, element_file, location_names)
 
-        keys = ['year', 'month']
-        for append_key in ['division', 'location', 'location_code', 'state', 'state_code']:
+        keys = ['location_code', 'year', 'month']
+        for append_key in ['division', 'state', 'state_code']:
             if append_key in element_df.columns:
                 keys.append(append_key)
         element_df.set_index(keys, inplace=True)
@@ -130,6 +131,7 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
             df = df.join(element_df, how='outer')
 
     df = df.reset_index()
+    df = _resolve_location_names(df, location_names, by_state)
 
     if as_dataframe:
         return df
@@ -204,7 +206,6 @@ def _parse_values(file_handle, by_state, location_names, element):
     columns = id_columns + month_columns
 
     na_values = [NO_DATA_VALUES.get(element)]
-
     parsed = util.parse_fwf(file_handle, columns, na_values=na_values)
 
     month_columns = [id_column[0] for id_column in id_columns]
@@ -213,30 +214,34 @@ def _parse_values(file_handle, by_state, location_names, element):
 
     melted.month = melted.month.astype(int)
 
-    if location_names is None:
-        data = melted
-    elif location_names not in ('abbr', 'full'):
-        raise ValueError("location_names should be set to either None, 'abbr' or 'full'")
-    else:
-        locations = _states_regions_dataframe()[location_names]
-        with_locations = melted.join(locations, on='location_code')
+    # throw away NaNs
+    melted = melted[melted['value'].notnull()]
 
-        if by_state:
-            data = with_locations.rename(columns={
-                location_names: 'location',
-            })
-        else:
-            data = with_locations.rename(columns={
-                location_names: 'state',
-                'location_code': 'state_code',
-            })
-
-    data = data[data['value'].notnull()]
-    data = data.rename(columns={
+    data = melted.rename(columns={
         'value': element,
     })
 
     return data
+
+
+def _resolve_location_names(df, location_names, by_state):
+    if location_names is None:
+        return df
+    elif location_names not in ('abbr', 'full'):
+        raise ValueError("location_names should be set to either None, 'abbr' or 'full'")
+    else:
+        locations = _states_regions_dataframe()[location_names]
+        with_locations = df.join(locations, on='location_code')
+
+        if by_state:
+            return with_locations.rename(columns={
+                location_names: 'location',
+            })
+        else:
+            return with_locations.rename(columns={
+                location_names: 'state',
+                'location_code': 'state_code',
+            })
 
 
 def _states_regions_dataframe():
