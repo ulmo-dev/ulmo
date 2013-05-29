@@ -99,7 +99,7 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
             'hdd',
             'pcp',
             'pdsi',
-            'pdhi',
+            'phdi',
             'pmdi',
             'sp01',
             'sp02',
