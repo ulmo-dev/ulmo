@@ -215,6 +215,8 @@ def _parse_values(file_handle, by_state, location_names, element):
                 location_names: 'state',
                 'location_code': 'state_code',
             })
+
+    data = data[data['value'].notnull()]
     data = data.rename(columns={
         'value': element,
     })

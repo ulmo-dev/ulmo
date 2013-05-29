@@ -1,5 +1,7 @@
 import copy
 
+import numpy as np
+
 import ulmo
 import test_util
 
@@ -154,6 +156,7 @@ def _run_test_sets(test_sets):
         use_file = _test_use_file(element, by_state)
         data = ulmo.ncdc.cirs.get_data(
             element, use_file=use_file, as_dataframe=True, **test_args)
+        assert np.all(data[element].notnull())
         for test_value in test_values:
             _assert_inclusion(test_value, data)
 
