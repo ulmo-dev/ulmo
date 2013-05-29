@@ -36,7 +36,7 @@ test_sets = [
 
 def test_get_data_by_county():
     for test_set in test_sets:
-        with test_util.mocked_requests(test_set['filename']):
+        with test_util.mocked_urls(test_set['filename']):
             data = ulmo.twc.kbdi.get_data(county=test_set['fips'], start=test_set['start'],
                 end=test_set['end'])
         assert len(data) == 1
@@ -46,7 +46,7 @@ def test_get_data_by_county():
 def test_get_data():
 
     for test_set in test_sets:
-        with test_util.mocked_requests(test_set['filename']):
+        with test_util.mocked_urls(test_set['filename']):
             data = ulmo.twc.kbdi.get_data(start=test_set['start'], end=test_set['end'])
 
         values = data.get(test_set['fips'], {})
@@ -58,7 +58,7 @@ def test_get_data():
 
 
 def test_get_data_as_dataframe():
-    with test_util.mocked_requests('twc/kbdi/summ20130409.txt'):
+    with test_util.mocked_urls('twc/kbdi/summ20130409.txt'):
         data = ulmo.twc.kbdi.get_data(start='2013-04-09', end='2013-04-10',
                 as_dataframe=True)
 

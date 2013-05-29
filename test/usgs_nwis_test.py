@@ -10,13 +10,13 @@ TEST_FILE_PATH = '/tmp/ulmo_test.h5'
 
 def test_get_sites_by_state_code():
     mocked_urls = {
-        'http://waterservices.usgs.gov/nwis/dv/?stateCd=RI&format=waterml':
+        'http://waterservices.usgs.gov/nwis/dv/':
             'usgs/nwis/RI_daily.xml',
-        'http://waterservices.usgs.gov/nwis/iv/?stateCd=RI&format=waterml':
+        'http://waterservices.usgs.gov/nwis/iv/':
             'usgs/nwis/RI_instantaneous.xml',
     }
 
-    with test_util.mocked_requests(mocked_urls):
+    with test_util.mocked_urls(mocked_urls):
         sites = ulmo.usgs.nwis.get_sites(state_code='RI')
     assert len(sites) == 64
 
@@ -24,7 +24,7 @@ def test_get_sites_by_state_code():
 def test_get_sites_single_site():
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
-    with test_util.mocked_requests(site_data_file):
+    with test_util.mocked_urls(site_data_file):
         sites = ulmo.usgs.nwis.get_sites(sites=site_code)
     assert len(sites) == 1
 
@@ -32,7 +32,7 @@ def test_get_sites_single_site():
 def test_get_site_data_single_site():
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
-    with test_util.mocked_requests(site_data_file):
+    with test_util.mocked_urls(site_data_file):
         site_data = ulmo.usgs.nwis.get_site_data(site_code)
     assert len(site_data) == 16
 
@@ -40,7 +40,7 @@ def test_get_site_data_single_site():
 def test_get_site_data_bad_service_raises_error():
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
-    with test_util.mocked_requests(site_data_file):
+    with test_util.mocked_urls(site_data_file):
         with pytest.raises(ValueError):
             ulmo.usgs.nwis.get_site_data(site_code,
                     service="bad_service")
@@ -49,7 +49,7 @@ def test_get_site_data_bad_service_raises_error():
 def test_get_site_data_single_site_with_start_and_end():
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_08068500_instantaneous_2011-11-05_2011-11-18.xml'
-    with test_util.mocked_requests(site_data_file):
+    with test_util.mocked_urls(site_data_file):
         site_data = ulmo.usgs.nwis.get_site_data(site_code, start='2011-11-05',
                 end='2011-11-18', service='instantaneous')
     assert len(site_data) == 7
@@ -59,7 +59,7 @@ def test_get_site_data_single_site_with_start_and_end():
 def test_get_site_data_single_site_with_period():
     site_data_file = 'usgs/nwis/site_01117800_instantaneous_P45D.xml'
     site_code = '01117800'
-    with test_util.mocked_requests(site_data_file):
+    with test_util.mocked_urls(site_data_file):
         site_data = ulmo.usgs.nwis.get_site_data(site_code, period='P45D',
                 service='daily')
     assert len(site_data) >= 1
@@ -69,6 +69,6 @@ def test_get_site_data_single_site_with_period():
 def test_get_sites_multiple_sites():
     site_codes = ['08068500', '08041500']
     sites_data_file = 'usgs/nwis/sites_%s_daily.xml' % '_'.join(site_codes)
-    with test_util.mocked_requests(sites_data_file):
+    with test_util.mocked_urls(sites_data_file):
         sites = ulmo.usgs.nwis.get_sites(sites=site_codes)
     assert len(sites) == 2

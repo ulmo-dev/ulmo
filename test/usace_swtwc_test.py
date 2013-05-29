@@ -5,7 +5,7 @@ import test_util
 
 def test_get_stations():
     stations_file = 'usace/swtwc/shefids.html'
-    with test_util.mocked_requests(stations_file):
+    with test_util.mocked_urls(stations_file):
         stations = ulmo.usace.swtwc.get_stations()
 
     test_stations = [
@@ -49,7 +49,7 @@ def test_get_station_data():
         url_date = date.replace('-', '')
         filename = '%s.%s.html' % (code, url_date)
         data_file = 'usace/swtwc/' + filename
-        with test_util.mocked_requests(data_file):
+        with test_util.mocked_urls(data_file):
             station_data = ulmo.usace.swtwc.get_station_data(code, date)
 
         for key, value in test_data.iteritems():
@@ -64,7 +64,7 @@ def test_get_station_data_current():
     # just make sure it parses correctl: current will have '---' values where
     # previous days do not
     data_file = 'usace/swtwc/MYST2.current.html'
-    with test_util.mocked_requests(data_file):
+    with test_util.mocked_urls(data_file):
         station_data = ulmo.usace.swtwc.get_station_data('MYST2')
     assert len(station_data.get('values')) > 0
 

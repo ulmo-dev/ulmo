@@ -65,8 +65,9 @@ test_sets = [
 
 def test_get_data_by_state():
     for test_set in test_sets:
-        with test_util.mocked_requests(test_set['filename']):
-            data = ulmo.cpc.drought.get_data(state=test_set['state'], start=test_set['start'],
+        with test_util.mocked_urls(test_set['filename']):
+            data = ulmo.cpc.drought.get_data(
+                state=test_set['state'], start=test_set['start'],
                 end=test_set['end'])
         assert len(data) == 1
         assert test_set['state'] in data
@@ -74,7 +75,7 @@ def test_get_data_by_state():
 
 def test_get_data():
     for test_set in test_sets:
-        with test_util.mocked_requests(test_set['filename']):
+        with test_util.mocked_urls(test_set['filename']):
             data = ulmo.cpc.drought.get_data(start=test_set['start'], end=test_set['end'])
 
         values = data.get(test_set['state'], {}).get(test_set['climate_division'])
@@ -85,7 +86,7 @@ def test_get_data():
 
 
 def test_get_data_as_dataframe():
-    with test_util.mocked_requests('cpc/drought/palmer10'):
+    with test_util.mocked_urls('cpc/drought/palmer10'):
         data = ulmo.cpc.drought.get_data(
             start='2010-5-20', end='2010-6-13', as_dataframe=True)
 

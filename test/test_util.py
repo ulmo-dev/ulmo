@@ -1,46 +1,15 @@
 import contextlib
 import os
 import os.path
+import re
 
 from httpretty import HTTPretty
 import mock
-import requests
 
 
 def get_test_file_path(file_path):
     """translates a file path to be relative to the test files directory"""
     return os.path.join(os.path.dirname(__file__), 'files', file_path)
-
-
-@contextlib.contextmanager
-def mocked_requests(mocked_urls):
-    """mocks the requests library to return a given file's content"""
-    # if environment variable is set, then don't mock the tests just grab files
-    # over the network. Example:
-    #    env ULMO_DONT_MOCK_TESTS=1 py.test
-    if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
-        yield
-
-    else:
-        if isinstance(mocked_urls, basestring):
-            file_paths = [mocked_urls]
-        else:
-            file_paths = mocked_urls.values()
-
-        with _open_multiple(file_paths) as open_files:
-            if isinstance(mocked_urls, basestring):
-                url_files = open_files.values()[0]
-            else:
-                url_files = dict([
-                    (url, open_files.get(file_path))
-                    for url, file_path in mocked_urls.iteritems()
-                ])
-            side_effect = _mock_request_side_effect(url_files)
-            with contextlib.nested(
-                    mock.patch('requests.get', side_effect=side_effect),
-                    mock.patch('requests.head', side_effect=side_effect),
-                    ):
-                yield
 
 
 @contextlib.contextmanager
@@ -70,7 +39,7 @@ def mocked_suds_client(waterml_version, mocked_service_calls):
 
 
 @contextlib.contextmanager
-def mocked_url(url, response_file_path, methods=None):
+def mocked_urls(url_files, methods=None):
     """mocks the underlying python sockets library to return a given file's
     content
     """
@@ -81,20 +50,29 @@ def mocked_url(url, response_file_path, methods=None):
         yield
 
     else:
-        with open(get_test_file_path(response_file_path)) as f:
-            response = f.read()
+        if isinstance(url_files, basestring):
+            url_files = {'.*': url_files}
 
         HTTPretty.enable()
+        for url_match, url_file in url_files.iteritems():
+            if not isinstance(url_match, basestring) and len(url_match) == 2:
+                url_match, methods = url_match
 
-        if methods is None:
-            methods = ['GET', 'POST']
+            if not os.path.isabs(url_file):
+                url_file = get_test_file_path(url_file)
 
-        for method in methods:
-            request_class = getattr(HTTPretty, method)
-            HTTPretty.register_uri(request_class, url, body=response)
+            callback = _build_request_callback(url_file)
+            url_re = re.compile(url_match)
 
+            if methods is None:
+                methods = ['GET', 'POST', 'HEAD']
+
+            for method in methods:
+                request_class = getattr(HTTPretty, method)
+                HTTPretty.register_uri(request_class, url_re, body=callback)
         yield
         HTTPretty.disable()
+        HTTPretty.reset()
 
 
 def use_test_files():
@@ -102,23 +80,15 @@ def use_test_files():
     return os.environ.get('ULMO_DONT_MOCK_TESTS', True)
 
 
-def _mock_request_side_effect(url_files):
-    def _side_effect(url, *args, **kwargs):
-        mock_response = requests.Response()
-        mock_response.request = requests.Request('GET', url, *args, **kwargs).prepare()
-        mock_response.status_code = 200
-        mock_response.url = url
-        mock_response.mocked = True
-        if isinstance(url_files, dict):
-            mock_response.raw = url_files.get(mock_response.request.url)
-        elif hasattr(url_files, 'read'):
-            mock_response.raw = url_files
-
-        # seek to beginning in case this handle has been used before
-        mock_response.raw.seek(0)
-
-        return mock_response
-    return _side_effect
+def _build_request_callback(response_file):
+    def request_callback(method, uri, headers):
+        if method == 'HEAD':
+            response_text = ''
+        else:
+            with open(response_file, 'rb') as f:
+                response_text = f.read()
+        return [200, headers, response_text]
+    return request_callback
 
 
 @contextlib.contextmanager

@@ -49,7 +49,7 @@ def test_get_stations():
             'state': '',
         }),
     ]
-    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations()
 
     assert 30000 < len(stations) < 35000
@@ -59,7 +59,7 @@ def test_get_stations():
 
 
 def test_get_stations_with_country():
-    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations(country='AH')
         assert 250 <= len(stations) <= 300
         assert '999032-99999' in stations
@@ -72,7 +72,7 @@ def test_get_stations_with_country():
 
 
 def test_get_stations_with_fips():
-    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations(fips='SW')
         assert 400 <= len(stations) <= 500
         assert '026850-99999' in stations
@@ -85,7 +85,7 @@ def test_get_stations_with_fips():
 
 
 def test_get_stations_with_state():
-    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations(state='TX')
         assert 500 <= len(stations) <= 550
         assert '999999-93987' in stations
@@ -98,7 +98,7 @@ def test_get_stations_with_state():
 
 
 def test_get_stations_with_start():
-    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations(start='2011-3-2')
     assert 16500 <= len(stations) <= 17000
     assert '062390-99999' in stations
@@ -106,7 +106,7 @@ def test_get_stations_with_start():
 
 
 def test_get_stations_with_end():
-    with test_util.mocked_requests('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations(end='1960-11-5')
     assert 12000 <= len(stations) <= 13000
     assert '534780-99999' in stations
@@ -210,13 +210,13 @@ def test_get_station_data():
         start_year = int(start.split('-')[0])
         end_year = int(end.split('-')[0])
 
-        mocked_urls = dict([
+        url_files = dict([
             ('http://www1.ncdc.noaa.gov/pub/data/gsod/%s/gsod_%s.tar' % (year, year),
                 'ncdc/gsod/gsod_%s.tar' % year)
             for year in range(start_year, end_year + 1)
         ])
 
-        with test_util.mocked_requests(mocked_urls):
+        with test_util.mocked_urls(url_files):
             station_data = ulmo.ncdc.gsod.get_data(**kwargs)
 
         for test_value in test_values:

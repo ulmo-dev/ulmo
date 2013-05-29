@@ -296,7 +296,7 @@ def test_site_data_update_site_list_with_multiple_updates(test_file_path):
     site_code = '01117800'
     site_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_daily.xml' % site_code)
-    with test_util.mocked_requests(site_data_file):
+    with test_util.mocked_urls(site_data_file):
         with freezegun.freeze_time(first_timestamp):
             nwis.hdf5.update_site_data(site_code, path=test_file_path,
                     autorepack=False)
@@ -308,7 +308,7 @@ def test_site_data_update_site_list_with_multiple_updates(test_file_path):
 
     update_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_daily_update.xml' % site_code)
-    with test_util.mocked_requests(update_data_file):
+    with test_util.mocked_urls(update_data_file):
         with freezegun.freeze_time(second_timestamp):
             nwis.hdf5.update_site_data(site_code, path=test_file_path,
                     autorepack=False)
@@ -360,7 +360,7 @@ def test_last_refresh_gets_updated(test_file_path):
     site_data_file = test_util.get_test_file_path(
         'usgs/nwis/site_%s_daily.xml' % site_code)
 
-    with test_util.mocked_requests(site_data_file):
+    with test_util.mocked_urls(site_data_file):
         with freezegun.freeze_time(first_timestamp):
             nwis.hdf5.update_site_data(site_code, path=test_file_path,
                     autorepack=False)
