@@ -105,6 +105,18 @@ test_sets = [
                 'tmp': 14.00,
             },
         ]
+    }, {
+        'element': 'sp01',
+        'by_state': True,
+        'values': [
+            {
+                'location': 'AL',
+                'location_code': 1,
+                'year': 1895,
+                'month': 1,
+                'sp01': 0.84,
+            },
+        ]
     },
 ]
 

@@ -167,12 +167,20 @@ def _get_url(element, by_state):
 
 def _parse_values(file_handle, by_state, location_names, element):
     if by_state:
-        id_columns = [
-            ('location_code', 0, 3, None),
-            #('division', 3, 3, None), # ignored in state files
-            #('element', 4, 6, None),  # element is redundant
-            ('year', 6, 10, None),
-        ]
+        if 'sp' in element:
+            id_columns = [
+                ('location_code', 0, 3, None),
+                #('division', 3, 3, None), # ignored in state files
+                #('element', 4, 6, None),  # element is redundant
+                ('year', 7, 11, None),
+            ]
+        else:
+            id_columns = [
+                ('location_code', 0, 3, None),
+                #('division', 3, 3, None), # ignored in state files
+                #('element', 4, 6, None),  # element is redundant
+                ('year', 6, 10, None),
+            ]
     else:
         id_columns = [
             ('location_code', 0, 2, None),
@@ -181,8 +189,10 @@ def _parse_values(file_handle, by_state, location_names, element):
             ('year', 6, 10, None),
         ]
 
+    year_col_end = id_columns[-1][2]
+
     month_columns = [
-        (str(n), 3 + (7 * n), 10 + (7 * n), None)
+        (str(n), year_col_end - 6 + (7 * n), year_col_end + (7 * n), None)
         for n in range(1, 13)
     ]
 
