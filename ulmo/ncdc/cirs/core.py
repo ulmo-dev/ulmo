@@ -118,14 +118,18 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
         element_file = _get_element_file(use_file, element, elements, by_state)
         element_df = _get_element_data(element, by_state, element_file, location_names)
 
+        keys = ['year', 'month']
+        for append_key in ['division', 'location', 'location_code', 'state', 'state_code']:
+            if append_key in element_df.columns:
+                keys.append(append_key)
+        element_df.set_index(keys, inplace=True)
+
         if df is None:
             df = element_df
         else:
-            keys = ['year', 'month']
-            for append_key in ['location', 'location_code', 'state', 'state_code']:
-                if append_key in df.columns:
-                    keys.append(append_key)
-            df = pandas.merge(df, element_df, left_on=keys, right_on=keys)
+            df = df.join(element_df, how='outer')
+
+    df = df.reset_index()
 
     if as_dataframe:
         return df
@@ -140,6 +144,7 @@ def _get_element_data(element, by_state, use_file, location_names):
 
     with util.open_file_for_url(url, path, use_file=use_file) as f:
         element_df = _parse_values(f, by_state, location_names, element)
+
     return element_df
 
 
