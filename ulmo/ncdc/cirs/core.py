@@ -18,8 +18,8 @@ from ulmo import util
 CIRS_DIR = util.get_ulmo_dir('ncdc/cirs')
 
 NO_DATA_VALUES = {
-    'ccd': '-9999.,
-    'hdd': '-9999.,
+    'ccd': '-9999.',
+    'hdd': '-9999.',
     'pcp': '-9.99',
     'pdsi': '-99.99',
     'phdi': '-99.99',
