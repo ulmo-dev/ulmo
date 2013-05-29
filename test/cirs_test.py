@@ -132,13 +132,13 @@ test_sets = [
                 'pdsi': 0.44,
             },
             {
-                'location': np.nan,
+                'location': None,
                 'location_code': 113,
                 'year': 1895,
                 'month': 1,
-                'sp01': np.nan,
+                'sp01': None,
                 'tmp': 17.20,
-                'pdsi': np.nan,
+                'pdsi': None,
             },
         ]
     },
