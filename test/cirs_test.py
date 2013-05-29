@@ -125,6 +125,25 @@ def test_doesnt_have_locations_if_location_names_is_none():
     assert 'location' not in data.columns
 
 
+def test_multiple_elements():
+    elements = ['pdsi', 'tmp']
+    use_file = _test_use_file(elements, by_state=True)
+    data = ulmo.ncdc.cirs.get_data(
+        elements, by_state=True, use_file=use_file, as_dataframe=True)
+
+    for element in elements:
+        assert element in data.columns
+        _test_sets = [
+            s for s in test_sets
+            if s['by_state'] and s['element'] == element
+            and s.get('location_names', 'abbr') == 'abbr'
+        ]
+        for _test_set in _test_sets:
+            test_values = _test_set['values']
+            for test_value in test_values:
+                _assert_inclusion(test_value, data)
+
+
 def _run_test_sets(test_sets):
     for test_set in test_sets:
         test_args = copy.copy(test_set)
