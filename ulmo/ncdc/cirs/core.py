@@ -311,7 +311,7 @@ def _states_regions_dataframe():
         217: ("NWS: Mid-Atlantic Basin", "nws:mab"),
         218: ("NWS: New England Basin", "nws:neb"),
         220: ("NWS: Mississippi River Basin & Tributaties (N. of Memphis, TN",
-              "nws:mrb&t"),
+              "nws:mrbt"),
 
         # below( codes are weighted by area)
         250: ("Area: Spring Wheat Belt", "area:swb"),
