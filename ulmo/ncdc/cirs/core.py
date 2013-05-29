@@ -17,6 +17,25 @@ from ulmo import util
 
 CIRS_DIR = util.get_ulmo_dir('ncdc/cirs')
 
+NO_DATA_VALUES = {
+    'ccd': '-9999.,
+    'hdd': '-9999.,
+    'pcp': '-9.99',
+    'pdsi': '-99.99',
+    'phdi': '-99.99',
+    'pmdi': '-99.99',
+    'sp01': '-99.99',
+    'sp02': '-99.99',
+    'sp03': '-99.99',
+    'sp06': '-99.99',
+    'sp09': '-99.99',
+    'sp12': '-99.99',
+    'sp24': '-99.99',
+    'tmp': '-99.90',
+    'zndx': '-99.99',
+
+}
+
 
 def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=False, use_file=None):
     """Retrieves data.
@@ -31,7 +50,7 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
           * 'hdd': Heating Degree Days
           * 'pcp': Precipitation
           * 'pdsi': Palmer Drought Severity Index
-          * 'pdhi': Palmer Hydrological Drought Index
+          * 'phdi': Palmer Hydrological Drought Index
           * 'pmdi': Modified Palmer Drought Severity Index
           * 'sp01': 1-month Standardized Precipitation Index
           * 'sp02': 2-month Standardized Precipitation Index
@@ -166,7 +185,9 @@ def _parse_values(file_handle, by_state, location_names, element):
 
     columns = id_columns + month_columns
 
-    parsed = util.parse_fwf(file_handle, columns, na_values=["-99.99"])
+    na_values = [NO_DATA_VALUES.get(element)]
+
+    parsed = util.parse_fwf(file_handle, columns, na_values=na_values)
 
     month_columns = [id_column[0] for id_column in id_columns]
     melted = pandas.melt(parsed, id_vars=month_columns)\
