@@ -71,8 +71,8 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
         for n in xrange(1, 32)
     ]))
 
-    station_file_path = _get_ghcn_file(station_id + '.dly',
-            check_modified=update)
+    station_file_path = _get_ghcn_file(
+        station_id + '.dly', check_modified=update)
     station_data = util.parse_fwf(station_file_path, columns, na_values=[-9999])
 
     dataframes = {}
@@ -199,7 +199,7 @@ def get_stations(country=None, state=None, elements=None, start_year=None,
                 mask += inventory['element'] == element
             inventory = inventory[mask]
         if not start_year is None:
-            inventory = inventory[start_year <= inventory['last_year']]
+            inventory = inventory[inventory['last_year'] >= start_year]
         if not end_year is None:
             inventory = inventory[inventory['first_year'] <= end_year]
 
