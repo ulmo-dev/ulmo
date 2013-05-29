@@ -18,7 +18,7 @@ from ulmo import util
 CIRS_DIR = util.get_ulmo_dir('ncdc/cirs')
 
 NO_DATA_VALUES = {
-    'ccd': '-9999.',
+    'cdd': '-9999.',
     'hdd': '-9999.',
     'pcp': '-9.99',
     'pdsi': '-99.99',
@@ -46,7 +46,7 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
         The element(s) for which to get data for. If ``None`` (default), then
         all elements are used. An individual element is a string, but a list or
         tuple of them can be used to specify a set of elements.  Elements are:
-          * 'ccd': Cooling Degree Days
+          * 'cdd': Cooling Degree Days
           * 'hdd': Heating Degree Days
           * 'pcp': Precipitation
           * 'pdsi': Palmer Drought Severity Index
@@ -95,7 +95,7 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
         elements = [elements]
     elif elements is None:
         elements = [
-            'ccd',
+            'cdd',
             'hdd',
             'pcp',
             'pdsi',
