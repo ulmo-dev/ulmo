@@ -18,13 +18,15 @@ from ulmo import util
 CIRS_DIR = util.get_ulmo_dir('ncdc/cirs')
 
 
-def get_data(index, by_state=False, location_names='abbr', as_dataframe=False, use_file=None):
+def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=False, use_file=None):
     """Retrieves data.
 
     Parameters
     ----------
-    index : str
-        The element for which to get data for. Options are:
+    elements : ``None`, str or list
+        The element(s) for which to get data for. If ``None`` (default), then
+        all elements are used. An individual element is a string, but a list or
+        tuple of them can be used to specify a set of elements.  Elements are:
           * 'ccd': Cooling Degree Days
           * 'hdd': Heating Degree Days
           * 'pcp': Precipitation
@@ -69,25 +71,79 @@ def get_data(index, by_state=False, location_names='abbr', as_dataframe=False, u
         A list of value dicts or a pandas.DataFrame containing data. See
         the ``as_dataframe`` parameter for more.
     """
-    url = _get_url(index, by_state)
+
+    if isinstance(elements, basestring):
+        elements = [elements]
+    elif elements is None:
+        elements = [
+            'ccd',
+            'hdd',
+            'pcp',
+            'pdsi',
+            'pdhi',
+            'pmdi',
+            'sp01',
+            'sp02',
+            'sp03',
+            'sp06',
+            'sp09',
+            'sp12',
+            'sp24',
+            'tmp',
+            'zndx',
+        ]
+
+    df = None
+
+    for element in elements:
+        element_file = _get_element_file(use_file, element, elements, by_state)
+        element_df = _get_element_data(element, by_state, element_file, location_names)
+
+        if df is None:
+            df = element_df
+        else:
+            keys = ['location_code', 'year', 'month']
+            df = pandas.merge(df, element_df, left_on=keys, right_on=keys)
+
+    if as_dataframe:
+        return df
+    else:
+        return df.T.to_dict().values()
+
+
+def _get_element_data(element, by_state, use_file, location_names):
+    url = _get_url(element, by_state)
     filename = url.rsplit('/', 1)[-1]
     path = os.path.join(CIRS_DIR, filename)
 
     with util.open_file_for_url(url, path, use_file=use_file) as f:
-        data = _parse_values(f, by_state, location_names)
-
-    if as_dataframe:
-        return data
-    else:
-        return data.T.to_dict().values()
+        element_df = _parse_values(f, by_state, location_names, element)
+    return element_df
 
 
-def _get_url(index, by_state):
-    return "ftp://ftp.ncdc.noaa.gov/pub/data/cirs/drd964x.%s%s.txt" % (
-        index, 'st' if by_state else '')
+def _get_element_file(use_file, element, elements, by_state):
+    if isinstance(use_file, basestring):
+        if os.path.basename(use_file) == '':
+            if len(elements) > 1:
+                assert ValueError(
+                    "'use_file' must be a path to a directory if using "
+                    "'use_file' with multiple elements")
+
+            return use_file + _get_filename(element, by_state)
+
+    return use_file
 
 
-def _parse_values(file_handle, by_state, location_names):
+def _get_filename(element, by_state):
+    return "drd964x.%s%s.txt" % (element, 'st' if by_state else '')
+
+
+def _get_url(element, by_state):
+    filename = _get_filename(element, by_state)
+    return "ftp://ftp.ncdc.noaa.gov/pub/data/cirs/" + filename
+
+
+def _parse_values(file_handle, by_state, location_names, element):
     if by_state:
         id_columns = [
             ('location_code', 0, 3, None),
@@ -133,8 +189,11 @@ def _parse_values(file_handle, by_state, location_names):
         else:
             data = with_locations.rename(columns={
                 location_names: 'state',
-                'location_code': 'state_code'
+                'location_code': 'state_code',
             })
+    data = data.rename(columns={
+        'value': element,
+    })
 
     return data
 
