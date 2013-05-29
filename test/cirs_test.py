@@ -1,6 +1,7 @@
 import copy
 
 import numpy as np
+import pandas
 
 import ulmo
 import test_util
@@ -117,6 +118,29 @@ test_sets = [
                 'sp01': 0.84,
             },
         ]
+    }, {
+        'element': ['sp01', 'tmp', 'pdsi'],
+        'by_state': True,
+        'values': [
+            {
+                'location': 'AL',
+                'location_code': 1,
+                'year': 1895,
+                'month': 1,
+                'sp01': 0.84,
+                'tmp': 43.70,
+                'pdsi': 0.44,
+            },
+            {
+                'location': np.nan,
+                'location_code': 113,
+                'year': 1895,
+                'month': 1,
+                'sp01': np.nan,
+                'tmp': 17.20,
+                'pdsi': np.nan,
+            },
+        ]
     },
 ]
 
@@ -139,25 +163,6 @@ def test_doesnt_have_locations_if_location_names_is_none():
     assert 'location' not in data.columns
 
 
-def test_multiple_elements():
-    elements = ['pdsi', 'tmp']
-    use_file = _test_use_file(elements, by_state=True)
-    data = ulmo.ncdc.cirs.get_data(
-        elements, by_state=True, use_file=use_file, as_dataframe=True)
-
-    for element in elements:
-        assert element in data.columns
-        _test_sets = [
-            s for s in test_sets
-            if s['by_state'] and s['element'] == element
-            and s.get('location_names', 'abbr') == 'abbr'
-        ]
-        for _test_set in _test_sets:
-            test_values = _test_set['values']
-            for test_value in test_values:
-                _assert_inclusion(test_value, data)
-
-
 def _run_test_sets(test_sets):
     for test_set in test_sets:
         test_args = copy.copy(test_set)
@@ -168,7 +173,11 @@ def _run_test_sets(test_sets):
         use_file = _test_use_file(element, by_state)
         data = ulmo.ncdc.cirs.get_data(
             element, use_file=use_file, as_dataframe=True, **test_args)
-        assert np.all(data[element].notnull())
+        if isinstance(element, basestring) or len(element) == 1:
+            not_nulls = data[element].notnull()
+        else:
+            not_nulls = pandas.notnull(data[element]).any(axis=1)
+        assert np.all(not_nulls)
         for test_value in test_values:
             _assert_inclusion(test_value, data)
 
@@ -177,7 +186,10 @@ def _assert_inclusion(value_dict, dataframe):
     "tests that a value_dict is in a dataframe"
     sub_df = dataframe.copy()
     for k, v in value_dict.iteritems():
-        sub_df = sub_df[sub_df[k] == v]
+        if pandas.isnull(v):
+            sub_df = sub_df[pandas.isnull(sub_df[k])]
+        else:
+            sub_df = sub_df[sub_df[k] == v]
 
     assert len(sub_df) == 1
 
