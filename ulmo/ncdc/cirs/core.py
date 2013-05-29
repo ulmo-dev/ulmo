@@ -121,7 +121,10 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
         if df is None:
             df = element_df
         else:
-            keys = ['location_code', 'year', 'month']
+            keys = ['year', 'month']
+            for append_key in ['location', 'location_code', 'state', 'state_code']:
+                if append_key in df.columns:
+                    keys.append(append_key)
             df = pandas.merge(df, element_df, left_on=keys, right_on=keys)
 
     if as_dataframe:
