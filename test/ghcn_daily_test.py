@@ -6,7 +6,8 @@ from ulmo.ncdc import ghcn_daily
 import test_util
 
 
-test_stations = [{
+test_stations = [
+    {
         'country': 'US',
         'elevation': 286.5,
         'gsn_flag': 'GSN',
@@ -33,7 +34,7 @@ test_stations = [{
         'state': 'AL',
         'wm_oid': None
     },
-    ]
+]
 
 test_data = {
     'USW00003870': {
@@ -79,8 +80,8 @@ def test_get_data_as_dataframes():
     for station_id, sample_data in test_data.iteritems():
         elements = sample_data.keys()
         with test_util.mocked_requests('ncdc/ghcnd/%s.dly' % station_id):
-            station_data = ghcn_daily.get_data(station_id, elements=elements,
-                    as_dataframe=True)
+            station_data = ghcn_daily.get_data(
+                station_id, elements=elements, as_dataframe=True)
 
             for element_id, element_test_data in sample_data.iteritems():
                 element_df = station_data[element_id]

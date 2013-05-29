@@ -115,8 +115,11 @@ def test_get_stations_with_end():
 
 def test_get_station_data():
     test_data = [
-        (dict(station_codes='999999-14896', start='1952-01-01',
-            end='1953-02-02'), [{
+        (dict(
+            station_codes='999999-14896',
+            start='1952-01-01',
+            end='1953-02-02'),
+            [{
                 'FRSHTT': '010000',
                 'USAF': '999999',
                 'WBAN': '14896',
@@ -196,7 +199,7 @@ def test_get_station_data():
                 'visibility_count': 20,
             },
             ]
-        )
+         )
     ]
 
     for kwargs, test_values in test_data:
