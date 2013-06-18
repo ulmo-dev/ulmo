@@ -30,12 +30,12 @@ def get_data(county=None, start=None, end=None, as_dataframe=False):
     county : ``None`` or str
         If specified, results will be limited to the county corresponding to the
         given 5-character Texas county fips code i.e. 48???.
-    start : ``None`` or date (see :ref:`dates-and-times`)
-        Results will be limited to those after the given date. Default is the
-        start of the current calendar year.
     end : ``None`` or date (see :ref:`dates-and-times`)
         If specified, results will be limited to data before this date. Default is
         the current date.
+    start : ``None`` or date (see :ref:`dates-and-times`)
+        Results will be limited to those after the given date. Default is the
+        start of the end year.
     as_dataframe: bool
         If ``False`` (default), a dict with a nested set of dicts will be
         returned with data indexed by 5-character Texas county fips code. If ``True``
