@@ -16,7 +16,7 @@ MOCKED_URLS = dict([
 test_sets = [
     {
         'start': '2013-04-09',
-        'end': '2013-04-10',
+        'end': '2013-04-09',
         'fips': '48507',
         'values': [{
             'county': 'ZAVALA',
@@ -28,7 +28,7 @@ test_sets = [
     },
     {
         'start': '2013-04-09',
-        'end': '2013-04-10',
+        'end': '2013-04-09',
         'fips': '48007',
         'values': [{
             'county':  'ARANSAS',
@@ -77,7 +77,7 @@ def test_get_data_as_dataframe():
         with test_util.mocked_urls(MOCKED_URLS):
             data = ulmo.twc.kbdi.get_data(
                 start='2013-04-09',
-                end='2013-04-10',
+                end='2013-04-09',
                 as_dataframe=True,
                 data_dir=data_dir,
             )
@@ -90,7 +90,7 @@ def test_data_dir_used():
         with test_util.mocked_urls(MOCKED_URLS):
             ulmo.twc.kbdi.get_data(
                 start='2013-04-09',
-                end='2013-04-12',
+                end='2013-04-11',
                 as_dataframe=True,
                 data_dir=data_dir,
             )

@@ -21,18 +21,17 @@ from ulmo import util
 def get_data(county=None, start=None, end=None, as_dataframe=False, data_dir=None):
     """Retreives data.
 
-
     Parameters
     ----------
     county : ``None`` or str
         If specified, results will be limited to the county corresponding to the
         given 5-character Texas county fips code i.e. 48???.
     end : ``None`` or date (see :ref:`dates-and-times`)
-        If specified, results will be limited to data before this date. Default is
-        the current date.
+        Results will be limited to data on or before this date. Default is the
+        current date.
     start : ``None`` or date (see :ref:`dates-and-times`)
-        Results will be limited to those after the given date. Default is the
-        start of the end year.
+        Results will be limited to data on or after this date. Default is the
+        start of the calendar year for the end date.
     as_dataframe: bool
         If ``False`` (default), a dict with a nested set of dicts will be
         returned with data indexed by 5-character Texas county fips code. If ``True``
@@ -65,7 +64,7 @@ def get_data(county=None, start=None, end=None, as_dataframe=False, data_dir=Non
 
     data = None
     FIPS = _fips()
-    for date in _daterange(start_date, end_date):
+    for date in pandas.period_range(start_date, end_date, freq='D'):
         url = _get_data_url(date)
         with _open_data_file(url, data_dir) as data_file:
             day_data = _parse_data_file(data_file)
@@ -100,11 +99,6 @@ def _as_data_dict(dataframe):
         county_dict[county] = values
 
     return county_dict
-
-
-def _daterange(start_date, end_date):
-    for n in range(int((end_date - start_date).days)):
-        yield start_date + datetime.timedelta(n)
 
 
 def _fips():
