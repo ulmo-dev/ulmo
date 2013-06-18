@@ -2,6 +2,8 @@ import contextlib
 import os
 import os.path
 import re
+import shutil
+import tempfile
 
 from httpretty import HTTPretty
 import mock
@@ -73,6 +75,13 @@ def mocked_urls(url_files, methods=None):
         yield
         HTTPretty.disable()
         HTTPretty.reset()
+
+
+@contextlib.contextmanager
+def temp_dir():
+    temp_dir = tempfile.mkdtemp()
+    yield temp_dir
+    shutil.rmtree(temp_dir)
 
 
 def use_test_files():

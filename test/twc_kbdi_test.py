@@ -4,6 +4,11 @@ import ulmo
 
 import test_util
 
+DATA_DIR = os.path.abspath('files/twc/kbdi')
+MOCKED_URLS = dict([
+    ('http://twc.tamu.edu/weather_images/summ/' + os.path.basename(path), path)
+    for path in glob.glob(os.path.join(DATA_DIR, '*'))
+])
 
 test_sets = [
     {
@@ -67,3 +72,16 @@ def test_get_data_as_dataframe():
             as_dataframe=True)
 
         assert isinstance(data, pandas.DataFrame)
+
+
+def test_data_dir_used():
+    with test_util.temp_dir() as data_dir:
+        with test_util.mocked_urls(MOCKED_URLS):
+            ulmo.twc.kbdi.get_data(
+                start='2013-04-09',
+                end='2013-04-12',
+                as_dataframe=True,
+                data_dir=data_dir,
+            )
+        files_glob = glob.glob(os.path.join(data_dir, '*'))
+        assert len(files_glob) == 3

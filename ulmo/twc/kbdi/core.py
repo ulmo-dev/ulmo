@@ -17,11 +17,8 @@ import pandas
 
 from ulmo import util
 
-# directory where drought data will be stashed
-TWC_KBDI_DIR = os.path.join(util.get_ulmo_dir(), 'twc/kbdi')
 
-
-def get_data(county=None, start=None, end=None, as_dataframe=False):
+def get_data(county=None, start=None, end=None, as_dataframe=False, data_dir=None):
     """Retreives data.
 
 
@@ -42,6 +39,11 @@ def get_data(county=None, start=None, end=None, as_dataframe=False):
         then a pandas.DataFrame object will be returned.  The pandas dataframe
         is used internally, so setting this to ``True`` is a little bit faster
         as it skips a serialization step.
+    data_dir : ``None`` or directory path
+        Directory for holding downloaded data files. If no path is provided
+        (default), then a user-specific directory for holding application data
+        will be used (the directory will depend on the platform/operating
+        system).
 
 
     Returns
@@ -58,12 +60,14 @@ def get_data(county=None, start=None, end=None, as_dataframe=False):
         start_date = datetime.date(end_date.year, 1, 1)
     else:
         start_date = util.convert_date(start)
+    if data_dir is None:
+        data_dir = os.path.join(util.get_ulmo_dir(), 'twc/kbdi')
 
     data = None
     FIPS = _fips()
     for date in _daterange(start_date, end_date):
         url = _get_data_url(date)
-        with _open_data_file(url) as data_file:
+        with _open_data_file(url, data_dir) as data_file:
             day_data = _parse_data_file(data_file)
 
         day_data['date'] = pandas.Period(date, freq='D')
@@ -393,12 +397,12 @@ def _parse_data_file(data_file):
     return dataframe
 
 
-def _open_data_file(url):
+def _open_data_file(url, data_dir):
     """returns an open file handle for a data file; downloading if necessary or
     otherwise using a previously downloaded file
     """
     file_name = url.rsplit('/', 1)[-1]
-    file_path = os.path.join(TWC_KBDI_DIR, file_name)
+    file_path = os.path.join(data_dir, file_name)
     return util.open_file_for_url(url, file_path, check_modified=True)
 
 
