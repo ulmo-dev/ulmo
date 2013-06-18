@@ -394,7 +394,9 @@ def _parse_data_file(data_file):
 
 
 def _open_data_file(url):
-    """returns an open file handle for a data file; downloading if necessary or otherwise using a previously downloaded file"""
+    """returns an open file handle for a data file; downloading if necessary or
+    otherwise using a previously downloaded file
+    """
     file_name = url.rsplit('/', 1)[-1]
     file_path = os.path.join(TWC_KBDI_DIR, file_name)
     return util.open_file_for_url(url, file_path, check_modified=True)
