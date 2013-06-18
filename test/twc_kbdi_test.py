@@ -7,7 +7,7 @@ import ulmo
 
 import test_util
 
-DATA_DIR = os.path.abspath('files/twc/kbdi')
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'files/twc/kbdi')
 MOCKED_URLS = dict([
     ('http://twc.tamu.edu/weather_images/summ/' + os.path.basename(path), path)
     for path in glob.glob(os.path.join(DATA_DIR, '*'))
