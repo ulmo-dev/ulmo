@@ -290,6 +290,32 @@ def test_update_site_data_basic_data_parsing(test_file_path):
         assert test_value in site_values
 
 
+def test_site_data_filter_by_one_parameter_code(test_file_path):
+    site_code = '08068500'
+    parameter_code = '00065:00003'
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=site_data_file, autorepack=False)
+    all_site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
+    site_data = nwis.hdf5.get_site_data(site_code, parameter_code=parameter_code, path=test_file_path)
+    assert site_data == all_site_data[parameter_code]
+
+
+def test_site_data_filter_by_multiple_parameter_codes(test_file_path):
+    site_code = '08068500'
+    parameter_code = ['00060:00003', '00065:00003', 'nonexistent']
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=site_data_file, autorepack=False)
+    all_site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
+    site_data = nwis.hdf5.get_site_data(site_code, parameter_code=parameter_code, path=test_file_path)
+    for code in parameter_code:
+        if code in site_data.keys():
+            assert site_data[code] == all_site_data[code]
+
+
 def test_site_data_update_site_list_with_multiple_updates(test_file_path):
     first_timestamp = '2013-01-01T01:01:01'
     second_timestamp = '2013-02-02T02:02:02'
