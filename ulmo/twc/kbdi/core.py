@@ -79,15 +79,13 @@ def get_data(county=None, start=None, end=None, as_dataframe=False, data_dir=Non
         return _as_data_dict(df)
 
 
-def _as_data_dict(dataframe):
+def _as_data_dict(df):
+    df['date'] = df['date'].map(str)
     county_dict = {}
-    for county in dataframe['fips'].unique():
-        county_dataframe = dataframe[dataframe['fips'] == county]
-        county_data = county_dataframe.T.drop(['fips'])
-        values = [
-            _value_dict(date, value)
-            for date, value in county_data.iteritems()
-        ]
+    for county in df['fips'].unique():
+        county_df = df[df['fips'] == county]
+        county_data = county_df.T.drop(['fips'])
+        values = [v.to_dict() for k, v in county_data.iteritems()]
         county_dict[county] = values
 
     return county_dict
@@ -405,9 +403,3 @@ def _open_data_file(url, data_dir):
     file_name = url.rsplit('/', 1)[-1]
     file_path = os.path.join(data_dir, file_name)
     return util.open_file_for_url(url, file_path, check_modified=True)
-
-
-def _value_dict(date, value):
-    value_dict = value.to_dict()
-    value_dict['date'] = str(date)
-    return value_dict
