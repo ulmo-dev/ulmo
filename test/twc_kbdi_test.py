@@ -21,9 +21,9 @@ test_sets = [
         'values': [{
             'county': 'ZAVALA',
             'date': '2013-04-09',
-            'kbdi_avg': 572,
-            'kbdi_max': 708,
-            'kbdi_min': 423,
+            'avg': 572,
+            'max': 708,
+            'min': 423,
         }]
     },
     {
@@ -33,9 +33,9 @@ test_sets = [
         'values': [{
             'county':  'ARANSAS',
             'date': '2013-04-09',
-            'kbdi_avg': 497,
-            'kbdi_max': 561,
-            'kbdi_min': 439,
+            'avg': 497,
+            'max': 561,
+            'min': 439,
         }]
     },
 ]

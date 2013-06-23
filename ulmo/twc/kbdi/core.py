@@ -384,9 +384,9 @@ def _parse_data_file(data_file):
 
     dtype = [
         ('county', '|S15'),
-        ('kbdi_avg', 'i4'),
-        ('kbdi_max', 'i4'),
-        ('kbdi_min', 'i4'),
+        ('avg', 'i4'),
+        ('max', 'i4'),
+        ('min', 'i4'),
     ]
 
     data_array = np.genfromtxt(
