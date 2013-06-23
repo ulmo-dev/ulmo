@@ -17,7 +17,7 @@ test_sets = [
     {
         'start': '2013-04-09',
         'end': '2013-04-09',
-        'fips': '48507',
+        'fips': 48507,
         'values': [{
             'county': 'ZAVALA',
             'date': '2013-04-09',
@@ -29,7 +29,7 @@ test_sets = [
     {
         'start': '2013-04-09',
         'end': '2013-04-09',
-        'fips': '48007',
+        'fips': 48007,
         'values': [{
             'county':  'ARANSAS',
             'date': '2013-04-09',
