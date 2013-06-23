@@ -34,7 +34,7 @@ def get_data(county=None, start=None, end=None, as_dataframe=False, data_dir=Non
         start of the calendar year for the end date.
     as_dataframe: bool
         If ``False`` (default), a dict with a nested set of dicts will be
-        returned with data indexed by 5-character Texas county fips code. If ``True``
+        returned with data indexed by 5-character Texas county FIPS code. If ``True``
         then a pandas.DataFrame object will be returned.  The pandas dataframe
         is used internally, so setting this to ``True`` is a little bit faster
         as it skips a serialization step.
