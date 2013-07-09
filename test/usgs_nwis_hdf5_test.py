@@ -299,6 +299,7 @@ def test_site_data_filter_by_one_parameter_code(test_file_path):
             input_file=site_data_file, autorepack=False)
     all_site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
     site_data = nwis.hdf5.get_site_data(site_code, parameter_code=parameter_code, path=test_file_path)
+
     assert site_data[parameter_code] == all_site_data[parameter_code]
 
 
@@ -311,6 +312,7 @@ def test_site_data_filter_by_multiple_parameter_codes(test_file_path):
             input_file=site_data_file, autorepack=False)
     all_site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
     site_data = nwis.hdf5.get_site_data(site_code, parameter_code=parameter_code, path=test_file_path)
+
     for code in parameter_code:
         if code in site_data.keys():
             assert site_data[code] == all_site_data[code]
