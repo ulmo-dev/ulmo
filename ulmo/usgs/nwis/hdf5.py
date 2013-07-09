@@ -121,7 +121,7 @@ def get_site(site_code, path=None, complevel=None, complib=None):
 
 
 def get_site_data(site_code, agency_code=None, path=None, complevel=None,
-                  complib=None):
+                  complib=None, parameter_code=None):
     """Fetches previously-cached site data from an hdf5 file.
 
     Parameters
@@ -145,6 +145,10 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
         the best available compression library available on your system will be
         selected. If complevel argument is set to 0 then no compression will be
         used.
+    parameter_code : `None` or list
+        List of parameters to read. If ``None`` (default) read all parameters.
+        Otherwise only read specified parameters. Parameters should be specified
+        with statistic code, i.e. daily streamflow is '00060:00003'
 
 
     Returns
@@ -160,11 +164,18 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
         if site_group is None:
             return {}
 
-        site_data = dict([
-            (variable_group._v_pathname.rsplit('/', 1)[-1],
-            _variable_group_to_dict(store, variable_group))
-            for variable_group in site_group
-        ])
+        if parameter_code:
+            site_data = dict([
+                (variable_group._v_pathname.rsplit('/', 1)[-1],
+                _variable_group_to_dict(store, variable_group))
+                for variable_group in site_group if variable_group._v_pathname.rsplit('/', 1)[-1] in parameter_code
+            ])
+        else:
+            site_data = dict([
+                (variable_group._v_pathname.rsplit('/', 1)[-1],
+                _variable_group_to_dict(store, variable_group))
+                for variable_group in site_group
+            ])
     return site_data
 
 
