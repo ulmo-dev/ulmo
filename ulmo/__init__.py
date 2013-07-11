@@ -6,6 +6,8 @@
 """
 from __future__ import absolute_import
 
+from .version import __version__
+
 from . import cpc
 from . import cuahsi
 from . import twc
@@ -13,7 +15,3 @@ from . import ncdc
 from . import usace
 from . import usgs
 from . import util
-
-
-# set version number
-__version__ = '0.6.0-dev'

@@ -2,9 +2,6 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
 
-from ulmo import __version__
-
-
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
@@ -25,6 +22,11 @@ with open('README.rst') as f:
     long_description = ''.join([
         line for line in f.readlines()
         if 'travis-ci' not in line])
+
+
+# this sets __version__
+exec(open('ulmo/version.py'))
+
 
 setup(
     name='ulmo',
