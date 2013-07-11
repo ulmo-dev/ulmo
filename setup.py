@@ -26,7 +26,7 @@ with open('README.rst') as f:
 
 setup(
     name='ulmo',
-    version='0.5.1-dev',
+    version='0.6.0-dev',
     license='BSD',
     author='Andy Wilson',
     author_email='wilson.andrew.j@gmail.com',

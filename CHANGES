@@ -1,9 +1,11 @@
 Changelog
 ---------
 
-**0.5.1 (in development)**
+**0.6.0 (in development)**
 
+- this release includes some backwards incompatible changes
 - added support for NCDC's CIRS drought index dataset
+- added parameter_code kwarg to usgs.nwis.hdf5.get_site_data
 
 
 **0.5.0 (released 2013-05-14)**
