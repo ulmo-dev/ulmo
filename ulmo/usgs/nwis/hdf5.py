@@ -120,8 +120,8 @@ def get_site(site_code, path=None, complevel=None, complib=None):
         raise LookupError("could not find site: %s" % site_code)
 
 
-def get_site_data(site_code, agency_code=None, path=None, complevel=None,
-                  complib=None, parameter_code=None):
+def get_site_data(site_code, agency_code=None, parameter_code=None, path=None,
+                  complevel=None, complib=None):
     """Fetches previously-cached site data from an hdf5 file.
 
     Parameters
@@ -131,6 +131,10 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
     agency_code : ``None`` or str
         The agency code to get data for. This will need to be set if a site code
         is in use by multiple agencies (this is rare).
+    parameter_code : `None`, str, or list
+        List of parameters to read. If ``None`` (default) read all parameters.
+        Otherwise only read specified parameters. Parameters should be specified
+        with statistic code, i.e. daily streamflow is '00060:00003'
     path : ``None`` or file path
         Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used. If a file path is a directory, then multiple hdf5 files
@@ -145,10 +149,6 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
         the best available compression library available on your system will be
         selected. If complevel argument is set to 0 then no compression will be
         used.
-    parameter_code : `None` or list
-        List of parameters to read. If ``None`` (default) read all parameters.
-        Otherwise only read specified parameters. Parameters should be specified
-        with statistic code, i.e. daily streamflow is '00060:00003'
 
 
     Returns
@@ -159,6 +159,7 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
     site_data_path = _get_store_path(path, site_code + '.h5')
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
+
     with _get_store(site_data_path, 'r', **comp_kwargs) as store:
         site_group = store.get_node(site_code)
         if site_group is None:
@@ -167,13 +168,14 @@ def get_site_data(site_code, agency_code=None, path=None, complevel=None,
         if parameter_code:
             site_data = dict([
                 (variable_group._v_pathname.rsplit('/', 1)[-1],
-                _variable_group_to_dict(store, variable_group))
-                for variable_group in site_group if variable_group._v_pathname.rsplit('/', 1)[-1] in parameter_code
+                 _variable_group_to_dict(store, variable_group))
+                for variable_group in site_group
+                if variable_group._v_pathname.rsplit('/', 1)[-1] in parameter_code
             ])
         else:
             site_data = dict([
                 (variable_group._v_pathname.rsplit('/', 1)[-1],
-                _variable_group_to_dict(store, variable_group))
+                 _variable_group_to_dict(store, variable_group))
                 for variable_group in site_group
             ])
     return site_data
