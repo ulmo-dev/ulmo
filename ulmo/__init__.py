@@ -13,3 +13,7 @@ from . import ncdc
 from . import usace
 from . import usgs
 from . import util
+
+
+# set version number
+__version__ = '0.6.0-dev'

@@ -2,6 +2,8 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
 
+from ulmo import __version__
+
 
 class PyTest(TestCommand):
     def finalize_options(self):
@@ -26,7 +28,7 @@ with open('README.rst') as f:
 
 setup(
     name='ulmo',
-    version='0.6.0-dev',
+    version=__version__,
     license='BSD',
     author='Andy Wilson',
     author_email='wilson.andrew.j@gmail.com',
