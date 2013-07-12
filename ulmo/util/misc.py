@@ -236,7 +236,7 @@ def _path_last_modified(path):
     if not os.path.exists(path):
         return None
 
-    return datetime.datetime.fromtimestamp(os.path.getmtime(path))
+    return datetime.datetime.utcfromtimestamp(os.path.getmtime(path))
 
 
 def _request_file_size_matches(request, path):
