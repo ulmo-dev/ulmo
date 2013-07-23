@@ -17,25 +17,25 @@ test_sets = [
     {
         'start': '2013-04-09',
         'end': '2013-04-09',
-        'fips': '48507',
+        'fips': 48507,
         'values': [{
             'county': 'ZAVALA',
             'date': '2013-04-09',
-            'kbdi_avg': 572,
-            'kbdi_max': 708,
-            'kbdi_min': 423,
+            'avg': 572,
+            'max': 708,
+            'min': 423,
         }]
     },
     {
         'start': '2013-04-09',
         'end': '2013-04-09',
-        'fips': '48007',
+        'fips': 48007,
         'values': [{
             'county':  'ARANSAS',
             'date': '2013-04-09',
-            'kbdi_avg': 497,
-            'kbdi_max': 561,
-            'kbdi_min': 439,
+            'avg': 497,
+            'max': 561,
+            'min': 439,
         }]
     },
 ]

@@ -1,5 +1,5 @@
 Ulmo depends on a lot of libraries from the scientific python stack (namely:
-numpy, pytables and pandas). There are a couple of ways to get these
+numpy, pytables and pandas) and lxml. There are a couple of ways to get these
 dependencies installed but it can be tricky if doing it by hand. The simplest
 way to get things up and running is to use a scientific python distribution that
 will install everything together. A full list is available on `numfocus.org`_

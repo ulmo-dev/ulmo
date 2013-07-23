@@ -13,6 +13,12 @@
 
 import sys, os
 
+# HACKS: pytables is a difficult dependency to build, so just mock it when
+# generating docs - this makes sure the docs build fully for ulmo.readthedocs.org
+import mock
+sys.modules['tables'] = mock.MagicMock()
+sys.modules['tables.scripts'] = mock.MagicMock()
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
