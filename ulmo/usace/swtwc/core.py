@@ -97,8 +97,8 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
     station_dict['variables'] = dict([
         (name, {'unit': unit, 'source': source})
-        for name, unit, source in zip(variable_names, variable_units,
-            variable_sources)
+        for name, unit, source in zip(
+            variable_names, variable_units, variable_sources)
     ])
 
     station_dict['timezone'] = sio.readline().strip().strip('()')
@@ -109,9 +109,10 @@ def get_station_data(station_code, date=None, as_dataframe=False):
         for variable_name in variable_names
     ])
     date_parser = lambda x: _convert_datetime(x, year)
-    dataframe = pandas.read_fwf(sio, names=column_names, widths=widths,
-            index_col=['datetime'], na_values=['----'], converters=converters,
-            parse_dates=True, date_parser=date_parser)
+    dataframe = pandas.read_fwf(
+        sio, names=column_names, widths=widths, index_col=['datetime'],
+        na_values=['----'], converters=converters, parse_dates=True,
+        date_parser=date_parser)
 
     # parse out rows that are all nans (e.g. end of "current" page)
     dataframe = dataframe[~np.isnan(dataframe.T.sum())]
@@ -155,7 +156,7 @@ def _convert_datetime(s, year):
 
 
 def _split_line(line, n):
-    return [line[i:i+n].strip() for i in range(0, len(line), n)][:-1]
+    return [line[i:i + n].strip() for i in range(0, len(line), n)][:-1]
 
 
 def _parse_station_link(link):
