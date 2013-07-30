@@ -1,0 +1,72 @@
+<timeSeriesResponse xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wtr="http://www.cuahsi.org/waterML/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.cuahsi.org/waterML/1.0/">
+  <queryInfo>
+    <creationTime>2013-07-30T15:45:06.649Z</creationTime>
+    <criteria>
+      <locationParam>MuddyRiver:MuddyRiver_14</locationParam>
+      <variableParam>MR:MuddyRiver_ACID</variableParam>
+      <timeParam>
+        <beginDateTime>2008-01-01T00:00:00</beginDateTime>
+      </timeParam>
+    </criteria>
+    <note>OD Web Service</note>
+  </queryInfo>
+  <timeSeries>
+    <sourceInfo xsi:type="SiteInfoType">
+      <siteName>Roving Location</siteName>
+      <siteCode network="MuddyRiver" siteID="17">MuddyRiver_14</siteCode>
+      <geoLocation>
+        <geogLocation xsi:type="LatLonPointType">
+          <latitude>42.323944</latitude>
+          <longitude>-71.115036</longitude>
+        </geogLocation>
+      </geoLocation>
+      <elevation_m>8</elevation_m>
+      <note title="State">MA</note>
+      <note title="Site Comments">station type = outfall</note>
+    </sourceInfo>
+    <variable>
+      <variableCode vocabulary="MR" default="true" variableID="16">MuddyRiver_ACID</variableCode>
+      <variableName>Acid neutralizing capacity</variableName>
+      <valueType>Sample</valueType>
+      <dataType>Sporadic</dataType>
+      <generalCategory>Water Quality</generalCategory>
+      <sampleMedium>Surface Water</sampleMedium>
+      <units unitsAbbreviation="mg/L" unitsCode="199">milligrams per liter</units>
+      <NoDataValue>-9999</NoDataValue>
+      <timeSupport isRegular="false"/>
+    </variable>
+    <values unitsAbbreviation="mg/L" unitsCode="199" unitsType="Angle" count="15">
+      <value censorCode="nc" dateTime="2008-03-08T09:43:00" methodID="0" sourceID="1">2.4</value>
+      <value censorCode="nc" dateTime="2008-03-29T09:36:00" methodID="0" sourceID="1">6.4</value>
+      <value censorCode="nc" dateTime="2008-05-09T10:00:00" methodID="0" sourceID="1">8</value>
+      <value censorCode="nc" dateTime="2008-06-03T09:41:00" methodID="0" sourceID="1">11</value>
+      <value censorCode="nc" dateTime="2008-07-31T09:32:00" methodID="0" sourceID="1">3.5</value>
+      <value censorCode="nc" dateTime="2008-09-28T09:40:00" methodID="0" sourceID="1">4.8</value>
+      <value censorCode="nc" dateTime="2008-10-08T09:54:00" methodID="0" sourceID="1">4.9</value>
+      <value censorCode="nc" dateTime="2008-10-27T08:42:00" methodID="0" sourceID="1">10.5</value>
+      <value censorCode="nc" dateTime="2008-11-08T08:38:00" methodID="0" sourceID="1">7.8</value>
+      <value censorCode="nc" dateTime="2009-01-18T09:43:00" methodID="0" sourceID="1">4</value>
+      <value censorCode="nc" dateTime="2009-03-14T09:58:00" methodID="0" sourceID="1">8</value>
+      <value censorCode="nc" dateTime="2009-03-28T09:27:00" methodID="0" sourceID="1">3</value>
+      <value censorCode="nc" dateTime="2009-04-26T09:27:00" methodID="0" sourceID="1">2</value>
+      <value censorCode="nc" dateTime="2009-07-08T10:07:00" methodID="0" sourceID="1">3</value>
+      <value censorCode="nc" dateTime="2009-07-21T10:17:00" methodID="0" sourceID="1">4</value>
+      <method methodID="0">
+        <MethodDescription>No method specified</MethodDescription>
+      </method>
+      <source sourceID="1">
+        <Organization>Northeastern University</Organization>
+        <SourceDescription>Muddy River Water Quality Monitoring</SourceDescription>
+        <ContactInformation>
+          <ContactName>Ferdi L. Hellweger</ContactName>
+          <TypeOfContact>main</TypeOfContact>
+          <Phone>(617) 373-3992</Phone>
+          <Email>ferdi@coe.neu.edu</Email>
+          <Address xsi:type="xsd:string">400 Snell Engineering Center
+,Boston, MA 02115</Address>
+        </ContactInformation>
+        <SourceLink>http://www.muddyrivermmoc.org/index.html</SourceLink>
+      </source>
+    </values>
+  </timeSeries>
+</timeSeriesResponse>

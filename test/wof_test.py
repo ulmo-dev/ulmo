@@ -1,5 +1,4 @@
 import ulmo
-
 import test_util
 
 
@@ -60,8 +59,8 @@ def test_core_get_values_waterml_1_0():
     WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_values_file = 'cuahsi/wof/get_values_1_0_MuddyRiver_MuddyRiver_14_MR_MuddyRiver_ACID.xml'
     with test_util.mocked_suds_client('1.0', dict(GetValues=get_values_file)):
-        values = ulmo.cuahsi.wof.get_values(WSDL_URL,
-                'MuddyRiver:MuddyRiver_14', 'MR:MuddyRiver_ACID')
+        values = ulmo.cuahsi.wof.get_values(
+            WSDL_URL, 'MuddyRiver:MuddyRiver_14', 'MR:MuddyRiver_ACID')
     assert len(values['values']) == 28
     assert values['methods'] == {
         '0': {
@@ -82,6 +81,34 @@ def test_core_get_values_waterml_1_0():
             'type_of_contact': 'main',
         }
     }
+
+
+def test_core_get_values_start_and_end_parsing():
+    WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    file_template = 'cuahsi/wof/get_values_1_0_MuddyRiver_MuddyRiver_14_MR_MuddyRiver_ACID_%(start)s_%(end)s.xml'
+
+    start_ends = [
+        ('2006-07-21', '2008-04-04'),
+        ('2008-01-01', None),
+        (None, '2007-03-13'),
+    ]
+
+    for start, end in start_ends:
+        get_values_file = file_template % {'start': start, 'end': end}
+        with test_util.mocked_suds_client('1.0', dict(GetValues=get_values_file)):
+            values = ulmo.cuahsi.wof.get_values(
+                WSDL_URL, 'MuddyRiver:MuddyRiver_14', 'MR:MuddyRiver_ACID',
+                start=start, end=end)
+
+            assert len(values['values']) > 0
+            timestamps = [value.get('datetime') for value in values['values']]
+            if start:
+                for timestamp in timestamps:
+                    assert timestamp > start
+
+            if end:
+                for timestamp in timestamps:
+                    assert timestamp < end
 
 
 def test_core_get_values_waterml_1_1():
@@ -172,7 +199,7 @@ def test_core_get_variable_info_waterml_all_1_0():
         'MR:MuddyRiver_FC',
         'MR:MuddyRiver_FCOLOR',
         'MR:MuddyRiver_pH',
-        ]
+    ]
 
     for check in check_includes:
         assert check in variable_info
