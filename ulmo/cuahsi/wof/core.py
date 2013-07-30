@@ -10,7 +10,9 @@
 import cStringIO as StringIO
 
 import suds
+import isodate
 
+from ulmo import util
 from ulmo import waterml
 
 
@@ -95,7 +97,7 @@ def get_site_info(wsdl_url, site_code):
     return site_info
 
 
-def get_values(wsdl_url, site_code, variable_code=None):
+def get_values(wsdl_url, site_code, variable_code=None, start=None, end=None):
     """
     Retrieves site values from a WaterOneFlow service using a GetValues request.
 
@@ -113,6 +115,12 @@ def get_values(wsdl_url, site_code, variable_code=None):
         Variable code of the variable you'd like to get values for. Variable
         codes MUST contain the network and be of the form
         <vocabulary>:<variable_code>, as is required by WaterOneFlow.
+    start : ``None`` or datetime (see :ref:`dates-and-times`)
+        Start of a date range for a query. If both start and end parameters are
+        omitted, the entire time series available will be returned.
+    end : ``None`` or datetime (see :ref:`dates-and-times`)
+        End of a date range for a query. If both start and end parameters are
+        omitted, the entire time series available will be returned.
 
     Returns
     -------
@@ -120,9 +128,31 @@ def get_values(wsdl_url, site_code, variable_code=None):
         a python dict containing values
     """
     suds_client = suds.client.Client(wsdl_url)
-
+        
+    datetime_formatter = isodate.datetime_isoformat
+    #datetime_formatter = isodate.date_isoformat
+    
+    ''' Not clear if WOF servers really do handle time zones (time offsets or "Z"
+    in the iso8601 datetime strings. In the past, I (Emilio) have passed 
+    naive strings to GetValues(). if a datetime object is passed to this ulmo function,
+    the isodate code above will include it in the resulting iso8601 string; if not, no.
+    Test effect of dt_isostr having a timezone code or offset, vs not having it 
+    (the latter, naive dt strings, is what I've been using all along)
+    '''
+    # the intepretation of start and end time zone is server-dependent
+    start_dt_isostr = None
+    end_dt_isostr = None
+    if start is not None:
+        start_datetime = util.convert_datetime(start)
+        start_dt_isostr = datetime_formatter(start_datetime)
+    if end is not None:
+        end_datetime = util.convert_datetime(end)
+        end_dt_isostr = datetime_formatter(end_datetime)
+    
     waterml_version = _waterml_version(suds_client)
-    response = suds_client.service.GetValues(site_code, variable_code)
+    response = suds_client.service.GetValues(site_code, variable_code, 
+                                        startDate=start_dt_isostr, endDate=end_dt_isostr)
+    
     response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
     if waterml_version == '1.0':
         values = waterml.v1_0.parse_site_values(response_buffer)
