@@ -6,13 +6,20 @@ will install everything together. A full list is available on `numfocus.org`_
 but `Anaconda`_ is recommended as it is the easiest to set up.
 
 
-Once you've got The most recent release of ulmo can be installed from pypi. Pip
-is a good way to do that:
+Once the requisite scientific python libraries are installed are installed, the
+most recent release of ulmo can be installed from pypi. Pip is a good way to do
+that:
 
     pip install ulmo
 
 
-To install a development version, grab a copy of the `source code`_ and run:
+Or easy_install:
+
+    easy_install ulmo
+
+
+To install the bleeding edge development version, grab a copy of the `source
+code`_ and run setup.py from the root directory:
 
     python setup.py develop
 
