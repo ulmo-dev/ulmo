@@ -130,9 +130,6 @@ def get_values(wsdl_url, site_code, variable_code=None, start=None, end=None):
     """
     suds_client = suds.client.Client(wsdl_url)
 
-    datetime_formatter = isodate.datetime_isoformat
-    #datetime_formatter = isodate.date_isoformat
-
     # Note from Emilio:
     #   Not clear if WOF servers really do handle time zones (time offsets or
     #   "Z" in the iso8601 datetime strings. In the past, I (Emilio) have
@@ -147,10 +144,10 @@ def get_values(wsdl_url, site_code, variable_code=None, start=None, end=None):
     end_dt_isostr = None
     if start is not None:
         start_datetime = util.convert_datetime(start)
-        start_dt_isostr = datetime_formatter(start_datetime)
+        start_dt_isostr = isodate.datetime_isoformat(start_datetime)
     if end is not None:
         end_datetime = util.convert_datetime(end)
-        end_dt_isostr = datetime_formatter(end_datetime)
+        end_dt_isostr = isodate.datetime_isoformat(end_datetime)
 
     waterml_version = _waterml_version(suds_client)
     response = suds_client.service.GetValues(
