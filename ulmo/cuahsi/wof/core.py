@@ -47,9 +47,10 @@ def get_sites(wsdl_url):
         response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
         sites = waterml.v1_1.parse_site_infos(response_buffer)
 
-    return dict([ (site['network'] + ':' + site['code'], site)
-                  for site in sites.values()
-                ])
+    return dict([
+        (site['network'] + ':' + site['code'], site)
+        for site in sites.values()
+    ])
 
 
 def get_site_info(wsdl_url, site_code):
@@ -128,17 +129,19 @@ def get_values(wsdl_url, site_code, variable_code=None, start=None, end=None):
         a python dict containing values
     """
     suds_client = suds.client.Client(wsdl_url)
-        
+
     datetime_formatter = isodate.datetime_isoformat
     #datetime_formatter = isodate.date_isoformat
-    
-    ''' Not clear if WOF servers really do handle time zones (time offsets or "Z"
-    in the iso8601 datetime strings. In the past, I (Emilio) have passed 
-    naive strings to GetValues(). if a datetime object is passed to this ulmo function,
-    the isodate code above will include it in the resulting iso8601 string; if not, no.
-    Test effect of dt_isostr having a timezone code or offset, vs not having it 
-    (the latter, naive dt strings, is what I've been using all along)
-    '''
+
+    # Note from Emilio:
+    #   Not clear if WOF servers really do handle time zones (time offsets or
+    #   "Z" in the iso8601 datetime strings. In the past, I (Emilio) have
+    #   passed naive strings to GetValues(). if a datetime object is passed to
+    #   this ulmo function, the isodate code above will include it in the
+    #   resulting iso8601 string; if not, no.  Test effect of dt_isostr having
+    #   a timezone code or offset, vs not having it (the latter, naive dt
+    #   strings, is what I've been using all along)
+
     # the intepretation of start and end time zone is server-dependent
     start_dt_isostr = None
     end_dt_isostr = None
@@ -148,11 +151,12 @@ def get_values(wsdl_url, site_code, variable_code=None, start=None, end=None):
     if end is not None:
         end_datetime = util.convert_datetime(end)
         end_dt_isostr = datetime_formatter(end_datetime)
-    
+
     waterml_version = _waterml_version(suds_client)
-    response = suds_client.service.GetValues(site_code, variable_code, 
-                                        startDate=start_dt_isostr, endDate=end_dt_isostr)
-    
+    response = suds_client.service.GetValues(
+        site_code, variable_code, startDate=start_dt_isostr,
+        endDate=end_dt_isostr)
+
     response_buffer = StringIO.StringIO(response.encode('ascii', 'ignore'))
     if waterml_version == '1.0':
         values = waterml.v1_0.parse_site_values(response_buffer)
@@ -217,5 +221,5 @@ def _waterml_version(suds_client):
     elif tns_str == 'http://www.cuahsi.org/his/1.1/ws/':
         return '1.1'
     else:
-        raise NotImplementedError("only WaterOneFlow 1.0 and 1.1 are currently"
-            " supported")
+        raise NotImplementedError(
+            "only WaterOneFlow 1.0 and 1.1 are currently supported")
