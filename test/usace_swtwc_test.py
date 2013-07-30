@@ -1,5 +1,6 @@
-import ulmo
+import pytest
 
+import ulmo
 import test_util
 
 
@@ -67,6 +68,16 @@ def test_get_station_data_current():
     with test_util.mocked_urls(data_file):
         station_data = ulmo.usace.swtwc.get_station_data('MYST2')
     assert len(station_data.get('values')) > 0
+
+
+def test_get_station_data_out_of_range():
+    # can't easily test current since it is a moving target changes, but mostly
+    # just make sure it parses correctl: current will have '---' values where
+    # previous days do not
+    data_file = 'usace/swtwc/empty.html'
+    with test_util.mocked_urls(data_file):
+        with pytest.raises(ValueError):
+            station_data = ulmo.usace.swtwc.get_station_data('MYST2', '1945-01-01')
 
 
 def _compare_values(test_values, station_values):

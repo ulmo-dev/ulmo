@@ -1,7 +1,10 @@
 Changelog
 ---------
 
-**0.6.0 (in development)**
+**0.6.1 (in development)**
+- raise a friendlier error message for usace.swtwc when no data is found
+
+**0.6.0**
 
 - this release includes some backwards incompatible changes
 - simplified labels used for KBDI values: kbdi_avg -> avg, kbdi_min -> min...
