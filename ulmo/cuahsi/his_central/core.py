@@ -23,8 +23,8 @@ def get_services(bbox=None):
     ----------
     bbox : ``None`` or 4-tuple
         Optional argument for a bounding box that covers the area you want to
-        look for services in. This should be a tuple containing min_latitude,
-        min_longitude, max_latitude, and max_longitude with these values in
+        look for services in. This should be a tuple containing (min_longitude,
+        min_latitude, max_longitude, and max_latitude) with these values in
         decimal degrees. If not provided then the full set of services will be
         queried from HIS Central.
 
