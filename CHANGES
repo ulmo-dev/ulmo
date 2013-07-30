@@ -4,8 +4,14 @@ Changelog
 **0.6.0 (in development)**
 
 - this release includes some backwards incompatible changes
-- added support for NCDC's CIRS drought index dataset
+- simplified labels used for KBDI values: kbdi_avg -> avg, kbdi_min -> min...
 - added parameter_code kwarg to usgs.nwis.hdf5.get_site_data
+- added start and end dates to cuahsi.wof.get_values()
+- added support for NCDC's CIRS drought index dataset
+- fixed filesystem timestamp related bug that could cause file-based datesets to
+  be unnecessarily re-downloaded
+- version number is now available at ulmo.__version__
+- misc documentation fixes
 
 
 **0.5.0 (released 2013-05-14)**
