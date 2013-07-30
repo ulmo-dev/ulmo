@@ -135,11 +135,11 @@ def test_core_get_values_waterml_1_1():
     }
     assert values['methods'] == {
         '2': {
-                'code': '2',
-                'description': '6" Glass Thermometer, Centigrade Scale',
-                'id': '2',
-            }
+            'code': '2',
+            'description': '6" Glass Thermometer, Centigrade Scale',
+            'id': '2',
         }
+    }
     assert values['sources'] == {
         '1': {
             'abstract': 'The Ipswich River Watershed Associations (IRWA) RiverWatch water quality monitoring program, in operation since 1997, enlists volunteers to collect data on the health of the Ipswich River and its tributaries. Volunteers monitor according to a state-approved monitoring plan that ensures that the data they collect is of good quality. The goals of the program are to document River conditions in order to identify water quality problems (including adequate river flow) and to use this data to develop solutions to observed problems.',
@@ -268,9 +268,9 @@ def test_core_get_variable_info_waterml_all_1_1():
         variable_info = ulmo.cuahsi.wof.get_variable_info(WSDL_URL)
 
     check_includes = [
-         'ipswich:DO',
-         'ipswich:PercDO',
-         'ipswich:Temp'
+        'ipswich:DO',
+        'ipswich:PercDO',
+        'ipswich:Temp',
     ]
     for check in check_includes:
         assert check in variable_info
