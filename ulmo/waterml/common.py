@@ -43,7 +43,7 @@ def parse_site_values(content_io, namespace, query_isodate=None):
                         underscored_tag)
                     for element in values_element.findall(namespace + tag)
                 ]
-                if len(collection):
+                if len(filter(lambda x: len(x), collection)):
                     collection_dict = dict([
                         (item[key], item)
                         for item in collection
