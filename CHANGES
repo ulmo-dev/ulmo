@@ -2,6 +2,7 @@ Changelog
 ---------
 
 **0.6.1**
+
 - raise a friendlier error message for usace.swtwc when no data is found
 - bugfix: waterml files with empty metadata elements (e.g. method) were breaking
   the parsing logic
