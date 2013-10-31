@@ -45,21 +45,24 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
         data = pd.read_hdf(dcp_data_path, dcp_address)
     else:
         data = pd.DataFrame()
-
-    if start:
-        drs_since = _format_time(start)
-    else:
-        try: 
-            drs_since = _format_time(data['message_timestamp_utc'][-1])
-        except:
-            drs_since = 'now -2 days'
-
-    if end:
-        drs_until = _format_time(end)
-    else:
-        drs_until = 'now'
+        if not update_cache:
+            print 'no cached data available for DCP address %s, setting update_cache to True\n' %dcp_address
+            update_cache = True
 
     if update_cache:
+        if start:
+            drs_since = _format_time(start)
+        else:
+            try: 
+                drs_since = _format_time(data['message_timestamp_utc'][-1])
+            except:
+                drs_since = 'now -2 days'
+
+        if end:
+            drs_until = _format_time(end)
+        else:
+            drs_until = 'now'
+    
         params = {}
         params['DCP_ADDRESS'] = dcp_address
         params['DRS_SINCE'] = drs_since
@@ -78,12 +81,12 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
         params['DAPS_STATUS'] = daps_status
 
         r = requests.get(EDDN_URL, params=params)
-        print 'new data retrieved using url: %s' % r.url
+        print 'new data retrieved using url: %s\n' % r.url
         soup = BeautifulSoup(r.text)
         message = soup.find('pre').contents[0].strip('\n').splitlines()
 
         if 'Max data limit reached' in message[-1]:
-            print 'Max data limit reached, returning available data, try using a smaller time range'
+            print 'Max data limit reached, returning available data, try using a smaller time range\n'
             message = message[:-1]
 
         new_data = pd.DataFrame([_parse(row) for row in message if '//' not in row])
@@ -92,6 +95,18 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
         data = new_data.combine_first(data)
 
         data.to_hdf(dcp_data_path, dcp_address)
+
+    if start:
+        if start.startswith('P'):
+            start = data['message_timestamp_utc'][-1] - isodate.parse_duration(start)
+
+        data = data[start:]
+
+    if end:
+        if end.startswith('P'):
+            end = data['message_timestamp_utc'][-1] - isodate.parse_duration(end)
+            
+        data = data[:end]
 
     return data
 
