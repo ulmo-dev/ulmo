@@ -10,7 +10,7 @@
     message body varies widely depending on the manufacturer of the transmitter, 
     data logger, sensors, and the technician who programmed the DCP. The body can 
     be simple ASCII, sometime with parameter codes and time-stamps embedded, 
-    sometimes not. The body can also be in ‘Pseudo-Binary’ which is character 
+    sometimes not. The body can also be in 'Pseudo-Binary' which is character 
     encoding of binary data that uses 6 bits of every byte and guarantees that 
     all characters are printable.
 
@@ -24,9 +24,11 @@
 from collections import OrderedDict
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
+import os
 import pandas as pd
 import requests
 from ulmo import util
+from . import parsers
 
 # eddn query base url
 EDDN_URL = 'http://eddn.usgs.gov/cgi-bin/retrieveData.pl?%s'
@@ -34,6 +36,24 @@ EDDN_URL = 'http://eddn.usgs.gov/cgi-bin/retrieveData.pl?%s'
 # default file path (appended to default ulmo path)
 DEFAULT_FILE_PATH = 'usgs/eddn/'
 
+
+def fn(df):
+    message = df['dcp_message'].lower()
+    _valid = lambda x: not [i for i in ['channel', 'time'] if i in x]
+    fields = [field.strip('$+-" ') for field in message.split() if _valid(field)]
+
+
+def decode(dataframe, parser, **kwargs):
+    if isinstance(parser, basestring):
+        parser = getattr(parsers, parser)
+
+    df = []
+    for timestamp, data in dataframe.iterrows():
+        df.append(parser(data, **kwargs))
+
+    df = pd.concat(df)
+    return df
+    
 
 def get_data(dcp_address, start=None, end=None, networklist='', channel='', spacecraft='Any', baud='Any', 
         electronic_mail='', dcp_bul='', glob_bul='', timing='', retransmitted='Y', daps_status='N', 

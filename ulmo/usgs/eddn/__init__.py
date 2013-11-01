@@ -4,5 +4,5 @@
 
     .. _USGS Emergency Data Distribution Network: http://eddn.usgs.gov/
 """
-from .core import get_data
+from .core import get_data, decode
 
