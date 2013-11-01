@@ -37,12 +37,6 @@ EDDN_URL = 'http://eddn.usgs.gov/cgi-bin/retrieveData.pl?%s'
 DEFAULT_FILE_PATH = 'usgs/eddn/'
 
 
-def fn(df):
-    message = df['dcp_message'].lower()
-    _valid = lambda x: not [i for i in ['channel', 'time'] if i in x]
-    fields = [field.strip('$+-" ') for field in message.split() if _valid(field)]
-
-
 def decode(dataframe, parser, **kwargs):
     if isinstance(parser, basestring):
         parser = getattr(parsers, parser)
