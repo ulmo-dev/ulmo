@@ -53,11 +53,11 @@ def decode(dataframe, parser, **kwargs):
 
 def get_data(dcp_address, start=None, end=None, networklist='', channel='', spacecraft='Any', baud='Any', 
         electronic_mail='', dcp_bul='', glob_bul='', timing='', retransmitted='Y', daps_status='N', 
-        path=None, update_cache=True):
+        path=None, update_cache=True, clear_cache=False):
 
     dcp_data_path = _get_store_path(path, dcp_address + '.h5')
     
-    if os.path.exists(dcp_data_path):
+    if os.path.exists(dcp_data_path) and (not clear_cache):
         data = pd.read_hdf(dcp_data_path, dcp_address)
     else:
         data = pd.DataFrame()
@@ -110,7 +110,7 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
         new_data.index = new_data.message_timestamp_utc
 
         data = new_data.combine_first(data)
-
+        data.sort(inplace=True)
         data.to_hdf(dcp_data_path, dcp_address)
 
     if start:
