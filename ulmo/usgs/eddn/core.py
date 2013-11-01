@@ -25,7 +25,9 @@ from collections import OrderedDict
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import os
+import isodate
 import pandas as pd
+import re
 import requests
 from ulmo import util
 from . import parsers
@@ -97,13 +99,14 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
         r = requests.get(EDDN_URL, params=params)
         print 'new data retrieved using url: %s\n' % r.url
         soup = BeautifulSoup(r.text)
-        message = soup.find('pre').contents[0].strip('\n').splitlines()
+        message = soup.find('pre').contents[0].strip('\n')
 
         if 'Max data limit reached' in message[-1]:
             print 'Max data limit reached, returning available data, try using a smaller time range\n'
-            message = message[:-1]
 
-        new_data = pd.DataFrame([_parse(row) for row in message if '//' not in row])
+        message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M|re.S)]
+        
+        new_data = pd.DataFrame([_parse(row) for row in message])
         new_data.index = new_data.message_timestamp_utc
 
         data = new_data.combine_first(data)
