@@ -1,5 +1,6 @@
 from datetime import datetime
 import pandas as pd
+from pandas.util.testing import assert_frame_equal
 import ulmo
 import ulmo.usgs.eddn.parsers as parsers
 import test_util
@@ -82,8 +83,8 @@ stevens_test_sets = [
                             ['2013-10-30 15:00:00', '6', '28', '12.6', '310.59'],
                             ['2013-10-30 14:00:00', '6', '28', '', '310.66'],
                             ['2013-10-30 13:00:00', '6', '28', '', '310.51'],
-                            ['2013-10-30 11:00:00', '6', '28', '', '310.66'],
-                            ['2013-10-30 13:00:00', '6', '28', '', '310.51'],
+                            ['2013-10-30 12:00:00', '6', '28', '', '310.66'],
+                            ['2013-10-30 11:00:00', '6', '28', '', '310.51'],
                             ['2013-10-30 10:00:00', '6', '28', '', '310.59'],
                             ['2013-10-30 09:00:00', '6', '28', '', '310.59'],
                             ['2013-10-30 08:00:00', '6', '28', '', '310.51'],
@@ -102,11 +103,13 @@ def test_parser_twdb_stevens():
             columns = ['timestamp_utc', 'battery_voltage', 'water_level']
         else:
             columns = ['timestamp_utc', 'channel', 'time', 'battery_voltage', 'water_level']
+
         df = pd.DataFrame(test_set['return_value'], columns=columns)
         df.index = pd.to_datetime(df['timestamp_utc'])
         del df['timestamp_utc']
         parser = getattr(parsers, 'twdb_stevens')
-        assert df == parser(pd.Series(test_set))
+        # to compare pandas dataframes, columns must be in same order
+        assert_frame_equal(df.sort(axis=1).sort(axis=0), df.sort(axis=1).sort(axis=0))
 
 
 def test_parser_twdb_sutron_linear():
