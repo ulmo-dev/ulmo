@@ -40,7 +40,9 @@ def twdb_stevens(dataframe, drop_dcp_metadata=True):
 
 
 def twdb_sutron_linear(dataframe, drop_dcp_metadata=True):
-    # ':ott 60 #60 -190.56 -190.66 -190.69 -190.71 -190.74 -190.73 -190.71 -190.71 -190.71 -190.71 -190.72 -190.72 :BL 13.05  '
+    # '":ott 60 #60 -190.56 -190.66 -190.69 -190.71 -190.74 -190.73 -190.71 -190.71 -190.71 -190.71 -190.72 -190.72 :BL 13.05  '
+    # '":SENSE01 60 #60 -82.19 -82.19 -82.18 -82.19 -82.19 -82.22 -82.24 -82.26 -82.27 -82.28 -82.28 -82.26 :BL 12.41  '
+
     message = dataframe['dcp_message'].lower()
     split = data.split()
     battery_voltage = split[-1] 
