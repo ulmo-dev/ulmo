@@ -101,7 +101,11 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
         soup = BeautifulSoup(r.text)
         message = soup.find('pre').contents[0].strip('\n')
 
-        if 'Max data limit reached' in message[-1]:
+        if not message:
+            print 'No data found\n'
+            return pd.DataFrame()
+
+        if 'Max data limit reached' in message:
             print 'Max data limit reached, returning available data, try using a smaller time range\n'
 
         message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M|re.S)]
