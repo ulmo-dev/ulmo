@@ -96,13 +96,22 @@ def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels):
     data = []
     base_timestamp = message_timestamp.replace(minute=0, second=0, microsecond=0)
     water_levels.reverse()
+    try:
+        battery_voltage = float(battery_voltage)
+    except:
+        battery_voltage = pd.np.nan
 
     for hrs, water_level in enumerate(water_levels):
         timestamp = base_timestamp - timedelta(hours=hrs)
+        try:
+            water_level = float(water_level)
+        except:
+            water_level = pd.np.nan
+
         if hrs==0 and battery_voltage:
             data.append([timestamp, battery_voltage, water_level])
         else:
-            data.append([timestamp, '', water_level])
+            data.append([timestamp, pd.np.nan, water_level])
 
     df = pd.DataFrame(data, columns=['timestamp_utc', 'battery_voltage', 'water_level'])
     df.index = pd.to_datetime(df['timestamp_utc'])
