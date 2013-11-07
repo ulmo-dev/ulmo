@@ -12,6 +12,7 @@ def twdb_stevens(dataframe, drop_dcp_metadata=True):
     fields = message.split()
     battery_voltage = fields[0].split(':')[-1]
     message = ' '.join(fields[1:])
+    fmt = '$+-"\x7f '
 
     df = []
     if 'channel' in message:
@@ -19,14 +20,14 @@ def twdb_stevens(dataframe, drop_dcp_metadata=True):
             fields = channel_msg.split()
             msg_channel = fields[0].split(':')[-1]
             msg_time = fields[1].split(':')[-1]
-            water_levels = [field.strip('$+-" ') for field in fields[2:]]
+            water_levels = [field.strip(fmt) for field in fields[2:]]
             data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels)
             data['channel'] = msg_channel
             data['time'] = msg_time
             df.append(data)
     else:
         fields = message.split()
-        water_levels = [field.strip('$+-" ') for field in fields]
+        water_levels = [field.strip(fmt) for field in fields]
         data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels)
         df.append(data)
 
