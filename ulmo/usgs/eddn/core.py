@@ -53,68 +53,66 @@ def decode(dataframe, parser, **kwargs):
 
 def get_data(dcp_address, start=None, end=None, networklist='', channel='', spacecraft='Any', baud='Any', 
         electronic_mail='', dcp_bul='', glob_bul='', timing='', retransmitted='Y', daps_status='N', 
-        path=None, update_cache=True, clear_cache=False):
+        use_cache=False, cache_path=None):
 
-    dcp_data_path = _get_store_path(path, dcp_address + '.h5')
-    
-    if os.path.exists(dcp_data_path) and (not clear_cache):
-        data = pd.read_hdf(dcp_data_path, dcp_address)
-    else:
-        data = pd.DataFrame()
-        if not update_cache:
-            print 'no cached data available for DCP address %s, setting update_cache to True\n' %dcp_address
-            update_cache = True
+    data = pd.DataFrame()
 
-    if update_cache:
-        if start:
-            drs_since = _format_time(start)
-        else:
-            try: 
-                drs_since = _format_time(data['message_timestamp_utc'][-1])
-            except:
-                drs_since = 'now -2 days'
-
-        if end:
-            drs_until = _format_time(end)
-        else:
-            drs_until = 'now'
-    
-        params = {}
-        params['DCP_ADDRESS'] = dcp_address
-        params['DRS_SINCE'] = drs_since
-        params['DRS_UNTIL'] = drs_until
-        params['NETWORKLIST'] = networklist
-        params['CHANNEL'] = channel
-        params['BEFORE'] = '//START\n',
-        params['AFTER'] = '\n//END\n',
-        params['SPACECRAFT'] = spacecraft
-        params['BAUD'] = baud
-        params['ELECTRONIC_MAIL'] = electronic_mail
-        params['DCP_BUL'] = dcp_bul
-        params['GLOB_BUL'] = glob_bul
-        params['TIMING'] = timing
-        params['RETRANSMITTED'] = retransmitted
-        params['DAPS_STATUS'] = daps_status
-
-        r = requests.get(EDDN_URL, params=params)
-        print 'new data retrieved using url: %s\n' % r.url
-        soup = BeautifulSoup(r.text)
-        message = soup.find('pre').contents[0].strip('\n')
-
-        if not message:
-            print 'No data found\n'
-            return pd.DataFrame()
-
-        if 'Max data limit reached' in message:
-            print 'Max data limit reached, returning available data, try using a smaller time range\n'
-
-        message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M|re.S)]
+    if use_cache:
+        dcp_data_path = _get_store_path(cache_path, dcp_address + '.h5')
+        if os.path.exists(dcp_data_path):
+            data = pd.read_hdf(dcp_data_path, dcp_address)
         
-        new_data = pd.DataFrame([_parse(row) for row in message])
-        new_data.index = new_data.message_timestamp_utc
+    if start:
+        drs_since = _format_time(start)
+    else:
+        try: 
+            drs_since = _format_time(data['message_timestamp_utc'][-1])
+        except:
+            drs_since = 'now -2 days'
 
-        data = new_data.combine_first(data)
-        data.sort(inplace=True)
+    if end:
+        drs_until = _format_time(end)
+    else:
+        drs_until = 'now'
+
+    params = {}
+    params['DCP_ADDRESS'] = dcp_address
+    params['DRS_SINCE'] = drs_since
+    params['DRS_UNTIL'] = drs_until
+    params['NETWORKLIST'] = networklist
+    params['CHANNEL'] = channel
+    params['BEFORE'] = '//START\n',
+    params['AFTER'] = '\n//END\n',
+    params['SPACECRAFT'] = spacecraft
+    params['BAUD'] = baud
+    params['ELECTRONIC_MAIL'] = electronic_mail
+    params['DCP_BUL'] = dcp_bul
+    params['GLOB_BUL'] = glob_bul
+    params['TIMING'] = timing
+    params['RETRANSMITTED'] = retransmitted
+    params['DAPS_STATUS'] = daps_status
+
+    r = requests.get(EDDN_URL, params=params)
+    print 'new data retrieved using url: %s\n' % r.url
+    soup = BeautifulSoup(r.text)
+    message = soup.find('pre').contents[0].strip('\n')
+
+    if not message:
+        print 'No data found\n'
+        return pd.DataFrame()
+
+    if 'Max data limit reached' in message:
+        print 'Max data limit reached, returning available data, try using a smaller time range\n'
+
+    message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M|re.S)]
+    
+    new_data = pd.DataFrame([_parse(row) for row in message])
+    new_data.index = new_data.message_timestamp_utc
+
+    data = new_data.combine_first(data)
+    data.sort(inplace=True)
+
+    if use_cache:
         data.to_hdf(dcp_data_path, dcp_address)
 
     if start:
