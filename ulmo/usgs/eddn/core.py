@@ -40,6 +40,24 @@ DEFAULT_FILE_PATH = 'usgs/eddn/'
 
 
 def decode(dataframe, parser, **kwargs):
+    """decodes dcp message data in pandas dataframe returned by ulmo.usgs.eddn.get_data().
+
+    Parameters
+    ----------
+    dataframe : pandas.DataFrame
+        pandas.DataFrame returned by ulmo.usgs.eddn.get_data()
+    parser : {function, str}
+        function that acts on dcp_message each row of the dataframe and returns a new dataframe
+        containing several rows of decoded data. This returned dataframe may have different
+        (but derived) timestamps than that the original row. If a string is passed then a matching
+        parser function is looked up from ulmo.usgs.eddn.parsers
+
+    Returns
+    -------
+    decoded_data : pandas.DataFrame
+        pandas dataframe, the format and parameters in the returned dataframe depend wholly on the parser used
+
+    """
     if isinstance(parser, basestring):
         parser = getattr(parsers, parser)
 
@@ -53,7 +71,63 @@ def decode(dataframe, parser, **kwargs):
 
 def get_data(dcp_address, start=None, end=None, networklist='', channel='', spacecraft='Any', baud='Any', 
         electronic_mail='', dcp_bul='', glob_bul='', timing='', retransmitted='Y', daps_status='N', 
-        use_cache=False, cache_path=None):
+        use_cache=False, cache_path=None, as_dataframe=True):
+    """Fetches GOES Satellite DCP messages from USGS Emergency Data Distribution Network. 
+
+    Parameters
+    ----------
+    dcp_address : str, iterable of strings 
+        DCP address or list of DCP addresses to be fetched; lists will be joined by a ','.
+    start : {``None``, str, datetime, datetime.timedelta} 
+        If ``None`` (default) then the start time is 2 days prior (or date of last data if cache is used)
+        If a datetime or datetime like string is specified it will be used as the start date. 
+        If a timedelta or string in ISO 8601 period format (e.g 'P2D' for a period of 2 days) then 
+        'now' minus the timedelta will be used as the start. 
+        NOTE: The EDDN service does not specify how far back data is available. The service also imposes
+        a maximum data limit of 25000 character. 
+    end : {``None``, str, datetime, datetime.timedelta} 
+        If ``None`` (default) then the end time is 'now' 
+        If a datetime or datetime like string is specified it will be used as the end date. 
+        If a timedelta or string in ISO 8601 period format (e.g 'P2D' for a period of 2 days) then 
+        'now' minus the timedelta will be used as the end.
+        NOTE: The EDDN service does not specify how far back data is available. The service also imposes
+        a maximum data limit of 25000 character.
+    networklist : str, 
+        '' (default). Filter by network.
+    channel : str,
+        '' (default). Filter by channel. 
+    spacecraft : str,
+        East, West, Any (default). Filter by GOES East/West Satellite
+    baud : str,
+        'Any' (default). Filter by baud rate. See http://eddn.usgs.gov/msgaccess.html for options
+    electronic_mail : str,
+        '' (default) or 'Y'
+    dcp_bul : str,
+        '' (default) or 'Y'
+    glob_bul : str,
+        '' (default) or 'Y'
+    timing : str,
+        '' (default) or 'Y' 
+    retransmitted : str,
+        'Y' (default) or 'N'
+    daps_status : str,
+        'N' (default) or 'Y'
+    use_cache : bool,
+        If True (default) use hdf file to cache data and retrieve new data on subsequent requests
+    cache_path : {``None``, str},
+        If ``None`` use default ulmo location for cached files otherwise use specified path. files are named
+        using dcp_address.
+    as_dataframe : bool
+        If True (default) return data in a pandas dataframe otherwise return a dict.
+
+    Returns
+    -------
+    message_data : {pandas.DataFrame, dict}
+        Either a pandas dataframe or a dict indexed by dcp message times 
+    """
+
+    if isinstance(dcp_address, list):
+        dcp_address = ','.join(dcp_address)
 
     data = pd.DataFrame()
 
@@ -126,6 +200,9 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
             end = data['message_timestamp_utc'][-1] - isodate.parse_duration(end)
             
         data = data[:end]
+
+    if not as_dataframe:
+        data = data.T.to_dict()
 
     return data
 
