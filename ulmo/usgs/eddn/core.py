@@ -21,15 +21,17 @@
 
 """
 
-from collections import OrderedDict
 from bs4 import BeautifulSoup
+from collections import OrderedDict
 from datetime import datetime, timedelta
-import os
 import isodate
+import logging
+import os
 import pandas as pd
 import re
 import requests
 from ulmo import util
+
 from . import parsers
 
 # eddn query base url
@@ -37,6 +39,12 @@ EDDN_URL = 'http://eddn.usgs.gov/cgi-bin/retrieveData.pl?%s'
 
 # default file path (appended to default ulmo path)
 DEFAULT_FILE_PATH = 'usgs/eddn/'
+
+# configure logging
+LOG_FORMAT = '%(message)s'
+logging.basicConfig(format=LOG_FORMAT)
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
 
 def decode(dataframe, parser, **kwargs):
@@ -167,16 +175,16 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
     params['DAPS_STATUS'] = daps_status
 
     r = requests.get(EDDN_URL, params=params)
-    print 'new data retrieved using url: %s\n' % r.url
+    log.info('new data retrieved using url: %s\n' % r.url)
     soup = BeautifulSoup(r.text)
     message = soup.find('pre').contents[0].strip('\n')
 
     if not message:
-        print 'No data found\n'
+        log.info('No data found\n')
         return pd.DataFrame()
 
     if 'Max data limit reached' in message:
-        print 'Max data limit reached, returning available data, try using a smaller time range\n'
+        log.info('Max data limit reached, returning available data, try using a smaller time range\n')
 
     message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M|re.S)]
     
