@@ -22,7 +22,6 @@
 """
 
 from bs4 import BeautifulSoup
-from collections import OrderedDict
 from datetime import datetime, timedelta
 import isodate
 import logging
