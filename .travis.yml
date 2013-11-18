@@ -14,5 +14,9 @@ install:
   - "pip install tables"
   - "pip install ."
   - "pip install sure"
+  - "pip install freezegun"
+  - "pip install pytest"
+  - "pip install httpretty"
+
 # command to run tests
-script: "python setup.py test"
+script: "py.test"
