@@ -5,13 +5,13 @@
     This module provides access to data provided by the `United States Geological
     Survey`_ `Emergency Data Distribution Network`_ web site.
 
-    The `DCP message format`_ includes some header information that is parsed and 
-    the message body, with a variable number of characters. The format of the 
-    message body varies widely depending on the manufacturer of the transmitter, 
-    data logger, sensors, and the technician who programmed the DCP. The body can 
-    be simple ASCII, sometime with parameter codes and time-stamps embedded, 
-    sometimes not. The body can also be in 'Pseudo-Binary' which is character 
-    encoding of binary data that uses 6 bits of every byte and guarantees that 
+    The `DCP message format`_ includes some header information that is parsed and
+    the message body, with a variable number of characters. The format of the
+    message body varies widely depending on the manufacturer of the transmitter,
+    data logger, sensors, and the technician who programmed the DCP. The body can
+    be simple ASCII, sometime with parameter codes and time-stamps embedded,
+    sometimes not. The body can also be in 'Pseudo-Binary' which is character
+    encoding of binary data that uses 6 bits of every byte and guarantees that
     all characters are printable.
 
 
@@ -74,35 +74,36 @@ def decode(dataframe, parser, **kwargs):
 
     df = pd.concat(df)
     return df
-    
 
-def get_data(dcp_address, start=None, end=None, networklist='', channel='', spacecraft='Any', baud='Any', 
-        electronic_mail='', dcp_bul='', glob_bul='', timing='', retransmitted='Y', daps_status='N', 
+
+def get_data(
+        dcp_address, start=None, end=None, networklist='', channel='', spacecraft='Any', baud='Any',
+        electronic_mail='', dcp_bul='', glob_bul='', timing='', retransmitted='Y', daps_status='N',
         use_cache=False, cache_path=None, as_dataframe=True):
-    """Fetches GOES Satellite DCP messages from USGS Emergency Data Distribution Network. 
+    """Fetches GOES Satellite DCP messages from USGS Emergency Data Distribution Network.
 
     Parameters
     ----------
-    dcp_address : str, iterable of strings 
+    dcp_address : str, iterable of strings
         DCP address or list of DCP addresses to be fetched; lists will be joined by a ','.
-    start : {``None``, str, datetime, datetime.timedelta} 
+    start : {``None``, str, datetime, datetime.timedelta}
         If ``None`` (default) then the start time is 2 days prior (or date of last data if cache is used)
-        If a datetime or datetime like string is specified it will be used as the start date. 
-        If a timedelta or string in ISO 8601 period format (e.g 'P2D' for a period of 2 days) then 
-        'now' minus the timedelta will be used as the start. 
+        If a datetime or datetime like string is specified it will be used as the start date.
+        If a timedelta or string in ISO 8601 period format (e.g 'P2D' for a period of 2 days) then
+        'now' minus the timedelta will be used as the start.
         NOTE: The EDDN service does not specify how far back data is available. The service also imposes
-        a maximum data limit of 25000 character. 
-    end : {``None``, str, datetime, datetime.timedelta} 
-        If ``None`` (default) then the end time is 'now' 
-        If a datetime or datetime like string is specified it will be used as the end date. 
-        If a timedelta or string in ISO 8601 period format (e.g 'P2D' for a period of 2 days) then 
+        a maximum data limit of 25000 character.
+    end : {``None``, str, datetime, datetime.timedelta}
+        If ``None`` (default) then the end time is 'now'
+        If a datetime or datetime like string is specified it will be used as the end date.
+        If a timedelta or string in ISO 8601 period format (e.g 'P2D' for a period of 2 days) then
         'now' minus the timedelta will be used as the end.
         NOTE: The EDDN service does not specify how far back data is available. The service also imposes
         a maximum data limit of 25000 character.
-    networklist : str, 
+    networklist : str,
         '' (default). Filter by network.
     channel : str,
-        '' (default). Filter by channel. 
+        '' (default). Filter by channel.
     spacecraft : str,
         East, West, Any (default). Filter by GOES East/West Satellite
     baud : str,
@@ -114,7 +115,7 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
     glob_bul : str,
         '' (default) or 'Y'
     timing : str,
-        '' (default) or 'Y' 
+        '' (default) or 'Y'
     retransmitted : str,
         'Y' (default) or 'N'
     daps_status : str,
@@ -130,7 +131,7 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
     Returns
     -------
     message_data : {pandas.DataFrame, dict}
-        Either a pandas dataframe or a dict indexed by dcp message times 
+        Either a pandas dataframe or a dict indexed by dcp message times
     """
 
     if isinstance(dcp_address, list):
@@ -142,11 +143,11 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
         dcp_data_path = _get_store_path(cache_path, dcp_address + '.h5')
         if os.path.exists(dcp_data_path):
             data = pd.read_hdf(dcp_data_path, dcp_address)
-        
+
     if start:
         drs_since = _format_time(start)
     else:
-        try: 
+        try:
             drs_since = _format_time(data['message_timestamp_utc'][-1])
         except:
             drs_since = 'now -2 days'
@@ -185,8 +186,8 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
     if 'Max data limit reached' in message:
         log.info('Max data limit reached, returning available data, try using a smaller time range\n')
 
-    message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M|re.S)]
-    
+    message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M | re.S)]
+
     new_data = pd.DataFrame([_parse(row) for row in message])
     new_data.index = new_data.message_timestamp_utc
 
@@ -205,7 +206,7 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
     if end:
         if end.startswith('P'):
             end = data['message_timestamp_utc'][-1] - isodate.parse_duration(end)
-            
+
         data = data[:end]
 
     if not as_dataframe:
@@ -215,13 +216,13 @@ def get_data(dcp_address, start=None, end=None, networklist='', channel='', spac
 
 
 def _format_period(period):
-    days, hours, minutes = period.days, period.seconds//3600, (period.seconds//60)%60
+    days, hours, minutes = period.days, period.seconds // 3600, (period.seconds // 60) % 60
 
     if minutes:
-        return 'now -%s minutes' % period.seconds/60
+        return 'now -%s minutes' % period.seconds / 60
 
     if hours:
-        return 'now -%s hours' % period.seconds/3600
+        return 'now -%s hours' % period.seconds / 3600
 
     if days:
         return 'now -%s days' % days
@@ -235,7 +236,6 @@ def _format_time(timestamp):
         else:
             timestamp = isodate.parse_datetime(timestamp)
 
-
     if isinstance(timestamp, datetime):
         return datetime.strftime('%Y/%j %H:%M:%S')
     elif isinstance(timestamp, timedelta):
@@ -248,9 +248,9 @@ def _get_store_path(path, default_file_name):
 
     if not os.path.exists(path):
         os.makedirs(path)
-        
+
     return os.path.join(path, default_file_name)
-    
+
 
 def _parse(line):
     return {

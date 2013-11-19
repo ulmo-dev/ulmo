@@ -1,17 +1,17 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 import pandas as pd
 
 
 def twdb_stevens(dataframe, drop_dcp_metadata=True):
-    """Parser for twdb stevens dataloggers. 
-    Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour 
+    """Parser for twdb stevens dataloggers.
+    Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour
     for the previous 12 hours and one battery voltage measurement for the current hour
 
     format examples:
 
     '"BV:12.5  451.70$ 451.66$ 451.66$ 451.62$ 451.59$ 451.57$ 451.54$ 451.53$ 451.52$ 451.52$ 451.52$ 451.52$ '
     '"BV:12.2  Channel:5 Time:43 +441.48 +443.25 +440.23 +440.67 +441.26 +441.85 +442.66 +443.84 +445.24 +442.15 +442.88 +443.91 '
-    '"BV:12.6  Channel:5 Time:28 +304.63 +304.63 +304.63 +304.56 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.71 Channel:6 Time:28 +310.51 +310.66 +310.59 +310.51 +310.51 +310.59 +310.59 +310.51 +310.66 +310.51 +310.66 +310.59 '    
+    '"BV:12.6  Channel:5 Time:28 +304.63 +304.63 +304.63 +304.56 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.71 Channel:6 Time:28 +310.51 +310.66 +310.59 +310.51 +310.51 +310.59 +310.59 +310.51 +310.66 +310.51 +310.66 +310.59 '
     """
     message = dataframe['dcp_message'].lower()
     message_timestamp = dataframe['message_timestamp_utc']
@@ -48,8 +48,8 @@ def twdb_stevens(dataframe, drop_dcp_metadata=True):
 
 
 def twdb_sutron(dataframe, drop_dcp_metadata=True):
-    """Parser for twdb sutron dataloggers. 
-    Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour 
+    """Parser for twdb sutron dataloggers.
+    Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour
     for the previous 12 hours and one battery voltage measurement for the current hour
 
     format examples:
@@ -74,9 +74,9 @@ def twdb_sutron(dataframe, drop_dcp_metadata=True):
         battery_voltage = lines[-1].split('bl')[-1].strip()
         for line in lines[:-1]:
             channel = line[:7]
-            split = line[7:].split()    
+            split = line[7:].split()
             water_levels = [field.strip('+-" ') for field in split[2:]]
-            df = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels)    
+            df = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels)
             df['channel'] = channel
             data.append(df)
         df = pd.concat(data)
@@ -89,15 +89,15 @@ def twdb_sutron(dataframe, drop_dcp_metadata=True):
 
 
 def twdb_texuni(dataframe, drop_dcp_metadata=True):
-    """Parser for twdb texuni dataloggers. 
-    Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour 
+    """Parser for twdb texuni dataloggers.
+    Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour
     for the previous 12 hours
 
     format examples:
     '"\r\n+0.000,-245.3,\r\n+0.000,-245.3,\r\n+0.000,-245.3,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.4,\r\n+0.000,-245.5,\r\n+0.000,-245.5,\r\n+0.000,-245.6,\r\n+0.000,-245.6,\r\n+0.000,-245.6,\r\n+0.000,-245.6,\r\n+0.000,-245.6,\r\n+0.000,-245.6,\r\n+412.0,+2013.,+307.0,+1300.,+12.75,+0.000,-245.4,-245.3,-245.6,+29.55,'
     ' \r\n+0.000,-109.8,\r\n+0.000,-109.8,\r\n+0.000,-109.8,\r\n+0.000,-109.8,\r\n+0.000,-109.8,\r\n+0.000,-109.9,\r\n+0.000,-109.9,\r\n+0.000,-109.9,\r\n+0.000,-109.9,\r\n+0.000,-109.9,\r\n+0.000,-110.0,\r\n+0.000,-110.0,\r\n+0.000,-109.9,\r\n+0.000,-109.9,\r\n+0.000,-109.9,\r\n+0.000,-109.9,\r\n+0.000,-110.0,\r\n+0.000,-110.0,\r\n+0.000,-110.0,\r\n+0.000,-110.1,\r\n+0.000,-110.1,\r\n+0.000,-110.1,\r\n+0.000,-110.1,\r\n+0.000,-110.1,\r\n+340.0,+2013.,+307.0,+1400.,+12.07,+0.000,-109.9,-109.8,-110.1,+30.57,'
     """
-    
+
     message = dataframe['dcp_message']
     message_timestamp = dataframe['message_timestamp_utc']
     water_levels = [row.split(',')[1].strip('+- ') for row in message.strip('" \r\n').splitlines()[:-1]]
@@ -108,7 +108,7 @@ def twdb_texuni(dataframe, drop_dcp_metadata=True):
         for col in dataframe.index:
             df[col] = dataframe[col]
 
-    return df    
+    return df
 
 
 def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels):
