@@ -38,12 +38,6 @@ Currently, ulmo supports the following datasets / services:
 Future
 ------
 
-Support for the following datasets is currently under development and they
-should be available soon:
-
-- National Weather Service 24-hour Precip (4 km grid)
-
-
 A list of future datasets is kept in on the `issue tracker`_. If there's a dataset
 you'd like to see added, please open an issue about it.
 
