@@ -9,46 +9,46 @@
     .. _California Data Exchange Center: http://cdec.water.ca.gov
 
 
-SELECTED CDEC SENSOR NUMBERS (these are not be available for all sites):
+    SELECTED CDEC SENSOR NUMBERS (these are not be available for all sites):
 
-1    river stage [ft]
-2    precipitation, accumulated [in]
-3    SWE [in]
-4    air temperature [F]
-5    EC [ms/cm]
-6    reservoir elevation [ft]
-7    reservoir scheduled release [cfs]
-8    full natural flow [cfs]
-15   reservoir storage [af]
-20   flow -- river discharge [cfs]
-22   reservoir storage change [af]
-23   reservoir outflow [cfs]
-24   Evapotranspiration [in]
-25   water temperature [F]
-27   water turbidity [ntu]
-28   chlorophyll [ug/l]
-41   flow -- mean daily [cfs]
-45   precipitation, incremental [in]
-46   runoff volume [af]
-61   water dissolved oxygen [mg/l]
-62   water pH value [pH]
-64   pan evaporation (incremental) [in]
-65   full natural flow [af]
-66   flow -- monthly volume [af]
-67   accretions (estimated) [af]
-71   spillway discharge [cfs]
-74   lake evaporation (computed) [cfs]
-76   reservoir inflow [cfs]
-85   control regulating discharge [cfs]
-94   top conservation storage (reservoir) [af]
-100  water EC [us/cm]
+    1    river stage [ft]
+    2    precipitation, accumulated [in]
+    3    SWE [in]
+    4    air temperature [F]
+    5    EC [ms/cm]
+    6    reservoir elevation [ft]
+    7    reservoir scheduled release [cfs]
+    8    full natural flow [cfs]
+    15   reservoir storage [af]
+    20   flow -- river discharge [cfs]
+    22   reservoir storage change [af]
+    23   reservoir outflow [cfs]
+    24   Evapotranspiration [in]
+    25   water temperature [F]
+    27   water turbidity [ntu]
+    28   chlorophyll [ug/l]
+    41   flow -- mean daily [cfs]
+    45   precipitation, incremental [in]
+    46   runoff volume [af]
+    61   water dissolved oxygen [mg/l]
+    62   water pH value [pH]
+    64   pan evaporation (incremental) [in]
+    65   full natural flow [af]
+    66   flow -- monthly volume [af]
+    67   accretions (estimated) [af]
+    71   spillway discharge [cfs]
+    74   lake evaporation (computed) [cfs]
+    76   reservoir inflow [cfs]
+    85   control regulating discharge [cfs]
+    94   top conservation storage (reservoir) [af]
+    100  water EC [us/cm]
 
-CDEC DURATION CODES:
+    CDEC DURATION CODES:
 
-E    event
-H    hourly
-D    daily
-M    monthly
+    E    event
+    H    hourly
+    D    daily
+    M    monthly
 
 """
 
@@ -61,6 +61,7 @@ from ulmo import util
 
 DEFAULT_START_DATE = '01/01/1901'
 DEFAULT_END_DATE   = 'Now'
+
 
 def get_stations():
     """Fetches information on all CDEC sites. 
@@ -78,6 +79,7 @@ def get_stations():
     df = pd.read_csv(url, names=col_names, header=None, quotechar="'",index_col=0)
 
     return df
+
 
 def get_sensors(sensor_id=None):
     """
@@ -110,6 +112,7 @@ def get_sensors(sensor_id=None):
         return df
     else:
         return df.ix[sensor_id]
+
 
 def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
     """
@@ -175,7 +178,7 @@ def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
     return station_sensors
 
 
-def get_data(station_ids=None, sensor_ids=None, resolutions=None):
+def get_data(station_ids=None, sensor_ids=None, resolutions=None, start=None, end=None):
     """
     Downloads data for a set of CDEC station and sensor ids. If either is not 
     provided, all available data will be downloaded. Be really careful with 
@@ -210,6 +213,18 @@ def get_data(station_ids=None, sensor_ids=None, resolutions=None):
         containing all of the sensor/resolution combinations.
     """
 
+    if start is None:
+        start_date = DEFAULT_START_DATE
+    else:
+        start_date = util.convert_date(start)
+    if end is None:
+        end_date = DEFAULT_END_DATE
+    else:
+        end_date = util.convert_date(end)
+
+    start_date_str = _format_date(start_date)
+    end_date_str = _format_date(end_date)
+
     if station_ids is None:
         station_ids = get_stations().index
 
@@ -224,11 +239,12 @@ def get_data(station_ids=None, sensor_ids=None, resolutions=None):
             res = row.ix['resolution']
             var = row.ix['variable']
             sensor_id =  row.ix['sensor_id']
-            station_data[var] = _download_raw(station_id, sensor_id, _res_to_dur_code(res))
+            station_data[var] = _download_raw(station_id, sensor_id, _res_to_dur_code(res), start_date_str, end_date_str)
 
         d[station_id] = station_data
 
     return d
+
 
 def _limit_sensor_list(sensor_list, sensor_ids, resolution):
 
@@ -241,14 +257,14 @@ def _limit_sensor_list(sensor_list, sensor_ids, resolution):
     return sensor_list
 
 
-def _download_raw(station_id, sensor_num, dur_code):
+def _download_raw(station_id, sensor_num, dur_code, start_date, end_date):
  
     url = 'http://cdec.water.ca.gov/cgi-progs/queryCSV' + \
           '?station_id=' + station_id    + \
           '&dur_code='   + dur_code   + \
           '&sensor_num=' + str(sensor_num) + \
-          '&start_date=' + DEFAULT_START_DATE + \
-          '&end_date='   + DEFAULT_END_DATE   
+          '&start_date=' + start_date + \
+          '&end_date='   + end_date   
 
     #tf = tempfile.mktemp()
     #urllib.urlretrieve(url, tf)
@@ -259,6 +275,7 @@ def _download_raw(station_id, sensor_num, dur_code):
 
     return df
 
+
 def _res_to_dur_code(res):
     map = {
         'hourly':'H',
@@ -267,3 +284,7 @@ def _res_to_dur_code(res):
         'event':'E'}
 
     return map[res]
+
+
+def _format_date(date):
+    return '%s/%s/%s' % (date.month, date.day, date.year)
