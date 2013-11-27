@@ -103,7 +103,8 @@ def get_sensors(sensor_id=None):
     """
 
     url = 'http://cdec.water.ca.gov/misc/senslist.html'
-    df = pd.read_html(url,infer_types=False,header=0,index_col=0)[0]
+    df = pd.read_html(url,infer_types=False,header=0)[0]
+    df.set_index('Sensor No')
 
     if sensor_id is None:
         return df
