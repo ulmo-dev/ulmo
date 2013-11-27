@@ -70,6 +70,13 @@ DEFAULT_END_DATE   = 'Now'
 #SENSOR_NAM = ['SalinityA','DischargeA','MeanDailyDischarge','SalinityB']
 
 def get_stations():
+    """Fetches information on all CDEC sites. 
+
+    Returns
+    -------
+    df : pandas DataFrame
+        a pandas DataFrame (indexed on site id) with station information.
+    """
         # I haven't found a better list of stations, seems pretty janky 
         # to just have them in a file, and not sure if/when it is updated.
     url = 'http://cdec.water.ca.gov/misc/all_stations.csv'
@@ -81,8 +88,25 @@ def get_stations():
 
 def get_sensors(sensor_id=None):
     """
-    Returns a list of sensor ids as a DataFrame indexed on sensor 
-    number. Can be limited by a list of numbers. 
+    Gets a list of sensor ids as a DataFrame indexed on sensor 
+    number. Can be limited by a list of numbers.
+
+    Usage Example:
+
+    from ulmo import cdec
+        # to get all available sensor info
+    snesors = cdec.historical.get_sensors()
+        # or to get just one sensor
+    sensors = cdec.historical.get_sensors([1])
+
+    Parameters
+    ----------
+    sites : iterable of integers or ``None``
+
+    Returns
+    -------
+    df : pandas DataFrame
+        a python dict with site codes mapped to site information
     """
 
     url = 'http://cdec.water.ca.gov/misc/senslist.html'
@@ -94,7 +118,43 @@ def get_sensors(sensor_id=None):
         return df.ix[sensor_id]
 
 def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
+    """
+    Gets available sensors for the given stations, sensor ids and time 
+    resolutions. If no station ids are provided, all available stations will 
+    be used (this is not recommended, and will probably take a really long 
+    time). 
 
+    The list can be limited by a list of sensor numbers, or time resolutions 
+    if you already know what you want. If none of the provided sensors or 
+    resolutions are available, an empty DataFrame will be returned for that 
+    station.
+
+    Usage Example:
+
+    from ulmo import cdec
+        # to get all available sensors
+    available_sensors = cdec.historical.get_sensors(['NEW'])
+
+    Parameters
+    ----------
+    station_ids : iterable of strings or ``None``
+
+    sensor_ids : iterable of integers or ``None``   
+        check out  or use the ``get_sensors()`` function to see a list of 
+        available sensor numbers
+
+    resolutions : iterable of strings or ``None``
+        Possible values are 'event', 'hourly', 'daily', and 'monthly' but not 
+        all of these time resolutions are available at every station. 
+
+
+    Returns
+    -------
+    dict : a python dict
+        a python dict with site codes as keys with values containing pandas
+        DataFrames of available sensor numbers and metadata.
+    """
+    
     station_sensors = {}
 
     if station_ids is None:
@@ -120,23 +180,40 @@ def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
 
     return station_sensors
 
-def _limit_sensor_list(sensor_list, sensor_ids, resolution):
-
-    if sensor_ids is not None:
-        sensor_list = sensor_list[[x in sensor_ids for x in sensor_list.sensor_id]]
-
-    if resolution is not None:
-        sensor_list = sensor_list[[x in resolution for x in sensor_list.resolution]]
-
-    return sensor_list
-
 
 def get_data(station_ids=None, sensor_ids=None, resolutions=None):
     """
-    Downloads data for a set of CDEC station and sensor ids. If either is not provided, 
-    all available data will be downloaded. Be really careful with choosing hourly  
-    resolution as the data sets are big, and CDEC's servers are slow as molasses 
-    in winter.
+    Downloads data for a set of CDEC station and sensor ids. If either is not 
+    provided, all available data will be downloaded. Be really careful with 
+    choosing hourly resolution as the data sets are big, and CDEC's servers 
+    are slow as molasses in winter.
+
+
+
+    Usage Example:
+
+    from ulmo import cdec
+        # to get all available sensors
+    dat = cdec.historical.get_data(['PRA'],resolutions=['daily'])
+
+    Parameters
+    ----------
+    station_ids : iterable of strings or ``None``
+
+    sensor_ids : iterable of integers or ``None``   
+        check out  or use the ``get_sensors()`` function to see a list of 
+        available sensor numbers
+
+    resolutions : iterable of strings or ``None``
+        Possible values are 'event', 'hourly', 'daily', and 'monthly' but not 
+        all of these time resolutions are available at every station. 
+
+
+    Returns
+    -------
+    dict : a python dict
+        a python dict with site codes as keys. Values will be nested dicts 
+        containing all of the sensor/resolution combinations.
     """
 
     if station_ids is None:
@@ -153,13 +230,24 @@ def get_data(station_ids=None, sensor_ids=None, resolutions=None):
             res = row.ix['resolution']
             var = row.ix['variable']
             sensor_id =  row.ix['sensor_id']
-            station_data[var] = download_raw(station_id, sensor_id, _res_to_dur_code(res))
+            station_data[var] = _download_raw(station_id, sensor_id, _res_to_dur_code(res))
 
         d[station_id] = station_data
 
     return d
 
-def download_raw(station_id, sensor_num, dur_code):
+def _limit_sensor_list(sensor_list, sensor_ids, resolution):
+
+    if sensor_ids is not None:
+        sensor_list = sensor_list[[x in sensor_ids for x in sensor_list.sensor_id]]
+
+    if resolution is not None:
+        sensor_list = sensor_list[[x in resolution for x in sensor_list.resolution]]
+
+    return sensor_list
+
+
+def _download_raw(station_id, sensor_num, dur_code):
  
     url = 'http://cdec.water.ca.gov/cgi-progs/queryCSV' + \
           '?station_id=' + station_id    + \
