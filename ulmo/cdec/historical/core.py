@@ -52,22 +52,15 @@ M    monthly
 
 """
 
-import os
-import sys
-from datetime import datetime
 import pandas as pd
-import urllib
+#import urllib
 import requests
-from bs4 import BeautifulSoup
 import re
 
 from ulmo import util
 
 DEFAULT_START_DATE = '01/01/1901'
 DEFAULT_END_DATE   = 'Now'
-
-#SENSOR_NUM = [    5,   20,   41,  100]
-#SENSOR_NAM = ['SalinityA','DischargeA','MeanDailyDischarge','SalinityB']
 
 def get_stations():
     """Fetches information on all CDEC sites. 
