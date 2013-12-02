@@ -43,11 +43,26 @@ def mocked_suds_client(waterml_version, mocked_service_calls):
 @contextlib.contextmanager
 def mocked_urls(url_files, methods=None):
     """mocks the underlying python sockets library to return a given file's
-    content
-    """
-    # if environment variable is set, then don't mock the tests just grab files
-    # over the network. Example:
+    content. Note: that this function checks for an environment variable named
+    ULMO_DONT_MOCK_TESTS; if that environment variable is set then urls will
+    not be mocked and the HTTP requests will go over the network. For example,
+    this could be used to to run the whole test suite without mocking files:
     #    env ULMO_DONT_MOCK_TESTS=1 py.test
+
+    Parameters
+    ----------
+    url_files : str or dict
+        Files to be mocked. It can either be a string representation of a
+        filepath to a file whose contents will be used as a response to all
+        HTTP requests. Or it can be a dict where the keys are regular
+        expression strings and the values are filepaths - the regex keys will
+        be used to match urls and matching if they match, the file path will be
+        used.
+
+    methods : iterable of str or None
+        HTTP methods that will be mocked. If set to None (default) then the
+        default methods are GET, POST and HEAD.
+    """
     if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
         yield
 
