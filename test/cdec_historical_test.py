@@ -39,11 +39,14 @@ def test_get_station_data():
     ]
 
     for station_id, var_name, test_values in test_sets:
+        data_regex = 'http://cdec.water.ca.gov/cgi-progs/queryCSV?station_id.*'
         data_file = 'cdec/historical/%s.csv' % station_id
+        sensors_regex = 'http://cdec.water.ca.gov/misc/senslist.html'
         sensors_file = 'cdec/historical/sensors.htm'
 
-        with test_util.mocked_urls({'.*':sensors_file,'.*':data_file}):
-            station_data = ulmo.cdec.historical.get_data(['PRA'], [6], 
+        url_files = {sensors_regex: sensors_file, data_regex: data_file}
+        with test_util.mocked_urls(url_files):
+            station_data = ulmo.cdec.historical.get_data(['PRA'], [6],
                 resolutions=['daily'], start='2000-1-1', end='2000-1-2')
-            
+
             assert np.all(test_values == station_data[station_id][var_name].index)
