@@ -17,6 +17,7 @@ install:
   - "pip install freezegun"
   - "pip install pytest"
   - "pip install httpretty"
+  - "pip install html5lib"
 
 # command to run tests
 script: "py.test"
