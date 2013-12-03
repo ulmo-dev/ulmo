@@ -2,6 +2,12 @@ Changelog
 ---------
 
 
+**0.6.3 (in development)**
+
+- add cdec.historical for accessing California Department of Water Resources
+  California Data Exchange Center
+
+
 **0.6.2 (released 2013-11-19)**
 
 - add usgs.eddn module for accessing USGS Emergency Data Distribution Network 
