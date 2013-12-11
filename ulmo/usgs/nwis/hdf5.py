@@ -352,7 +352,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
                 compare_cols = ['value', 'qualifiers']
                 original_values = store[values_path]
                 original_align, new_align = original_values.align(new_values)
-                new_nulls = (new_align[compare_cols] == np.nan).sum(axis=1).astype(bool)
+                new_nulls = pandas.isnull(new_align[compare_cols]).sum(axis=1).astype(bool)
                 modified_mask = ~new_nulls & ((
                     original_align[compare_cols] == new_align[compare_cols]) \
                     .sum(axis=1) < len(compare_cols))
