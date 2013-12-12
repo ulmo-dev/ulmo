@@ -6,11 +6,13 @@ Changelog
 
 - add cdec.historical for accessing California Department of Water Resources
   California Data Exchange Center
+- fix last_modified dates being incorrectly updated when using nwis hdf5 backend
+  on some platforms
 
 
 **0.6.2 (released 2013-11-19)**
 
-- add usgs.eddn module for accessing USGS Emergency Data Distribution Network 
+- add usgs.eddn module for accessing USGS Emergency Data Distribution Network
 
 
 **0.6.1 (released 2013-07-31)**
