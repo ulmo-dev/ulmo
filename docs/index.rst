@@ -27,6 +27,24 @@ of what Ulmo is about.
 .. _tutorial: http://earthpy.org/ulmo.html
 
 
+Getting help
+------------
+
+If your stuck, have questions, ideas, or just want to say hi feel free to drop
+us a line on the `mailing list`_.
+
+.. _mailing list: https://groups.google.com/d/forum/ulmo
+
+
+Contributing
+------------
+
+If you'd like to contribute code or documentation, visit our `github`_
+repository. Bug reports, issues and especially pull Requests are welcome.
+
+.. _github: https://github.com/twdb/ulmo
+
+
 
 API Reference
 -------------
