@@ -45,6 +45,31 @@ def test_parse_dcp_message_timestamp():
             assert data['message_timestamp_utc'][-1] == test_set['first_row_message_timestamp_utc']
 
 
+multi_message_test_sets = [
+    {
+        'dcp_address': 'C5149430',
+        'data_files': { 
+            '.*DRS_UNTIL=now.*':'usgs/eddn/C5149430_file1.txt',
+            '.*DRS_UNTIL=2013%2F294.*':'usgs/eddn/C5149430_file2.txt',
+            '.*DRS_UNTIL=2013%2F207.*':'usgs/eddn/C5149430_file3.txt'
+        },
+        'first_row_message_timestamp_utc': datetime.strptime('14016152818', fmt),
+        'last_row_message_timestamp_utc': datetime.strptime('13202032818', fmt),
+        'number_of_lines': 360,
+        'start': 'P365D'
+    }
+]
+
+
+def test_multi_message_download():
+    for test_set in multi_message_test_sets:
+        with test_util.mocked_urls(test_set['data_files']):
+            data = ulmo.usgs.eddn.get_data(test_set['dcp_address'], start=test_set['start'])
+            assert data['message_timestamp_utc'][-1] == test_set['first_row_message_timestamp_utc']
+            assert data['message_timestamp_utc'][0] == test_set['last_row_message_timestamp_utc']
+            assert len(data) == test_set['number_of_lines']
+
+
 twdb_stevens_test_sets = [
     {
         'message_timestamp_utc': datetime(2013,10,30,15,28,18),
