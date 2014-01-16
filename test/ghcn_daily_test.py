@@ -92,7 +92,7 @@ def test_get_data_as_dataframes():
                     nulls = pandas.isnull(value)
 
                     assert np.all(pandas.isnull(test_array) == nulls)
-                    assert np.all(value[~nulls] == test_array[~nulls])
+                    assert np.all(value[~nulls.values] == test_array[~nulls.values])
 
 
 def test_get_data_as_dicts():
