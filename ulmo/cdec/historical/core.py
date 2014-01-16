@@ -86,13 +86,13 @@ def get_sensors(sensor_id=None):
     Gets a list of sensor ids as a DataFrame indexed on sensor
     number. Can be limited by a list of numbers.
 
-    Usage Example:
+    Usage example::
 
-    from ulmo import cdec
+        from ulmo import cdec
         # to get all available sensor info
-    snesors = cdec.historical.get_sensors()
+        sensors = cdec.historical.get_sensors()
         # or to get just one sensor
-    sensors = cdec.historical.get_sensors([1])
+        sensor = cdec.historical.get_sensors([1])
 
     Parameters
     ----------
@@ -126,11 +126,12 @@ def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
     resolutions are available, an empty DataFrame will be returned for that
     station.
 
-    Usage Example:
+    Usage example::
 
-    from ulmo import cdec
+        from ulmo import cdec
         # to get all available sensors
-    available_sensors = cdec.historical.get_sensors(['NEW'])
+        available_sensors = cdec.historical.get_sensors(['NEW'])
+
 
     Parameters
     ----------
@@ -186,12 +187,10 @@ def get_data(station_ids=None, sensor_ids=None, resolutions=None, start=None, en
     are slow as molasses in winter.
 
 
+    Usage example::
 
-    Usage Example:
-
-    from ulmo import cdec
-        # to get all available sensors
-    dat = cdec.historical.get_data(['PRA'],resolutions=['daily'])
+        from ulmo import cdec
+        dat = cdec.historical.get_data(['PRA'],resolutions=['daily'])
 
     Parameters
     ----------
