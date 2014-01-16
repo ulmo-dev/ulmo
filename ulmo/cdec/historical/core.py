@@ -53,14 +53,12 @@
 """
 
 import pandas as pd
-#import urllib
-import requests
 import re
 
 from ulmo import util
 
 DEFAULT_START_DATE = '01/01/1901'
-DEFAULT_END_DATE   = 'Now'
+DEFAULT_END_DATE = 'Now'
 
 
 def get_stations():
@@ -171,7 +169,7 @@ def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
         var_resolution = [re.split(r'[\(\)]+',x)[1] for x in sensor_list.resolution]
 
         sensor_list['resolution'] = var_resolution
-        sensor_list['variable'] = [x+y for x,y in zip(var_names,var_resolution)]
+        sensor_list['variable'] = [x + y for x, y in zip(var_names, var_resolution)]
         sensor_list['units'] = pd.Series(units,index=sensor_list.index)
 
         station_sensors[station_id] = _limit_sensor_list(sensor_list, sensor_ids, resolutions)
@@ -237,7 +235,7 @@ def get_data(station_ids=None, sensor_ids=None, resolutions=None, start=None, en
         for index, row in sensor_list.iterrows():
             res = row.ix['resolution']
             var = row.ix['variable']
-            sensor_id =  row.ix['sensor_id']
+            sensor_id = row.ix['sensor_id']
             station_data[var] = _download_raw(station_id, sensor_id, _res_to_dur_code(res), start_date_str, end_date_str)
 
         d[station_id] = station_data
@@ -259,14 +257,11 @@ def _limit_sensor_list(sensor_list, sensor_ids, resolution):
 def _download_raw(station_id, sensor_num, dur_code, start_date, end_date):
 
     url = 'http://cdec.water.ca.gov/cgi-progs/queryCSV' + \
-          '?station_id=' + station_id    + \
-          '&dur_code='   + dur_code   + \
+          '?station_id=' + station_id + \
+          '&dur_code=' + dur_code + \
           '&sensor_num=' + str(sensor_num) + \
           '&start_date=' + start_date + \
-          '&end_date='   + end_date
-
-    #tf = tempfile.mktemp()
-    #urllib.urlretrieve(url, tf)
+          '&end_date=' + end_date
 
     df = pd.read_csv(url, skiprows=2, header=None, parse_dates=[[0,1]], index_col=None, na_values='m')
     df.columns = ['datetime', 'value']
