@@ -237,7 +237,7 @@ def _format_time(timestamp):
             timestamp = isodate.parse_datetime(timestamp)
 
     if isinstance(timestamp, datetime):
-        return datetime.strftime('%Y/%j %H:%M:%S')
+        return timestamp.strftime('%Y/%j %H:%M:%S')
     elif isinstance(timestamp, timedelta):
         return _format_period(timestamp)
 
