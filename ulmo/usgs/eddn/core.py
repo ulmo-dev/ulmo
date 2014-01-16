@@ -92,7 +92,8 @@ def get_data(
         If a timedelta or string in ISO 8601 period format (e.g 'P2D' for a period of 2 days) then
         'now' minus the timedelta will be used as the start.
         NOTE: The EDDN service does not specify how far back data is available. The service also imposes
-        a maximum data limit of 25000 character.
+        a maximum data limit of 25000 character. If this is limit reached multiple requests will be made 
+        until all available data is downloaded. 
     end : {``None``, str, datetime, datetime.timedelta}
         If ``None`` (default) then the end time is 'now'
         If a datetime or datetime like string is specified it will be used as the end date.
