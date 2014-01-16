@@ -10,6 +10,7 @@ import warnings
 
 import appdirs
 from lxml import etree
+import numpy as np
 import pandas
 import requests
 
@@ -46,13 +47,25 @@ def convert_datetime(datetime):
 
 
 def dict_from_dataframe(dataframe):
-    for column_name in dataframe.columns:
-        dataframe[column_name][pandas.isnull(dataframe[column_name])] = None
     if isinstance(dataframe.index, pandas.PeriodIndex)\
             or isinstance(dataframe.index, pandas.DatetimeIndex):
         dataframe.index = [str(i) for i in dataframe.index]
 
-    return dataframe.T.to_dict()
+    # convert np.nan objects to None objects; prior to pandas 0.13.0 this could
+    # be done in a vectorized way, but as of 0.13, assigning None into a
+    # dataframe, it gets converted to a nan object so this has to be done
+    # rather inefficiently in a post-processing step
+    if pandas.__version__ < '0.13.0':
+        for column_name in dataframe.columns:
+            dataframe[column_name][pandas.isnull(dataframe[column_name])] = None
+        df_dict = dataframe.T.to_dict()
+    else:
+        df_dict = dict([
+            (k, _nans_to_nones(v))
+            for k, v in dataframe.T.to_dict().iteritems()
+        ])
+
+    return df_dict
 
 
 def download_if_new(url, path, check_modified=True):
@@ -223,6 +236,15 @@ def _http_download_if_new(url, path, check_modified):
         _http_download_file(url, path)
     elif check_modified and _request_is_newer_than_file(head, path):
         _http_download_file(url, path)
+
+
+def _nans_to_nones(nan_dict):
+    """takes a dict and if any values are np.nan then it will replace them with
+    None"""
+    return dict([
+        (k, v) if v is not np.nan else (k, None)
+        for k, v in nan_dict.iteritems()
+    ])
 
 
 def _parse_rfc_1123_timestamp(timestamp_str):
