@@ -1,6 +1,13 @@
 .. _api:
 
 
+
+California Department of Water Resources Historical Data
+========================================================
+.. automodule:: ulmo.cdec.historical
+   :members: get_stations, get_sensors, get_station_sensors, get_data
+
+
 Climate Prediction Center Weekly Drought
 ========================================
 .. automodule:: ulmo.cpc.drought
@@ -53,6 +60,12 @@ USGS National Water Information System
 
 .. automodule:: ulmo.usgs.nwis.hdf5
    :members:
+
+
+USGS Emergency Data Distribution Network services
+=================================================
+.. automodule:: ulmo.usgs.eddn
+   :members: get_data, decode
 
 
 .. _dates-and-times:
