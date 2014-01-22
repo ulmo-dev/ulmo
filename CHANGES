@@ -2,6 +2,13 @@ Changelog
 ---------
 
 
+**0.6.4 (in development)**
+
+- a bunch of minor fixes for working with pandas 0.13
+- this release drops support for pandas 0.10.1; the minimum required version of
+  pandas is now 0.11
+
+
 **0.6.3 (released 2013-12-12)**
 
 - add cdec.historical for accessing California Department of Water Resources
