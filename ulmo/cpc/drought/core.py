@@ -330,7 +330,9 @@ def _value_dict(value):
 def _week_number(date):
     """returns the growing season week number for a given datetime.date"""
     first_sunday = _first_sunday(date.year)
-    if date < first_sunday:
-        first_sunday = _first_sunday(date.year - 1)
-    days_since_first_sunday = (date - first_sunday).days
+    date_ts = pandas.Timestamp(date)
+    first_sunday_ts = pandas.Timestamp(first_sunday)
+    if date_ts < first_sunday_ts:
+        first_sunday_ts = pandas.Timestamp(_first_sunday(date.year - 1))
+    days_since_first_sunday = (date_ts - first_sunday_ts).days
     return (first_sunday.year, (days_since_first_sunday / 7) + 1)

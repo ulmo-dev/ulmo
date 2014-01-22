@@ -1,6 +1,7 @@
 import numpy as np
 import pandas
 
+from ulmo import util
 from ulmo.ncdc import ghcn_daily
 
 import test_util
@@ -86,13 +87,14 @@ def test_get_data_as_dataframes():
             for element_id, element_test_data in sample_data.iteritems():
                 element_df = station_data[element_id]
                 for date, test_value in element_test_data.iteritems():
+                    date = pandas.Period(pandas.Timestamp(date), freq='D')
                     value = element_df.xs(date)
                     test_array = np.array(test_value, dtype=value.dtype)
 
                     nulls = pandas.isnull(value)
 
                     assert np.all(pandas.isnull(test_array) == nulls)
-                    assert np.all(value[~nulls] == test_array[~nulls])
+                    assert np.all(value[~nulls.values] == test_array[~nulls.values])
 
 
 def test_get_data_as_dicts():
@@ -136,8 +138,7 @@ def test_get_stations_as_dataframe():
     for test_station in test_stations:
         station_id = test_station.get('id')
         station = stations.xs(station_id)
-        station[pandas.isnull(station)] = None
-        station_dict = station.to_dict()
+        station_dict = util.misc._nans_to_nones(station.to_dict())
         assert station_dict == test_station
 
 

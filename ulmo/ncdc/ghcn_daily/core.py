@@ -102,7 +102,7 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
                     if date.day == day_of_month]
             if not len(dates):
                 continue
-            months = [pandas.Period(date, 'M') for date in dates]
+            months = pandas.PeriodIndex([pandas.Period(date, 'M') for date in dates])
             for column_name in dataframe.columns:
                 col = column_name + str(day_of_month)
                 dataframe[column_name][dates] = element_df[col][months]
@@ -208,7 +208,14 @@ def get_stations(country=None, state=None, elements=None, start_year=None,
         stations = pandas.merge(stations, ids).set_index('id', drop=False)
 
     # wm_oid gets converted as a float, so cast it to str manually
-    stations['wm_oid'] = stations['wm_oid'].astype('|S5')
+    # pandas versions prior to 0.13.0 could use numpy's fix-width string type
+    # to do this but that stopped working in pandas 0.13.0 - fortunately a
+    # regex-based helper method was added then, too
+    if pandas.__version__ < '0.13.0':
+        stations['wm_oid'] = stations['wm_oid'].astype('|S5')
+    else:
+        stations['wm_oid'] = stations['wm_oid'].astype(str).str.extract('(.{0,5})')
+
     stations['wm_oid'][stations['wm_oid'] == 'nan'] = np.nan
 
     if as_dataframe:

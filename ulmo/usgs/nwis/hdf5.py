@@ -72,7 +72,7 @@ def get_sites(path=None, complevel=None, complib=None):
     if not os.path.exists(sites_store_path):
         return {}
 
-    with _get_store(sites_store_path, 'r', **comp_kwargs) as store:
+    with _get_store(sites_store_path, mode='r', **comp_kwargs) as store:
         if SITES_TABLE not in store:
             return {}
 
@@ -160,7 +160,7 @@ def get_site_data(site_code, agency_code=None, parameter_code=None, path=None,
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
 
-    with _get_store(site_data_path, 'r', **comp_kwargs) as store:
+    with _get_store(site_data_path, mode='r', **comp_kwargs) as store:
         site_group = store.get_node(site_code)
         if site_group is None:
             return {}
@@ -268,7 +268,7 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
         return
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
-    with _get_store(sites_store_path, 'a', **comp_kwargs) as store:
+    with _get_store(sites_store_path, mode='a', **comp_kwargs) as store:
         _update_stored_sites(store, new_sites)
 
     if autorepack:
@@ -332,7 +332,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
 
     something_changed = False
-    with _get_store(site_data_path, 'a', **comp_kwargs) as store:
+    with _get_store(site_data_path, mode='a', **comp_kwargs) as store:
         for variable_code, data_dict in new_site_data.iteritems():
             variable_group_path = site_code + '/' + variable_code
 
@@ -375,7 +375,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
 
     if len(site_dict):
         sites_store_path = _get_store_path(path, 'sites.h5')
-        with _get_store(sites_store_path, 'a', **comp_kwargs) as store:
+        with _get_store(sites_store_path, mode='a', **comp_kwargs) as store:
             _update_stored_sites(store, {site_dict['code']: site_dict})
 
     if autorepack:
@@ -415,7 +415,7 @@ def _filter_warnings():
 def _get_last_refresh(site_code, path, complevel=None, complib=None):
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
     try:
-        with _get_store(path, 'r', **comp_kwargs) as store:
+        with _get_store(path, mode='r', **comp_kwargs) as store:
             site_group = store.get_node(site_code)
             if site_group is None:
                 return None
@@ -428,13 +428,13 @@ def _get_last_refresh(site_code, path, complevel=None, complib=None):
 
 
 @contextlib.contextmanager
-def _get_store(path, *args, **kwargs):
+def _get_store(path, **kwargs):
     abs_path = os.path.abspath(path)
     dir_path = os.path.dirname(abs_path)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
-    with pandas.io.pytables.get_store(path, *args, **kwargs) as store:
+    with pandas.io.pytables.get_store(path, **kwargs) as store:
         with _filter_warnings():
             yield store
 
@@ -537,7 +537,7 @@ def _values_dicts_to_df(values_dicts):
         df = pandas.DataFrame(columns=['datetime', 'value', 'qualifiers', 'last_checked',
             'last_modified'])
     else:
-        df = df.set_index(pandas.DatetimeIndex(df['datetime']))
+        df = df.set_index(pandas.DatetimeIndex(pandas.to_datetime(df['datetime'])))
     return df
 
 

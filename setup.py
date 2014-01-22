@@ -48,7 +48,7 @@ setup(
         # mock is required for mocking pytables-related functionality when it doesn't exist
         'mock>=1.0.0',
         'numpy>=1.4.0',
-        'pandas>=0.10.1',
+        'pandas>=0.11',
         'requests>=1.1',
         'suds>=0.4',
     ],

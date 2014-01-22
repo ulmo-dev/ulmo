@@ -1,7 +1,9 @@
-import datetime
+import pandas as pd
+import numpy as np
+
 import ulmo
 import test_util
-import numpy as np
+
 
 def test_get_stations():
     stations_file = 'cdec/historical/all_stations.csv'
@@ -16,7 +18,8 @@ def test_get_sensors():
     with test_util.mocked_urls(sensors_file):
         sensors = ulmo.cdec.historical.get_sensors()
     assert 200 < len(sensors)
-    assert u'FLOW, RIVER DISCHARGE' == sensors.ix[20]['Description']
+    sensors.index = sensors['Sensor No'].astype(int)
+    assert u'FLOW, RIVER DISCHARGE' == sensors.xs(20)['Description']
 
 
 def test_get_station_sensors():
@@ -49,4 +52,5 @@ def test_get_station_data():
             station_data = ulmo.cdec.historical.get_data(['PRA'], [6],
                 resolutions=['daily'], start='2000-1-1', end='2000-1-2')
 
-            assert np.all(test_values == station_data[station_id][var_name].index)
+            test_timestamps = [pd.Timestamp(t) for t in test_values]
+            assert np.all(test_timestamps == station_data[station_id][var_name].index)
