@@ -87,6 +87,7 @@ def test_get_data_as_dataframes():
             for element_id, element_test_data in sample_data.iteritems():
                 element_df = station_data[element_id]
                 for date, test_value in element_test_data.iteritems():
+                    date = pandas.Period(pandas.Timestamp(date), freq='D')
                     value = element_df.xs(date)
                     test_array = np.array(test_value, dtype=value.dtype)
 
