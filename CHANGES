@@ -7,6 +7,8 @@ Changelog
 - a bunch of minor fixes for working with pandas 0.13
 - this release drops support for pandas 0.10.1; the minimum required version of
   pandas is now 0.11
+- usgs.eddn.get_data will now make multiple requests if it encounters a 'Maximum
+  data limit reached' message
 
 
 **0.6.3 (released 2013-12-12)**
