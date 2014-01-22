@@ -92,7 +92,8 @@ def get_data(
         If a timedelta or string in ISO 8601 period format (e.g 'P2D' for a period of 2 days) then
         'now' minus the timedelta will be used as the start.
         NOTE: The EDDN service does not specify how far back data is available. The service also imposes
-        a maximum data limit of 25000 character.
+        a maximum data limit of 25000 character. If this is limit reached multiple requests will be made 
+        until all available data is downloaded. 
     end : {``None``, str, datetime, datetime.timedelta}
         If ``None`` (default) then the end time is 'now'
         If a datetime or datetime like string is specified it will be used as the end date.
@@ -174,21 +175,15 @@ def get_data(
     params['RETRANSMITTED'] = retransmitted
     params['DAPS_STATUS'] = daps_status
 
-    r = requests.get(EDDN_URL, params=params)
-    log.info('new data retrieved using url: %s\n' % r.url)
-    soup = BeautifulSoup(r.text)
-    message = soup.find('pre').contents[0].strip('\n')
+    data_limit_reached = True
+    messages = []
+    while data_limit_reached:
+        new_message, data_limit_reached =  _fetch_url(params)
+        messages += new_message
+        if data_limit_reached:
+            params['DRS_UNTIL'] = _format_time(_parse(new_message[-1])['message_timestamp_utc'])
 
-    if not message:
-        log.info('No data found\n')
-        return pd.DataFrame()
-
-    if 'Max data limit reached' in message:
-        log.info('Max data limit reached, returning available data, try using a smaller time range\n')
-
-    message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M | re.S)]
-
-    new_data = pd.DataFrame([_parse(row) for row in message])
+    new_data = pd.DataFrame([_parse(row) for row in messages])
     new_data.index = new_data.message_timestamp_utc
 
     data = new_data.combine_first(data)
@@ -215,6 +210,26 @@ def get_data(
     return data
 
 
+def _fetch_url(params):
+    r = requests.get(EDDN_URL, params=params)
+    log.info('data requested using url: %s\n' % r.url)
+    soup = BeautifulSoup(r.text)
+    message = soup.find('pre').contents[0].strip('\n')
+
+    if not message:
+        log.info('No data found\n')
+        message = []
+
+    data_limit_reached = False
+    if 'Max data limit reached' in message:
+        data_limit_reached = True
+        log.info('Max data limit reached, making new request for older data\n')
+
+    message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M | re.S)]
+
+    return message, data_limit_reached
+
+
 def _format_period(period):
     days, hours, minutes = period.days, period.seconds // 3600, (period.seconds // 60) % 60
 
@@ -237,7 +252,7 @@ def _format_time(timestamp):
             timestamp = isodate.parse_datetime(timestamp)
 
     if isinstance(timestamp, datetime):
-        return datetime.strftime('%Y/%j %H:%M:%S')
+        return timestamp.strftime('%Y/%j %H:%M:%S')
     elif isinstance(timestamp, timedelta):
         return _format_period(timestamp)
 

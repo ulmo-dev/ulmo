@@ -85,7 +85,7 @@ def mocked_urls(url_files, methods=None):
 
             for method in methods:
                 request_class = getattr(HTTPretty, method)
-                HTTPretty.register_uri(request_class, url_re, body=callback)
+                HTTPretty.register_uri(request_class, url_re, match_querystring=True, body=callback)
         yield
         HTTPretty.disable()
         HTTPretty.reset()
