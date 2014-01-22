@@ -56,8 +56,7 @@ def mocked_urls(url_files, methods=None):
         filepath to a file whose contents will be used as a response to all
         HTTP requests. Or it can be a dict where the keys are regular
         expression strings and the values are filepaths - the regex keys will
-        be used to match urls and matching if they match, the file path will be
-        used.
+        be used to match urls if they match, the file path will be used.
 
     methods : iterable of str or None
         HTTP methods that will be mocked. If set to None (default) then the
