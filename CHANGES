@@ -2,7 +2,7 @@ Changelog
 ---------
 
 
-**0.6.4 (in development)**
+**0.6.4 (released 2014-01-22)**
 
 - a bunch of minor fixes for working with pandas 0.13
 - this release drops support for pandas 0.10.1; the minimum required version of
