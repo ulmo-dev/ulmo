@@ -537,7 +537,7 @@ def _values_dicts_to_df(values_dicts):
         df = pandas.DataFrame(columns=['datetime', 'value', 'qualifiers', 'last_checked',
             'last_modified'])
     else:
-        df = df.set_index(pandas.DatetimeIndex(df['datetime']))
+        df = df.set_index(pandas.DatetimeIndex(pandas.to_datetime(df['datetime'])))
     return df
 
 
