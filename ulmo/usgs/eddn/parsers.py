@@ -132,10 +132,10 @@ def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels):
         else:
             data.append([timestamp, pd.np.nan, water_level])
 
-    try:
+    if len(data)>0:
         df = pd.DataFrame(data, columns=['timestamp_utc', 'battery_voltage', 'water_level'])
         df.index = pd.to_datetime(df['timestamp_utc'])
         del df['timestamp_utc']
         return df
-    except:
+    else:
         return pd.DataFrame()
