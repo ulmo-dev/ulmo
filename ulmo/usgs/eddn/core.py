@@ -70,7 +70,9 @@ def decode(dataframe, parser, **kwargs):
 
     df = []
     for timestamp, data in dataframe.iterrows():
-        df.append(parser(data, **kwargs))
+        parsed = parser(data, **kwargs)
+        if not parsed.empty:
+            df.append(parsed)
 
     df = pd.concat(df)
     return df
