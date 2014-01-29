@@ -186,13 +186,14 @@ def get_data(
             params['DRS_UNTIL'] = _format_time(_parse(new_message[-1])['message_timestamp_utc'])
 
     new_data = pd.DataFrame([_parse(row) for row in messages])
-    new_data.index = new_data.message_timestamp_utc
 
-    data = new_data.combine_first(data)
-    data.sort(inplace=True)
+    if not new_data.empty:
+        new_data.index = new_data.message_timestamp_utc
+        data = new_data.combine_first(data)
+        data.sort(inplace=True)
 
-    if use_cache:
-        data.to_hdf(dcp_data_path, dcp_address)
+        if use_cache:
+            data.to_hdf(dcp_data_path, dcp_address)
 
     if start:
         if start.startswith('P'):
