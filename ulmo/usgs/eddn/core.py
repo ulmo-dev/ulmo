@@ -218,16 +218,16 @@ def _fetch_url(params):
     soup = BeautifulSoup(r.text)
     message = soup.find('pre').contents[0].strip('\n')
 
-    if not message:
-        log.info('No data found\n')
-        message = []
-
     data_limit_reached = False
     if 'Max data limit reached' in message:
         data_limit_reached = True
         log.info('Max data limit reached, making new request for older data\n')
 
-    message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M | re.S)]
+    if not message:
+        log.info('No data found\n')
+        message = []
+    else:
+        message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M | re.S)]
 
     return message, data_limit_reached
 
