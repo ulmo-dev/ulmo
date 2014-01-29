@@ -118,13 +118,31 @@ twdb_stevens_test_sets = [
             ['2013-10-30 05:00:00', '6', '28', pd.np.nan, 310.66],
             ['2013-10-30 04:00:00', '6', '28', pd.np.nan, 310.51],
         ]
-    }
+    },
+    {
+        'message_timestamp_utc': datetime(2013,10,30,15,28,18),
+        'dcp_message': '"BV:12.6 ',
+        'return_value': pd.DataFrame()
+    },
+        {
+        'message_timestamp_utc': datetime(2013,10,30,15,28,18),
+        'dcp_message': """ 79."$}X^pZBF8iB~i>>Xmj[bvr^Zv%JXl,DU=l{uu[ t(
+|@2q^sjS!
+ """,
+        'return_value': pd.DataFrame()
+    },
 ]
 
 
 def test_parser_twdb_stevens():
     for test_set in twdb_stevens_test_sets:
         print 'testing twdb_stevens parser'
+
+        if isinstance(test_set['return_value'], pd.DataFrame):
+            parser = getattr(parsers, 'twdb_stevens')
+            assert_frame_equal(pd.DataFrame(), parser(test_set))
+            return
+
         if len(test_set['return_value'][0]) == 3:
             columns = ['timestamp_utc', 'battery_voltage', 'water_level']
         else:
