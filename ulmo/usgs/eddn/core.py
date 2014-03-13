@@ -29,6 +29,7 @@ import os
 import pandas as pd
 import re
 import requests
+import shutil
 from ulmo import util
 
 from . import parsers
@@ -193,7 +194,10 @@ def get_data(
         data.sort(inplace=True)
 
         if use_cache:
-            data.to_hdf(dcp_data_path, dcp_address)
+            #write to a tmp file and move to avoid ballooning h5 file
+            tmp = dcp_data_path + '.tmp'
+            data.to_hdf(tmp, dcp_address)
+            shutil.move(tmp, dcp_data_path)
 
     if start:
         if start.startswith('P'):
