@@ -57,7 +57,7 @@ setup(
         'suds>=0.4',
     ],
     extras_require={
-        'pytables_caching': ['tables>=0.2.3']
+        'pytables_caching': ['tables>=2.3.0']
     },
     classifiers=[
         'Development Status :: 4 - Beta',

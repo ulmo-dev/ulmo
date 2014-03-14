@@ -29,6 +29,7 @@ import os
 import pandas as pd
 import re
 import requests
+import shutil
 from ulmo import util
 
 from . import parsers
@@ -70,7 +71,9 @@ def decode(dataframe, parser, **kwargs):
 
     df = []
     for timestamp, data in dataframe.iterrows():
-        df.append(parser(data, **kwargs))
+        parsed = parser(data, **kwargs)
+        if not parsed.empty:
+            df.append(parsed)
 
     df = pd.concat(df)
     return df
@@ -184,13 +187,17 @@ def get_data(
             params['DRS_UNTIL'] = _format_time(_parse(new_message[-1])['message_timestamp_utc'])
 
     new_data = pd.DataFrame([_parse(row) for row in messages])
-    new_data.index = new_data.message_timestamp_utc
 
-    data = new_data.combine_first(data)
-    data.sort(inplace=True)
+    if not new_data.empty:
+        new_data.index = new_data.message_timestamp_utc
+        data = new_data.combine_first(data)
+        data.sort(inplace=True)
 
-    if use_cache:
-        data.to_hdf(dcp_data_path, dcp_address)
+        if use_cache:
+            #write to a tmp file and move to avoid ballooning h5 file
+            tmp = dcp_data_path + '.tmp'
+            data.to_hdf(tmp, dcp_address)
+            shutil.move(tmp, dcp_data_path)
 
     if start:
         if start.startswith('P'):
@@ -216,16 +223,16 @@ def _fetch_url(params):
     soup = BeautifulSoup(r.text)
     message = soup.find('pre').contents[0].strip('\n')
 
-    if not message:
-        log.info('No data found\n')
-        message = []
-
     data_limit_reached = False
     if 'Max data limit reached' in message:
         data_limit_reached = True
         log.info('Max data limit reached, making new request for older data\n')
 
-    message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M | re.S)]
+    if not message:
+        log.info('No data found\n')
+        message = []
+    else:
+        message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M | re.S)]
 
     return message, data_limit_reached
 
