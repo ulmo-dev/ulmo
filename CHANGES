@@ -2,6 +2,14 @@ Changelog
 ---------
 
 
+**0.6.5 (released 2014-03-14)**
+
+- usgs.eddn hdf5 files will no longer grow larger than they have to with each
+  update
+- fix incorrect ghcn_daily wm_oid when using pandas 0.13.1
+- fix incorrect pytables required version
+
+
 **0.6.4 (released 2014-01-22)**
 
 - a bunch of minor fixes for working with pandas 0.13
