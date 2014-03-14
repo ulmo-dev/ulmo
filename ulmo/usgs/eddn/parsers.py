@@ -114,7 +114,6 @@ def twdb_texuni(dataframe, drop_dcp_metadata=True):
 def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels):
     data = []
     base_timestamp = message_timestamp.replace(minute=0, second=0, microsecond=0)
-    water_levels.reverse()
     try:
         battery_voltage = float(battery_voltage)
     except:
