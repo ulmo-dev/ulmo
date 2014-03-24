@@ -2,6 +2,14 @@ Changelog
 ---------
 
 
+=======
+
+**0.6.6 (released 2014-03-24)**
+
+- fix usgs.eddn parsers: values should be interpretted as reversed for sutron
+  and texuni dataloggers
+
+
 **0.6.5 (released 2014-03-14)**
 
 - usgs.eddn hdf5 files will no longer grow larger than they have to with each
