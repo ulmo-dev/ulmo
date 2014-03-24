@@ -68,7 +68,7 @@ def twdb_sutron(dataframe, drop_dcp_metadata=True):
     lines = message.strip('":').split(':')
     if len(lines) == 1:
         water_levels = [field.strip('+- ') for field in lines[0].split()]
-        df = _twdb_assemble_dataframe(message_timestamp, None, water_levels)
+        df = _twdb_assemble_dataframe_sutron(message_timestamp, None, water_levels)
     else:
         data = []
         battery_voltage = lines[-1].split('bl')[-1].strip()
@@ -76,7 +76,7 @@ def twdb_sutron(dataframe, drop_dcp_metadata=True):
             channel = line[:7]
             split = line[7:].split()
             water_levels = [field.strip('+-" ') for field in split[2:]]
-            df = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels)
+            df = _twdb_assemble_dataframe_sutron(message_timestamp, battery_voltage, water_levels)
             df['channel'] = channel
             data.append(df)
         df = pd.concat(data)
@@ -112,6 +112,36 @@ def twdb_texuni(dataframe, drop_dcp_metadata=True):
 
 
 def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels):
+    data = []
+    base_timestamp = message_timestamp.replace(minute=0, second=0, microsecond=0)
+    water_levels.reverse()
+    try:
+        battery_voltage = float(battery_voltage)
+    except:
+        battery_voltage = pd.np.nan
+
+    for hrs, water_level in enumerate(water_levels):
+        timestamp = base_timestamp - timedelta(hours=hrs)
+        try:
+            water_level = float(water_level)
+        except:
+            water_level = pd.np.nan
+
+        if hrs==0 and battery_voltage:
+            data.append([timestamp, battery_voltage, water_level])
+        else:
+            data.append([timestamp, pd.np.nan, water_level])
+
+    if len(data)>0:
+        df = pd.DataFrame(data, columns=['timestamp_utc', 'battery_voltage', 'water_level'])
+        df.index = pd.to_datetime(df['timestamp_utc'])
+        del df['timestamp_utc']
+        return df
+    else:
+        return pd.DataFrame()
+
+
+def _twdb_assemble_dataframe_sutron(message_timestamp, battery_voltage, water_levels):
     data = []
     base_timestamp = message_timestamp.replace(minute=0, second=0, microsecond=0)
     try:
