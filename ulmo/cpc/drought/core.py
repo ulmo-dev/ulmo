@@ -313,8 +313,8 @@ def _period_for_week(year, week_number):
 def _reindex_data(dataframe):
     dataframe = _convert_week_numbers(dataframe)
     dataframe = _convert_state_codes(dataframe)
-    return dataframe.set_index(['state', 'climate_division', 'period'],
-            drop=False)
+    return dataframe.set_index(
+        ['state', 'climate_division', 'period'], drop=False)
 
 
 def _url_exists(url):
@@ -335,4 +335,4 @@ def _week_number(date):
     if date_ts < first_sunday_ts:
         first_sunday_ts = pandas.Timestamp(_first_sunday(date.year - 1))
     days_since_first_sunday = (date_ts - first_sunday_ts).days
-    return (first_sunday.year, (days_since_first_sunday / 7) + 1)
+    return (first_sunday_ts.year, (days_since_first_sunday / 7) + 1)
