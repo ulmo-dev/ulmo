@@ -4,6 +4,11 @@ Changelog
 
 =======
 
+**0.6.7 (in development)**
+
+- fix usgs.cpc year/week number reckoning bug
+
+
 **0.6.6 (released 2014-03-24)**
 
 - fix usgs.eddn parsers: values should be interpretted as reversed for sutron
