@@ -240,15 +240,13 @@ def _get_data_url(year):
         if not _url_exists(url):
             url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data'
         return url
-    elif year == current_year - 2:
+    elif year <= 1985:
+        return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer73-85'
+    else:
         url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s' % str(year)[-2:]
         if not _url_exists(url):
             url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:]
         return url
-    elif 1985 < year < current_year - 2:
-        return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s' % str(year)[-2:]
-    elif year <= 1985:
-        return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer73-85'
 
 
 def _open_data_file(url):
