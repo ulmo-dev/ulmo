@@ -4,6 +4,12 @@ Changelog
 
 =======
 
+**0.6.8 (in development)**
+
+- fix flakey usgs.cpc url determination causing data for the 2011 agricultural
+  year to be unavailable
+
+
 **0.6.7 (released 2014-03-28)**
 
 - fix usgs.cpc year/week number reckoning bug
