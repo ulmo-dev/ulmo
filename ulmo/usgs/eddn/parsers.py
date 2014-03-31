@@ -28,14 +28,14 @@ def twdb_stevens(dataframe, drop_dcp_metadata=True):
             msg_channel = fields[0].split(':')[-1]
             msg_time = fields[1].split(':')[-1]
             water_levels = [field.strip(fmt) for field in fields[2:]]
-            data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels)
+            data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, reverse=True)
             data['channel'] = msg_channel
             data['time'] = msg_time
             df.append(data)
     else:
         fields = message.split()
         water_levels = [field.strip(fmt) for field in fields]
-        data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels)
+        data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, reverse=True)
         df.append(data)
 
     df = pd.concat(df)
@@ -68,7 +68,7 @@ def twdb_sutron(dataframe, drop_dcp_metadata=True):
     lines = message.strip('":').split(':')
     if len(lines) == 1:
         water_levels = [field.strip('+- ') for field in lines[0].split()]
-        df = _twdb_assemble_dataframe(message_timestamp, None, water_levels)
+        df = _twdb_assemble_dataframe(message_timestamp, None, water_levels, reverse=False)
     else:
         data = []
         battery_voltage = lines[-1].split('bl')[-1].strip()
@@ -76,7 +76,7 @@ def twdb_sutron(dataframe, drop_dcp_metadata=True):
             channel = line[:7]
             split = line[7:].split()
             water_levels = [field.strip('+-" ') for field in split[2:]]
-            df = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels)
+            df = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, reverse=False)
             df['channel'] = channel
             data.append(df)
         df = pd.concat(data)
@@ -102,7 +102,7 @@ def twdb_texuni(dataframe, drop_dcp_metadata=True):
     message_timestamp = dataframe['message_timestamp_utc']
     water_levels = [row.split(',')[1].strip('+- ') for row in message.strip('" \r\n').splitlines()[:-1]]
 
-    df = _twdb_assemble_dataframe(message_timestamp, None, water_levels)
+    df = _twdb_assemble_dataframe(message_timestamp, None, water_levels, reverse=True)
 
     if not drop_dcp_metadata:
         for col in dataframe.index:
@@ -111,9 +111,11 @@ def twdb_texuni(dataframe, drop_dcp_metadata=True):
     return df
 
 
-def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels):
+def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, reverse=False):
     data = []
     base_timestamp = message_timestamp.replace(minute=0, second=0, microsecond=0)
+    if reverse:
+        water_levels.reverse()
     try:
         battery_voltage = float(battery_voltage)
     except:
