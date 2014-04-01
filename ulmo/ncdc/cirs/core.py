@@ -8,6 +8,7 @@
     .. _National Climatic Data Center: http://www.ncdc.noaa.gov
     .. _Climate Index Reference Sequential (CIRS): http://www1.ncdc.noaa.gov/pub/data/cirs/
 """
+import distutils
 import os.path
 
 import pandas
@@ -59,7 +60,7 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
           * 'sp09': 9-month Standardized Precipitation Index
           * 'sp12': 12-month Standardized Precipitation Index
           * 'sp24': 24-month Standardized Precipitation Index
-          * 'tmp': Temperature
+          * 'tmpc': Temperature
           * 'zndx': ZNDX
     by_state : bool
         If False (default), divisional data will be retrieved. If True, then
@@ -140,9 +141,13 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
 
 
 def _get_element_data(element, by_state, use_file, location_names):
-    url = _get_url(element, by_state)
-    filename = url.rsplit('/', 1)[-1]
-    path = os.path.join(CIRS_DIR, filename)
+    if use_file:
+        url = None
+        path = None
+    else:
+        url = _get_url(element, by_state)
+        filename = url.rsplit('/', 1)[-1]
+        path = os.path.join(CIRS_DIR, filename)
 
     with util.open_file_for_url(url, path, use_file=use_file) as f:
         element_df = _parse_values(f, by_state, location_names, element)
@@ -158,36 +163,46 @@ def _get_element_file(use_file, element, elements, by_state):
                     "'use_file' must be a path to a directory if using "
                     "'use_file' with multiple elements")
 
-            return use_file + _get_filename(element, by_state)
+            return use_file + _get_filename(element, by_state, os.path.dirname(use_file))
 
     return use_file
 
 
-def _get_filename(element, by_state):
-    return "drd964x.%s%s.txt" % (element, 'st' if by_state else '')
+def _get_filename(element, by_state, dir_path):
+    files = os.listdir(dir_path)
+    return _most_recent(files, element, by_state)
 
 
 def _get_url(element, by_state):
-    filename = _get_filename(element, by_state)
-    return "ftp://ftp.ncdc.noaa.gov/pub/data/cirs/" + filename
+    ftp_dir = "ftp://ftp.ncdc.noaa.gov/pub/data/cirs/climdiv/"
+    files = util.dir_list(ftp_dir)
+    most_recent = _most_recent(files, element, by_state)
+    return ftp_dir + most_recent
+
+
+def _most_recent(files, element, by_state):
+    geographic_extent = 'st' if by_state else 'dv'
+    match_str = 'climdiv-{element}{geographic_extent}'.format(
+        element=element,
+        geographic_extent=geographic_extent,
+    )
+    matches = filter(lambda s: s.startswith(match_str), files)
+    return sorted(matches, key=_file_key)[0]
+
+
+def _file_key(filename):
+    version_str = filename.split('-')[2][1:]
+    return distutils.version.StrictVersion(version_str)
 
 
 def _parse_values(file_handle, by_state, location_names, element):
     if by_state:
-        if 'sp' in element:
-            id_columns = [
-                ('location_code', 0, 3, None),
-                #('division', 3, 3, None), # ignored in state files
-                #('element', 4, 6, None),  # element is redundant
-                ('year', 7, 11, None),
-            ]
-        else:
-            id_columns = [
-                ('location_code', 0, 3, None),
-                #('division', 3, 3, None), # ignored in state files
-                #('element', 4, 6, None),  # element is redundant
-                ('year', 6, 10, None),
-            ]
+        id_columns = [
+            ('location_code', 0, 3, None),
+            #('division', 3, 3, None), # ignored in state files
+            #('element', 4, 6, None),  # element is redundant
+            ('year', 6, 10, None),
+        ]
     else:
         id_columns = [
             ('location_code', 0, 2, None),

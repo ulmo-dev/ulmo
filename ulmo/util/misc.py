@@ -46,6 +46,16 @@ def convert_datetime(datetime):
     return pandas.Timestamp(datetime).to_datetime()
 
 
+def dir_list(url):
+    """given a path to a ftp directory, returns a list of files in that
+    directory
+    """
+    parsed = urlparse.urlparse(url)
+    ftp = ftplib.FTP(parsed.netloc, "anonymous")
+    ftp.cwd(parsed.path)
+    return ftp.nlst()
+
+
 def dict_from_dataframe(dataframe):
     if isinstance(dataframe.index, pandas.PeriodIndex)\
             or isinstance(dataframe.index, pandas.DatetimeIndex):
