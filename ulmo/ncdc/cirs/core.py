@@ -8,6 +8,7 @@
     .. _National Climatic Data Center: http://www.ncdc.noaa.gov
     .. _Climate Index Reference Sequential (CIRS): http://www1.ncdc.noaa.gov/pub/data/cirs/
 """
+import distutils
 import os.path
 
 import pandas
@@ -18,9 +19,9 @@ from ulmo import util
 CIRS_DIR = util.get_ulmo_dir('ncdc/cirs')
 
 NO_DATA_VALUES = {
-    'cdd': '-9999.',
-    'hdd': '-9999.',
-    'pcp': '-9.99',
+    'cddc': '-9999.',
+    'hddc': '-9999.',
+    'pcpn': '-9.99',
     'pdsi': '-99.99',
     'phdi': '-99.99',
     'pmdi': '-99.99',
@@ -31,7 +32,7 @@ NO_DATA_VALUES = {
     'sp09': '-99.99',
     'sp12': '-99.99',
     'sp24': '-99.99',
-    'tmp': '-99.90',
+    'tmpc': '-99.90',
     'zndx': '-99.99',
 
 }
@@ -46,9 +47,9 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
         The element(s) for which to get data for. If ``None`` (default), then
         all elements are used. An individual element is a string, but a list or
         tuple of them can be used to specify a set of elements.  Elements are:
-          * 'cdd': Cooling Degree Days
-          * 'hdd': Heating Degree Days
-          * 'pcp': Precipitation
+          * 'cddc': Cooling Degree Days
+          * 'hddc': Heating Degree Days
+          * 'pcpn': Precipitation
           * 'pdsi': Palmer Drought Severity Index
           * 'phdi': Palmer Hydrological Drought Index
           * 'pmdi': Modified Palmer Drought Severity Index
@@ -59,7 +60,7 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
           * 'sp09': 9-month Standardized Precipitation Index
           * 'sp12': 12-month Standardized Precipitation Index
           * 'sp24': 24-month Standardized Precipitation Index
-          * 'tmp': Temperature
+          * 'tmpc': Temperature
           * 'zndx': ZNDX
     by_state : bool
         If False (default), divisional data will be retrieved. If True, then
@@ -95,9 +96,9 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
         elements = [elements]
     elif elements is None:
         elements = [
-            'cdd',
-            'hdd',
-            'pcp',
+            'cddc',
+            'hddc',
+            'pcpn',
             'pdsi',
             'phdi',
             'pmdi',
@@ -108,7 +109,7 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
             'sp09',
             'sp12',
             'sp24',
-            'tmp',
+            'tmpc',
             'zndx',
         ]
 
@@ -140,9 +141,13 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
 
 
 def _get_element_data(element, by_state, use_file, location_names):
-    url = _get_url(element, by_state)
-    filename = url.rsplit('/', 1)[-1]
-    path = os.path.join(CIRS_DIR, filename)
+    if use_file:
+        url = None
+        path = None
+    else:
+        url = _get_url(element, by_state)
+        filename = url.rsplit('/', 1)[-1]
+        path = os.path.join(CIRS_DIR, filename)
 
     with util.open_file_for_url(url, path, use_file=use_file) as f:
         element_df = _parse_values(f, by_state, location_names, element)
@@ -158,36 +163,46 @@ def _get_element_file(use_file, element, elements, by_state):
                     "'use_file' must be a path to a directory if using "
                     "'use_file' with multiple elements")
 
-            return use_file + _get_filename(element, by_state)
+            return use_file + _get_filename(element, by_state, os.path.dirname(use_file))
 
     return use_file
 
 
-def _get_filename(element, by_state):
-    return "drd964x.%s%s.txt" % (element, 'st' if by_state else '')
+def _get_filename(element, by_state, dir_path):
+    files = os.listdir(dir_path)
+    return _most_recent(files, element, by_state)
 
 
 def _get_url(element, by_state):
-    filename = _get_filename(element, by_state)
-    return "ftp://ftp.ncdc.noaa.gov/pub/data/cirs/" + filename
+    ftp_dir = "ftp://ftp.ncdc.noaa.gov/pub/data/cirs/climdiv/"
+    files = util.dir_list(ftp_dir)
+    most_recent = _most_recent(files, element, by_state)
+    return ftp_dir + most_recent
+
+
+def _most_recent(files, element, by_state):
+    geographic_extent = 'st' if by_state else 'dv'
+    match_str = 'climdiv-{element}{geographic_extent}'.format(
+        element=element,
+        geographic_extent=geographic_extent,
+    )
+    matches = filter(lambda s: s.startswith(match_str), files)
+    return sorted(matches, key=_file_key)[0]
+
+
+def _file_key(filename):
+    version_str = filename.split('-')[2][1:]
+    return distutils.version.StrictVersion(version_str)
 
 
 def _parse_values(file_handle, by_state, location_names, element):
     if by_state:
-        if 'sp' in element:
-            id_columns = [
-                ('location_code', 0, 3, None),
-                #('division', 3, 3, None), # ignored in state files
-                #('element', 4, 6, None),  # element is redundant
-                ('year', 7, 11, None),
-            ]
-        else:
-            id_columns = [
-                ('location_code', 0, 3, None),
-                #('division', 3, 3, None), # ignored in state files
-                #('element', 4, 6, None),  # element is redundant
-                ('year', 6, 10, None),
-            ]
+        id_columns = [
+            ('location_code', 0, 3, None),
+            #('division', 3, 3, None), # ignored in state files
+            #('element', 4, 6, None),  # element is redundant
+            ('year', 6, 10, None),
+        ]
     else:
         id_columns = [
             ('location_code', 0, 2, None),

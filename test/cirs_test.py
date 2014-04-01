@@ -18,53 +18,53 @@ test_sets = [
                 'division': 8,
                 'year': 1998,
                 'month': 1,
-                'pdsi': 2.35,
+                'pdsi': 1.84,
             }, {
                 'state': 'WY',
                 'state_code': 48,
                 'division': 8,
                 'year': 1998,
                 'month': 2,
-                'pdsi': 2.31,
+                'pdsi': 1.88,
             }, {
                 'state': 'WY',
                 'state_code': 48,
                 'division': 8,
                 'year': 1998,
                 'month': 3,
-                'pdsi': 2.33,
+                'pdsi': 1.99,
             }, {
                 'state': 'WY',
                 'state_code': 48,
                 'division': 8,
                 'year': 1998,
                 'month': 11,
-                'pdsi': 3.11,
+                'pdsi': 2.71,
             }, {
                 'state': 'WY',
                 'state_code': 48,
                 'division': 8,
                 'year': 1998,
                 'month': 12,
-                'pdsi': 2.96,
+                'pdsi': 2.53,
             }, {
                 'state': 'TX',
                 'state_code': 41,
                 'division': 10,
                 'year': 1895,
                 'month': 1,
-                'pdsi': -0.1,
+                'pdsi': -0.05,
             }, {
                 'state': 'TX',
                 'state_code': 41,
                 'division': 10,
                 'year': 1895,
                 'month': 12,
-                'pdsi': 1.94,
+                'pdsi': 1.72,
             },
         ]
     }, {
-        'element': 'tmp',
+        'element': 'tmpc',
         'by_state': True,
         'values': [
             {
@@ -72,29 +72,29 @@ test_sets = [
                 'location_code': 17,
                 'year': 1895,
                 'month': 1,
-                'tmp': 14.00,
+                'tmpc': 12.20,
             }, {
                 'location': 'ME',
                 'location_code': 17,
                 'year': 1895,
                 'month': 12,
-                'tmp': 22.70,
+                'tmpc': 20.7,
             }, {
                 'location': 'national',
                 'location_code': 110,
                 'year': 2013,
                 'month': 1,
-                'tmp': 31.91,
+                'tmpc': 32.25,
             }, {
                 'location': 'national',
                 'location_code': 110,
                 'year': 2013,
                 'month': 2,
-                'tmp': 34.77,
+                'tmpc': 34.79,
             },
         ]
     }, {
-        'element': 'tmp',
+        'element': 'tmpc',
         'by_state': True,
         'location_names': 'full',
         'values': [
@@ -103,7 +103,7 @@ test_sets = [
                 'location_code': 17,
                 'year': 1895,
                 'month': 1,
-                'tmp': 14.00,
+                'tmpc': 12.20,
             },
         ]
     }, {
@@ -115,11 +115,11 @@ test_sets = [
                 'location_code': 1,
                 'year': 1895,
                 'month': 1,
-                'sp01': 0.84,
+                'sp01': 1.23,
             },
         ]
     }, {
-        'element': ['sp01', 'tmp', 'pdsi'],
+        'element': ['sp01', 'tmpc', 'pdsi'],
         'by_state': True,
         'values': [
             {
@@ -127,9 +127,9 @@ test_sets = [
                 'location_code': 1,
                 'year': 1895,
                 'month': 1,
-                'sp01': 0.84,
-                'tmp': 43.70,
-                'pdsi': 0.44,
+                'sp01': 1.23,
+                'tmpc': 43.1,
+                'pdsi': 0.78,
             },
             {
                 'location': None,
@@ -137,7 +137,7 @@ test_sets = [
                 'year': 1895,
                 'month': 1,
                 'sp01': None,
-                'tmp': 17.20,
+                'tmpc': 15.5,
                 'pdsi': None,
             },
         ]
@@ -197,10 +197,9 @@ def _assert_inclusion(value_dict, dataframe):
 def _test_use_file(elements, by_state):
     if test_util.use_test_files():
         if isinstance(elements, basestring):
-            if by_state:
-                path = 'ncdc/cirs/drd964x.%sst.txt' % elements
-            else:
-                path = 'ncdc/cirs/drd964x.%s.txt' % elements
+            div = "st" if by_state else "dv"
+            path = 'ncdc/cirs/climdiv-{elements}{div}-v1.0.0-20140304'.format(
+                elements=elements, div=div)
         else:
             path = 'ncdc/cirs/'
         return test_util.get_test_file_path(path)

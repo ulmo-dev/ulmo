@@ -3,6 +3,7 @@ from .misc import (
         convert_date,
         convert_datetime,
         dict_from_dataframe,
+        dir_list,
         download_if_new,
         get_ulmo_dir,
         mkdir_if_doesnt_exist,
