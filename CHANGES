@@ -2,7 +2,7 @@ Changelog
 ---------
 
 
-**0.7.0 (in development)**
+**0.7.0 (released 2014-04-01)**
 
 - this release includes some backwards incompatible changes
 - update ncdc.cirs to use new nClimDiv dataset (see
