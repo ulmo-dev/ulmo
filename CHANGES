@@ -2,8 +2,9 @@ Changelog
 ---------
 
 
-**0.6.8 (in development)**
+**0.7.0 (in development)**
 
+- this release includes some backwards incompatible changes
 - update ncdc.cirs to use new nClimDiv dataset (see
   ftp://ftp.ncdc.noaa.gov/pub/data/cirs/climdiv/div-dataset-transition-readme.txt)
   for details about the new dataset
