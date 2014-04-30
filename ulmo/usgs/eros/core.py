@@ -22,13 +22,15 @@
 """
 
 import logging
+import os
+import pandas as pd
 import requests
-import shutil
 from ulmo import util
 
 
 # eros services base urls
 EROS_INVENTORY_URL = 'http://nimbus.cr.usgs.gov/index_service/Index_Service_JSON2.asmx'
+EROS_VALIDATION_URL = 'http://extract.cr.usgs.gov/requestValidationServiceClient/sampleRequestValidationServiceProxy/getTiledDataDirectURLs2.jsp?TOP=%s&BOTTOM=%s&LEFT=%s&RIGHT=%s&LAYER_IDS=%s&JSON=true'
 
 # default file path (appended to default ulmo path)
 DEFAULT_FILE_PATH = 'usgs/eros/'
@@ -40,12 +42,72 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-def list_themes():
+def available_datasets(xmin, ymin, xmax, ymax, epsg=4326, attrs=None, as_dataframe=True):
+    if epsg != 4326:
+        raise NotImplementedError
+
+    if attrs is None:
+        attrs = ','.join(list_attributes()['name'].tolist())
+
+    payload = {
+                'Attribs': attrs,
+                'Xmin': xmin,
+                'Ymin': ymin,
+                'Xmax': xmax,
+                'Ymax': ymax,
+                'EPSG': epsg,
+        }
+
+    url = EROS_INVENTORY_URL + '/return_Attributes_Download_Only'
+    return _call_service(url, payload, as_dataframe)
+
+
+def get_raster(product_key, xmin, ymin, xmax, ymax, type='tiled', format='geojson', path=None):
+
+    if type!='tiled':
+        raise NotImplementedError
+
+    if format=='geojson':
+        layer_id = product_key + '02'
+    else:
+        raise NotImplementedError
+
+    url = EROS_VALIDATION_URL % (ymax, ymin, xmin, xmax, layer_id)
+    r = requests.get(url)
+
+    tiles = r.json()['REQUEST_SERVICE_RESPONSE']['PIECE']
+
+    if path is None:
+        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    for i, tile in enumerate(tiles):
+        url = tile['DOWNLOAD_URL']
+        filename = os.path.split(url)[-1].split('&')[0]
+        full_path = os.path.join(path, filename)
+        print 'downloading tile %s of %s: saved as %s' % (i, len(tiles), full_path)
+        util.download_if_new(url, full_path, check_modified=True)
+
+
+def list_attributes(as_dataframe=True):
+    url = EROS_INVENTORY_URL + '/return_Attribute_List'
+    return _call_service(url, {}, as_dataframe)
+
+
+def list_themes(as_dataframe=True):
     url = EROS_INVENTORY_URL + '/return_Themes'
-    return _call_service(url, {})
+    return _call_service(url, {}, as_dataframe)
 
 
-def _call_service(url, payload):
+def _call_service(url, payload, as_dataframe):
     payload['callback'] = ''
     r = requests.get(url, params=payload)
-    return r.json()
+    if as_dataframe:
+        df = pd.DataFrame(r.json()['items'])
+        df.index = df['ID']
+        del df['ID']
+        return df
+    else:
+        return r.json()

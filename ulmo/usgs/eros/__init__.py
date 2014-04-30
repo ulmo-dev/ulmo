@@ -4,5 +4,5 @@
 
     .. _Earth Resources Observation and Science (EROS) Center: http://nimbus.cr.usgs.gov/app_services.php
 """
-from .core import list_themes
+from .core import available_datasets, list_themes, list_attributes, get_raster
 
