@@ -42,7 +42,12 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-def available_datasets(xmin, ymin, xmax, ymax, epsg=4326, attrs=None, as_dataframe=True):
+def get_attribute_list(as_dataframe=True):
+    url = EROS_INVENTORY_URL + '/return_Attribute_List'
+    return _call_service(url, {}, as_dataframe)
+
+
+def get_available_datasets(xmin, ymin, xmax, ymax, epsg=4326, attrs=None, as_dataframe=True):
     if epsg != 4326:
         raise NotImplementedError
 
@@ -62,16 +67,32 @@ def available_datasets(xmin, ymin, xmax, ymax, epsg=4326, attrs=None, as_datafra
     return _call_service(url, payload, as_dataframe)
 
 
-def get_raster(product_key, xmin, ymin, xmax, ymax, type='tiled', format='geojson', path=None):
+def get_available_formats(product_key, as_dataframe=True):
+    url = EROS_INVENTORY_URL + '/return_Download_Options'
+    payload = {'ProductIDs': product_key}
+    return _call_service(url, payload, as_dataframe)
+
+
+def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled', path=None):
 
     if type!='tiled':
         raise NotImplementedError
 
-    if format=='geojson':
-        layer_id = product_key + '02'
+    available_formats = get_available_formats(product_key)['outputformat'][0].lower()
+    if fmt is None:
+        if 'geotiff' in available_formats:
+            fmt = 'geotiff'
+        elif 'img' in available_formats:
+            fmt = 'img'
+        else:
+            fmt = available_formats.split('-')[0]
     else:
-        raise NotImplementedError
+        if fmt not in available_formats:
+            raise ValueError, 'file format %s not available for product %s' % (fmt, product_key)
 
+    pos = available_formats.find(fmt)
+    layer_id = product_key + available_formats[pos-3:pos-1]
+    
     url = EROS_VALIDATION_URL % (ymax, ymin, xmin, xmax, layer_id)
     r = requests.get(url)
 
@@ -87,16 +108,11 @@ def get_raster(product_key, xmin, ymin, xmax, ymax, type='tiled', format='geojso
         url = tile['DOWNLOAD_URL']
         filename = os.path.split(url)[-1].split('&')[0]
         full_path = os.path.join(path, filename)
-        print 'downloading tile %s of %s: saved as %s' % (i, len(tiles), full_path)
+        print 'downloading tile %s of %s: saved as %s (file format - %s) \n url: %s' % (i+1, len(tiles), full_path, fmt, url)
         util.download_if_new(url, full_path, check_modified=True)
 
 
-def list_attributes(as_dataframe=True):
-    url = EROS_INVENTORY_URL + '/return_Attribute_List'
-    return _call_service(url, {}, as_dataframe)
-
-
-def list_themes(as_dataframe=True):
+def get_themes(as_dataframe=True):
     url = EROS_INVENTORY_URL + '/return_Themes'
     return _call_service(url, {}, as_dataframe)
 
