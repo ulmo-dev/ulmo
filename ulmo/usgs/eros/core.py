@@ -21,11 +21,14 @@
 
 """
 
+import hashlib
 import logging
 import os
 import pandas as pd
 import requests
+import subprocess
 from ulmo import util
+import zipfile
 
 
 # eros services base urls
@@ -34,6 +37,11 @@ EROS_VALIDATION_URL = 'http://extract.cr.usgs.gov/requestValidationServiceClient
 
 # default file path (appended to default ulmo path)
 DEFAULT_FILE_PATH = 'usgs/eros/'
+
+ext = {
+        'geotiff': '.tif',
+        'img': '.img',
+    }
 
 # configure logging
 LOG_FORMAT = '%(message)s'
@@ -52,7 +60,7 @@ def get_available_datasets(xmin, ymin, xmax, ymax, epsg=4326, attrs=None, as_dat
         raise NotImplementedError
 
     if attrs is None:
-        attrs = ','.join(list_attributes()['name'].tolist())
+        attrs = ','.join(get_attribute_list()['name'].tolist())
 
     payload = {
                 'Attribs': attrs,
@@ -73,7 +81,28 @@ def get_available_formats(product_key, as_dataframe=True):
     return _call_service(url, payload, as_dataframe)
 
 
-def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled', path=None):
+def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled', path=None, use_cache=True):
+
+    if path is None:
+        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    if not os.path.exists(os.path.join(path, 'by_boundingbox')):
+        os.makedirs(os.path.join(path, 'by_boundingbox'))
+
+    uid = hashlib.md5(','.join([product_key, repr(xmin), repr(ymin), repr(xmax), repr(ymax)])).hexdigest()
+    output_path = os.path.join(path, 'by_boundingbox', uid + '.vrt')
+
+    if os.path.isfile(output_path):
+        return output_path
+
+    vrt_path = os.path.join(path, product_key, 'virtual_raster.vrt')
+    #if os.path.isfile(vrt_path):
+    #    with rasterio.drivers():
+    #        with rasterio.open('virtual_raster.vrt') as src:
+    #            bounds = src.bounds
 
     if type!='tiled':
         raise NotImplementedError
@@ -98,19 +127,26 @@ def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled', path
 
     tiles = r.json()['REQUEST_SERVICE_RESPONSE']['PIECE']
 
-    if path is None:
-        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
-
-    if not os.path.exists(path):
-        os.makedirs(path)
-
+    print 'Downloading tiles needed for requested bounding box:'
+    raster_tiles = []
     for i, tile in enumerate(tiles):
         url = tile['DOWNLOAD_URL']
-        filename = os.path.split(url)[-1].split('&')[0]
-        full_path = os.path.join(path, filename)
-        print 'downloading tile %s of %s: saved as %s (file format - %s) \n url: %s' % (i+1, len(tiles), full_path, fmt, url)
-        util.download_if_new(url, full_path, check_modified=True)
+        direct_url = requests.head(url).headers.get('location')
+        filename = os.path.split(direct_url)[-1]
+        zip_path = os.path.join(path, product_key, 'zip', filename)
+        print '... downloading tile %s of %s from %s' % (i+1, len(tiles), direct_url)
+        util.download_if_new(direct_url, zip_path, check_modified=True)
+        print '... ... zipfile saved at %s' % zip_path
+        tile_path = zip_path.replace('/zip', '')
+        raster_tiles.append(_extract_raster_from_zip(zip_path, tile_path, fmt))
 
+    print 'Mosaic and clip to bounding box extents'
+    tile_path = os.path.split(tile_path)[0]
+    #print subprocess.check_output(['gdalbuildvrt', output_path] + raster_tiles)
+    print subprocess.check_output(['gdalbuildvrt', '-te', repr(xmin), repr(ymin), repr(xmax), repr(ymax), output_path] + raster_tiles)
+    #print repr(xmin), repr(ymin), repr(xmax), repr(ymax)
+    return output_path
+   
 
 def get_themes(as_dataframe=True):
     url = EROS_INVENTORY_URL + '/return_Themes'
@@ -127,3 +163,14 @@ def _call_service(url, payload, as_dataframe):
         return df
     else:
         return r.json()
+
+
+def _extract_raster_from_zip(zip_path, tile_path, fmt):
+    tile_path = os.path.splitext(tile_path)[0] + ext[fmt]
+    with zipfile.ZipFile(zip_path) as z:
+        fname = [x for x in z.namelist() if ext[fmt] in x][0]
+        with open(tile_path, 'w') as f:
+            f.write(z.read(fname))
+            print '... ... %s format raster saved at %s' % (fmt, tile_path)
+
+    return tile_path
