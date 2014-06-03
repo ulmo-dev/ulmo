@@ -26,11 +26,15 @@ import zipfile
 # NED ftp url.  
 NED_FTP_URL = 'ftp://rockyftp.cr.usgs.gov/vdelivery/Datasets/Staged/NED/<layer>/IMG/'
 
+# ScienceBase webservice url for IMG format NED tiles
+# https://www.sciencebase.gov/catalog/items?fields=id,title,summary,body,tags,webLinks,dates,spatial&q=&filter=tags=National Elevation Dataset (NED) 1/9 arc-second&filter=spatialQuery=Polygon ((-95.26155638325938 40.07132704825149,-94.16292357075272 40.07132704825149,-94.16292357075272 40.594749211728654,-95.26155638325938 40.594749211728654,-95.26155638325938 40.07132704825149))&format=json
+NED_WS_URL = 'https://www.sciencebase.gov/catalog/items?fields=webLinks&q=&filter=tags=National Elevation Dataset (NED) %s&filter=tags=IMG&filter=spatialQuery=Polygon ((%s))&format=json'
+
 # default file path (appended to default ulmo path)
 DEFAULT_FILE_PATH = 'usgs/ned/'
 
 layer_dict = {
-        '2 arc-second': '2',
+        'Alaska 2 arc-second': '2',
         '1 arc-second': '1',
         '1/3 arc-second': '13',
         '1/9 arc-second': '19',
@@ -62,14 +66,29 @@ def get_file_index(path=None, update_cache=False):
         return json.load(f)
 
 
-def _tile_urls(layer, xmin, ymin, xmax, ymax, path=None):
+def get_tile_urls(layer, xmin, ymin, xmax, ymax, path=None, use_webservice=False):
     """
         Find tile urls corresponding to the given layer and bounding box
     """
+    if use_webservice:
+        polygon = ','.join([(repr(x) + ' ' + repr(y)) for x,y in [
+            (xmin, ymax),
+            (xmin, ymin), 
+            (xmax, ymin), 
+            (xmax, ymax), 
+            (xmin, ymax)]])
+        url = NED_WS_URL % (layer, polygon)
+        r = requests.get(url)
+        urls = []
+        for tile in r.json()['items']:
+            urls.append([x for x in tile['webLinks'] if x['type']=='download'][0]['uri'])
+
+        return sorted(urls)
+
     base_url = NED_FTP_URL.replace('<layer>', layer_dict[layer])
     file_index = get_file_index(path=path)
 
-    if layer=='1 arc-second':
+    if layer in ['1 arc-second', '1/3 arc-second', 'Alaska 2 arc-second']:
         lats = np.arange(np.ceil(ymin), np.ceil(ymax)+1)
         lons = np.arange(np.floor(xmin), np.floor(xmax)+1)
         files = []
@@ -80,10 +99,10 @@ def _tile_urls(layer, xmin, ymin, xmax, ymax, path=None):
             for lon in lons:
                 files.append(fmt % (fmt_lat(lat), fmt_lon(lon)))
 
-        available_files = list(set(file_index['1 arc-second']).intersection(set(files)))
+        available_files = list(set(file_index[layer]).intersection(set(files)))
 
         urls = [base_url + filename for filename in available_files]
-        return urls
+        return sorted(urls)
 
 
 def _update_file_index(filename):
@@ -125,7 +144,7 @@ def get_raster(layer, xmin, ymin, xmax, ymax, path=None, use_cache=True):
 
     print 'Downloading tiles needed for requested bounding box:'
     raster_tiles = []
-    tiles = _tile_urls(layer, xmin, ymin, xmax, ymax)
+    tiles = get_tile_urls(layer, xmin, ymin, xmax, ymax)
     for i, url in enumerate(tiles):
         filename = os.path.split(url)[-1]
         zip_path = os.path.join(path, layer_dict[layer], 'zip', filename)
