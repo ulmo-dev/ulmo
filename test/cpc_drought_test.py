@@ -7,6 +7,24 @@ import test_util
 
 test_sets = [
     {
+        'filename': 'cpc/drought/palmer88',
+        'start': '1989-01-22',
+        'end': '1989-01-28',
+        'state': 'TX',
+        'climate_division': 1,
+        'values': [{
+            'cmi': -0.11,
+            'pdsi': 0.0,
+            'period': '1989-01-22/1989-01-28',
+            'potential_evap': 0.1,
+            'precipitation': 0.4,
+            'runoff': 0.0,
+            'soil_moisture_lower': 0.3,
+            'soil_moisture_upper': 0.3,
+            'temperature': 43.0
+        }],
+    },
+    {
         'filename': 'cpc/drought/palmer94',
         'start': '1995-02-19',
         'end': '1995-02-25',

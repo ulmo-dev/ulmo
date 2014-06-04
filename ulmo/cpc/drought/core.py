@@ -131,9 +131,9 @@ def get_data(state=None, climate_division=None, start=None, end=None,
     data = None
     for year in range(start_year, end_year + 1):
         url = _get_data_url(year)
-        format_type =_get_data_format(year)
+        format_type = _get_data_format(year)
         with _open_data_file(url) as data_file:
-            year_data = _parse_data_file(data_file, format_type)
+            year_data = _parse_data_file(data_file, format_type, year)
 
         if state_code:
             year_data = year_data[year_data['state_code'] == state_code]
@@ -256,14 +256,13 @@ def _open_data_file(url):
     return util.open_file_for_url(url, file_path, check_modified=True)
 
 
-def _parse_data_file(data_file, palmer_format):
+def _parse_data_file(data_file, palmer_format, year):
     """
     based on the fortran format strings:
         format2: FORMAT(I4,3I2,F4.1,F4.0,10F6.2,4F6.4,F6.3,10F6.2,F4.0,12F6.2)
         format4: FORMAT(2I4,I2,F4.1,F4.0,10F6.2,4F6.4,F6.3,10F6.2,F4.0,12F6.2)
         format5: FORMAT(2I4,I2,F5.2,F5.1,10F6.2,4F6.4,F6.3,10F6.2,F4.0,12F6.2)
     """
-    to_yyyy = 0
     if palmer_format == 'format5':
         delim_sequence = (2, 2, 4, 2, 5, 5) + 10*(6,) + 4*(6,) + (6,) + 10*(6,) + (4,) + 12*(6,)
         use_columns = (0, 1, 2, 3, 4, 5, 9, 15, 28, 29, 37, 40, 41)
@@ -273,7 +272,6 @@ def _parse_data_file(data_file, palmer_format):
     elif palmer_format == 'format2':
         delim_sequence = (2, 2, 2, 2, 2, 4, 4) + 10*(6,) + 4*(6,) + (6,) + 10*(6,) + (4,) + 12*(6,)
         use_columns = (0, 1, 2, 3, 5, 6, 10, 16, 29, 30, 38, 41, 42)
-        to_yyyy = 1900
     else:
         raise NotImplementedError("we have not implemented the format for given date range")
 
@@ -293,7 +291,7 @@ def _parse_data_file(data_file, palmer_format):
     ]
 
     data_array = np.genfromtxt(data_file, dtype=dtype, delimiter=delim_sequence, usecols=use_columns)
-    data_array['year'] += to_yyyy
+    data_array['year'] = year
     dataframe = pandas.DataFrame(data_array)
     return dataframe
 
