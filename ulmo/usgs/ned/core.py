@@ -20,7 +20,7 @@ import pandas as pd
 import requests
 import subprocess
 from ulmo import util
-import zipfile
+
 
 
 # NED ftp url.  
@@ -122,53 +122,25 @@ def _update_file_index(filename):
     return filename
 
 
-def get_raster(layer, xmin, ymin, xmax, ymax, path=None, use_cache=True, 
+def get_raster(layer, xmin, ymin, xmax, ymax, path=None, update_cache=False, 
     check_modified=False):
 
     if path is None:
         path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
 
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-    if not os.path.exists(os.path.join(path, 'by_boundingbox')):
-        os.makedirs(os.path.join(path, 'by_boundingbox'))
-
-    uid = hashlib.md5(','.join([layer, repr(xmin), repr(ymin), repr(xmax), repr(ymax)])).hexdigest()
+    util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
+    uid = util.generate_raster_uid(layer, xmin, ymin, xmax, ymax)
     output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
 
-    if os.path.isfile(output_path):
+    layer_path = os.path.join(path, layer_dict[layer])
+
+    if os.path.isfile(output_path) and not update_cache:
         return output_path
 
     print 'Downloading tiles needed for requested bounding box:'
-    raster_tiles = []
-    tiles = get_tile_urls(layer, xmin, ymin, xmax, ymax)
-    for i, url in enumerate(tiles):
-        filename = os.path.split(url)[-1]
-        zip_path = os.path.join(path, layer_dict[layer], 'zip', filename)
+    tile_urls = get_tile_urls(layer, xmin, ymin, xmax, ymax)
+    tile_fmt = '.img'
+    raster_tiles = util.download_tiles(layer_path, tile_urls, tile_fmt, check_modified)
+    util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
 
-        print '... downloading tile %s of %s from %s' % (i+1, len(tiles), url)
-        util.download_if_new(url, zip_path, check_modified=check_modified)
-        print '... ... zipfile saved at %s' % zip_path
-        tile_path = zip_path.replace('/zip', '')
-        raster_tiles.append(_extract_raster_from_zip(zip_path, tile_path))
-
-    print 'Mosaic and clip to bounding box extents'
-    tile_path = os.path.split(tile_path)[0]
-    print subprocess.check_output(['gdalwarp', '-te', repr(xmin), repr(ymin), repr(xmax), repr(ymax)] + raster_tiles + [output_path])
     return output_path
-   
-
-def _extract_raster_from_zip(zip_path, tile_path):
-    tile_path = os.path.splitext(tile_path)[0] + '.img'
-    if os.path.exists(tile_path):
-        if os.stat(zip_path).st_mtime < os.stat(tile_path).st_mtime:
-            return tile_path
-
-    with zipfile.ZipFile(zip_path) as z:
-        fname = [x for x in z.namelist() if '.img' in x][0]
-        with open(tile_path, 'w') as f:
-            f.write(z.read(fname))
-            print '... ... .img format raster saved at %s' % (tile_path)
-
-    return tile_path

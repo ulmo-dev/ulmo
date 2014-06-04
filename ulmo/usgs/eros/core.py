@@ -81,28 +81,18 @@ def get_available_formats(product_key, as_dataframe=True):
     return _call_service(url, payload, as_dataframe)
 
 
-def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled', path=None, use_cache=True):
+def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled', 
+    path=None, update_cache=False, check_modified=False):
 
     if path is None:
         path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
 
-    if not os.path.exists(path):
-        os.makedirs(path)
+    util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
+    uid = util.generate_raster_uid(product_key, xmin, ymin, xmax, ymax)
+    output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
 
-    if not os.path.exists(os.path.join(path, 'by_boundingbox')):
-        os.makedirs(os.path.join(path, 'by_boundingbox'))
-
-    uid = hashlib.md5(','.join([product_key, repr(xmin), repr(ymin), repr(xmax), repr(ymax)])).hexdigest()
-    output_path = os.path.join(path, 'by_boundingbox', uid + '.vrt')
-
-    if os.path.isfile(output_path):
+    if os.path.isfile(output_path) and not update_cache:
         return output_path
-
-    vrt_path = os.path.join(path, product_key, 'virtual_raster.vrt')
-    #if os.path.isfile(vrt_path):
-    #    with rasterio.drivers():
-    #        with rasterio.open('virtual_raster.vrt') as src:
-    #            bounds = src.bounds
 
     if type!='tiled':
         raise NotImplementedError
@@ -121,32 +111,28 @@ def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled', path
 
     pos = available_formats.find(fmt)
     layer_id = product_key + available_formats[pos-3:pos-1]
-    
-    url = EROS_VALIDATION_URL % (ymax, ymin, xmin, xmax, layer_id)
+    layer_path = os.path.join(path, product_key)
+    tile_urls = get_raster_urls(layer_id, xmin, ymin, xmax, ymax)
+    tile_fmt = ext[fmt]
+    raster_tiles = util.download_tiles(layer_path, tile_urls, tile_fmt, check_modified)
+    util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
+
+    return output_path
+   
+
+def get_raster_urls(layer, xmin, ymin, xmax, ymax):
+
+    url = EROS_VALIDATION_URL % (ymax, ymin, xmin, xmax, layer)
     r = requests.get(url)
 
     tiles = r.json()['REQUEST_SERVICE_RESPONSE']['PIECE']
+    tile_urls = []
+    for tile in tiles:
+       url = tile['DOWNLOAD_URL']
+       tile_urls.append(requests.head(url).headers.get('location'))
 
-    print 'Downloading tiles needed for requested bounding box:'
-    raster_tiles = []
-    for i, tile in enumerate(tiles):
-        url = tile['DOWNLOAD_URL']
-        direct_url = requests.head(url).headers.get('location')
-        filename = os.path.split(direct_url)[-1]
-        zip_path = os.path.join(path, product_key, 'zip', filename)
-        print '... downloading tile %s of %s from %s' % (i+1, len(tiles), direct_url)
-        util.download_if_new(direct_url, zip_path, check_modified=True)
-        print '... ... zipfile saved at %s' % zip_path
-        tile_path = zip_path.replace('/zip', '')
-        raster_tiles.append(_extract_raster_from_zip(zip_path, tile_path, fmt))
+    return tile_urls
 
-    print 'Mosaic and clip to bounding box extents'
-    tile_path = os.path.split(tile_path)[0]
-    #print subprocess.check_output(['gdalbuildvrt', output_path] + raster_tiles)
-    print subprocess.check_output(['gdalbuildvrt', '-te', repr(xmin), repr(ymin), repr(xmax), repr(ymax), output_path] + raster_tiles)
-    #print repr(xmin), repr(ymin), repr(xmax), repr(ymax)
-    return output_path
-   
 
 def get_themes(as_dataframe=True):
     url = EROS_INVENTORY_URL + '/return_Themes'
@@ -163,14 +149,3 @@ def _call_service(url, payload, as_dataframe):
         return df
     else:
         return r.json()
-
-
-def _extract_raster_from_zip(zip_path, tile_path, fmt):
-    tile_path = os.path.splitext(tile_path)[0] + ext[fmt]
-    with zipfile.ZipFile(zip_path) as z:
-        fname = [x for x in z.namelist() if ext[fmt] in x][0]
-        with open(tile_path, 'w') as f:
-            f.write(z.read(fname))
-            print '... ... %s format raster saved at %s' % (fmt, tile_path)
-
-    return tile_path
