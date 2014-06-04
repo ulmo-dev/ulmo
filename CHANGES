@@ -2,6 +2,13 @@ Changelog
 ---------
 
 
+**0.7.1 (released 2014-06-05)**
+
+- bugfix: in cpc.drought dataset calculate year number externally rather than
+  using year number from data files, as they are sometimes incorrect (see github
+  issue #66)
+
+
 **0.7.0 (released 2014-04-01)**
 
 - this release includes some backwards incompatible changes
