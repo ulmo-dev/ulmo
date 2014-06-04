@@ -104,6 +104,9 @@ def get_tile_urls(layer, xmin, ymin, xmax, ymax, path=None, use_webservice=False
         urls = [base_url + filename for filename in available_files]
         return sorted(urls)
 
+    if layer=='1/9 arc-second':
+        raise NotImplementedError("1/9 arc-second NED local tile determination not implemented yet")
+
 
 def _update_file_index(filename):
     index = {}
