@@ -15,6 +15,13 @@ from .misc import (
         save_pretty_printed_xml,
     )
 
+from .raster import (
+        extract_from_zip,
+        mosaic_and_clip,
+        download_tiles,
+        generate_raster_uid,
+    )
+
 try:
     from .pytables import (
             get_default_h5file_path,
