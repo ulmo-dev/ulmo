@@ -119,7 +119,9 @@ def _update_file_index(filename):
     return filename
 
 
-def get_raster(layer, xmin, ymin, xmax, ymax, path=None, use_cache=True):
+def get_raster(layer, xmin, ymin, xmax, ymax, path=None, use_cache=True, 
+    check_modified=False):
+
     if path is None:
         path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
 
@@ -143,7 +145,7 @@ def get_raster(layer, xmin, ymin, xmax, ymax, path=None, use_cache=True):
         zip_path = os.path.join(path, layer_dict[layer], 'zip', filename)
 
         print '... downloading tile %s of %s from %s' % (i+1, len(tiles), url)
-        util.download_if_new(url, zip_path, check_modified=True)
+        util.download_if_new(url, zip_path, check_modified=check_modified)
         print '... ... zipfile saved at %s' % zip_path
         tile_path = zip_path.replace('/zip', '')
         raster_tiles.append(_extract_raster_from_zip(zip_path, tile_path))
@@ -156,6 +158,10 @@ def get_raster(layer, xmin, ymin, xmax, ymax, path=None, use_cache=True):
 
 def _extract_raster_from_zip(zip_path, tile_path):
     tile_path = os.path.splitext(tile_path)[0] + '.img'
+    if os.path.exists(tile_path):
+        if os.stat(zip_path).st_mtime < os.stat(tile_path).st_mtime:
+            return tile_path
+
     with zipfile.ZipFile(zip_path) as z:
         fname = [x for x in z.namelist() if '.img' in x][0]
         with open(tile_path, 'w') as f:
