@@ -135,8 +135,12 @@ def get_raster_urls(layer, xmin, ymin, xmax, ymax):
     tiles = r.json()['REQUEST_SERVICE_RESPONSE']['PIECE']
     tile_urls = []
     for tile in tiles:
-       url = tile['DOWNLOAD_URL']
-       tile_urls.append(requests.head(url).headers.get('location'))
+        url = tile['DOWNLOAD_URL']
+        headers = requests.head(url).headers
+        if 'location' in headers.keys():
+            url = headers['location']
+            
+        tile_urls.append(url)
 
     return tile_urls
 
