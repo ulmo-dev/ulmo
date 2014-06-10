@@ -41,6 +41,8 @@ DEFAULT_FILE_PATH = 'usgs/eros/'
 ext = {
         'geotiff': '.tif',
         'img': '.img',
+        'jpg2000': '.jp2',
+        '': '',
     }
 
 # configure logging
@@ -97,14 +99,19 @@ def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled',
     if type!='tiled':
         raise NotImplementedError
 
-    available_formats = get_available_formats(product_key)['outputformat'][0].lower()
+    available_formats = get_available_formats(product_key)
+    if not available_formats.empty:
+        available_formats = available_formats['outputformat'][0].lower()
+    else:
+        available_formats = ''
+
     if fmt is None:
         if 'geotiff' in available_formats:
             fmt = 'geotiff'
         elif 'img' in available_formats:
             fmt = 'img'
         else:
-            fmt = available_formats.split('-')[0]
+            fmt = available_formats.split(',')[0].split('-')[-1]
     else:
         if fmt not in available_formats:
             raise ValueError, 'file format %s not available for product %s' % (fmt, product_key)
@@ -144,6 +151,8 @@ def _call_service(url, payload, as_dataframe):
     r = requests.get(url, params=payload)
     if as_dataframe:
         df = pd.DataFrame(r.json()['items'])
+        if df.empty:
+            return df
         df.index = df['ID']
         del df['ID']
         return df
