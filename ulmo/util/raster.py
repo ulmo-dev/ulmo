@@ -51,7 +51,7 @@ def download_tiles(path, tile_urls, tile_fmt, check_modified=False):
 def extract_from_zip(zip_path, tile_path, tile_fmt):
     tile_path = os.path.splitext(tile_path)[0] + tile_fmt
     with zipfile.ZipFile(zip_path) as z:
-        fname = [x for x in z.namelist() if tile_fmt in x][0]
+        fname = [x for x in z.namelist() if tile_fmt in x[-4:]][0]
         with open(tile_path, 'w') as f:
             f.write(z.read(fname))
             print '... ... %s format raster saved at %s' % (tile_fmt, tile_path)
