@@ -34,13 +34,17 @@ def download_tiles(path, tile_urls, tile_fmt, check_modified=False):
 	raster_tiles = []
 	for i, url in enumerate(tile_urls):
 		filename = os.path.split(url)[-1]
-		zip_path = os.path.join(path, 'zip', filename)
 		print '... downloading tile %s of %s from %s' % (i+1, len(tile_urls), url)
-		download_if_new(url, zip_path, check_modified=check_modified)
-		print '... ... zipfile saved at %s' % zip_path
-		tile_path = zip_path.replace('/zip', '')
-		raster_tiles.append(extract_from_zip(zip_path, tile_path, tile_fmt))
+		tile_path = os.path.join(path, filename)
+		if tile_fmt=='':
+			download_if_new(url, tile_path, check_modified=check_modified)
+		else:
+			zip_path = os.path.join(path, 'zip', filename)
+			download_if_new(url, zip_path, check_modified=check_modified)
+			print '... ... zipfile saved at %s' % zip_path
+			tile_path = extract_from_zip(zip_path, tile_path, tile_fmt)
 
+		raster_tiles.append(tile_path)
 	return raster_tiles
 
 
