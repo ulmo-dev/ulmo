@@ -2,7 +2,14 @@ from datetime import timedelta
 import pandas as pd
 
 
-def twdb_stevens(dataframe, drop_dcp_metadata=True):
+def twdb_dot(dataframe, drop_dcp_metadata=True, reverse=False):
+    """Parser for twdb DOT dataloggers.
+    Similar transmission format as twdb_stevents, but values are from newest to oldest.
+    """
+    return twdb_stevens(dataframe, drop_dcp_metadata=drop_dcp_metadata, reverse=reverse)
+
+
+def twdb_stevens(dataframe, drop_dcp_metadata=True, reverse=True):
     """Parser for twdb stevens dataloggers.
     Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour
     for the previous 12 hours and one battery voltage measurement for the current hour
@@ -28,14 +35,14 @@ def twdb_stevens(dataframe, drop_dcp_metadata=True):
             msg_channel = fields[0].split(':')[-1]
             msg_time = fields[1].split(':')[-1]
             water_levels = [field.strip(fmt) for field in fields[2:]]
-            data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, reverse=True)
+            data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, reverse=reverse)
             data['channel'] = msg_channel
             data['time'] = msg_time
             df.append(data)
     else:
         fields = message.split()
         water_levels = [field.strip(fmt) for field in fields]
-        data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, reverse=True)
+        data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, reverse=reverse)
         df.append(data)
 
     df = pd.concat(df)
