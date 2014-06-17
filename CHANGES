@@ -2,6 +2,11 @@ Changelog
 ---------
 
 
+**0.7.2 (in development)**
+
+- add parser for TWDB DOT dataloggers to usgs.eddn
+
+
 **0.7.1 (released 2014-06-05)**
 
 - bugfix: in cpc.drought dataset calculate year number externally rather than
