@@ -54,10 +54,11 @@ def get_data(station_codes, start=None, end=None, parameters=None):
         end_date = util.convert_date(end)
     else:
         end_date = datetime.date.today()
+    if isinstance(parameters, basestring):
+        parameters = [parameters]
     if parameters and not 'date' in parameters:
         # add date to list of parameters if it's not there already
         parameters.insert(0, 'date')
-
     if isinstance(station_codes, basestring):
         station_codes = [station_codes]
 
@@ -79,7 +80,7 @@ def get_data(station_codes, start=None, end=None, parameters=None):
             for station in stations:
                 year_data = _read_gsod_file(gsod_tar, station, year)
                 if parameters:
-                    year_data = year_data[parameters]
+                    year_data = _subset_record_array(year_data, parameters)
                 if not year_data is None:
                     # apply date ranges if they exist
                     if start_date or end_date:
@@ -330,3 +331,15 @@ def _record_array_to_value_dicts(record_array):
 def _station_code(station):
     """returns station code from a station dict"""
     return '-'.join([station['USAF'], station['WBAN']])
+
+
+def _subset_record_array(record_array, parameters):
+    dtype = np.dtype([
+        (parameter, record_array[parameter].dtype)
+        for parameter in parameters
+    ])
+    return np.array([
+        tuple(i) for i in np.array([
+            record_array[parameter] for parameter in parameters
+        ]).T.tolist()
+    ], dtype=dtype)

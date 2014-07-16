@@ -199,7 +199,45 @@ def test_get_station_data():
                 'visibility_count': 20,
             },
             ]
-         )
+         ),
+        (dict(
+            station_codes='999999-14896',
+            start='1952-01-01',
+            end='1953-02-02',
+            parameters='snow_depth'),
+            [{
+                'date': datetime.date(1952, 1, 1),
+                'snow_depth': 999.9,
+            }, {
+                'date': datetime.date(1952, 1, 3),
+                'snow_depth': 999.9,
+            }, {
+                'date': datetime.date(1953, 2, 2),
+                'snow_depth': 999.9,
+            },
+            ]
+         ),
+        (dict(
+            station_codes='999999-14896',
+            start='1952-01-01',
+            end='1953-02-02',
+            parameters=['station_pressure', 'dew_point']),
+            [{
+                'date': datetime.date(1952, 1, 1),
+                'dew_point': 52.4,
+                'station_pressure': 978.2,
+            }, {
+                'date': datetime.date(1952, 1, 3),
+                'dew_point': 18.4,
+                'station_pressure': 991.4,
+            }, {
+                'date': datetime.date(1953, 2, 2),
+                'dew_point': 12.0,
+                'station_pressure': 982.6,
+            },
+            ]
+         ),
+
     ]
 
     for kwargs, test_values in test_data:
