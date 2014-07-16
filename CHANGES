@@ -2,9 +2,9 @@ Changelog
 ---------
 
 
-**0.7.3 (in development)**
+**0.7.3 (released 2014-07-16)**
 
-- bugfix: ulmo.ncdc.gsod.get_data parameter argument was not working
+- bugfix: using parameters argument in ulmo.ncdc.gsod.get_data() was not working
 
 
 **0.7.2 (released 2014-06-17)**
