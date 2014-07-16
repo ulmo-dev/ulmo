@@ -2,6 +2,11 @@ Changelog
 ---------
 
 
+**0.7.3 (in development)**
+
+- bugfix: ulmo.ncdc.gsod.get_data parameter argument was not working
+
+
 **0.7.2 (released 2014-06-17)**
 
 - add parser for TWDB DOT dataloggers to usgs.eddn
