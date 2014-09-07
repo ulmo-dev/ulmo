@@ -277,7 +277,7 @@ def _get_client(wsdl_url, cache_duration=("default",)):
 
     # Handle new or changed client request (create new client)
     if _suds_client is None or _suds_client.wsdl.url != wsdl_url:
-        _suds_client = _get_client(wsdl_url, suds_cache)
+        _suds_client = suds.client.Client(wsdl_url)
         if cache_duration is None:
             _suds_client.set_options(cache=None)
         else:
