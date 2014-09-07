@@ -284,7 +284,7 @@ def _get_client(wsdl_url, cache_duration=("default",)):
             cache = _suds_client.options.cache
             # could add some error catching ...
             if cache_duration[0] == "default":
-                cache.setduration(days, 1)
+                cache.setduration(days=1)
             else:
                 cache.setduration(**dict([cache_duration]))
 
