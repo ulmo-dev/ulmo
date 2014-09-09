@@ -6,6 +6,8 @@ Changelog
 
 - in cuahsi.wof module: allow optional configuration of caching behavior for
   underlying suds SOAP library
+- in cuahsi.wof.get_values(), variable_code is no longer a keyword argument. It
+  didn't make sense for it to be a kwarg since it is not optional.
 
 
 **0.7.3 (released 2014-07-16)**
