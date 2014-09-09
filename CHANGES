@@ -2,6 +2,12 @@ Changelog
 ---------
 
 
+**0.7.4 (released 2014-09-09)**
+
+- in cuahsi.wof module: allow optional configuration of caching behavior for
+  underlying suds SOAP library
+
+
 **0.7.3 (released 2014-07-16)**
 
 - bugfix: using parameters argument in ulmo.ncdc.gsod.get_data() was not working
