@@ -3,7 +3,7 @@
     ~~~~~~~~~~~~~~~~~~~~~
 
     This module provides access to data provided by the `United States Geological
-    Survey`_ `Earth Resources Observation and Science (EROS) Center`_ application 
+    Survey`_ `Earth Resources Observation and Science (EROS) Center`_ application
     services web site.
 
     The `DCP message format`_ includes some header information that is parsed and
@@ -83,7 +83,7 @@ def get_available_formats(product_key, as_dataframe=True):
     return _call_service(url, payload, as_dataframe)
 
 
-def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled', 
+def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled',
     path=None, update_cache=False, check_modified=False):
 
     if path is None:
@@ -125,7 +125,7 @@ def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled',
     util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
 
     return output_path
-   
+
 
 def get_raster_urls(layer, xmin, ymin, xmax, ymax):
 
@@ -139,7 +139,7 @@ def get_raster_urls(layer, xmin, ymin, xmax, ymax):
         headers = requests.head(url).headers
         if 'location' in headers.keys():
             url = headers['location']
-            
+
         tile_urls.append(url)
 
     return tile_urls
