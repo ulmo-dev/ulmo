@@ -31,8 +31,8 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-def get_sites(sites=None, state_code=None, site_type=None, service=None,
-        input_file=None):
+def get_sites(sites=None, state_code=None, site_type=None, bounding_box=None, parameter_code=None,
+        service=None, input_file=None):
     """Fetches site information from USGS services. See the USGS waterservices
     documentation for options.
 
@@ -45,6 +45,12 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None,
         Two-letter state code used in stateCd parameter.
     site_type : str or ``None``
         Type of site used in siteType parameter.
+    bounding_box : str or ``None``
+        This parameter represents the bounding box (latitude/longitude) parameter for the usgs website.  The format is
+        westernmost longitude,southernmost latitude,easternmost longitude,northernmost latitude
+    parameter_code : str or ``None``
+        Parameter code(s) that will be passed as the parameterCd parameter.   
+        This parameter represents the following usgs website input: Sites serving parameter codes 
     service : {``None``, 'instantaneous', 'iv', 'daily', 'dv'}
         The service to use, either "instantaneous", "daily", or ``None``
         (default).  If set to ``None``, then both services are used.  The
@@ -74,12 +80,18 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None,
     if site_type:
         url_params['siteType'] = site_type
 
+    if bounding_box:
+        url_params['bBox'] = bounding_box
+        
+    if parameter_code:
+        url_params['parameterCd'] = parameter_code
+        
     if input_file is None:
         if not service:
             return_sites = get_sites(sites=sites, state_code=state_code,
-                    site_type=site_type, service="daily", input_file=input_file)
+                    site_type=site_type, bounding_box=bounding_box, parameter_code=parameter_code, service="daily", input_file=input_file)
             instantaneous_sites = get_sites(sites=sites, state_code=state_code,
-                site_type=site_type, service="instantaneous", input_file=input_file)
+                site_type=site_type, bounding_box=bounding_box, parameter_code=parameter_code, service="instantaneous", input_file=input_file)
             return_sites.update(instantaneous_sites)
             return return_sites
 
