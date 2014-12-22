@@ -123,7 +123,7 @@ def _update_file_index(filename):
 
 
 def get_raster(layer, xmin, ymin, xmax, ymax, path=None, update_cache=False, 
-    check_modified=False):
+    check_modified=False, mosaic=False):
 
     if path is None:
         path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
@@ -141,6 +141,9 @@ def get_raster(layer, xmin, ymin, xmax, ymax, path=None, update_cache=False,
     tile_urls = get_tile_urls(layer, xmin, ymin, xmax, ymax)
     tile_fmt = '.img'
     raster_tiles = util.download_tiles(layer_path, tile_urls, tile_fmt, check_modified)
-    util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
+    
+    if mosaic:
+        util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
+        return output_path
 
-    return output_path
+    return raster_tiles
