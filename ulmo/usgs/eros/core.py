@@ -84,7 +84,7 @@ def get_available_formats(product_key, as_dataframe=True):
 
 
 def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled',
-    path=None, update_cache=False, check_modified=False):
+    path=None, update_cache=False, check_modified=False, mosaic=False):
 
     if path is None:
         path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
@@ -122,9 +122,11 @@ def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled',
     tile_urls = get_raster_urls(layer_id, xmin, ymin, xmax, ymax)
     tile_fmt = ext[fmt]
     raster_tiles = util.download_tiles(layer_path, tile_urls, tile_fmt, check_modified)
-    util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
+    if mosaic:
+        util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
+        return output_path
 
-    return output_path
+    return raster_tiles
 
 
 def get_raster_urls(layer, xmin, ymin, xmax, ymax):
