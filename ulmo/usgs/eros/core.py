@@ -21,6 +21,7 @@
 
 """
 
+from geojson import Feature, FeatureCollection, Polygon
 import hashlib
 import logging
 import os
@@ -50,6 +51,20 @@ LOG_FORMAT = '%(message)s'
 logging.basicConfig(format=LOG_FORMAT)
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
+
+
+def download_tiles(tiles, path=None, check_modified=False):
+
+    if path is None:
+        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+
+    for tile in tiles['features']:
+
+        metadata = tile['properties']
+        layer_path = os.path.join(path, metadata['product_key'])
+        tile['properties']['file'] = util.download_tiles(layer_path, metadata['download url'], metadata['format'], check_modified)[0]
+
+    return tiles
 
 
 def get_attribute_list(as_dataframe=True):
@@ -83,22 +98,84 @@ def get_available_formats(product_key, as_dataframe=True):
     return _call_service(url, payload, as_dataframe)
 
 
-def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled',
+def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None,
     path=None, update_cache=False, check_modified=False, mosaic=False):
 
-    if path is None:
-        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+    raster_tiles = download_tiles(get_raster_availability(product_key, xmin, ymin, xmax, ymax, fmt), path, check_modified)
 
-    util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
-    uid = util.generate_raster_uid(product_key, xmin, ymin, xmax, ymax)
-    output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
+    if mosaic:
+        if path is None:
+            path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+        util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
+        uid = util.generate_raster_uid(product_key, xmin, ymin, xmax, ymax)
+        output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
 
-    if os.path.isfile(output_path) and not update_cache:
+        if os.path.isfile(output_path) and not update_cache:
+            return output_path
+
+        raster_files = [tile['properties']['file'] for tile in raster_tiles['features']]
+        util.mosaic_and_clip(raster_files, xmin, ymin, xmax, ymax, output_path)
+        
         return output_path
 
-    if type!='tiled':
-        raise NotImplementedError
+    return raster_tiles
 
+
+def get_raster_availability(product_key, xmin, ymin, xmax, ymax, fmt=None):
+
+    layer, fmt = _layer_id(product_key, fmt)
+
+    url = EROS_VALIDATION_URL % (ymax, ymin, xmin, xmax, layer)
+    r = requests.get(url)
+
+    tiles = r.json()['REQUEST_SERVICE_RESPONSE']['PIECE']
+    
+    features = []
+    for tile in tiles:         
+        features.append(Feature(geometry=Polygon(_bbox2poly(tile['BBOX'])), id=tile['ID'], 
+                    properties={'download url': _extract_url(tile['DOWNLOAD_URL']),'product_key': product_key, 'format': fmt}
+                    ))
+    
+    return FeatureCollection(features)
+
+
+def get_themes(as_dataframe=True):
+    url = EROS_INVENTORY_URL + '/return_Themes'
+    return _call_service(url, {}, as_dataframe)
+
+
+def _bbox2poly(bbox):
+    xmin = bbox['LEFT']
+    xmax = bbox['RIGHT']
+    ymin = bbox['BOTTOM']
+    ymax = bbox['TOP']
+
+    return [[(xmin,ymin), (xmin,ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)]]
+
+
+def _call_service(url, payload, as_dataframe):
+    payload['callback'] = ''
+    r = requests.get(url, params=payload)
+    if as_dataframe:
+        df = pd.DataFrame(r.json()['items'])
+        if df.empty:
+            return df
+        df.index = df['ID']
+        del df['ID']
+        return df
+    else:
+        return r.json()
+
+
+def _extract_url(url):
+    headers = requests.head(url).headers
+    if 'location' in headers.keys():
+        url = headers['location']
+
+    return url
+
+
+def _layer_id(product_key, fmt=None):
     available_formats = get_available_formats(product_key)
     if not available_formats.empty:
         available_formats = available_formats['outputformat'][0].lower()
@@ -118,49 +195,5 @@ def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None, type='tiled',
 
     pos = available_formats.find(fmt)
     layer_id = product_key + available_formats[pos-3:pos-1]
-    layer_path = os.path.join(path, product_key)
-    tile_urls = get_raster_urls(layer_id, xmin, ymin, xmax, ymax)
-    tile_fmt = ext[fmt]
-    raster_tiles = util.download_tiles(layer_path, tile_urls, tile_fmt, check_modified)
-    if mosaic:
-        util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
-        return output_path
 
-    return raster_tiles
-
-
-def get_raster_urls(layer, xmin, ymin, xmax, ymax):
-
-    url = EROS_VALIDATION_URL % (ymax, ymin, xmin, xmax, layer)
-    r = requests.get(url)
-
-    tiles = r.json()['REQUEST_SERVICE_RESPONSE']['PIECE']
-    tile_urls = []
-    for tile in tiles:
-        url = tile['DOWNLOAD_URL']
-        headers = requests.head(url).headers
-        if 'location' in headers.keys():
-            url = headers['location']
-
-        tile_urls.append(url)
-
-    return tile_urls
-
-
-def get_themes(as_dataframe=True):
-    url = EROS_INVENTORY_URL + '/return_Themes'
-    return _call_service(url, {}, as_dataframe)
-
-
-def _call_service(url, payload, as_dataframe):
-    payload['callback'] = ''
-    r = requests.get(url, params=payload)
-    if as_dataframe:
-        df = pd.DataFrame(r.json()['items'])
-        if df.empty:
-            return df
-        df.index = df['ID']
-        del df['ID']
-        return df
-    else:
-        return r.json()
+    return layer_id, ext[fmt]
