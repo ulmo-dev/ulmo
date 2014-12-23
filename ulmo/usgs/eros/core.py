@@ -62,7 +62,7 @@ def get_available_datasets(xmin, ymin, xmax, ymax, epsg=4326, attrs=None, as_dat
         raise NotImplementedError
 
     if attrs is None:
-        attrs = ','.join(get_attribute_list()['name'].tolist())
+        attrs = ','.join(get_attribute_list().drop(37)['name'].tolist()) #attr 37->LYR_URL causing null returns
 
     payload = {
                 'Attribs': attrs,
