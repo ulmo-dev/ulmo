@@ -8,13 +8,14 @@
 import hashlib
 from .misc import download_if_new
 import os
-from pyproj import Proj
-import rasterio
-import subprocess
 import zipfile
 
 
 def mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path):
+	from pyproj import Proj
+	import rasterio
+	import subprocess
+
 	print 'Mosaic and clip to bounding box extents'
 	output_vrt = os.path.splitext(output_path)[0] + '.vrt'
 	print subprocess.check_output(['gdalbuildvrt', '-overwrite', output_vrt] + raster_tiles)
