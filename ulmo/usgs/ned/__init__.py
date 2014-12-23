@@ -4,5 +4,5 @@
 
     .. _National Elevation Dataset (NED): http://ned.usgs.gov
 """
-from .core import download_tiles, get_available_tiles, get_file_index, get_raster, get_tile_urls
+from .core import download_tiles, get_raster, get_raster_availability
 
