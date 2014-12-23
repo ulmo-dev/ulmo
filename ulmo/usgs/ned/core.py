@@ -11,6 +11,7 @@
 
 """
 
+from geojson import Feature, FeatureCollection, Polygon
 import hashlib
 import json
 import logging
@@ -28,7 +29,8 @@ NED_FTP_URL = 'ftp://rockyftp.cr.usgs.gov/vdelivery/Datasets/Staged/NED/<layer>/
 
 # ScienceBase webservice url for IMG format NED tiles
 # https://www.sciencebase.gov/catalog/items?fields=id,title,summary,body,tags,webLinks,dates,spatial&q=&filter=tags=National Elevation Dataset (NED) 1/9 arc-second&filter=spatialQuery=Polygon ((-95.26155638325938 40.07132704825149,-94.16292357075272 40.07132704825149,-94.16292357075272 40.594749211728654,-95.26155638325938 40.594749211728654,-95.26155638325938 40.07132704825149))&format=json
-NED_WS_URL = 'https://www.sciencebase.gov/catalog/items?fields=webLinks&q=&filter=tags=National Elevation Dataset (NED) %s&filter=tags=IMG&filter=spatialQuery=Polygon ((%s))&format=json'
+NED_WS_URL = 'https://www.sciencebase.gov/catalog/items?fields=webLinks,spatial,title&q=&filter=tags=National Elevation Dataset (NED) %s&filter=tags=IMG&filter=spatialQuery=Polygon ((%s))&format=json'
+SCIENCEBASE_ITEM_URL = 'https://www.sciencebase.gov/catalog/item/%s?format=json'
 
 # default file path (appended to default ulmo path)
 DEFAULT_FILE_PATH = 'usgs/ned/'
@@ -46,6 +48,37 @@ logging.basicConfig(format=LOG_FORMAT)
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+
+def get_available_layers():
+    return layer_dict.keys()
+
+
+def get_available_tiles(layer, xmin, ymin, xmax, ymax, as_json=False):
+    polygon = ','.join([(repr(x) + ' ' + repr(y)) for x,y in [
+        (xmin, ymax),
+        (xmin, ymin), 
+        (xmax, ymin), 
+        (xmax, ymax), 
+        (xmin, ymax)]])
+    url = NED_WS_URL % (layer, polygon)
+    r = requests.get(url)
+
+    if as_json:
+        features = []
+        for item in r.json()['items']:
+            feature = Feature(geometry=Polygon(_bbox2poly(item['spatial']['boundingBox'])), id=item['id'], 
+                        properties={'name': item['title'], 'uri': [x for x in item['webLinks'] if x['type']=='download'][0]['uri']}
+                    )
+            features.append(feature)
+
+        features = FeatureCollection(features)
+        return features
+
+    urls = []
+    for item in r.json()['items']:
+        urls.append([x for x in item['webLinks'] if x['type']=='download'][0]['uri'])
+
+    return urls
 
 
 def get_file_index(path=None, update_cache=False):
@@ -66,23 +99,12 @@ def get_file_index(path=None, update_cache=False):
         return json.load(f)
 
 
-def get_tile_urls(layer, xmin, ymin, xmax, ymax, path=None, use_webservice=False):
+def get_tile_urls(layer, xmin, ymin, xmax, ymax, path=None, use_webservice=True):
     """
         Find tile urls corresponding to the given layer and bounding box
     """
     if use_webservice:
-        polygon = ','.join([(repr(x) + ' ' + repr(y)) for x,y in [
-            (xmin, ymax),
-            (xmin, ymin), 
-            (xmax, ymin), 
-            (xmax, ymax), 
-            (xmin, ymax)]])
-        url = NED_WS_URL % (layer, polygon)
-        r = requests.get(url)
-        urls = []
-        for tile in r.json()['items']:
-            urls.append([x for x in tile['webLinks'] if x['type']=='download'][0]['uri'])
-
+        urls = get_available_tiles(layer, xmin, ymin, xmax, ymax)       
         return sorted(urls)
 
     base_url = NED_FTP_URL.replace('<layer>', layer_dict[layer])
@@ -141,9 +163,41 @@ def get_raster(layer, xmin, ymin, xmax, ymax, path=None, update_cache=False,
     tile_urls = get_tile_urls(layer, xmin, ymin, xmax, ymax)
     tile_fmt = '.img'
     raster_tiles = util.download_tiles(layer_path, tile_urls, tile_fmt, check_modified)
-    
+
     if mosaic:
         util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
         return output_path
 
     return raster_tiles
+
+
+def download_tiles(feature_ids, path=None, update_cache=False, check_modified=False,):
+    if path is None:
+        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+
+    if isinstance(feature_ids, basestring):
+        feature_ids = [feature_ids]
+
+    tiles =[]
+    tile_fmt = '.img'
+    for feature_id in feature_ids:
+        url = SCIENCEBASE_ITEM_URL % feature_id
+        metadata = requests.get(url).json()
+        layer = [a for a in layer_dict.keys() if a in metadata['title']][0]
+        layer_path = os.path.join(path, layer_dict[layer])
+        tile_urls = [link['uri'] for link in metadata['webLinks'] if link['type']=='download']
+        tiles.append({'feature_id': feature_id,
+                      'tiles': util.download_tiles(layer_path, tile_urls, tile_fmt, check_modified),
+                      })
+
+    return tiles
+
+
+def _bbox2poly(bbox):
+    xmin = bbox['minX']
+    xmax = bbox['maxX']
+    ymin = bbox['minY']
+    ymax = bbox['maxY']
+
+    return [[(xmin,ymin), (xmin,ymax), (xmax, ymax), (xmax, ymin), (xmin, ymin)]]
+
