@@ -53,7 +53,7 @@ def get_available_layers():
     return layer_dict.keys()
 
 
-def get_available_tiles(layer, xmin, ymin, xmax, ymax, as_json=False):
+def get_raster_availability(layer, xmin, ymin, xmax, ymax):
     polygon = ','.join([(repr(x) + ' ' + repr(y)) for x,y in [
         (xmin, ymax),
         (xmin, ymin), 
@@ -63,22 +63,18 @@ def get_available_tiles(layer, xmin, ymin, xmax, ymax, as_json=False):
     url = NED_WS_URL % (layer, polygon)
     r = requests.get(url)
 
-    if as_json:
-        features = []
-        for item in r.json()['items']:
-            feature = Feature(geometry=Polygon(_bbox2poly(item['spatial']['boundingBox'])), id=item['id'], 
-                        properties={'name': item['title'], 'uri': [x for x in item['webLinks'] if x['type']=='download'][0]['uri']}
-                    )
-            features.append(feature)
-
-        features = FeatureCollection(features)
-        return features
-
-    urls = []
+    features = []
     for item in r.json()['items']:
-        urls.append([x for x in item['webLinks'] if x['type']=='download'][0]['uri'])
+        feature = Feature(geometry=Polygon(_bbox2poly(item['spatial']['boundingBox'])), id=item['id'], 
+                    properties={
+                        'name': item['title'], 
+                        'layer': layer,
+                        'format': '.img',
+                        'download url': [x for x in item['webLinks'] if x['type']=='download'][0]['uri']}
+                )
+        features.append(feature)
 
-    return urls
+    return FeatureCollection(features)
 
 
 def get_file_index(path=None, update_cache=False):
@@ -99,13 +95,10 @@ def get_file_index(path=None, update_cache=False):
         return json.load(f)
 
 
-def get_tile_urls(layer, xmin, ymin, xmax, ymax, path=None, use_webservice=True):
+def get_tile_urls(layer, xmin, ymin, xmax, ymax, path=None):
     """
-        Find tile urls corresponding to the given layer and bounding box
+        Non webservice approach to identify tile urls corresponding to the given layer and bounding box
     """
-    if use_webservice:
-        urls = get_available_tiles(layer, xmin, ymin, xmax, ymax)       
-        return sorted(urls)
 
     base_url = NED_FTP_URL.replace('<layer>', layer_dict[layer])
     file_index = get_file_index(path=path)
@@ -147,31 +140,27 @@ def _update_file_index(filename):
 def get_raster(layer, xmin, ymin, xmax, ymax, path=None, update_cache=False, 
     check_modified=False, mosaic=False):
 
-    if path is None:
-        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
-
-    util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
-    uid = util.generate_raster_uid(layer, xmin, ymin, xmax, ymax)
-    output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
-
-    layer_path = os.path.join(path, layer_dict[layer])
-
-    if os.path.isfile(output_path) and not update_cache:
-        return output_path
-
-    print 'Downloading tiles needed for requested bounding box:'
-    tile_urls = get_tile_urls(layer, xmin, ymin, xmax, ymax)
-    tile_fmt = '.img'
-    raster_tiles = util.download_tiles(layer_path, tile_urls, tile_fmt, check_modified)
+    raster_tiles = download_tiles(get_raster_availability(layer, xmin, ymin, xmax, ymax), path=path, check_modified=check_modified)
 
     if mosaic:
-        util.mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path)
+        if path is None:
+            path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+
+        util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
+        uid = util.generate_raster_uid(layer, xmin, ymin, xmax, ymax)
+        output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
+
+        if os.path.isfile(output_path) and not update_cache:
+            return output_path
+
+        raster_files = [tile['properties']['file'] for tile in raster_tiles['features']]
+        util.mosaic_and_clip(raster_files, xmin, ymin, xmax, ymax, output_path)
         return output_path
 
     return raster_tiles
 
 
-def download_tiles(feature_ids, path=None, update_cache=False, check_modified=False,):
+def download_features(feature_ids, path=None, update_cache=False, check_modified=False,):
     if path is None:
         path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
 
@@ -191,6 +180,20 @@ def download_tiles(feature_ids, path=None, update_cache=False, check_modified=Fa
                       })
 
     return tiles
+
+
+def download_tiles(tiles, path=None, check_modified=False):
+
+    if path is None:
+        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+
+    for tile in tiles['features']:
+
+        metadata = tile['properties']
+        layer_path = os.path.join(path, layer_dict[metadata['layer']])
+        tile['properties']['file'] = util.download_tiles(layer_path, metadata['download url'], metadata['format'], check_modified)[0]
+
+    return tiles    
 
 
 def _bbox2poly(bbox):
