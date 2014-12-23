@@ -32,6 +32,10 @@ def mosaic_and_clip(raster_tiles, xmin, ymin, xmax, ymax, output_path):
 
 def download_tiles(path, tile_urls, tile_fmt, check_modified=False):
 	raster_tiles = []
+
+	if isinstance(tile_urls, basestring):
+		tile_urls = [tile_urls]
+
 	for i, url in enumerate(tile_urls):
 		filename = os.path.split(url)[-1]
 		print '... downloading tile %s of %s from %s' % (i+1, len(tile_urls), url)
