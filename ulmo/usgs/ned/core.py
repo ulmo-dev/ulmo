@@ -61,18 +61,27 @@ def get_raster_availability(layer, xmin, ymin, xmax, ymax):
         (xmax, ymax), 
         (xmin, ymax)]])
     url = NED_WS_URL % (layer, polygon)
-    r = requests.get(url)
 
     features = []
-    for item in r.json()['items']:
-        feature = Feature(geometry=Polygon(_bbox2poly(item['spatial']['boundingBox'])), id=item['id'], 
-                    properties={
-                        'name': item['title'], 
-                        'layer': layer,
-                        'format': '.img',
-                        'download url': [x for x in item['webLinks'] if x['type']=='download'][0]['uri']}
-                )
-        features.append(feature)
+
+    while url:
+        print 'retrieving raster availability from %s' % url
+        r = requests.get(url)
+        content = r.json()
+        for item in content['items']:
+            feature = Feature(geometry=Polygon(_bbox2poly(item['spatial']['boundingBox'])), id=item['id'], 
+                        properties={
+                            'name': item['title'], 
+                            'layer': layer,
+                            'format': '.img',
+                            'download url': [x for x in item['webLinks'] if x['type']=='download'][0]['uri']}
+                    )
+            features.append(feature)
+
+        if content.get('nextlink'):
+            url = content['nextlink']['url']
+        else:
+            break
 
     return FeatureCollection(features)
 
