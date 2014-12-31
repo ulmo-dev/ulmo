@@ -1,5 +1,6 @@
 import contextlib
 import copy
+from datetime import datetime
 import os
 import shutil
 import sys
@@ -13,6 +14,7 @@ from tables.scripts import ptrepack
 
 from ulmo import util
 from ulmo.usgs.nwis import core
+
 
 
 # default hdf5 file path
@@ -179,6 +181,66 @@ def get_site_data(site_code, agency_code=None, parameter_code=None, path=None,
                 for variable_group in site_group
             ])
     return site_data
+
+
+def remove_values(site_code, datetime_dicts, path, complevel=None, complib=None,
+        autorepack=True):
+    """Remove values from hdf5 file.
+
+    Parameters
+    ----------
+    site_code : str
+        The site code of the site to remove records from.
+    datetime_dicts : a python dict with a list of periods or
+        timestamps for a given variable (key) to delete.
+    path : file path to hdf5 file.
+
+    Returns
+    -------
+    None : ``None``
+    """
+    site_data_path = _get_store_path(path, site_code + '.h5')
+
+    comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
+
+    something_changed = False
+    with _get_store(site_data_path, mode='a', **comp_kwargs) as store:
+        site_group = store.get_node(site_code)
+        if site_group is None:
+            core.log.warning("No site group found for site %s in %s" %
+            (site_code, site_data_path))
+            return
+
+        for variable_code, datetimes in datetime_dicts.iteritems():
+            variable_group_path = site_code + '/' + variable_code
+            values_path = variable_group_path + '/' + 'values'
+
+            if values_path in store:
+                values_df = store[values_path]
+                original_datetimes = set(values_df.dropna().index.tolist())
+                datetimes_to_remove = original_datetimes.intersection(set(datetimes))
+                if not len(datetimes_to_remove):
+                    core.log.info("No %s values matching the given dates to remove were found."
+                        % variable_code)
+                    continue
+                else:
+                    values_df.ix[list(datetimes_to_remove), 'value'] = np.nan
+                    values_df.ix[list(datetimes_to_remove), 'last_modified'] = \
+                        datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%M:%S')
+                    core.log.info("%i %s values removed from file."
+                        % (len(datetimes_to_remove), variable_code))
+
+            else:
+                core.log.warning("Values path %s not found in %s." %
+                    (values_path, site_data_path))
+                continue
+
+            store[values_path] = values_df
+            something_changed = True
+
+    if autorepack:
+        if something_changed:
+            repack(site_data_path, complevel=complevel, complib=complib)
 
 
 def repack(path, complevel=None, complib=None):
