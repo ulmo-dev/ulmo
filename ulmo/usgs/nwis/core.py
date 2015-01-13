@@ -66,6 +66,31 @@ def get_sites(sites=None, state_code=None, site_type=None, bounding_box=None, pa
     sites_dict : dict
         a python dict with site codes mapped to site information
     """
+    
+    # Checking to see if the correct amount of major filters are being used.
+    # The NWIS site requires only one major filter to be used at a time.
+    
+    if bounding_box is None and sites is None and state_code is None:
+        error_msg = 'At least one major filter has to be supplied [state code, site code(s), or ' \
+                'bounding box].'
+        raise ValueError(error_msg)    
+    else:        
+        major_filter_count = 0
+
+        if bounding_box is not None:
+            major_filter_count+=1        
+        
+        if sites is not None:
+            major_filter_count+=1        
+        
+        if state_code is not None:
+            major_filter_count+=1
+
+        if major_filter_count > 1: 
+            error_msg = 'Only one of the major filters [state, site(s), or bounding box] needs ' \
+                        'to be supplied.'
+            raise ValueError(error_msg)        
+    
     url_params = {'format': 'waterml'}
 
     if state_code:
