@@ -254,6 +254,54 @@ def test_non_usgs_site(test_file_path):
     assert len(site_data['00062:00011']['values']) > 1000
 
 
+def test_remove_values(test_file_path):
+    from datetime import datetime
+    site_code = '07335390'
+    parameter_code = '00062:00011'
+    values_to_remove = {
+        parameter_code: ['2012-10-25 06:00', '2012-10-25 23:00',
+            '2012-10-30 15:00:00', datetime(2012, 11, 15, 13)]
+    }
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_instantaneous.xml' % site_code)
+    nwis.hdf5.update_site_data(site_code, period='all',
+            path=test_file_path, input_file=site_data_file, autorepack=False)
+    nwis.hdf5.remove_values(site_code, values_to_remove, path=test_file_path,
+        autorepack=False)
+
+    test_values = [
+        dict(datetime="2012-10-25T01:00:00-05:00", last_checked=None, last_modified=None, qualifiers="P", value=None),
+        dict(datetime="2012-10-25T18:00:00-05:00", last_checked=None, last_modified=None, qualifiers="P", value=None),
+        dict(datetime="2012-10-30T10:00:00-05:00", last_checked=None, last_modified=None, qualifiers="P", value=None),
+        dict(datetime="2012-11-15T07:00:00-06:00", last_checked=None, last_modified=None, qualifiers="P", value=None),
+    ]
+
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
+    site_values = site_data[parameter_code]['values']
+    for test_value in test_values:
+        assert test_value in site_values
+
+
+def test_remove_values_with_missing_code(test_file_path):
+    site_code = '08068500'
+    values_to_remove = {
+        '12345:0000': ['2010-01-01'],
+        '00010:00002': ['2012-12-10']
+    }
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    nwis.hdf5.update_site_data(site_code, period='all', path=test_file_path,
+            input_file=site_data_file, autorepack=False)
+    nwis.hdf5.remove_values(site_code, values_to_remove, path=test_file_path,
+            autorepack=False)
+
+    test_value = dict(datetime="2012-12-10T00:00:00", last_checked=None, last_modified=None, qualifiers="P", value=None)
+
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
+    site_values = site_data['00010:00002']['values']
+    assert test_value in site_values
+
+
 def test_site_data_is_sorted(test_file_path):
     site_code = '01117800'
     site_data_file = test_util.get_test_file_path(
