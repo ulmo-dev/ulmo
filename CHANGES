@@ -2,6 +2,12 @@ Changelog
 ---------
 
 
+**0.7.5 (released 2015-01-26)**
+
+- add support for pandas 0.14 and 0.15
+- add a function to selectively remove data from nwis hdf5 cache
+
+
 **0.7.4 (released 2014-09-09)**
 
 - in cuahsi.wof module: allow optional configuration of caching behavior for
