@@ -72,3 +72,27 @@ def test_get_sites_multiple_sites():
     with test_util.mocked_urls(sites_data_file):
         sites = ulmo.usgs.nwis.get_sites(sites=site_codes)
     assert len(sites) == 2
+
+def test_get_sites_by_bounding_box():
+    bounding_box_values = '-83.0,36.5,-81.0,38.5'
+    sites_data_file = 'usgs/nwis/sites_%s_daily.xml' % bounding_box_values
+    with test_util.mocked_urls(sites_data_file):
+        sites = ulmo.usgs.nwis.get_sites(bounding_box=bounding_box_values, service='dv')
+    assert len(sites) == 244
+    
+def test_get_sites_by_serving_parameter_code():
+    site_code = '08068500'
+    parameter_code_value = '00060'
+    sites_data_file = 'usgs/nwis/sites_%s_%s_daily.xml' % (site_code, parameter_code_value)
+    with test_util.mocked_urls(sites_data_file):
+        sites = ulmo.usgs.nwis.get_sites(sites=site_code, parameter_code=parameter_code_value, service='dv')
+    assert len(sites) == 1
+    
+def test_get_sites_by_multiple_serving_parameter_code():
+    site_code = '08068500'
+    parameter_code_values = '00060,00065'
+    sites_data_file = 'usgs/nwis/sites_%s_%s_daily.xml' % (site_code, parameter_code_values)
+    with test_util.mocked_urls(sites_data_file):
+        sites = ulmo.usgs.nwis.get_sites(sites=site_code, parameter_code=parameter_code_values, service='dv')
+    assert len(sites) == 1
+    
