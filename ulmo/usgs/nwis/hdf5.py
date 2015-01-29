@@ -274,23 +274,17 @@ def repack(path, complevel=None, complib=None):
         shutil.copyfile(temp_path, path)
 
 
-def update_site_list(sites=None, state_code=None, service=None, path=None,
-        input_file=None, complevel=None, complib=None, autorepack=True):
-    """Update cached site information.
+def update_site_list(sites=None, state_code=None, huc=None, bounding_box=None, 
+        county_code=None, parameter_code=None, site_type=None, service=None, 
+        input_file=None, complevel=None, complib=None, autorepack=True, path=None,
+        **kwargs):
+    """Update cached site information. 
+
+    See ulmo.usgs.nwis.core.get_sites() for description of regular parameters, only
+    extra parameters used for caching are listed below.
 
     Parameters
     ----------
-    sites : str, iterable of strings or ``None``
-        The site to use or list of sites to use; lists will be joined by a ','.
-    state_code : str or ``None``
-        Two-letter state code used in stateCd parameter.
-    site_type : str or ``None``
-        Type of site used in siteType parameter.
-    service : {``None``, 'instantaneous', 'iv', 'daily', 'dv'}
-        The service to use, either "instantaneous", "daily", or ``None``
-        (default).  If set to ``None``, then both services are used.  The
-        abbreviations "iv" and "dv" can be used for "instantaneous" and "daily",
-        respectively.
     path : ``None`` or file path
         Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used. If a file path is a directory, then multiple hdf5 files
@@ -323,8 +317,9 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
     """
     sites_store_path = _get_store_path(path, 'sites.h5')
 
-    new_sites = core.get_sites(sites=sites, state_code=state_code, service=service,
-            input_file=input_file)
+    new_sites = core.get_sites(sites=sites, state_code=state_code, huc=huc, bounding_box=bounding_box, 
+        county_code=county_code, parameter_code=parameter_code, site_type=site_type, service=service, 
+        input_file=input_file, **kwargs)
 
     if len(new_sites) == 0:
         return
