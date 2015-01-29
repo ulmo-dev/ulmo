@@ -21,6 +21,29 @@ def test_get_sites_by_state_code():
     assert len(sites) == 64
 
 
+def test_get_sites_by_county_code():
+    county_code='51059,51061'
+    sites_data_file = 'usgs/nwis/sites_county_%s_daily.xml' % county_code
+    with test_util.mocked_urls(sites_data_file):
+        sites = ulmo.usgs.nwis.get_sites(county_code=county_code, service='dv')
+    assert len(sites) == 23
+
+
+def test_get_sites_by_huc():
+    huc='02070010'
+    sites_data_file = 'usgs/nwis/sites_huc_%s_daily.xml' % huc
+    with test_util.mocked_urls(sites_data_file):
+        sites = ulmo.usgs.nwis.get_sites(huc=huc, service='dv')
+    assert len(sites) == 61
+
+
+def test_get_sites_with_extra_kwarg():
+    sites_data_file = 'usgs/nwis/sites_kwarg_agencyCD.xml'
+    with test_util.mocked_urls(sites_data_file):
+        sites = ulmo.usgs.nwis.get_sites(state_code='TX', agencyCD='USCE', service='dv')
+    assert len(sites) == 1
+
+
 def test_get_sites_single_site():
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
@@ -72,3 +95,29 @@ def test_get_sites_multiple_sites():
     with test_util.mocked_urls(sites_data_file):
         sites = ulmo.usgs.nwis.get_sites(sites=site_codes)
     assert len(sites) == 2
+
+
+def test_get_sites_by_bounding_box():
+    bounding_box_values = '-83.0,36.5,-81.0,38.5'
+    sites_data_file = 'usgs/nwis/sites_%s_daily.xml' % bounding_box_values
+    with test_util.mocked_urls(sites_data_file):
+        sites = ulmo.usgs.nwis.get_sites(bounding_box=bounding_box_values, service='dv')
+    assert len(sites) == 244
+
+    
+def test_get_sites_by_serving_parameter_code():
+    site_code = '08068500'
+    parameter_code_value = '00060'
+    sites_data_file = 'usgs/nwis/sites_%s_%s_daily.xml' % (site_code, parameter_code_value)
+    with test_util.mocked_urls(sites_data_file):
+        sites = ulmo.usgs.nwis.get_sites(sites=site_code, parameter_code=parameter_code_value, service='dv')
+    assert len(sites) == 1
+
+    
+def test_get_sites_by_multiple_serving_parameter_code():
+    site_code = '08068500'
+    parameter_code_values = '00060,00065'
+    sites_data_file = 'usgs/nwis/sites_%s_%s_daily.xml' % (site_code, parameter_code_values)
+    with test_util.mocked_urls(sites_data_file):
+        sites = ulmo.usgs.nwis.get_sites(sites=site_code, parameter_code=parameter_code_values, service='dv')
+    assert len(sites) == 1

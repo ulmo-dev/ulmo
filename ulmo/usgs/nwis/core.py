@@ -31,20 +31,27 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-def get_sites(sites=None, state_code=None, site_type=None, service=None,
-        input_file=None):
-    """Fetches site information from USGS services. See the USGS waterservices
-    documentation for options.
+def get_sites(sites=None, state_code=None, huc=None, bounding_box=None, 
+        county_code=None, parameter_code=None, site_type=None, service=None, 
+        input_file=None, **kwargs):
+    """Fetches site information from USGS services. See the `USGS Site Service`_
+    documentation for a detailed description of options. For convenience, major
+    options have been included with pythonic names. Options that are not listed 
+    below may be provided as extra kwargs (i.e. keyword='argument') and will be 
+    passed along with the web services request. These extra keywords must match 
+    the USGS names exactly. The `USGS Site Service`_ website describes available
+    keyword names and argument formats. 
 
+    .. USGS Site Service:http://waterservices.usgs.gov/rest/Site-Service.html
+
+    .. note::
+        Only the options listed below have been tested and you may have mixed 
+        results retrieving data with extra options specified. Currently ulmo 
+        requests and parses data in the waterml format. Some options are not 
+        available in this format.
 
     Parameters
-    ----------
-    sites : str, iterable of strings or ``None``
-        The site to use or list of sites to use; lists will be joined by a ','.
-    state_code : str or ``None``
-        Two-letter state code used in stateCd parameter.
-    site_type : str or ``None``
-        Type of site used in siteType parameter.
+    ==========
     service : {``None``, 'instantaneous', 'iv', 'daily', 'dv'}
         The service to use, either "instantaneous", "daily", or ``None``
         (default).  If set to ``None``, then both services are used.  The
@@ -55,38 +62,95 @@ def get_sites(sites=None, state_code=None, site_type=None, service=None,
         if a file is passed then this file will be used instead of requesting
         data from the NWIS web services.
 
+    Major Filters (At least one filter must be specified)
+    -----------------------------------------------------
+        sites : str, iterable of strings or ``None``
+            The site(s) to use; lists will be joined by a ','. 
+        state_code : str or ``None``
+            Two-letter state code used in stateCd parameter.
+        county_code : str, iterable of strings or ``None``
+            The 5 digit FIPS county code(s) used in the countyCd parameter; lists 
+            will be joined by a ','.
+        huc : str, iterable of strings or ``None``
+            The hydrologic unit code(s) to use; lists will be joined by a ','.
+        bounding_box : str, iterable of strings or ``None``
+            This bounding box used in the bBox parameter. The format is westernmost 
+            longitude, southernmost latitude, easternmost longitude, northernmost 
+            latitude; lists will be joined by a ','.
+
+    Optional Filters Provided
+    -------------------------
+        parameter_code : str, iterable of strings or ``None``
+            Parameter code(s) that will be passed as the parameterCd parameter; lists will be joined by a ','.   
+            This parameter represents the following usgs website input: Sites serving parameter codes
+        site_types : str, iterable of strings or ``None``
+            The type(s) of site used in siteType parameter; lists will be joined by a ','.
+
+
     Returns
     -------
     sites_dict : dict
         a python dict with site codes mapped to site information
     """
-    url_params = {'format': 'waterml'}
-
-    if state_code:
-        url_params['stateCd'] = state_code
-
-    if sites:
-        if isinstance(sites, basestring):
-            url_params['sites'] = sites
-        else:
-            url_params['sites'] = ','.join(sites)
-
-    if site_type:
-        url_params['siteType'] = site_type
-
+    
     if input_file is None:
+        # Checking to see if the correct amount of major filters are being used.
+        # The NWIS site requires only one major filter to be used at a time.
+        major_filters = [sites, state_code, huc, bounding_box, county_code]
+
+        if not any(major_filters):
+            error_msg = (
+                    '*At least one* of the following major filters must be supplied: '
+                    'sites, state_code, huc, bounding_box, country_code.'
+                )
+            raise ValueError(error_msg)  
+
+        if len(filter(None, major_filters)) > 1:
+            error_msg = (
+                    '*Only one* of the following major filters can be supplied:'
+                    'sites, state_code, huc, bounding_box, country_code.'
+                )
+            raise ValueError(error_msg)    
+        
+        url_params = {'format': 'waterml'}
+
+        if state_code:
+            url_params['stateCd'] = state_code
+
+        if sites:
+            url_params['sites'] = _as_str(sites)
+
+        if huc:
+            url_params['hucs'] = _as_str(huc)
+
+        if bounding_box:
+            url_params['bBox'] = _as_str(bounding_box)
+
+        if county_code:
+            url_params['countyCd'] = _as_str(county_code)
+
+        if site_type:
+            url_param['siteType'] = _as_str(site_type)
+
+        if parameter_code:
+            url_params['parameterCd'] = _as_str(parameter_code)
+
+        url_params.update(kwargs)
+
         if not service:
-            return_sites = get_sites(sites=sites, state_code=state_code,
-                    site_type=site_type, service="daily", input_file=input_file)
-            instantaneous_sites = get_sites(sites=sites, state_code=state_code,
-                site_type=site_type, service="instantaneous", input_file=input_file)
-            return_sites.update(instantaneous_sites)
+            return_sites = {}
+            for service in ['daily', 'instantaneous']:
+                new_sites = get_sites(sites=sites, state_code=state_code, huc=huc, 
+                                bounding_box=bounding_box, county_code=county_code, parameter_code=parameter_code, 
+                                site_type=site_type, service=service, input_file=input_file, **kwargs)
+                return_sites.update(new_sites)
             return return_sites
 
         url = _get_service_url(service)
         log.info('making request for sites: %s' % url)
         req = requests.get(url, params=url_params)
         log.info("processing data from request: %s" % req.request.url)
+        req.raise_for_status()        
         input_file = StringIO.StringIO(str(req.content))
 
     with _open_input_file(input_file) as content_io:
@@ -186,6 +250,15 @@ def get_site_data(site_code, service=None, parameter_code=None, start=None,
             get_site_data(site_code, service='instantaneous', **kwargs))
 
     return values
+
+
+def _as_str(arg):
+    """if arg is a list, convert to comma delimited string
+    """
+    if isinstance(arg, basestring):
+        return arg
+    else:
+        return ','.join(arg)
 
 
 def _extract_site_properties(site):
