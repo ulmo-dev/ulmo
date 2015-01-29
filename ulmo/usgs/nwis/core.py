@@ -31,26 +31,24 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-def get_sites(sites=None, state_code=None, site_type=None, bounding_box=None, parameter_code=None,
-        service=None, input_file=None):
-    """Fetches site information from USGS services. See the USGS waterservices
-    documentation for options.
+def get_sites(sites=None, state_code=None, hydrologic_unit_codes=None, bounding_box=None, 
+        country_codes=None, parameter_codes=None, site_types=None, service=None, 
+        input_file=None, **kwargs):
+    """Fetches site information from USGS services. See the `USGS Site Service`_
+    documentation for a detailed description of options. For convenience, major
+    options have been included with pythonic names. Options that are not listed 
+    below may be provided as extra kwargs (i.e. keyword='argument') and will be 
+    passed along with the web services request. These extra keywords must match 
+    the USGS names exactly. The `USGS Site Test Tool`_ can be used to explore 
+    available keyword names and argument formats. 
 
+    .. USGS Site Service:http://waterservices.usgs.gov/rest/Site-Service.html
+
+    Please note, that only the options listed below have been tested and you may 
+    have mixed results retrieving data with extra options specified.
 
     Parameters
-    ----------
-    sites : str, iterable of strings or ``None``
-        The site to use or list of sites to use; lists will be joined by a ','.
-    state_code : str or ``None``
-        Two-letter state code used in stateCd parameter.
-    site_type : str or ``None``
-        Type of site used in siteType parameter.
-    bounding_box : str or ``None``
-        This parameter represents the bounding box (latitude/longitude) parameter for the usgs website.  The format is
-        westernmost longitude,southernmost latitude,easternmost longitude,northernmost latitude
-    parameter_code : str or ``None``
-        Parameter code(s) that will be passed as the parameterCd parameter.   
-        This parameter represents the following usgs website input: Sites serving parameter codes 
+    ==========
     service : {``None``, 'instantaneous', 'iv', 'daily', 'dv'}
         The service to use, either "instantaneous", "daily", or ``None``
         (default).  If set to ``None``, then both services are used.  The
@@ -61,6 +59,25 @@ def get_sites(sites=None, state_code=None, site_type=None, bounding_box=None, pa
         if a file is passed then this file will be used instead of requesting
         data from the NWIS web services.
 
+    Major Filters (At least one filter must be specified)
+    -----------------------------------------------------
+        sites   : str, iterable of strings or ``None``
+            The site to use or list of sites to use; lists will be joined by a ','.
+        state_code : str or ``None``
+            Two-letter state code used in stateCd parameter.
+        bounding_box : str or ``None``
+            This parameter represents the bounding box (latitude/longitude) parameter for the usgs website.  The format is
+            westernmost longitude, southernmost latitude, easternmost longitude, northernmost latitude
+
+    Optional Filters Provided
+    -------------------------
+        parameter_codes : str or ``None``
+            Parameter code(s) that will be passed as the parameterCd parameter.   
+            This parameter represents the following usgs website input: Sites serving parameter codes
+        site_types : str, iterable of strings or ``None``
+            The type(s) of site used in siteType parameter; lists will be joined by a ','.
+
+
     Returns
     -------
     sites_dict : dict
@@ -69,27 +86,21 @@ def get_sites(sites=None, state_code=None, site_type=None, bounding_box=None, pa
     
     # Checking to see if the correct amount of major filters are being used.
     # The NWIS site requires only one major filter to be used at a time.
-    
-    if bounding_box is None and sites is None and state_code is None:
-        error_msg = 'At least one major filter has to be supplied [state code, site code(s), or ' \
-                'bounding box].'
+    major_filters = [sites, state_code, hydrologic_unit_codes, bounding_box, country_codes]
+
+    if not any(major_filters):
+        error_msg = (
+                '*At least one* of the following major filters must be supplied: '
+                'sites, state_code, hydrologic_unit_codes, bounding_box, country_codes.'
+            )
+        raise ValueError(error_msg)  
+
+    if len(filter(None, major_filters)) > 1:
+        error_msg = (
+                '*Only one* of the following major filters can be supplied:'
+                'sites, state_code, hydrologic_unit_codes, bounding_box, country_codes.'
+            )
         raise ValueError(error_msg)    
-    else:        
-        major_filter_count = 0
-
-        if bounding_box is not None:
-            major_filter_count+=1        
-        
-        if sites is not None:
-            major_filter_count+=1        
-        
-        if state_code is not None:
-            major_filter_count+=1
-
-        if major_filter_count > 1: 
-            error_msg = 'Only one of the major filters [state, site(s), or bounding box] needs ' \
-                        'to be supplied.'
-            raise ValueError(error_msg)        
     
     url_params = {'format': 'waterml'}
 
@@ -97,19 +108,25 @@ def get_sites(sites=None, state_code=None, site_type=None, bounding_box=None, pa
         url_params['stateCd'] = state_code
 
     if sites:
-        if isinstance(sites, basestring):
-            url_params['sites'] = sites
-        else:
-            url_params['sites'] = ','.join(sites)
+        url_params['sites'] = _as_str(sites)
+
+    if hydrologic_unit_codes:
+        url_params['hucs'] = _as_str(hydrologic_unit_codes)
+
+    if bounding_box:
+        url_params['bBox'] = bounding_box
+
+    if county_codes:
+        url_params['countyCd'] = county_codes
 
     if site_type:
         url_params['siteType'] = site_type
 
-    if bounding_box:
-        url_params['bBox'] = bounding_box
         
     if parameter_code:
         url_params['parameterCd'] = parameter_code
+
+    url_params.update(kwargs)
         
     if input_file is None:
         if not service:
@@ -223,6 +240,15 @@ def get_site_data(site_code, service=None, parameter_code=None, start=None,
             get_site_data(site_code, service='instantaneous', **kwargs))
 
     return values
+
+
+def _as_str(arg):
+    """if arg is a list, convert to comma delimited string
+    """
+    if isinstance(arg, basestring):
+        return arg
+    else:
+        return ','.join(arg)
 
 
 def _extract_site_properties(site):
