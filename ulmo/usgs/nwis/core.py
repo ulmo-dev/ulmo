@@ -93,50 +93,50 @@ def get_sites(sites=None, state_code=None, huc=None, bounding_box=None,
         a python dict with site codes mapped to site information
     """
     
-    # Checking to see if the correct amount of major filters are being used.
-    # The NWIS site requires only one major filter to be used at a time.
-    major_filters = [sites, state_code, huc, bounding_box, county_code]
-
-    if not any(major_filters):
-        error_msg = (
-                '*At least one* of the following major filters must be supplied: '
-                'sites, state_code, huc, bounding_box, country_code.'
-            )
-        raise ValueError(error_msg)  
-
-    if len(filter(None, major_filters)) > 1:
-        error_msg = (
-                '*Only one* of the following major filters can be supplied:'
-                'sites, state_code, huc, bounding_box, country_code.'
-            )
-        raise ValueError(error_msg)    
-    
-    url_params = {'format': 'waterml'}
-
-    if state_code:
-        url_params['stateCd'] = state_code
-
-    if sites:
-        url_params['sites'] = _as_str(sites)
-
-    if huc:
-        url_params['hucs'] = _as_str(huc)
-
-    if bounding_box:
-        url_params['bBox'] = _as_str(bounding_box)
-
-    if county_code:
-        url_params['countyCd'] = _as_str(county_code)
-
-    if site_type:
-        url_param['siteType'] = _as_str(site_type)
-
-    if parameter_code:
-        url_params['parameterCd'] = _as_str(parameter_code)
-
-    url_params.update(kwargs)
-        
     if input_file is None:
+        # Checking to see if the correct amount of major filters are being used.
+        # The NWIS site requires only one major filter to be used at a time.
+        major_filters = [sites, state_code, huc, bounding_box, county_code]
+
+        if not any(major_filters):
+            error_msg = (
+                    '*At least one* of the following major filters must be supplied: '
+                    'sites, state_code, huc, bounding_box, country_code.'
+                )
+            raise ValueError(error_msg)  
+
+        if len(filter(None, major_filters)) > 1:
+            error_msg = (
+                    '*Only one* of the following major filters can be supplied:'
+                    'sites, state_code, huc, bounding_box, country_code.'
+                )
+            raise ValueError(error_msg)    
+        
+        url_params = {'format': 'waterml'}
+
+        if state_code:
+            url_params['stateCd'] = state_code
+
+        if sites:
+            url_params['sites'] = _as_str(sites)
+
+        if huc:
+            url_params['hucs'] = _as_str(huc)
+
+        if bounding_box:
+            url_params['bBox'] = _as_str(bounding_box)
+
+        if county_code:
+            url_params['countyCd'] = _as_str(county_code)
+
+        if site_type:
+            url_param['siteType'] = _as_str(site_type)
+
+        if parameter_code:
+            url_params['parameterCd'] = _as_str(parameter_code)
+
+        url_params.update(kwargs)
+
         if not service:
             return_sites = {}
             for service in ['daily', 'instantaneous']:
