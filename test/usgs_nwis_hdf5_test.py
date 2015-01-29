@@ -31,7 +31,7 @@ def test_update_site_list(test_file_path):
     site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
-        nwis.hdf5.update_site_list(path=test_file_path,
+        nwis.hdf5.update_site_list(state_code='RI', path=test_file_path,
                 input_file=test_site_file, autorepack=False)
 
     sites = nwis.hdf5.get_sites(test_file_path)
@@ -150,7 +150,7 @@ def test_update_site_list_with_changes(test_file_path):
     ]
     for test_file, test_site in site_files:
         test_site_file = test_util.get_test_file_path(test_file)
-        nwis.hdf5.update_site_list(path=test_file_path,
+        nwis.hdf5.update_site_list(state_code='RI', path=test_file_path,
                 input_file=test_site_file, autorepack=False)
         sites = nwis.hdf5.get_sites(path=test_file_path)
         test_code = test_site['code']
@@ -162,7 +162,7 @@ def test_sites_table_remains_unique(test_file_path):
     site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
-        nwis.hdf5.update_site_list(path=test_file_path,
+        nwis.hdf5.update_site_list(state_code='RI', path=test_file_path,
             input_file=test_site_file, autorepack=False)
 
     with pandas.io.pytables.get_store(test_file_path) as store:
@@ -174,7 +174,7 @@ def test_get_site(test_file_path):
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
     input_file = test_util.get_test_file_path(site_data_file)
-    nwis.hdf5.update_site_list(path=test_file_path,
+    nwis.hdf5.update_site_list(sites=site_code, path=test_file_path,
             input_file=input_file, autorepack=False)
 
     site = nwis.hdf5.get_site(site_code, path=test_file_path)
@@ -206,7 +206,7 @@ def test_get_sites_isnt_cached_between_calls(test_file_path):
     site_data_file = 'usgs/nwis/RI_daily.xml'
     input_file = test_util.get_test_file_path(site_data_file)
 
-    nwis.hdf5.update_site_list(input_file=input_file, path=test_file_path,
+    nwis.hdf5.update_site_list(state_code='RI', input_file=input_file, path=test_file_path,
             autorepack=False)
     sites = nwis.hdf5.get_sites(path=test_file_path)
     assert len(sites) > 0
@@ -224,7 +224,7 @@ def test_empty_update_list_doesnt_error(test_file_path):
 
     sites = nwis.hdf5.get_sites(path=test_file_path)
     assert sites == {}
-    nwis.hdf5.update_site_list(path=test_file_path,
+    nwis.hdf5.update_site_list(sites=site_code, path=test_file_path,
         input_file=input_file, autorepack=False)
 
     sites = nwis.hdf5.get_sites(path=test_file_path)
@@ -235,7 +235,7 @@ def test_get_site_for_missing_raises_lookup(test_file_path):
     site_code = '08068500'
     site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
     input_file = test_util.get_test_file_path(site_data_file)
-    nwis.hdf5.update_site_list(path=test_file_path,
+    nwis.hdf5.update_site_list(sites=site_code, path=test_file_path,
         input_file=input_file, autorepack=False)
 
     with pytest.raises(LookupError):
@@ -547,13 +547,13 @@ def test_file_size_doesnt_balloon_with_update_site_list(test_file_path):
     test_file_path += 'test.h5'
     site_list_file = test_util.get_test_file_path('usgs/nwis/RI_daily.xml')
     updated_site_list_file = test_util.get_test_file_path('usgs/nwis/RI_daily.xml')
-    nwis.hdf5.update_site_list(path=test_file_path,
+    nwis.hdf5.update_site_list(state_code='RI', path=test_file_path,
         input_file=site_list_file)
-    nwis.hdf5.update_site_list(path=test_file_path,
+    nwis.hdf5.update_site_list(state_code='RI', path=test_file_path,
             input_file=updated_site_list_file)
     original_size = os.path.getsize(test_file_path)
     for i in range(3):
-        nwis.hdf5.update_site_list(path=test_file_path,
+        nwis.hdf5.update_site_list(state_code='RI', path=test_file_path,
                 input_file=updated_site_list_file)
     expected_size = original_size * 1.01
     assert os.path.getsize(test_file_path) <= expected_size

@@ -274,8 +274,10 @@ def repack(path, complevel=None, complib=None):
         shutil.copyfile(temp_path, path)
 
 
-def update_site_list(sites=None, state_code=None, service=None, path=None,
-        input_file=None, complevel=None, complib=None, autorepack=True):
+def update_site_list(sites=None, state_code=None, huc=None, bounding_box=None, 
+        county_code=None, parameter_code=None, site_type=None, service=None, 
+        input_file=None, complevel=None, complib=None, autorepack=True, path=None,
+        **kwargs):
     """Update cached site information.
 
     Parameters
@@ -323,8 +325,9 @@ def update_site_list(sites=None, state_code=None, service=None, path=None,
     """
     sites_store_path = _get_store_path(path, 'sites.h5')
 
-    new_sites = core.get_sites(sites=sites, state_code=state_code, service=service,
-            input_file=input_file)
+    new_sites = core.get_sites(sites=sites, state_code=state_code, huc=huc, bounding_box=bounding_box, 
+        county_code=county_code, parameter_code=parameter_code, site_type=site_type, service=service, 
+        input_file=input_file, **kwargs)
 
     if len(new_sites) == 0:
         return
