@@ -164,8 +164,9 @@ def get_sites(sites=None, state_code=None, huc=None, bounding_box=None,
     return return_sites
 
 
-def get_site_data(site_code, service=None, parameter_code=None, start=None,
-        end=None, period=None, modified_since=None, input_file=None):
+def get_site_data(site_code, service=None, parameter_code=None, statistic_code=None,
+        start=None, end=None, period=None, modified_since=None, input_file=None,
+        **kwargs):
     """Fetches site data.
 
 
@@ -180,6 +181,8 @@ def get_site_data(site_code, service=None, parameter_code=None, start=None,
         respectively.
     parameter_code : str
         Parameter code(s) that will be passed as the parameterCd parameter.
+    statistic_code: str
+        Statistic code(s) that will be passed as the statCd parameter
     start : ``None`` or datetime (see :ref:`dates-and-times`)
         Start of a date range for a query. This parameter is mutually exclusive
         with period (you cannot use both).
@@ -210,6 +213,8 @@ def get_site_data(site_code, service=None, parameter_code=None, start=None,
                   'site': site_code}
     if parameter_code:
         url_params['parameterCd'] = parameter_code
+    if statistic_code:
+        url_params['statCd'] = statistic_code
     if modified_since:
         url_params['modifiedSince'] = isodate.duration_isoformat(modified_since)
 
@@ -240,14 +245,16 @@ def get_site_data(site_code, service=None, parameter_code=None, start=None,
         url_params['endDT'] = datetime_formatter(end_datetime)
 
     if service is not None:
+        url_params.update(kwargs)
         values = _get_site_values(service, url_params, input_file=input_file)
     else:
-        kwargs = dict(parameter_code=parameter_code, start=start, end=end,
-                period=period, modified_since=modified_since,
+        kw = dict(parameter_code=parameter_code, statistic_code=statistic_code,
+                start=start, end=end, period=period, modified_since=modified_since,
                 input_file=input_file)
-        values = get_site_data(site_code, service='daily', **kwargs)
+        kw.update(kwargs)
+        values = get_site_data(site_code, service='daily', **kw)
         values.update(
-            get_site_data(site_code, service='instantaneous', **kwargs))
+            get_site_data(site_code, service='instantaneous', **kw))
 
     return values
 
