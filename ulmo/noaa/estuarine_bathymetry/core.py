@@ -40,6 +40,18 @@ log.setLevel(logging.INFO)
 
 def get_data_locations(path):
   
+     """
+     This function retrieves locations that has estuarine bathymetry data.  Each estuary has an associated 
+     shapefile acrhive that will be used to show the data locations.  Each estuarine shapefile archive is 
+     downloaded to determine the data locations.
+
+     Parameters
+     ----------
+     path : str, 
+        This parameter represents the path on a local machine to store the downloaded the estuarine shapefile
+        archives.
+     """
+    
      url_region_dict = _fetch_region_url()
     
      bathymetry_estuary_list = []      
@@ -83,6 +95,21 @@ def get_data_locations(path):
      return FeatureCollection(features)
     
 def get_data(estuary_id, path, dem_format):  
+    
+    """
+     This function retrieves estuarine bathymetry data.  Each estuary has an archived bathymetry
+     data in the following formats: 1 arc-second dem format or 3 arc-second dem format.  The term
+     dem stands for Digital Elevation Model.
+
+     Parameters
+     ----------
+     estuary_id : str, 
+        This parameter represents the id of the estuary.
+
+     dem_format : str,
+        This parameter represents the desired type of dem data archive to download (1 arc-second or 3 arc-second)     
+        
+     """
 
     if (os.path.exists(path)):   
        
@@ -108,6 +135,20 @@ def get_data(estuary_id, path, dem_format):
      
 def _read_shape_zipfile(estuary_id, zip_path):
     
+    """
+     This function uses the Fiona module to read estuarine bathymetry data shapefile archives.  
+
+     Parameters
+     ----------
+     estuary_id : str, 
+        This parameter represents the id of the estuary.
+
+     zip_path : str,
+        This parameter represents the desired location where the downloaded estuarine shape file
+        data archive is on the local machine.    
+        
+    """    
+    
     with fiona.open('/', vfs='zip://%s' % zip_path) as c:
          f = next(c)
          #print f['geometry']['type']
@@ -124,8 +165,10 @@ def _fetch_url(url, region):
     This function uses the Beautiful Soup module to parse the estuaries info (name, url link page) 
     from a particular region that NOAA has screated.
 
+    Parameters
+    ----------
     url : str, 
-        This parameter represents the url for a particular region that NOAA has screated. 
+        This parameter represents the url for a particular region that NOAA has created. 
 
     region : str,
         This parameter represents a particular region that has an estuary. 
@@ -165,6 +208,12 @@ def _fetch_url(url, region):
     return bathymetry_estuaries
 
 def _fetch_region_url():
+    
+    """
+    This function uses the Beautiful Soup module to parse the regional estuaries info (name, url link page) 
+    from a particular region that NOAA has created.
+    """
+
     r = requests.get(NOAA_BATHYMETRY_DATA_URL)
     
     url_region_dict = {}     
