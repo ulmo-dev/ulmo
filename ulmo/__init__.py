@@ -13,6 +13,7 @@ from . import cpc
 from . import cuahsi
 from . import twc
 from . import ncdc
+from . import noaa
 from . import usace
 from . import usgs
 from . import util
