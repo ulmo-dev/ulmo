@@ -21,7 +21,7 @@ import numpy as np
 from ulmo import util
 
 NCDC_GSOD_DIR = os.path.join(util.get_ulmo_dir(), 'ncdc/gsod')
-NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'ish-history.csv')
+NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'isd-history.csv')
 NCDC_GSOD_START_DATE = datetime.date(1929, 1, 1)
 
 
@@ -103,15 +103,12 @@ def get_data(station_codes, start=None, end=None, parameters=None):
     return data_dict
 
 
-def get_stations(fips=None, country=None, state=None, start=None, end=None, update=True):
+def get_stations(country=None, state=None, start=None, end=None, update=True):
     """Retrieve information on the set of available stations.
 
 
     Parameters
     ----------
-    fips : {``None``, str, or iterable}
-        If specified, results will be limited to stations with matching fips
-        codes.
     country : {``None``, str, or iterable}
         If specified, results will be limited to stations with matching country
         codes.
@@ -145,19 +142,16 @@ def get_stations(fips=None, country=None, state=None, start=None, end=None, upda
     else:
         end_date = None
 
-    if isinstance(fips, basestring):
-        fips = [fips]
     if isinstance(country, basestring):
         country = [country]
     if isinstance(state, basestring):
         state = [state]
 
-    stations_url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
+    stations_url = 'http://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv'
     with util.open_file_for_url(stations_url, NCDC_GSOD_STATIONS_FILE) as f:
         reader = csv.DictReader(f)
 
-        if fips is None and country is None and state is None \
-                and start is None and end is None:
+        if country is None and state is None and start is None and end is None:
             rows = reader
         else:
             if start_date is None:
@@ -170,8 +164,8 @@ def get_stations(fips=None, country=None, state=None, start=None, end=None, upda
                 end_str = end_date.strftime('%Y%m%d')
             rows = [
                 row for row in reader
-                if _passes_row_filter(row, fips=fips, country=country,
-                    state=state, start_str=start_str, end_str=end_str)
+                if _passes_row_filter(row, country=country, state=state,
+                    start_str=start_str, end_str=end_str)
             ]
 
         stations = dict([
@@ -220,10 +214,8 @@ def _open_tarfile(tar_path, mode):
         f.close()
 
 
-def _passes_row_filter(row, fips=None, country=None, state=None, start_str=None,
+def _passes_row_filter(row, country=None, state=None, start_str=None,
         end_str=None):
-    if not fips is None and row['FIPS'] not in fips:
-        return False
     if not country is None and row['CTRY'] not in country:
         return False
     if not state is None and row['STATE'] not in state:
@@ -239,15 +231,14 @@ def _process_station(station_row):
     """converts a csv row to a more human-friendly version"""
     station_dict = {
         'begin': _convert_date_string(station_row['BEGIN']),
-        'call': station_row['CALL'],
+        'icao': station_row['ICAO'],
         'country': station_row['CTRY'],
-        'elevation': round(float(station_row['ELEV(.1M)']) * .1, 1) \
-                if station_row['ELEV(.1M)'] not in ('', '-99999') else None,
+        'elevation': round(float(station_row['ELEV(M)']), 1) \
+                if station_row['ELEV(M)'] not in ('', '-99999') else None,
         'end': _convert_date_string(station_row['END']),
-        'FIPS': station_row['FIPS'],
-        'latitude': round(float(station_row['LAT']) * 0.001, 3) \
+        'latitude': round(float(station_row['LAT']), 3) \
                 if station_row['LAT'] not in ('', '-99999') else None,
-        'longitude': round(float(station_row['LON']) * 0.001, 3) \
+        'longitude': round(float(station_row['LON']), 3) \
                 if station_row['LON'] not in ('', '-999999') else None,
         'name': station_row['STATION NAME'],
         'state': station_row['STATE'],
