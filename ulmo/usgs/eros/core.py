@@ -53,21 +53,18 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-def download_tiles(tiles, path=None, check_modified=False):
-
-    if path is None:
-        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
-
-    for tile in tiles['features']:
-
-        metadata = tile['properties']
-        layer_path = os.path.join(path, metadata['product_key'])
-        tile['properties']['file'] = util.download_tiles(layer_path, metadata['download url'], metadata['format'], check_modified)[0]
-
-    return tiles
-
-
 def get_attribute_list(as_dataframe=True):
+    """retrieve list of metadata attributes for dataset
+
+    Parameters
+    ----------
+    as_dataframe : ``True`` (default) or ``False``
+        if ``True`` return pandas dataframe
+
+    Returns
+    -------
+        available metadata attributes
+    """
     url = EROS_INVENTORY_URL + '/return_Attribute_List'
     return _call_service(url, {}, as_dataframe)
 
@@ -93,36 +90,45 @@ def get_available_datasets(xmin, ymin, xmax, ymax, epsg=4326, attrs=None, as_dat
 
 
 def get_available_formats(product_key, as_dataframe=True):
+    """retrieve list of data formats available for dataset
+
+    Parameters
+    ----------
+    product_key : str
+        dataset name. (see get_available_datasets for list)
+    as_dataframe : ``True`` (default) or ``False``
+        if ``True`` return pandas dataframe
+
+    Returns
+    -------
+        available data formats
+    """
     url = EROS_INVENTORY_URL + '/return_Download_Options'
     payload = {'ProductIDs': product_key}
     return _call_service(url, payload, as_dataframe)
 
 
-def get_raster(product_key, xmin, ymin, xmax, ymax, fmt=None,
-    path=None, update_cache=False, check_modified=False, mosaic=False):
+def get_raster_availability(product_key, bbox, fmt=None):
+    """retrieve metadata for raster tiles that cover the given bounding box 
+    for the specified data layer. 
 
-    raster_tiles = download_tiles(get_raster_availability(product_key, xmin, ymin, xmax, ymax, fmt), path, check_modified)
-
-    if mosaic:
-        if path is None:
-            path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
-        util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
-        uid = util.generate_raster_uid(product_key, xmin, ymin, xmax, ymax)
-        output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
-
-        if os.path.isfile(output_path) and not update_cache:
-            return output_path
-
-        raster_files = [tile['properties']['file'] for tile in raster_tiles['features']]
-        util.mosaic_and_clip(raster_files, xmin, ymin, xmax, ymax, output_path)
+    Parameters
+    ----------
+    product_key : str
+        dataset layer name. (see get_available_layers for list)
+    bbox : (sequence of float|str)
+        bounding box of in geographic coordinates of area to download tiles 
+        in the format (min longitude, min latitude, max longitude, max latitude)
+    fmt : str
+        desired data format. if `None`, geotiff followed by img will be given preference
         
-        return output_path
+    Returns
+    -------
+    metadata : geojson FeatureCollection
+        returns metadata including download urls as a FeatureCollection
+    """
 
-    return raster_tiles
-
-
-def get_raster_availability(product_key, xmin, ymin, xmax, ymax, fmt=None):
-
+    xmin, ymin, xmax, ymax = [float(n) for n in bbox]
     layer, fmt = _layer_id(product_key, fmt)
 
     url = EROS_VALIDATION_URL % (ymax, ymin, xmin, xmax, layer)
@@ -139,7 +145,68 @@ def get_raster_availability(product_key, xmin, ymin, xmax, ymax, fmt=None):
     return FeatureCollection(features)
 
 
+def get_raster(product_key, bbox, fmt=None, path=None, check_modified=False, mosaic=False):
+    """downloads National Elevation Dataset raster tiles that cover the given bounding box 
+    for the specified data layer. 
+
+    Parameters
+    ----------
+    product_key : str
+        dataset name. (see get_available_datasets for list)
+    bbox : (sequence of float|str)
+        bounding box of in geographic coordinates of area to download tiles 
+        in the format (min longitude, min latitude, max longitude, max latitude)
+    fmt : ``None`` or str
+        available formats vary in different datasets. If ``None``, preference will be given
+        to geotiff and then img, followed by whatever fmt is available
+    path : ``None`` or path
+        if ``None`` default path will be used
+    update_cache: ``True`` or ``False`` (default)
+        if ``False`` then tiles will not be re-downloaded if they exist in the path
+    check_modified: ``True`` or ``False`` (default)
+        if tile exists in path, check if newer file exists online and download if available.  
+    mosaic: ``True`` or ``False`` (default)
+        if ``True``, mosaic and clip downloaded tiles to the extents of the bbox provided. Requires
+        rasterio package and GDAL.
+        
+    Returns
+    -------
+    raster_tiles : geojson FeatureCollection
+        metadata as a FeatureCollection. local url of downloaded data is in feature['properties']['file']
+    """
+    raster_tiles = _download_tiles(get_raster_availability(product_key, bbox, fmt),
+        path, check_modified)
+
+    if mosaic:
+        if path is None:
+            path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+        util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
+        uid = util.generate_raster_uid(product_key, xmin, ymin, xmax, ymax)
+        output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
+
+        if os.path.isfile(output_path) and not update_cache:
+            return output_path
+
+        raster_files = [tile['properties']['file'] for tile in raster_tiles['features']]
+        util.mosaic_and_clip(raster_files, xmin, ymin, xmax, ymax, output_path)
+        
+        return [output_path]
+
+    return raster_tiles
+
+
 def get_themes(as_dataframe=True):
+    """retrieve list of data themes available
+
+    Parameters
+    ----------
+    as_dataframe : ``True`` (default) or ``False``
+        if ``True`` return pandas dataframe
+
+    Returns
+    -------
+        available data themes
+    """
     url = EROS_INVENTORY_URL + '/return_Themes'
     return _call_service(url, {}, as_dataframe)
 
@@ -165,6 +232,20 @@ def _call_service(url, payload, as_dataframe):
         return df
     else:
         return r.json()
+
+
+def _download_tiles(tiles, path=None, check_modified=False):
+
+    if path is None:
+        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
+
+    for tile in tiles['features']:
+
+        metadata = tile['properties']
+        layer_path = os.path.join(path, metadata['product_key'])
+        tile['properties']['file'] = util._download_tiles(layer_path, metadata['download url'], metadata['format'], check_modified)[0]
+
+    return tiles
 
 
 def _extract_url(url):
