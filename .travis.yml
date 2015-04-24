@@ -21,7 +21,7 @@ install:
   - "pip install sure"
   - "pip install freezegun"
   - "pip install pytest"
-  - "pip install httpretty"
+  - "pip install httpretty==0.8.6" #later versions cause IncompleteRead error
   - "pip install html5lib"
 
 # command to run tests
