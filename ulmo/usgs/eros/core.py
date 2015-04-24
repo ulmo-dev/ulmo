@@ -69,9 +69,26 @@ def get_attribute_list(as_dataframe=True):
     return _call_service(url, {}, as_dataframe)
 
 
-def get_available_datasets(xmin, ymin, xmax, ymax, epsg=4326, attrs=None, as_dataframe=True):
-    if epsg != 4326:
-        raise NotImplementedError
+def get_available_datasets(bbox, attrs=None, as_dataframe=True):
+    """retrieve available datasets for a given bounding box. 
+
+    Parameters
+    ----------
+    bbox : (sequence of float|str)
+        bounding box of in geographic coordinates of area to download tiles 
+        in the format (min longitude, min latitude, max longitude, max latitude)
+    attrs: comma separated list of str
+        metadata attributes to retrieve, `None` (default) retrieves all
+    as_dataframe : ``True`` (default) or ``False``
+        if ``True`` return pandas dataframe
+        
+    Returns
+    -------
+    datasets : dict or pandas DataFrame
+        returns availabel datasets
+    """
+    xmin, ymin, xmax, ymax = [float(n) for n in bbox]
+    epsg = 4326
 
     if attrs is None:
         attrs = ','.join(get_attribute_list().drop(37)['name'].tolist()) #attr 37->LYR_URL causing null returns
@@ -132,6 +149,7 @@ def get_raster_availability(product_key, bbox, fmt=None):
     layer, fmt = _layer_id(product_key, fmt)
 
     url = EROS_VALIDATION_URL % (ymax, ymin, xmin, xmax, layer)
+    print 'retrieving raster availability from %s' % url
     r = requests.get(url)
 
     tiles = r.json()['REQUEST_SERVICE_RESPONSE']['PIECE']
@@ -243,7 +261,7 @@ def _download_tiles(tiles, path=None, check_modified=False):
 
         metadata = tile['properties']
         layer_path = os.path.join(path, metadata['product_key'])
-        tile['properties']['file'] = util._download_tiles(layer_path, metadata['download url'], metadata['format'], check_modified)[0]
+        tile['properties']['file'] = util.download_tiles(layer_path, metadata['download url'], metadata['format'], check_modified)[0]
 
     return tiles
 
