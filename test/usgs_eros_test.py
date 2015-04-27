@@ -1,7 +1,6 @@
 import pytest
 import ulmo
 import test_util
-import tempfile
 import filecmp
 
 def test_get_attributes():
@@ -53,7 +52,6 @@ def test_get_raster_availability():
 def test_get_raster():
  	product_key = 'NCP'
 	bbox = (-97.992, 31.991, -97.991, 31.992)
-	path = tempfile.gettempdir()
 	#availability_url = 'http://extract.cr.usgs.gov/requestValidationServiceClient/sampleRequestValidationServiceProxy/getTiledDataDirectURLs2.jsp?TOP=31.992&BOTTOM=31.991&LEFT=-97.992&RIGHT=-97.991&LAYER_IDS=NCP&JSON=true'
 	#jp2_url = 'http://tdds2.cr.usgs.gov/lta5/ortho/naip/compressed/TX/2012/201204_texas_naip_1x0000m_cnir/31097/m_3109701_nw_14_1_20120725_20121015.jp2'
 	format_url = 'http://nimbus.cr.usgs.gov/index_service/Index_Service_JSON2.asmx*'
@@ -65,7 +63,9 @@ def test_get_raster():
 		jp2_url: 'usgs/eros/m_3109701_nw_14_1_20120725_20121015.jp2',
 	}
 
-	#with test_util.mocked_urls(url_files):
-	locs = ulmo.usgs.eros.get_raster(product_key, bbox, path=path)
-	raster_tile = locs['features'][0]['properties']['file']
-	assert filecmp.cmp(raster_tile, 'files/usgs/eros/m_3109701_nw_14_1_20120725_20121015.jp2')
+	test_file = test_util.get_test_file_path('usgs/eros/m_3109701_nw_14_1_20120725_20121015.jp2')
+	with test_util.temp_dir() as data_dir:
+		#with test_util.mocked_urls(url_files):
+		locs = ulmo.usgs.eros.get_raster(product_key, bbox, path=data_dir)
+		raster_tile = locs['features'][0]['properties']['file']
+		assert filecmp.cmp(raster_tile, test_file)

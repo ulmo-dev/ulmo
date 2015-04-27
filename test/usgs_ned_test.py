@@ -1,7 +1,6 @@
 import pytest
 import ulmo
 import test_util
-import tempfile
 import filecmp
 
 
@@ -34,7 +33,6 @@ def test_get_raster_availability():
 def test_get_raster():
 	layer = 'Alaska 2 arc-second'
 	bbox = (-149.5, 60.5, -149.3, 60.7)
-	path = tempfile.gettempdir()
 	#availability_url = 'https://www.sciencebase.gov/catalog/items?fields=webLinks,spatial,title&q=&filter=tags=National Elevation Dataset (NED) Alaska 2 arc-second&filter=tags=IMG&filter=spatialQuery=Polygon ((-149.5 60.7,-149.5 60.5,-149.3 60.5,-149.3 60.7,-149.5 60.7))&format=json&max=1000'
 	#zip_url = 'ftp://rockyftp.cr.usgs.gov/vdelivery/Datasets/Staged/NED/2/IMG/n61w150.zip'
 	availability_url = 'https://www.sciencebase.gov/catalog/*'
@@ -45,7 +43,9 @@ def test_get_raster():
 		zip_url: 'n61w150.zip',
 	}
 
-	#with test_util.mocked_urls(url_files):
-	locs = ulmo.usgs.ned.get_raster(layer, bbox, path=path)
-	raster_tile = locs['features'][0]['properties']['file']
-	assert filecmp.cmp(raster_tile, 'files/usgs/ned/n61w150.img')
+	test_file = test_util.get_test_file_path('usgs/ned/n61w150.img')
+	with test_util.temp_dir() as data_dir:
+		#with test_util.mocked_urls(url_files):
+		locs = ulmo.usgs.ned.get_raster(layer, bbox, path=data_dir)
+		raster_tile = locs['features'][0]['properties']['file']
+		assert filecmp.cmp(raster_tile, test_file)
