@@ -85,6 +85,9 @@ def download_if_new(url, path, check_modified=True):
     """
     parsed = urlparse.urlparse(url)
 
+    if os.path.exists(path) and not check_modified:
+        return
+
     if parsed.scheme.startswith('ftp'):
         _ftp_download_if_new(url, path, check_modified)
     elif parsed.scheme.startswith('http'):
