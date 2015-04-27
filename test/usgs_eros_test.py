@@ -34,8 +34,7 @@ test_sets = [
  	 'bbox': (-78, 32, -76, 36),
  	 'number_of_tiles': 2,
  	 'fmt_file': 'usgs/eros/formats_l1l.json',
- 	 'file': 'usgs/eros/test.json',
- 	 #'file': 'usgs/eros/availability_bbox_test_set_1.json',
+ 	 'file': 'usgs/eros/availability_bbox_test_set_1.json',
  	},
 ]
 
@@ -44,11 +43,11 @@ def test_get_raster_availability():
  	for dataset in test_sets:
  		file_urls = {
 			'http://nimbus.cr.usgs.gov/index_service/Index_Service_JSON2.asmx/return_Download_Options': dataset['fmt_file'],
-			'http://extract.cr.usgs.gov/requestValidationServiceClient/*': dataset['file'],
+			'http://extract.cr.usgs.gov/requestValidationServiceClient/sampleRequestValidationServiceProxy/getTiledDataDirectURLs2.jsp?TOP=36.0&BOTTOM=32.0&LEFT=-78.0&RIGHT=-76.0&LAYER_IDS=L1L02&JSON=true': dataset['file'],
 		}
-	 	with test_util.mocked_urls(file_urls):
- 			locs = ulmo.usgs.eros.get_raster_availability(dataset['product_key'], dataset['bbox'])
- 			assert len(locs['features'])==dataset['number_of_tiles']
+	 	#with test_util.mocked_urls(file_urls):
+ 		locs = ulmo.usgs.eros.get_raster_availability(dataset['product_key'], dataset['bbox'])
+ 		assert len(locs['features'])==dataset['number_of_tiles']
 
 
 def test_get_raster():
@@ -61,12 +60,12 @@ def test_get_raster():
 	availability_url = 'http://extract.cr.usgs.gov/*'
 	jp2_url = 'http://tdds2.cr.usgs.gov/lta5/ortho/*'
 	url_files = {
-		format_url: 'usgs/eros/'
+		format_url: 'usgs/eros/formats_ncp.json',
 		availability_url: 'usgs/eros/get_raster_test_availability.json',
 		jp2_url: 'usgs/eros/m_3109701_nw_14_1_20120725_20121015.jp2',
 	}
 
-	with test_util.mocked_urls(url_files):
-		locs = ulmo.usgs.eros.get_raster(product_key, bbox, path=path)
-		raster_tile = locs['features'][0]['properties']['file']
-		assert filecmp.cmp(raster_tile, 'files/usgs/eros/m_3109701_nw_14_1_20120725_20121015.jp2')
+	#with test_util.mocked_urls(url_files):
+	locs = ulmo.usgs.eros.get_raster(product_key, bbox, path=path)
+	raster_tile = locs['features'][0]['properties']['file']
+	assert filecmp.cmp(raster_tile, 'files/usgs/eros/m_3109701_nw_14_1_20120725_20121015.jp2')
