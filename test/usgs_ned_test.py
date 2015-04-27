@@ -42,7 +42,7 @@ def test_get_raster():
 		zip_url: 'n61w150.zip',
 	}
 
-	with test_util.mocked_urls(url_files):
-		locs = ulmo.usgs.ned.get_raster(layer, bbox, path=path)
-		raster_tile = locs['features'][0]['properties']['file']
-		assert filecmp.cmp(raster_tile, 'files/usgs/ned/n61w150.img')
+	#with test_util.mocked_urls(url_files):
+	locs = ulmo.usgs.ned.get_raster(layer, bbox, path=path)
+	raster_tile = locs['features'][0]['properties']['file']
+	assert filecmp.cmp(raster_tile, 'files/usgs/ned/n61w150.img')
