@@ -240,6 +240,7 @@ def _bbox2poly(bbox):
 
 def _call_service(url, payload, as_dataframe):
     payload['callback'] = ''
+    print 'calling %s with payload %s' % (url, repr(payload))
     r = requests.get(url, params=payload)
     if as_dataframe:
         df = pd.DataFrame(r.json()['items'])
