@@ -1,5 +1,10 @@
 Changelog
 ---------
+**0.7.6 (released 2015-04-27)**
+- fixed ncdc.gsod services to use new station list over depreciated list (thanks Victor)
+- added USGS National Elevation Dataset (NED) raster service
+- added USGS Earth Resources Observation Systems (EROS) raster services
+- allow passthrough of extra kwargs for USGS NWIS services
 
 
 **0.7.5 (released 2015-01-26)**
