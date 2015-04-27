@@ -22,18 +22,31 @@ def test_get_available_datasets():
 		datasets = ulmo.usgs.eros.get_available_datasets(bbox, attrs='AREA_NAME')
 		assert len(datasets) >= 30
 
+
+def test_get_available_format():
+	with test_util.mocked_urls('usgs/eros/formats_l1l.json'):
+		formats = ulmo.usgs.eros.get_available_formats('L1L')
+		assert len(formats) == 1
+
+
 test_sets = [
  	{'product_key': 'L1L',
  	 'bbox': (-78, 32, -76, 36),
  	 'number_of_tiles': 2,
- 	 'file': 'usgs/eros/availability_bbox_test_set_1.json',
+ 	 'fmt_file': 'usgs/eros/formats_l1l.json',
+ 	 'file': 'usgs/eros/test.json',
+ 	 #'file': 'usgs/eros/availability_bbox_test_set_1.json',
  	},
 ]
 
 
 def test_get_raster_availability():
  	for dataset in test_sets:
- 		with test_util.mocked_urls(dataset['file']):
+ 		file_urls = {
+			'http://nimbus.cr.usgs.gov/index_service/Index_Service_JSON2.asmx/return_Download_Options': dataset['fmt_file'],
+			'http://extract.cr.usgs.gov/requestValidationServiceClient/*': dataset['file'],
+		}
+	 	with test_util.mocked_urls(file_urls):
  			locs = ulmo.usgs.eros.get_raster_availability(dataset['product_key'], dataset['bbox'])
  			assert len(locs['features'])==dataset['number_of_tiles']
 
