@@ -130,7 +130,7 @@ def get_sites(sites=None, state_code=None, huc=None, bounding_box=None,
             url_params['countyCd'] = _as_str(county_code)
 
         if site_type:
-            url_param['siteType'] = _as_str(site_type)
+            url_params['siteType'] = _as_str(site_type)
 
         if parameter_code:
             url_params['parameterCd'] = _as_str(parameter_code)
