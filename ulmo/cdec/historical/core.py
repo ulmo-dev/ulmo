@@ -128,7 +128,7 @@ def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
 
         from ulmo import cdec
         # to get all available sensors
-        available_sensors = cdec.historical.get_sensors(['NEW'])
+        available_sensors = cdec.historical.get_station_sensors(['NEW'])
 
 
     Parameters
@@ -211,11 +211,11 @@ def get_data(station_ids=None, sensor_ids=None, resolutions=None, start=None, en
     """
 
     if start is None:
-        start_date = DEFAULT_START_DATE
+        start_date = util.convert_date(DEFAULT_START_DATE)
     else:
         start_date = util.convert_date(start)
     if end is None:
-        end_date = DEFAULT_END_DATE
+        end_date = util.convert_date(DEFAULT_END_DATE)
     else:
         end_date = util.convert_date(end)
 
