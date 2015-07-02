@@ -60,7 +60,7 @@ def extract_from_zip(zip_path, tile_path, tile_fmt):
     tile_path = os.path.splitext(tile_path)[0] + tile_fmt
     with contextlib.closing(zipfile.ZipFile(zip_path)) as z:
         fname = [x for x in z.namelist() if tile_fmt in x[-4:]][0]
-        with open(tile_path, 'w') as f:
+        with open(tile_path, 'wb') as f:
             f.write(z.read(fname))
             print '... ... %s format raster saved at %s' % (tile_fmt, tile_path)
 
