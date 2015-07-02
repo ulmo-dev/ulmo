@@ -2,9 +2,14 @@ Ulmo depends on a lot of libraries from the scientific python stack (namely:
 numpy, pytables and pandas) and lxml. There are a couple of ways to get these
 dependencies installed but it can be tricky if doing it by hand. The simplest
 way to get things up and running is to use a scientific python distribution that
-will install everything together. A full list is available on `numfocus.org`_
+will install everything together. A full list is available on `scipy.org`_
 but `Anaconda`_ is recommended as it is the easiest to set up.
 
+If you are using Anaconda then you can install ulmo with the following command:
+
+    conda install -c https://conda.binstar.org/ulmo ulmo
+
+Otherwise, follow the instructions below:
 
 Once the requisite scientific python libraries are installed are installed, the
 most recent release of ulmo can be installed from pypi. Pip is a good way to do
@@ -12,11 +17,9 @@ that:
 
     pip install ulmo
 
-
 Or easy_install:
 
     easy_install ulmo
-
 
 To install the bleeding edge development version, grab a copy of the `source
 code`_ and run setup.py from the root directory:
@@ -26,5 +29,5 @@ code`_ and run setup.py from the root directory:
 
 
 .. _Anaconda: http://continuum.io/downloads.html 
-.. _numfocus.org: http://numfocus.org/projects-2/software-distributions/
+.. _scipy.org: http://scipy.org/install.html
 .. _source code: https://github.com/ulmo-dev/ulmo
