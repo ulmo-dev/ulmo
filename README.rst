@@ -47,8 +47,8 @@ Links
 -----
 
 * Documentation: http://ulmo.readthedocs.org
-* Repository: https://github.com/twdb/ulmo
+* Repository: https://github.com/ulmo-dev/ulmo
 
 
 .. _more sophisticated tools: http://pandas.pydata.org
-.. _issue tracker: https://github.com/twdb/ulmo/issues?labels=new+dataset&state=open 
+.. _issue tracker: https://github.com/ulmo-dev/ulmo/issues?labels=new+dataset&state=open 
