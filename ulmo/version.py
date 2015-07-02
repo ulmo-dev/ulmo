@@ -1,2 +1,2 @@
 # set version number
-__version__ = '0.7.7dev'
+__version__ = '0.7.7'

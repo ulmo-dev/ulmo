@@ -1,6 +1,15 @@
 Changelog
 ---------
+
+**0.7.7 (released 2015-07-02)**
+
+- dropped python 2.6 support
+- fixed bug in extracting raster file from zip file on windows
+- fixes for cdec service
+- fix url_params kwarg typo for nwis service
+
 **0.7.6 (released 2015-04-27)**
+
 - fixed ncdc.gsod services to use new station list over depreciated list (thanks Victor)
 - added USGS National Elevation Dataset (NED) raster service
 - added USGS Earth Resources Observation Systems (EROS) raster services
