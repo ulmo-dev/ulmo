@@ -119,15 +119,15 @@ def get_station_data(station_code, date=None, as_dataframe=False):
     initial_request = requests.get(waterquality_url)
     initialsoup = BeautifulSoup(initial_request.content, 'html.parser')
 
-    # stationvals = [ statag.get('value', None)
-    #     for statag in initialsoup.findAll(id="multiple")
-    #     if statag.get('value', None)
-    # ]
-
+    stationvals = [ statag.get('value', None)
+        for statag in initialsoup.findAll(id="multiple")
+        if statag.get('value', None)
+    ]
 
     result = _make_next_request(waterquality_url2, 
                                 initial_request, 
-                                {'site': station_code})
+                                {'multiple': stationvals,
+                                'site': station_code})
 
     if op.exists(resp_path) and \
         util.misc._request_file_size_matches(result, resp_path)\
@@ -154,6 +154,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
 
     results = []
+
     headers = [head.text for head in gridview.findAll('th')]
 
     #uses \xa0 for blank
