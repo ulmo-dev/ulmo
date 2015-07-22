@@ -2,9 +2,9 @@
     ulmo.lcra.waterquality.core
     ~~~~~~~~~~~~~~~~~~~~~
     This module provides access to data provided by the `Lower Colorado 
-    River Authority` _ `Water Quality`_ web site.
-    .. _United States Army Corps of Engineers: http://www.lcra.org
-    .. _Tulsa District Water Control: http://waterquality.lcra.org/
+    River Authority`_ `Water Quality`_ web site.
+    .. _Lower Colorado River Authority: http://www.lcra.org
+    .. _Water Quality: http://waterquality.lcra.org/
 """
 from bs4 import BeautifulSoup
 import logging
@@ -14,7 +14,7 @@ from ulmo import util
 
 
 import pickle
-
+import dateutil
 import os
 
 # import datetime
@@ -29,10 +29,8 @@ from bs4 import BeautifulSoup
 import requests
 
 
+import pandas as pd 
 
-
-# import numpy as np
-# import pandas
 
 
 # try:
@@ -74,7 +72,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
         ``get_stations()``
     date : ``None`` or date (see :ref:`dates-and-times`)
         The date of the data to be queried. If date is ``None`` (default), then
-        data for the current day is retreived.
+        all data will be returned.
     as_dataframe : bool
         This determines what format values are returned as. If ``False``
         (default), the values dict will be a dict with timestamps as keys mapped
@@ -96,12 +94,6 @@ def get_station_data(station_code, date=None, as_dataframe=False):
         log.error("Unsure of the station_code parameter type. \
                 Try string or int")
         raise
-
-    if date:
-        log.info("Date parameter not implemented yet")
-    if as_dataframe:
-        log.info("as_dataframe parameter not implemented yet")
-
 
     waterquality_url = "http://waterquality.lcra.org/parameter.aspx?qrySite=%s" %station_code
     waterquality_url2 = 'http://waterquality.lcra.org/events.aspx'
@@ -170,13 +162,38 @@ def get_station_data(station_code, date=None, as_dataframe=False):
         with open(pickle_path, 'wb') as mf:
             pickle.dump(results, mf)
 
-    return results
+    if date:
+        try:
+            datelim = dateutil.parser.parse(date)
+        except ValueError:
+            log.warn("Could not parse the provided date %s" %date)
+            datelim = None
+        if datelim:
+            df= _create_dataframe(results)
+            cut_df = df[df['Date'] > datelim]
+            if as_dataframe:
+                return cut_df
+            else:
+                return cut_df.to_dict('records')
 
+    if as_dataframe:
+        return _create_dataframe(results)
+    else:
+        return results
+
+def _create_dataframe(results):
+    df = pd.DataFrame.from_records(results)
+    df['Date'] = df['Date'].apply(dateutil.parser.parse)
+    df.set_index(['Date'])
+    return df
 
 def _extract_headers_for_next_request(request):
     payload = dict()
     for tag in BeautifulSoup(request.content, 'html.parser').findAll('input'):
         tag_dict = dict(tag.attrs)
+        if tag_dict.get('value', None) == 'tabular':
+            #
+            continue
         #some tags don't have a value and are used w/ JS to toggle a set of checkboxes
         payload[tag_dict['name']] = tag_dict.get('value')
     return payload
