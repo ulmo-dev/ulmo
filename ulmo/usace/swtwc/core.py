@@ -26,7 +26,7 @@ from ulmo import util
 try:
     import io as StringIO
 except ImportError:
-    import io
+    from cStringIO import StringIO
 
 USACE_SWTWC_DIR = os.path.join(util.get_ulmo_dir(), 'usace/swtwc')
 
@@ -80,7 +80,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
                 'station_code': station_code,
             }
             raise ValueError(error_msg)
-        sio = io.StringIO(str(pre.text.strip()))
+        sio = StringIO.StringIO(str(pre.text.strip()))
 
     first_line = sio.readline()
     split = first_line[8:].strip().split()
