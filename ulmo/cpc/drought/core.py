@@ -179,7 +179,7 @@ def _as_data_dict(dataframe):
             climate_division_data = group.T.drop(['state', 'climate_division'])
             values = [
                 _value_dict(value)
-                for k, value in climate_division_data.items()
+                for k, value in climate_division_data.iteritems()
             ]
             state_dict[climate_division] = values
         data_dict[state] = state_dict
