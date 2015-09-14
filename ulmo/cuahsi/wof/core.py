@@ -10,7 +10,7 @@
 from future import standard_library
 standard_library.install_aliases()
 from builtins import str
-import io as StringIO
+import io
 
 import suds.client
 import isodate
@@ -52,11 +52,11 @@ def get_sites(wsdl_url, suds_cache=("default",)):
     waterml_version = _waterml_version(suds_client)
     if waterml_version == '1.0':
         response = suds_client.service.GetSitesXml('')
-        response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+        response_buffer = io.BytesIO(response.encode('utf8', 'ignore'))
         sites = waterml.v1_0.parse_site_infos(response_buffer)
     elif waterml_version == '1.1':
         response = suds_client.service.GetSites('')
-        response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+        response_buffer = io.BytesIO(response.encode('utf8', 'ignore'))
         sites = waterml.v1_1.parse_site_infos(response_buffer)
 
     return dict([
@@ -97,11 +97,11 @@ def get_site_info(wsdl_url, site_code, suds_cache=("default",)):
     waterml_version = _waterml_version(suds_client)
     if waterml_version == '1.0':
         response = suds_client.service.GetSiteInfo(site_code)
-        response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+        response_buffer = io.BytesIO(response.encode('utf8', 'ignore'))
         sites = waterml.v1_0.parse_sites(response_buffer)
     elif waterml_version == '1.1':
         response = suds_client.service.GetSiteInfo(site_code)
-        response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+        response_buffer = io.BytesIO(response.encode('utf8', 'ignore'))
         sites = waterml.v1_1.parse_sites(response_buffer)
 
     if len(sites) == 0:
@@ -178,7 +178,7 @@ def get_values(wsdl_url, site_code, variable_code, start=None, end=None, suds_ca
         site_code, variable_code, startDate=start_dt_isostr,
         endDate=end_dt_isostr)
 
-    response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+    response_buffer = io.BytesIO(response.encode('utf8', 'ignore'))
     if waterml_version == '1.0':
         values = waterml.v1_0.parse_site_values(response_buffer)
     elif waterml_version == '1.1':
@@ -225,7 +225,7 @@ def get_variable_info(wsdl_url, variable_code=None, suds_cache=("default",)):
 
     waterml_version = _waterml_version(suds_client)
     response = suds_client.service.GetVariableInfo(variable_code)
-    response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+    response_buffer = io.BytesIO(response.encode('utf8', 'ignore'))
 
     if waterml_version == '1.0':
         variable_info = waterml.v1_0.parse_variables(response_buffer)
