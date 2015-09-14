@@ -54,9 +54,9 @@ def test_get_raster():
 	bbox = (-97.992, 31.991, -97.991, 31.992)
 	#availability_url = 'http://extract.cr.usgs.gov/requestValidationServiceClient/sampleRequestValidationServiceProxy/getTiledDataDirectURLs2.jsp?TOP=31.992&BOTTOM=31.991&LEFT=-97.992&RIGHT=-97.991&LAYER_IDS=NCP&JSON=true'
 	#jp2_url = 'http://tdds2.cr.usgs.gov/lta5/ortho/naip/compressed/TX/2012/201204_texas_naip_1x0000m_cnir/31097/m_3109701_nw_14_1_20120725_20121015.jp2'
-	format_url = 'http://nimbus.cr.usgs.gov/index_service/Index_Service_JSON2.asmx*'
-	availability_url = 'http://extract.cr.usgs.gov/*'
-	jp2_url = 'http://tdds2.cr.usgs.gov/lta5/ortho/*'
+	format_url = 'http://nimbus.cr.usgs.gov/index_service/Index_Service_JSON2.asmx'
+	availability_url = 'http://extract.cr.usgs.gov/requestValidationServiceClient/sampleRequestValidationServiceProxy/getTiledDataDirectURLs2.jsp'
+	jp2_url = 'http://tdds2.cr.usgs.gov/lta5/ortho/naip/compressed/TX/2012/201204_texas_naip_1x0000m_cnir/31097/m_3109701_nw_14_1_20120725_20121015.jp2'
 	url_files = {
 		format_url: 'usgs/eros/formats_ncp.json',
 		availability_url: 'usgs/eros/get_raster_test_availability.json',
@@ -65,7 +65,7 @@ def test_get_raster():
 
 	test_file = test_util.get_test_file_path('usgs/eros/m_3109701_nw_14_1_20120725_20121015.jp2')
 	with test_util.temp_dir() as data_dir:
-		#with test_util.mocked_urls(url_files):
-		locs = ulmo.usgs.eros.get_raster(product_key, bbox, path=data_dir)
-		raster_tile = locs['features'][0]['properties']['file']
-		assert filecmp.cmp(raster_tile, test_file)
+		with test_util.mocked_urls(url_files):
+			locs = ulmo.usgs.eros.get_raster(product_key, bbox, path=data_dir)
+			raster_tile = locs['features'][0]['properties']['file']
+			assert filecmp.cmp(raster_tile, test_file)
