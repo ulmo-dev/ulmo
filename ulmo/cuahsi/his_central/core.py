@@ -7,7 +7,7 @@
 
     .. _CUAHSI HIS Central: http://his.cuahsi.org/hiscentral.html
 """
-import suds
+import suds.client
 
 from ulmo import util
 

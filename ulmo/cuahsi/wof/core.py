@@ -9,7 +9,7 @@
 """
 import cStringIO as StringIO
 
-import suds
+import suds.client
 import isodate
 
 from ulmo import util

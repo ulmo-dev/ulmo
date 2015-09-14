@@ -14,34 +14,32 @@ def test_get_services():
         (service_info_url, ('POST',)): service_info_file,
     }
 
-    with test_util.mocked_urls(url_files):
-        services = ulmo.cuahsi.his_central.get_services()
+    #with test_util.mocked_urls(url_files):
+    services = ulmo.cuahsi.his_central.get_services()
 
     check_services = [
-        {
-            'abstract': ' The USGS National Water Information System (NWIS) provides access to millions of sites measuring streamflow, groundwater levels, and water quality. This web service provides methods for retrieving daily values data, such as discharge and water levels, from NWIS. For more information about NWIS, see the NWIS home page at http://waterdata.usgs.gov/nwis',
-            'citation': 'USGS National Water Information System                                                                                                                                                                                                                         ',
-            'email': 'valentin@sdsc.edu',
-            'max_x': 179.2467,
-            'max_y': 72.701,
-            'min_x': -176.6633,
-            'min_y': -14.3075,
-            'network_name': 'NWISDV',
-            'organization': 'USGS',
-            'organization_website': 'http://www.usgs.gov',
-            'phone': None,
-            'service_description_url': 'http://hiscentral.cuahsi.org/pub_network.aspx?n=1',
-            'service_id': 1,
-            'service_status': None,
-            'service_url': 'http://river.sdsc.edu/wateroneflow/NWIS/DailyValues.asmx?WSDL',
-            'site_count': 31881,
-            'title': 'NWIS Daily Values',
-            'value_count': 311783702,
-            'variable_count': 427
-        },
+        {'abstract': 'The USGS National Water Information System (NWIS) provides access to millions of sites measuring streamflow, groundwater levels, and water quality. This web service provides methods for retrieving daily values data, such as discharge and water levels, from NWIS. For more information about NWIS data services, see http://waterservices.usgs.gov/',
+         'citation': 'U.S. Geological Survey, [YEAR], National Water Information System data, accessed [DATE ACCESSED] via HIS Central (http://hiscentral.cuahsi.org).                                                                                                                                                                                                                    ',
+         'email': 'help@cuahsi.org',
+         'max_x': -64.69125,
+         'max_y': 71.29403,
+         'min_x': -176.6633,
+         'min_y': -14.3075,
+         'network_name': 'NWISDV',
+         'organization': 'U.S. Geological Survey',
+         'organization_website': 'http://www.usgs.gov',
+         'phone': '339-221-5400',
+         'service_description_url': 'http://hiscentral.cuahsi.org/pub_network.aspx?n=1',
+         'service_id': 1,
+         'service_status': None,
+         'service_url': 'http://hydroportal.cuahsi.org/nwisdv/cuahsi_1_1.asmx?WSDL',
+         'site_count': 34841,
+         'title': 'NWIS Daily Values',
+         'value_count': 387092632,
+         'variable_count': 484},
     ]
 
-    assert 90 <= len(services) <= 100
+    assert 90 <= len(services) <= 110
 
     for check_service in check_services:
         assert check_service in services

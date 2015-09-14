@@ -36,8 +36,8 @@ setup(
     name='ulmo',
     version=info['__version__'],
     license='BSD',
-    author='Andy Wilson',
-    author_email='wilson.andrew.j@gmail.com',
+    author='Dharhas Pothina',
+    author_email='dharhas@gmail.com',
     description='clean, simple and fast access to public hydrology and climatology data',
     long_description=long_description,
     url='https://github.com/ulmo-dev/ulmo/',
@@ -55,7 +55,7 @@ setup(
         'numpy>=1.4.0',
         'pandas>=0.11',
         'requests>=1.1',
-        'suds>=0.4',
+        'suds-jurko',
     ],
     extras_require={
         'pytables_caching': ['tables>=2.3.0']
@@ -71,7 +71,7 @@ setup(
     tests_require=[
         'freezegun>=0.1.4',
         'pytest>=2.3.2',
-        'httpretty>=0.5.8',
+        'httpretty==0.8.6',
     ],
     cmdclass={'test': PyTest},
 )
