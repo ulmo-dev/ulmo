@@ -57,6 +57,7 @@ setup(
         'pandas>=0.11',
         'requests>=1.1',
         'suds-jurko',
+        'future',
     ],
     extras_require={
         'pytables_caching': ['tables>=2.3.0']
