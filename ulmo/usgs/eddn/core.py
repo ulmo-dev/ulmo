@@ -20,6 +20,7 @@
     .. _http://eddn.usgs.gov/dcpformat.html
 
 """
+from past.builtins import basestring
 
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta

@@ -85,7 +85,7 @@ def _as_data_dict(df):
     for county in df['fips'].unique():
         county_df = df[df['fips'] == county]
         county_data = county_df.T.drop(['fips'])
-        values = [v.to_dict() for k, v in county_data.iteritems()]
+        values = [v.to_dict() for k, v in county_data.items()]
         county_dict[county] = values
 
     return county_dict

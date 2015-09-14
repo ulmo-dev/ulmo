@@ -9,6 +9,11 @@
     .. _Tulsa District Water Control: http://www.swt-wc.usace.army.mil/
 
 """
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import zip
+from builtins import range
 import datetime
 import os.path
 
@@ -19,9 +24,9 @@ import pandas
 from ulmo import util
 
 try:
-    import cStringIO as StringIO
+    import io as StringIO
 except ImportError:
-    import StringIO
+    import io
 
 USACE_SWTWC_DIR = os.path.join(util.get_ulmo_dir(), 'usace/swtwc')
 
@@ -75,7 +80,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
                 'station_code': station_code,
             }
             raise ValueError(error_msg)
-        sio = StringIO.StringIO(str(pre.text.strip()))
+        sio = io.StringIO(str(pre.text.strip()))
 
     first_line = sio.readline()
     split = first_line[8:].strip().split()

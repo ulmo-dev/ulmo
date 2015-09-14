@@ -10,6 +10,9 @@
     .. _Global Historical Climate Network - Daily: http://www.ncdc.noaa.gov/oa/climate/ghcn-daily/
 
 """
+from builtins import str
+from builtins import range
+from past.builtins import basestring
 import itertools
 import os
 
@@ -68,7 +71,7 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
     columns = list(itertools.chain(start_columns, *[
         [(name + str(n), start + 13 + (8 * n), end + 13 + (8 * n), converter)
          for name, start, end, converter in value_columns]
-        for n in xrange(1, 32)
+        for n in range(1, 32)
     ]))
 
     station_file_path = _get_ghcn_file(
@@ -114,7 +117,7 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
     else:
         return dict([
             (key, util.dict_from_dataframe(dataframe))
-            for key, dataframe in dataframes.iteritems()
+            for key, dataframe in dataframes.items()
         ])
 
 

@@ -20,6 +20,7 @@
     .. _Earth Resources Observation and Science (EROS) Center: http://nimbus.cr.usgs.gov/app_services.php
 
 """
+from __future__ import print_function
 
 from geojson import Feature, FeatureCollection, Polygon
 import hashlib
@@ -149,7 +150,7 @@ def get_raster_availability(product_key, bbox, fmt=None):
     layer, fmt = _layer_id(product_key, fmt)
 
     url = EROS_VALIDATION_URL % (ymax, ymin, xmin, xmax, layer)
-    print 'retrieving raster availability from %s' % url
+    print('retrieving raster availability from %s' % url)
     r = requests.get(url)
 
     tiles = r.json()['REQUEST_SERVICE_RESPONSE']['PIECE']
@@ -240,7 +241,7 @@ def _bbox2poly(bbox):
 
 def _call_service(url, payload, as_dataframe):
     payload['callback'] = ''
-    print 'calling %s with payload %s' % (url, repr(payload))
+    print('calling %s with payload %s' % (url, repr(payload)))
     r = requests.get(url, params=payload)
     if as_dataframe:
         df = pd.DataFrame(r.json()['items'])
@@ -269,7 +270,7 @@ def _download_tiles(tiles, path=None, check_modified=False):
 
 def _extract_url(url):
     headers = requests.head(url).headers
-    if 'location' in headers.keys():
+    if 'location' in list(headers.keys()):
         url = headers['location']
 
     return url
@@ -291,7 +292,7 @@ def _layer_id(product_key, fmt=None):
             fmt = available_formats.split(',')[0].split('-')[-1]
     else:
         if fmt not in available_formats:
-            raise ValueError, 'file format %s not available for product %s' % (fmt, product_key)
+            raise ValueError('file format %s not available for product %s' % (fmt, product_key))
 
     pos = available_formats.find(fmt)
     layer_id = product_key + available_formats[pos-3:pos-1]

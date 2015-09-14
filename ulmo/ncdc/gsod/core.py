@@ -8,6 +8,9 @@
     .. _National Climatic Data Center: http://www.ncdc.noaa.gov
     .. _Global Summary of the Day: http://www.ncdc.noaa.gov/oa/gsod.html
 """
+from builtins import str
+from builtins import range
+from past.builtins import basestring
 from contextlib import contextmanager
 import csv
 import datetime
@@ -97,7 +100,7 @@ def get_data(station_codes, start=None, end=None, parameters=None):
                         data_dict[station] = np.append(data_dict[station], year_data)
                     else:
                         data_dict[station] = year_data
-    for station, data_array in data_dict.iteritems():
+    for station, data_array in data_dict.items():
         if not data_dict[station] is None:
             data_dict[station] = _record_array_to_value_dicts(data_array)
     return data_dict
@@ -296,7 +299,7 @@ def _read_gsod_file(gsod_tar, station, year):
 
         # note: ignore initial 0
         delimiter = itertools.chain(*[column[1:3][::-1] for column in columns])
-        usecols = range(1, len(columns) * 2, 2)
+        usecols = list(range(1, len(columns) * 2, 2))
 
         data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
                 usecols=usecols, dtype=dtype, converters={5: _convert_date_string})

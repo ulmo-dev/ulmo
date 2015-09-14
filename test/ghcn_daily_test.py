@@ -78,15 +78,15 @@ test_data = {
 
 
 def test_get_data_as_dataframes():
-    for station_id, sample_data in test_data.iteritems():
-        elements = sample_data.keys()
+    for station_id, sample_data in test_data.items():
+        elements = list(sample_data.keys())
         with test_util.mocked_urls('ncdc/ghcnd/%s.dly' % station_id):
             station_data = ghcn_daily.get_data(
                 station_id, elements=elements, as_dataframe=True)
 
-            for element_id, element_test_data in sample_data.iteritems():
+            for element_id, element_test_data in sample_data.items():
                 element_df = station_data[element_id]
-                for date, test_value in element_test_data.iteritems():
+                for date, test_value in element_test_data.items():
                     date = pandas.Period(pandas.Timestamp(date), freq='D')
                     value = element_df.xs(date)
                     test_array = np.array(test_value, dtype=value.dtype)
@@ -98,14 +98,14 @@ def test_get_data_as_dataframes():
 
 
 def test_get_data_as_dicts():
-    for station_id, sample_data in test_data.iteritems():
-        elements = sample_data.keys()
+    for station_id, sample_data in test_data.items():
+        elements = list(sample_data.keys())
         with test_util.mocked_urls('ncdc/ghcnd/%s.dly' % station_id):
             station_data = ghcn_daily.get_data(station_id, elements=elements)
 
-            for element_id, element_test_data in sample_data.iteritems():
+            for element_id, element_test_data in sample_data.items():
                 element_dict = station_data[element_id]
-                for date, test_value in element_test_data.iteritems():
+                for date, test_value in element_test_data.items():
                     value_dict = element_dict[date]
                     values = [
                         value_dict.get(v)

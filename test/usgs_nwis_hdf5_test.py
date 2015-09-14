@@ -1,3 +1,4 @@
+from builtins import range
 import os
 import shutil
 
@@ -109,7 +110,7 @@ def test_update_site_list(test_file_path):
         },
     }
 
-    for test_code, test_value in test_sites.iteritems():
+    for test_code, test_value in test_sites.items():
         assert sites[test_code] == test_value
 
 
@@ -313,7 +314,7 @@ def test_site_data_is_sorted(test_file_path):
     values = site_data['00060:00003']['values']
     assert all(
         values[i]['datetime'] < values[i+1]['datetime']
-        for i in xrange(len(values) - 1))
+        for i in range(len(values) - 1))
 
 
 def test_update_site_data_basic_data_parsing(test_file_path):
@@ -362,7 +363,7 @@ def test_site_data_filter_by_multiple_parameter_codes(test_file_path):
     site_data = nwis.hdf5.get_site_data(site_code, parameter_code=parameter_code, path=test_file_path)
 
     for code in parameter_code:
-        if code in site_data.keys():
+        if code in list(site_data.keys()):
             assert site_data[code] == all_site_data[code]
 
 

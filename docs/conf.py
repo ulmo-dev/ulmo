@@ -11,6 +11,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+from __future__ import print_function
 import sys, os
 
 # HACKS: pytables is a difficult dependency to build, so just mock it when
@@ -57,7 +58,7 @@ import pkg_resources
 try:
     release = pkg_resources.get_distribution('ulmo').version
 except pkg_resources.DistributionNotFound:
-    print 'ulmo package needs to be installed in order to generate documentation'
+    print('ulmo package needs to be installed in order to generate documentation')
     sys.exit(1)
 del pkg_resources
 

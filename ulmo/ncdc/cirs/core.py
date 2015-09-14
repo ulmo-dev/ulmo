@@ -8,6 +8,9 @@
     .. _National Climatic Data Center: http://www.ncdc.noaa.gov
     .. _Climate Index Reference Sequential (CIRS): http://www1.ncdc.noaa.gov/pub/data/cirs/
 """
+from builtins import str
+from builtins import range
+from past.builtins import basestring
 import distutils
 import os.path
 
@@ -137,7 +140,7 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
     if as_dataframe:
         return df
     else:
-        return df.T.to_dict().values()
+        return list(df.T.to_dict().values())
 
 
 def _get_element_data(element, by_state, use_file, location_names):
@@ -186,7 +189,7 @@ def _most_recent(files, element, by_state):
         element=element,
         geographic_extent=geographic_extent,
     )
-    matches = filter(lambda s: s.startswith(match_str), files)
+    matches = [s for s in files if s.startswith(match_str)]
     return sorted(matches, key=_file_key)[0]
 
 

@@ -55,7 +55,7 @@ def update_or_append_sortable(table, update_values, sortby):
     update_values.sort(key=lambda v: v[sortby])
     table_iterator = table.itersorted(sortby)
     try:
-        current_row = table_iterator.next()
+        current_row = next(table_iterator)
     except StopIteration:
         current_row = None
 
@@ -67,7 +67,7 @@ def update_or_append_sortable(table, update_values, sortby):
             # advance the table iterator until you are >= update_value
             while current_row and current_row[sortby] < update_value[sortby]:
                 try:
-                    current_row = table_iterator.next()
+                    current_row = next(table_iterator)
                 except StopIteration:
                     current_row = None
 
@@ -101,7 +101,7 @@ def _best_available_filters(possible_compressions):
 
 def _update_row_with_dict(row, dict):
     """sets the values of row to be the values found in dict"""
-    for k, v in dict.iteritems():
+    for k, v in dict.items():
         row.__setitem__(k, v)
 
 

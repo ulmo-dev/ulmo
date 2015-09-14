@@ -1,3 +1,4 @@
+from __future__ import print_function
 from datetime import datetime
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
@@ -136,7 +137,7 @@ twdb_stevens_test_sets = [
 
 def test_parser_twdb_stevens():
     for test_set in twdb_stevens_test_sets:
-        print 'testing twdb_stevens parser'
+        print('testing twdb_stevens parser')
 
         if isinstance(test_set['return_value'], pd.DataFrame):
             parser = getattr(parsers, 'twdb_stevens')
@@ -223,7 +224,7 @@ twdb_sutron_test_sets = [
 
 def test_parser_twdb_sutron():
     for test_set in twdb_sutron_test_sets:
-        print 'testing twdb_sutron parser'
+        print('testing twdb_sutron parser')
         if len(test_set['return_value'][0]) == 3:
             columns = ['timestamp_utc', 'battery_voltage', 'water_level']
         else:
@@ -268,7 +269,7 @@ twdb_texuni_test_sets = [
 
 def test_parser_twdb_texuni():
     for test_set in twdb_texuni_test_sets:
-        print 'testing twdb_texuni parser'
+        print('testing twdb_texuni parser')
         columns = ['timestamp_utc', 'battery_voltage', 'water_level']
         _assert(test_set, columns, 'twdb_texuni')
 

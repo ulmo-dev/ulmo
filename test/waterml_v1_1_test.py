@@ -44,7 +44,7 @@ def test_parse_site_infos():
         }
     }
 
-    for test_code, test_dict in test_sites.iteritems():
+    for test_code, test_dict in test_sites.items():
         assert site_infos[test_code] == test_dict
     return site_infos
 

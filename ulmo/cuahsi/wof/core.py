@@ -7,7 +7,10 @@
 
     .. _CUAHSI WaterOneFlow: http://his.cuahsi.org/wofws.html
 """
-import cStringIO as StringIO
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+import io as StringIO
 
 import suds.client
 import isodate
@@ -58,7 +61,7 @@ def get_sites(wsdl_url, suds_cache=("default",)):
 
     return dict([
         (site['network'] + ':' + site['code'], site)
-        for site in sites.values()
+        for site in list(sites.values())
     ])
 
 
@@ -103,7 +106,7 @@ def get_site_info(wsdl_url, site_code, suds_cache=("default",)):
 
     if len(sites) == 0:
         return {}
-    site_info = sites.values()[0]
+    site_info = list(sites.values())[0]
     series_dict = dict([
         (series['variable']['vocabulary'] + ':' + series['variable']['code'],
             series)
@@ -182,7 +185,7 @@ def get_values(wsdl_url, site_code, variable_code, start=None, end=None, suds_ca
         values = waterml.v1_1.parse_site_values(response_buffer)
 
     if not variable_code is None:
-        return values.values()[0]
+        return list(values.values())[0]
     else:
         return values
 
@@ -230,11 +233,11 @@ def get_variable_info(wsdl_url, variable_code=None, suds_cache=("default",)):
         variable_info = waterml.v1_1.parse_variables(response_buffer)
 
     if not variable_code is None and len(variable_info) == 1:
-        return variable_info.values()[0]
+        return list(variable_info.values())[0]
     else:
         return dict([
             ('%s:%s' % (var['vocabulary'], var['code']), var)
-            for var in variable_info.values()
+            for var in list(variable_info.values())
         ])
 
 
