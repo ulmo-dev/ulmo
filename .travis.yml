@@ -1,24 +1,28 @@
+sudo: false
 language: python
 python:
   - "2.7"
   - "3.4"
-# install libhdf5 so pytables can link against it
-before_install:
- - sudo apt-get update -qq
- - sudo apt-get install -qq libhdf5-serial-dev
 # commands to install ulmo
 install: 
-  - "pip install future"
-  - "pip install numexpr"
-  - "pip install cython"
-  - "pip install tables"
-  - "pip install ."
-  - "pip install sure"
-  - "pip install freezegun"
-  - "pip install pytest"
-  - "pip install mock"
-  - "pip install httpretty==0.8.6" #later versions cause IncompleteRead error
-  - "pip install html5lib"
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
+  # Create ulmo venv and install deps
+  - conda config --add channels ioos
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION appdirs beautifulsoup4 future geojson isodate lxml mock numpy pandas pytables pytest requests suds-jurko
+  - source activate test-environment
+  - pip install freezegun
+  - pip install httpretty==0.8.6
+  - python setup.py install
 
 # command to run tests
 script: "py.test"
