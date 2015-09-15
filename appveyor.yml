@@ -27,7 +27,7 @@ install:
   - "activate test-environment"
   - "conda install pip"
   - "pip install freezegun"
-  - "pip install httpretty==0.8.6"
+  - "pip install httpretty==0.8.5"
   - "pip install future"
   - "python setup.py install"
 
