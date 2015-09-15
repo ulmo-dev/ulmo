@@ -162,7 +162,7 @@ def test_update_site_list_with_changes(test_file_path):
 
 
 def test_sites_table_remains_unique(test_file_path):
-    test_file_path = test_file_path + "test.h5"
+    test_file_path = os.path.join(test_file_path, "test.h5")
     site_files = [
             os.path.join('usgs','nwis', 'RI_daily.xml'), 
             os.path.join('usgs','nwis', 'RI_instantaneous.xml'),
@@ -208,7 +208,7 @@ def test_get_site(test_file_path):
 
 
 def test_get_sites_isnt_cached_between_calls(test_file_path):
-    test_file_path = test_file_path + "test.h5"
+    test_file_path = os.path.join(test_file_path, "test.h5")
 
     site_data_file = os.path.join('usgs', 'nwis', 'RI_daily.xml')
     input_file = test_util.get_test_file_path(site_data_file)
