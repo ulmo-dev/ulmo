@@ -22,7 +22,7 @@ dependencies:
     - mock
     - numpy
     - pandas
-    - pytables
+    - pytables <=3.1.1
     - pytest
     - requests
     - suds-jurko
