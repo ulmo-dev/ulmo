@@ -8,6 +8,9 @@
     .. _National Climatic Data Center: http://www.ncdc.noaa.gov
     .. _Global Summary of the Day: http://www.ncdc.noaa.gov/oa/gsod.html
 """
+from builtins import str
+from builtins import range
+from past.builtins import basestring
 from contextlib import contextmanager
 import csv
 import datetime
@@ -69,7 +72,7 @@ def get_data(station_codes, start=None, end=None, parameters=None):
 
     for year in range(start_date.year, end_date.year + 1):
         tar_path = _get_gsod_file(year)
-        with _open_tarfile(tar_path, 'r:') as gsod_tar:
+        with tarfile.open(tar_path, 'r:') as gsod_tar:
             stations_in_file = [
                 name.split('./')[-1].rsplit('-', 1)[0]
                 for name in gsod_tar.getnames() if len(name) > 1]
@@ -97,7 +100,7 @@ def get_data(station_codes, start=None, end=None, parameters=None):
                         data_dict[station] = np.append(data_dict[station], year_data)
                     else:
                         data_dict[station] = year_data
-    for station, data_array in data_dict.iteritems():
+    for station, data_array in data_dict.items():
         if not data_dict[station] is None:
             data_dict[station] = _record_array_to_value_dicts(data_array)
     return data_dict
@@ -179,6 +182,9 @@ def _convert_date_string(date_string):
     if date_string == '':
         return None
 
+    if isinstance(date_string, bytes):
+        date_string = date_string.decode('utf-8')
+
     return datetime.datetime.strptime(date_string, '%Y%m%d').date()
 
 
@@ -188,30 +194,6 @@ def _get_gsod_file(year):
     path = os.path.join(NCDC_GSOD_DIR, filename)
     util.download_if_new(url, path, check_modified=True)
     return path
-
-
-@contextmanager
-def _open_gzip(gzip_path, mode):
-    """this is replicates the context manager protocol that was added to the
-    gzip module in python 2.7; it is here to support python 2.6
-    """
-    try:
-        f = gzip.open(gzip_path, mode)
-        yield f
-    finally:
-        f.close()
-
-
-@contextmanager
-def _open_tarfile(tar_path, mode):
-    """this is replicates the context manager protocol that was added to the
-    tarfile module in python 2.7; it is here to support python 2.6
-    """
-    try:
-        f = tarfile.open(tar_path, mode)
-        yield f
-    finally:
-        f.close()
 
 
 def _passes_row_filter(row, country=None, state=None, start_str=None,
@@ -260,11 +242,11 @@ def _read_gsod_file(gsod_tar, station, year):
     temp_path = os.path.join(ncdc_temp_dir, tar_station_filename)
 
     gsod_tar.extract('./' + tar_station_filename, ncdc_temp_dir)
-    with _open_gzip(temp_path, 'rb') as gunzip_f:
+    with gzip.open(temp_path, 'rb') as gunzip_f:
         columns = [
             # name, length, # of spaces separating previous column, dtype
-            ('USAF', 6, 0, 'S6'),
-            ('WBAN', 5, 1, 'S5'),
+            ('USAF', 6, 0, 'U6'),
+            ('WBAN', 5, 1, 'U5'),
             ('date', 8, 2, object),
             ('mean_temp', 6, 2, float),
             ('mean_temp_count', 2, 1, int),
@@ -281,13 +263,13 @@ def _read_gsod_file(gsod_tar, station, year):
             ('max_wind_speed', 5, 2, float),
             ('max_gust', 5, 2, float),
             ('max_temp', 6, 2, float),
-            ('max_temp_flag', 1, 0, 'S1'),
+            ('max_temp_flag', 1, 0, 'U1'),
             ('min_temp', 6, 1, float),
-            ('min_temp_flag', 1, 0, 'S1'),
+            ('min_temp_flag', 1, 0, 'U1'),
             ('precip', 5, 1, float),
-            ('precip_flag', 1, 0, 'S1'),
+            ('precip_flag', 1, 0, 'U1'),
             ('snow_depth', 5, 1, float),
-            ('FRSHTT', 6, 2, 'S6'),
+            ('FRSHTT', 6, 2, 'U6'),
         ]
 
         dtype = np.dtype([
@@ -296,7 +278,7 @@ def _read_gsod_file(gsod_tar, station, year):
 
         # note: ignore initial 0
         delimiter = itertools.chain(*[column[1:3][::-1] for column in columns])
-        usecols = range(1, len(columns) * 2, 2)
+        usecols = list(range(1, len(columns) * 2, 2))
 
         data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
                 usecols=usecols, dtype=dtype, converters={5: _convert_date_string})

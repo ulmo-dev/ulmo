@@ -1,3 +1,5 @@
+from builtins import zip
+from past.builtins import basestring
 import contextlib
 import os
 import os.path
@@ -25,11 +27,11 @@ def mocked_suds_client(waterml_version, mocked_service_calls):
 
     else:
         tns_str = 'http://www.cuahsi.org/his/%s/ws/' % waterml_version
-        with _open_multiple(mocked_service_calls.values()) as open_files:
+        with _open_multiple(list(mocked_service_calls.values())) as open_files:
             client = mock.MagicMock()
             client.wsdl.tns = ('tns', tns_str)
 
-            for service_call, filename in mocked_service_calls.iteritems():
+            for service_call, filename in mocked_service_calls.items():
                 open_file = open_files[filename]
 
                 def _func(*args, **kwargs):
@@ -70,7 +72,7 @@ def mocked_urls(url_files, methods=None):
             url_files = {'.*': url_files}
 
         HTTPretty.enable()
-        for url_match, url_file in url_files.iteritems():
+        for url_match, url_file in url_files.items():
             if not isinstance(url_match, basestring) and len(url_match) == 2:
                 url_match, methods = url_match
 
@@ -124,7 +126,7 @@ def _open_multiple(paths, handlers=None, new_paths=None):
         with _open_multiple([], [], paths) as return_dict:
             yield return_dict
     elif len(new_paths) == 0:
-        yield dict(zip(paths, handlers))
+        yield dict(list(zip(paths, handlers)))
     else:
         next_path = new_paths.pop(0)
         test_path = get_test_file_path(next_path)

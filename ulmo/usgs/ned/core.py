@@ -10,6 +10,8 @@
     .. _National Map: http://nationalmap.gov
 
 """
+from __future__ import print_function
+from past.builtins import basestring
 
 from geojson import Feature, FeatureCollection, Polygon
 import hashlib
@@ -52,7 +54,7 @@ log.setLevel(logging.INFO)
 def get_available_layers():
     """return list of available data layers
     """
-    return layer_dict.keys()
+    return list(layer_dict.keys())
 
 
 def get_raster_availability(layer, bbox):
@@ -83,7 +85,7 @@ def get_raster_availability(layer, bbox):
     
     features = []
     while url:
-        print 'retrieving raster availability from %s' % url
+        print('retrieving raster availability from %s' % url)
         r = requests.get(url)
         content = r.json()
         for item in content['items']:
@@ -161,7 +163,7 @@ def _get_file_index(path=None, update_cache=False):
     filename = os.path.join(path, 'index.json')
 
     if not os.path.exists(filename) or update_cache:
-        for dirname in layer_dict.itervalues():
+        for dirname in layer_dict.values():
             layer_path = os.path.join(path, dirname, 'zip')
             if not os.path.exists(layer_path):
                 os.makedirs(layer_path)
@@ -207,14 +209,14 @@ def _update_file_index(filename):
     Experimental, not currently in use.
     """
     index = {}
-    for name, layer in layer_dict.iteritems():
-        print 'retrieving file index for NED layer - %s' % name
+    for name, layer in layer_dict.items():
+        print('retrieving file index for NED layer - %s' % name)
         url = NED_FTP_URL.replace('<layer>', layer)
         index[name] = sorted([line for line in util.dir_list(url) if 'zip' in line])
         
     with open(filename, 'wb') as outfile:
         json.dump(index, outfile)
-        print 'ned raster file index saved in %s' % filename
+        print('ned raster file index saved in %s' % filename)
 
     return filename
 
@@ -231,7 +233,7 @@ def _download_features(feature_ids, path=None, check_modified=False,):
     for feature_id in feature_ids:
         url = SCIENCEBASE_ITEM_URL % feature_id
         metadata = requests.get(url).json()
-        layer = [a for a in layer_dict.keys() if a in metadata['title']][0]
+        layer = [a for a in list(layer_dict.keys()) if a in metadata['title']][0]
         layer_path = os.path.join(path, layer_dict[layer])
         tile_urls = [link['uri'] for link in metadata['webLinks'] if link['type']=='download']
         tiles.append({'feature_id': feature_id,

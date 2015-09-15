@@ -7,7 +7,8 @@
 
     .. _CUAHSI HIS Central: http://his.cuahsi.org/hiscentral.html
 """
-import suds
+from builtins import str
+import suds.client
 
 from ulmo import util
 
@@ -58,7 +59,7 @@ def _cast_if_text(obj):
         try:
             return str(obj)
         except UnicodeEncodeError:
-            return unicode(obj)
+            return str(obj)
     else:
         return obj
 
@@ -81,7 +82,7 @@ def _service_dict(service_info):
 
     service_dict = dict([
         (util.camel_to_underscore(key), _cast_if_text(value))
-        for key, value in dict(service_info).iteritems()
+        for key, value in dict(service_info).items()
     ])
 
     for old_key, new_key in change_keys:

@@ -1,3 +1,4 @@
+from past.builtins import basestring
 import copy
 
 import numpy as np
@@ -185,7 +186,7 @@ def _run_test_sets(test_sets):
 def _assert_inclusion(value_dict, dataframe):
     "tests that a value_dict is in a dataframe"
     sub_df = dataframe.copy()
-    for k, v in value_dict.iteritems():
+    for k, v in value_dict.items():
         if pandas.isnull(v):
             sub_df = sub_df[pandas.isnull(sub_df[k])]
         else:

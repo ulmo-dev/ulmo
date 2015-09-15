@@ -44,4 +44,4 @@ def test_get_station_data():
                     start='2013-1-1', end='2013-1-15')
 
         for test_value in test_values:
-            assert test_value in station_data.iteritems()
+            assert test_value in iter(station_data.items())

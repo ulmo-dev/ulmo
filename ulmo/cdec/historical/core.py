@@ -51,6 +51,8 @@
     M    monthly
 
 """
+from builtins import str
+from builtins import zip
 
 import pandas as pd
 import re
@@ -161,7 +163,7 @@ def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
 
         sensor_list = pd.read_html(url)[0]
         sensor_list.columns = ['sensor_id','variable','resolution','timerange']
-        v = sensor_list.variable.to_dict().values()
+        v = list(sensor_list.variable.to_dict().values())
 
         split = [re.split(r'[\(\)]+',x) for x in v]
         var_names = [x[0] for x in split]
@@ -229,7 +231,7 @@ def get_data(station_ids=None, sensor_ids=None, resolutions=None, start=None, en
 
     d = {}
 
-    for station_id, sensor_list in sensors.items():
+    for station_id, sensor_list in list(sensors.items()):
         station_data = {}
 
         for index, row in sensor_list.iterrows():

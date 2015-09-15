@@ -1,3 +1,6 @@
+from builtins import map
+from builtins import zip
+from past.builtins import basestring
 import contextlib
 import copy
 from datetime import datetime
@@ -211,7 +214,7 @@ def remove_values(site_code, datetime_dicts, path=None, complevel=None, complib=
             (site_code, site_data_path))
             return
 
-        for variable_code, datetimes in datetime_dicts.iteritems():
+        for variable_code, datetimes in datetime_dicts.items():
             variable_group_path = site_code + '/' + variable_code
             values_path = variable_group_path + '/' + 'values'
 
@@ -268,10 +271,9 @@ def repack(path, complevel=None, complib=None):
     """
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
 
-    with tempfile.NamedTemporaryFile() as temp_f:
-        temp_path = temp_f.name
-        _ptrepack(path, temp_path, **comp_kwargs)
-        shutil.copyfile(temp_path, path)
+    temp_path = tempfile.NamedTemporaryFile().name
+    _ptrepack(path, temp_path, **comp_kwargs)
+    shutil.copyfile(temp_path, path)
 
 
 def update_site_list(sites=None, state_code=None, huc=None, bounding_box=None, 
@@ -390,7 +392,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
 
     something_changed = False
     with _get_store(site_data_path, mode='a', **comp_kwargs) as store:
-        for variable_code, data_dict in new_site_data.iteritems():
+        for variable_code, data_dict in new_site_data.items():
             variable_group_path = site_code + '/' + variable_code
 
             site_dict = data_dict.pop('site')
@@ -424,7 +426,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             something_changed = True
 
             variable_group = store.get_node(variable_group_path)
-            for key, value in data_dict.iteritems():
+            for key, value in data_dict.items():
                 setattr(variable_group._v_attrs, key, value)
 
         site_group = store.get_node(site_code)
@@ -515,9 +517,9 @@ def _nest_dataframe_dicts(unnested_df, nested_column, keys):
     df = _nans_to_none(df)
 
     def _nest_func(row):
-        return dict(zip(keys, row))
+        return dict(list(zip(keys, row)))
 
-    nested_values = map(_nest_func, df[keys].values)
+    nested_values = list(map(_nest_func, df[keys].values))
     df[nested_column] = nested_values
 
     for key in keys:
@@ -528,6 +530,13 @@ def _nest_dataframe_dicts(unnested_df, nested_column, keys):
 
 def _ptrepack(src, dst, complevel, complib):
     """run ptrepack to repack from src to dst"""
+
+    #check_output(['ptrepack','--complevel=%s' % complevel, '--complib=%s' % complib, src, dst])
+    
+    #fix for for pytables not finding files on windows because of drive in path 
+    src = os.path.splitdrive(src)[-1]
+    dst = os.path.splitdrive(dst)[-1]
+
     with _sysargs_hacks():
         sys.argv = ['', '--complevel=%s' % complevel, '--complib=%s' % complib, src, dst]
         with _filter_warnings():
@@ -579,7 +588,7 @@ def _unnest_dataframe_dicts(df, nested_column, keys):
             return [np.nan] * len(keys)
         return [nested_dict.get(key, np.nan) for key in keys]
 
-    unzipped_values = zip(*df[nested_column].map(_unnest_func).values)
+    unzipped_values = list(zip(*df[nested_column].map(_unnest_func).values))
 
     for key, values in zip(keys, unzipped_values):
         df[key] = values
@@ -600,7 +609,7 @@ def _values_dicts_to_df(values_dicts):
 
 def _values_df_to_dicts(values_df):
     df = values_df.where(pandas.notnull(values_df), None)
-    dicts = df.T.to_dict().values()
+    dicts = list(df.T.to_dict().values())
     dicts.sort(key=lambda d: d['datetime'])
     return dicts
 
