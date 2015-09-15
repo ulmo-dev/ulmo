@@ -1,4 +1,3 @@
-from past.builtins import execfile
 import os
 import sys
 
@@ -19,6 +18,7 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
+rootpath = os.path.abspath(os.path.dirname(__file__))
 with open('README.rst') as f:
     # use README for long description but don't include the link to travis-ci;
     # it seems a bit out of place on pypi since it applies to the development
@@ -29,13 +29,19 @@ with open('README.rst') as f:
 
 
 # this sets __version__
-info = {}
-execfile(os.path.join('ulmo', 'version.py'), info)
+def version():
+    """Get the version number."""
+    with open(os.path.join(rootpath, "VERSION.txt")) as v:
+        _version = v.read()
+    return _version.strip()
+
+
+__version__ = version()
 
 
 setup(
     name='ulmo',
-    version=info['__version__'],
+    version=__version__,
     license='BSD',
     author='Dharhas Pothina',
     author_email='dharhas@gmail.com',
