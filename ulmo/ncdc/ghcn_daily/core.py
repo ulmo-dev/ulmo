@@ -215,10 +215,10 @@ def get_stations(country=None, state=None, elements=None, start_year=None,
     # to do this but that stopped working in pandas 0.13.0 - fortunately a
     # regex-based helper method was added then, too
     if pandas.__version__ < '0.13.0':
-        stations['wm_oid'] = stations['wm_oid'].astype('|S5')
+        stations['wm_oid'] = stations['wm_oid'].astype('|U5')
         stations['wm_oid'][stations['wm_oid'] == 'nan'] = np.nan
     else:
-        stations['wm_oid'] = stations['wm_oid'].astype('|S5').map(lambda x: x[:-2])
+        stations['wm_oid'] = stations['wm_oid'].astype('|U5').map(lambda x: x[:-2])
         stations['wm_oid'][stations['wm_oid'] == 'n'] = np.nan
 
     if as_dataframe:
