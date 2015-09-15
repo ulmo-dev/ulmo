@@ -3,10 +3,18 @@ ulmo
 
 **clean, simple and fast access to public hydrology and climatology data**
 
------------
+
+Project Status
+--------------
 
 .. image:: https://secure.travis-ci.org/ulmo-dev/ulmo.png?branch=master
         :target: https://travis-ci.org/ulmo-dev/ulmo
+
+.. image:: https://ci.appveyor.com/api/projects/status/mqo6rl0f2ocngxcu/branch/master?svg=true
+        :target: https://ci.appveyor.com/project/dharhas/ulmo/branch/master
+
+.. image:: https://coveralls.io/repos/ulmo-dev/ulmo/badge.svg?branch=master&service=github 
+        :target: https://coveralls.io/github/ulmo-dev/ulmo?branch=master
 
 
 Features
@@ -16,7 +24,6 @@ Features
 - returns simple python data structures that can be easily pulled into `more
   sophisticated tools`_ for analysis
 - caches datasets locally and harvests updates as needed
-
 
 
 Datasets

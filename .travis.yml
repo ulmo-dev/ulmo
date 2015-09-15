@@ -44,7 +44,13 @@ install:
   - source activate test-environment
   - pip install freezegun
   - pip install httpretty==0.8.6
+  - pip install coveralls
   - python setup.py install
 
 # command to run tests
-script: "py.test"
+script: 
+  coverage run --source=ulmo setup.py test
+
+# generate test coverage information 
+after_success:
+  coveralls
