@@ -21,10 +21,10 @@ env:
 
 # commands to install ulmo
 install: 
-  - if [[ "TRAVIS_OS_NAME"=="linux"]]; then
-      export OS_VERSION="Linux"
+  - if [[ "$TRAVIS_OS_NAME"=="linux" ]]; then
+      OS_VERSION="Linux";
     else
-      export OS_VERSION="MacOSX"
+      OS_VERSION="MacOSX";
     fi
   - if [[ "$PYTHON_VERSION" == "2.7" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda-latest-${OS_VERSION}-x86_64.sh -O miniconda.sh;
