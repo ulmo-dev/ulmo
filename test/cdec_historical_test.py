@@ -48,9 +48,9 @@ def test_get_station_data():
         sensors_file = 'cdec/historical/sensors.htm'
 
         url_files = {sensors_regex: sensors_file, data_regex: data_file}
-        with test_util.mocked_urls(url_files):
-            station_data = ulmo.cdec.historical.get_data(['PRA'], [6],
-                resolutions=['daily'], start='2000-1-1', end='2000-1-2')
+        #with test_util.mocked_urls(url_files):
+        station_data = ulmo.cdec.historical.get_data(['PRA'], [6],
+            resolutions=['daily'], start='2000-1-1', end='2000-1-2')
 
-            test_timestamps = [pd.Timestamp(t) for t in test_values]
-            assert np.all(test_timestamps == station_data[station_id][var_name].index)
+        test_timestamps = [pd.Timestamp(t) for t in test_values]
+        assert np.all(test_timestamps == station_data[station_id][var_name].index)
