@@ -155,7 +155,7 @@ def get_sites(sites=None, state_code=None, huc=None, bounding_box=None,
         req = requests.get(url, params=url_params)
         log.info("processing data from request: %s" % req.request.url)
         req.raise_for_status()        
-        input_file = io.BytesIO(req.content.encode('utf8', 'ignore'))
+        input_file = io.BytesIO(util.to_bytes(req.content))
 
     with _open_input_file(input_file) as content_io:
         return_sites = wml.parse_site_infos(content_io)
@@ -321,7 +321,7 @@ def _get_site_values(service, url_params, input_file=None):
 
         if req.status_code != 200:
             return {}
-        input_file = io.BytesIO(req.content.encode('utf8', 'ignore'))
+        input_file = io.BytesIO(util.to_bytes(req.content))
     else:
         query_isodate = None
 

@@ -216,6 +216,16 @@ def save_pretty_printed_xml(filename, response_buffer):
         response_buffer.seek(0)
 
 
+def to_bytes(s):
+    """convert str to bytes for py 2/3 compat
+    """
+
+    if isinstance(s, bytes):
+        return s
+
+    return s.encode('utf-8', 'ignore')
+
+
 def _ftp_download_if_new(url, path, check_modified=True):
     parsed = urllib.parse.urlparse(url)
     ftp = ftplib.FTP(parsed.netloc, "anonymous")
