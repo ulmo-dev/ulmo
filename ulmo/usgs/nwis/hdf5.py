@@ -532,6 +532,10 @@ def _ptrepack(src, dst, complevel, complib):
     """run ptrepack to repack from src to dst"""
 
     #check_output(['ptrepack','--complevel=%s' % complevel, '--complib=%s' % complib, src, dst])
+    
+    #fix for for pytables not finding files on windows because of drive in path 
+    src = os.path.splitdrive(src)[-1]
+    dst = os.path.splitdrive(dst)[-1]
 
     with _sysargs_hacks():
         sys.argv = ['', '--complevel=%s' % complevel, '--complib=%s' % complib, src, dst]

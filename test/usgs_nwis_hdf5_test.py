@@ -10,12 +10,12 @@ from ulmo.usgs import nwis
 import test_util
 
 
-TEST_FILE_DIR = os.path.abspath('tmp/')
+TEST_FILE_DIR = os.path.abspath('tmp')
 
 
 @pytest.fixture
 def test_file_path(request):
-    return os.path.join(TEST_FILE_DIR, request.function.__name__ + '/')
+    return os.path.join(TEST_FILE_DIR, request.function.__name__)
 
 
 def setup_module(module):
