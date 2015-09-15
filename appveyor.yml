@@ -26,7 +26,7 @@ install:
   - "%CMD_IN_ENV% conda create -q -n test-environment appdirs beautifulsoup4 future geojson isodate lxml mock numpy pandas pytables pytest requests suds-jurko"
   - "%CMD_IN_ENV% activate test-environment"
   - "%CMD_IN_ENV% pip install freezegun"
-  - "%CMD_IN_ENV% httpretty==0.8.6"
+  - "%CMD_IN_ENV% pip install httpretty==0.8.6"
   - "%CMD_IN_ENV% python setup.py install"
 
 test_script:
