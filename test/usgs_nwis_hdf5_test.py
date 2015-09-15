@@ -432,7 +432,7 @@ def test_site_data_update_site_list_with_multiple_updates(test_file_path):
 
 
 def test_last_refresh_gets_updated(test_file_path):
-    test_file_path = test_file_path + "test.h5"
+    test_file_path = os.path.join(test_file_path, "test.h5")
 
     first_timestamp = '2013-01-01T01:01:01'
     second_timestamp = '2013-02-02T02:02:02'
@@ -528,7 +528,7 @@ def test_handles_empty_updates(test_file_path):
 
 
 def test_file_size_doesnt_balloon_with_update_site_data(test_file_path):
-    test_file_path += 'test.h5'
+    test_file_path = os.path.join(test_file_path, "test.h5")
     site_code = '01117800'
     site_data_file = test_util.get_test_file_path(os.path.join(
         'usgs', 'nwis', 'site_%s_daily.xml' % site_code))
@@ -549,7 +549,7 @@ def test_file_size_doesnt_balloon_with_update_site_data(test_file_path):
 
 
 def test_file_size_doesnt_balloon_with_update_site_list(test_file_path):
-    test_file_path += 'test.h5'
+    test_file_path = os.path.join(test_file_path, "test.h5")
     site_list_file = test_util.get_test_file_path(os.path.join('usgs', 'nwis', 'RI_daily.xml'))
     updated_site_list_file = test_util.get_test_file_path(os.path.join('usgs', 'nwis', 'RI_daily.xml'))
     nwis.hdf5.update_site_list(path=test_file_path,
