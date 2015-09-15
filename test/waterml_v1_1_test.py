@@ -8,7 +8,7 @@ def test_parse_site_infos():
     site_infos = {}
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
-        with open(test_site_file, 'r') as f:
+        with open(test_site_file, 'rb') as f:
             site_infos.update(ulmo.waterml.v1_1.parse_site_infos(f))
 
     assert len(site_infos) == 64
