@@ -6,9 +6,9 @@ language: c
 # Setting sudo to false opts in to Travis-CI container-based builds.
 sudo: false
 
-os:
-  - linux
-  - osx
+# Trun off email notifications
+notifications:
+  email: false
 
 matrix:
   include:
@@ -40,7 +40,7 @@ install:
   - conda info -a
   # Create ulmo venv and install deps
   - conda config --add channels ioos
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION appdirs beautifulsoup4 future geojson isodate lxml mock numpy pandas pytables pytest requests suds-jurko
+  - conda create -q -n test-environment python=$PYTHON_VERSION appdirs beautifulsoup4 future geojson isodate lxml mock numpy pandas pytables pytest requests suds-jurko
   - source activate test-environment
   - pip install freezegun
   - pip install httpretty==0.8.6
