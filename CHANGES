@@ -5,6 +5,7 @@ Changelog
 - python 3 compatibility. ulmo is now compatible py python 2.7 and python 3.4.
 - ulmo is now being tested on Windows/Linux/MacOSX using AppVeyor and Travis CI.
 - the ioos conda channel is now the supported way to get ulmo.
+- added conda environment yaml files to make it easier to set up a development environment.
 
 **0.7.8 (released 2015-07-02)**
 
