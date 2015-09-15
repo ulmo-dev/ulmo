@@ -21,7 +21,7 @@ env:
 
 # commands to install ulmo
 install: 
-  - if [[ "$TRAVIS_OS_NAME"=="linux" ]]; then
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       OS_VERSION="Linux";
     else
       OS_VERSION="MacOSX";
