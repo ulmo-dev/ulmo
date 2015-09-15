@@ -150,7 +150,7 @@ def module_with_deprecation_warnings(functions, warning_message):
 
 
 @contextmanager
-def open_file_for_url(url, path, check_modified=True, use_file=None):
+def open_file_for_url(url, path, check_modified=True, use_file=None, use_bytes=None):
     """Context manager that returns an open file handle for a data file;
     downloading if necessary or otherwise using a previously downloaded file.
     File downloading will be short-circuited if use_file is either a file path
@@ -170,7 +170,11 @@ def open_file_for_url(url, path, check_modified=True, use_file=None):
         download_if_new(url, path, check_modified)
         open_path = path
 
-    open_file = open(open_path, 'r')
+    if use_bytes is None:
+        open_file = open(open_path, 'r')
+    else:
+        open_file = open(open_path, 'rb')
+
     yield open_file
 
     if not leave_open:

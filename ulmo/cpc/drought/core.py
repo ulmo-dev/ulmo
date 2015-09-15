@@ -190,7 +190,7 @@ def _convert_state_codes(dataframe):
     """adds state abbreviations to a dataframe, based on state codes"""
     state_codes = pandas.DataFrame(
         np.array([i for i in STATE_CODES.items()],
-                 dtype=np.dtype([('state', '|S2'), ('code', int)])))
+                 dtype=np.dtype([('state', '|U2'), ('code', int)])))
     merged = pandas.merge(dataframe, state_codes,
             left_on='state_code', right_on='code', how='left')
     column_names = dataframe.columns.tolist()
@@ -257,7 +257,7 @@ def _open_data_file(url):
     """returns an open file handle for a data file; downloading if necessary or otherwise using a previously downloaded file"""
     file_name = url.rsplit('/', 1)[-1]
     file_path = os.path.join(CPC_DROUGHT_DIR, file_name)
-    return util.open_file_for_url(url, file_path, check_modified=True)
+    return util.open_file_for_url(url, file_path, check_modified=True, use_bytes=True)
 
 
 def _parse_data_file(data_file, palmer_format, year):
@@ -294,6 +294,7 @@ def _parse_data_file(data_file, palmer_format, year):
         ('cmi', 'f8')
     ]
 
+    decodef = lambda x: x.decode("utf-8")
     data_array = np.genfromtxt(data_file, dtype=dtype, delimiter=delim_sequence, usecols=use_columns)
     data_array['year'] = year
     dataframe = pandas.DataFrame(data_array)
