@@ -1,13 +1,14 @@
 language: python
 python:
   - "2.7"
+  - "3.4"
 # install libhdf5 so pytables can link against it
 before_install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq libhdf5-serial-dev
 # commands to install ulmo
 install: 
-  - "pip install 'python-dateutil<2'"
+  - "pip install future"
   - "pip install numexpr"
   - "pip install cython"
   - "pip install tables"
@@ -15,6 +16,7 @@ install:
   - "pip install sure"
   - "pip install freezegun"
   - "pip install pytest"
+  - "pip install mock"
   - "pip install httpretty==0.8.6" #later versions cause IncompleteRead error
   - "pip install html5lib"
 
