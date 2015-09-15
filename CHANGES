@@ -1,5 +1,8 @@
 Changelog
 ---------
+**0.8.0 (released 2015-09-??)**
+
+- python 3 compatibility. ulmo is now compatible py python 2.7 and python 3.4
 
 **0.7.8 (released 2015-07-02)**
 
