@@ -436,5 +436,5 @@ def _scrub_prefix(element_dict, prefix):
     "returns a dict with prefix scrubbed from the keys"
     return dict([
         (k.split(prefix + '_')[-1], v)
-        for k, v in list(element_dict.items())
+        for k, v in element_dict.items()
     ])
