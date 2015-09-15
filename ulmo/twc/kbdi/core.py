@@ -383,7 +383,7 @@ def _parse_data_file(data_file):
     """
 
     dtype = [
-        ('county', '|S15'),
+        ('county', '|U15'),
         ('avg', 'i4'),
         ('max', 'i4'),
         ('min', 'i4'),
@@ -402,4 +402,4 @@ def _open_data_file(url, data_dir):
     """
     file_name = url.rsplit('/', 1)[-1]
     file_path = os.path.join(data_dir, file_name)
-    return util.open_file_for_url(url, file_path, check_modified=True)
+    return util.open_file_for_url(url, file_path, check_modified=True, use_bytes=True)
