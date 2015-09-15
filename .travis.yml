@@ -10,22 +10,22 @@ sudo: false
 notifications:
   email: false
 
-matrix:
-  include:
-    - os: osx
-    - env: PYTHON_VERSION="2.7" OS_VERSION="MacOSX"
 
-    - os: osx
-    - env: PYTHON_VERSION="3.4" OS_VERSION="MacOSX"
+os:
+  - linux
+  - osx
 
-    - os: linux
-    - env: PYTHON_VERSION="2.7" OS_VERSION="Linux"
-
-    - os: linux
-    - env: PYTHON_VERSION="3.4" OS_VERSION="Linux"    
+env:
+  - PYTHON_VERSION="2.7"
+  - PYTHON_VERSION="3.4" 
 
 # commands to install ulmo
 install: 
+  - if [[ "TRAVIS_OS_NAME"=="linux"]]; then
+      OS_VERSION="Linux"
+    else
+      OS_VERSION="MacOSX"
+    fi
   - if [[ "$PYTHON_VERSION" == "2.7" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda-latest-${OS_VERSION}-x86_64.sh -O miniconda.sh;
     else
