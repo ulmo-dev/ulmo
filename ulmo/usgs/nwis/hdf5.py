@@ -271,10 +271,9 @@ def repack(path, complevel=None, complib=None):
     """
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
 
-    with tempfile.NamedTemporaryFile() as temp_f:
-        temp_path = temp_f.name
-        _ptrepack(path, temp_path, **comp_kwargs)
-        shutil.copyfile(temp_path, path)
+    temp_path = tempfile.NamedTemporaryFile().name
+    _ptrepack(path, temp_path, **comp_kwargs)
+    shutil.copyfile(temp_path, path)
 
 
 def update_site_list(sites=None, state_code=None, huc=None, bounding_box=None, 
@@ -531,6 +530,9 @@ def _nest_dataframe_dicts(unnested_df, nested_column, keys):
 
 def _ptrepack(src, dst, complevel, complib):
     """run ptrepack to repack from src to dst"""
+
+    #check_output(['ptrepack','--complevel=%s' % complevel, '--complib=%s' % complib, src, dst])
+
     with _sysargs_hacks():
         sys.argv = ['', '--complevel=%s' % complevel, '--complib=%s' % complib, src, dst]
         with _filter_warnings():
