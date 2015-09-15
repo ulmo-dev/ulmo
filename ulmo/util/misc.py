@@ -161,16 +161,16 @@ def open_file_for_url(url, path, check_modified=True, use_file=None):
     leave_open = False
 
     if use_file is not None:
-        if isinstance(use_file, basestring):
-            open_path = use_file
         if hasattr(use_file, 'read'):
             leave_open = True
             yield use_file
+        else:
+            open_path = use_file
     else:
         download_if_new(url, path, check_modified)
         open_path = path
 
-    open_file = open(open_path, 'rb')
+    open_file = open(open_path, 'r')
     yield open_file
 
     if not leave_open:
