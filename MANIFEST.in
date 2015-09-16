@@ -1,0 +1,8 @@
+include AUTHORS
+include CHANGES
+include INSTALL
+include LICENSE
+include *.rst
+include *.txt
+
+recursive-include ulmo *.py
