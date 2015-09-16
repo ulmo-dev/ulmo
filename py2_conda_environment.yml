@@ -19,6 +19,7 @@ dependencies:
     - future
     - geojson
     - isodate
+    - lxml
     - mock
     - numpy
     - pandas
