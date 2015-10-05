@@ -84,6 +84,7 @@ setup(
         'freezegun>=0.1.4',
         'pytest>=2.3.2',
         'httpretty==0.8.6',
+        'html5lib',
     ],
     cmdclass={'test': PyTest},
 )

@@ -1,7 +1,7 @@
 # conda environment file for python 2, includes packages needed for testing
 # create a conda virtual env using:
 #   conda env create -n myenv --file py2_conda_environment.yml
-#   source activate myenv (use 'activate test_environment' on windows)
+#   source activate myenv (use 'activate myenv' on windows)
 #   python setup.py develop
 #
 # optionally run tests:
@@ -30,3 +30,4 @@ dependencies:
     - pip:
         - freezegun
         - httpretty==0.8.6
+        - html5lib
