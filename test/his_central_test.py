@@ -1,4 +1,5 @@
 import ulmo
+import pandas as pd
 
 import test_util
 
@@ -41,5 +42,9 @@ def test_get_services():
 
     assert 90 <= len(services) <= 110
 
+    services = pd.DataFrame(services)
     for check_service in check_services:
-        assert check_service in services
+        assert check_service['abstract'] in services['abstract'].tolist()
+        assert check_service['network_name'] in services['network_name'].tolist()
+        assert check_service['organization'] in services['organization'].tolist()
+        assert check_service['title'] in services['title'].tolist()
