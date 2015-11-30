@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>waterquality.lcra.org</title>
+    <link href="style/www09_consolidated2.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="Images/faviconLCRA.ico" type="image/x-icon" />
+    <script src="include/www09_top_menu.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        function checkAll(field, v) {
+            for (i = 0; i < field.length; i++)
+                field[i].checked = v;
+        }
+
+        function nameAll(field) {
+            for (i = 0; i < field.length; i++)
+                field[i].name = "multiple";
+        }
+
+        function checkCat(field, v, category) {
+            for (i = 0; i < field.length; i++) {
+                myCategory = field[i].title;
+                if (myCategory == category) {
+                    field[i].checked = v;
+                }
+
+            }
+        }
+
+        //function to toggle the DIV for the TOC
+        function toggleImage(id, flagit) {
+            if (flagit == "1") {
+                if (document.layers) document.layers['' + "photo" + ''].visibility = "show"
+                else if (document.all) document.all['' + "photo" + ''].style.visibility = "visible"
+                else if (document.getElementById) document.getElementById('' + "photo" + '').style.visibility = "visible"
+                document.getElementById('' + "photo" + '').innerHTML = "<img id='Image1'  src='Images/rss/w/"+id+".jpg' />";
+            }
+            else
+                if (flagit == "0") {
+                    if (document.layers) document.layers['' + "photo" + ''].visibility = "hide"
+                    else if (document.all) document.all['' + "photo" + ''].style.visibility = "hidden"
+                    else if (document.getElementById) document.getElementById('' + "photo" + '').style.visibility = "hidden"
+            }
+        }
+
+    </script>
+
+</head>
+
+
+<body style="height: 100%; background-color:#033968; width:100%" onload="nameAll(document.form1.multiple);window.focus();">
+
+<div align="left">
+<script type="text/javascript" language="javascript">showTopNavBar();</script>
+</div>
+   
+    <form name="form1" method="post" action="events.aspx" id="form1" style="margin: 0px; padding: 0px;">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE0OTM2MjE2OTZkGAIFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYhBR5HcmlkVmlldzEkY3RsMDEkQ2hrYm94UE1TZWxBbGwFFUdyaWRWaWV3MSRjdGwwMyRjdGwwMAUVR3JpZFZpZXcxJGN0bDAyJGN0bDAwBRVHcmlkVmlldzEkY3RsMDQkY3RsMDAFFUdyaWRWaWV3MSRjdGwwNSRjdGwwMAUVR3JpZFZpZXcxJGN0bDA2JGN0bDAwBRVHcmlkVmlldzEkY3RsMDckY3RsMDAFFUdyaWRWaWV3MSRjdGwwOCRjdGwwMAUVR3JpZFZpZXcxJGN0bDA5JGN0bDAwBRVHcmlkVmlldzEkY3RsMTAkY3RsMDAFFUdyaWRWaWV3MSRjdGwxMSRjdGwwMAUVR3JpZFZpZXcxJGN0bDEyJGN0bDAwBRVHcmlkVmlldzEkY3RsMTMkY3RsMDAFFUdyaWRWaWV3MSRjdGwxNCRjdGwwMAUVR3JpZFZpZXcxJGN0bDE2JGN0bDAwBRVHcmlkVmlldzEkY3RsMTUkY3RsMDAFFUdyaWRWaWV3MSRjdGwxNyRjdGwwMAUVR3JpZFZpZXcxJGN0bDE5JGN0bDAwBRVHcmlkVmlldzEkY3RsMTgkY3RsMDAFFUdyaWRWaWV3MSRjdGwyMCRjdGwwMAUVR3JpZFZpZXcxJGN0bDIxJGN0bDAwBRVHcmlkVmlldzEkY3RsMjIkY3RsMDAFFUdyaWRWaWV3MSRjdGwyMyRjdGwwMAUVR3JpZFZpZXcxJGN0bDI0JGN0bDAwBRVHcmlkVmlldzEkY3RsMjUkY3RsMDAFFUdyaWRWaWV3MSRjdGwyNiRjdGwwMAUVR3JpZFZpZXcxJGN0bDI3JGN0bDAwBRVHcmlkVmlldzEkY3RsMjgkY3RsMDAFFUdyaWRWaWV3MSRjdGwyOSRjdGwwMAUVR3JpZFZpZXcxJGN0bDMwJGN0bDAwBRVHcmlkVmlldzEkY3RsMzEkY3RsMDAFFUdyaWRWaWV3MSRjdGwzMiRjdGwwMAUVR3JpZFZpZXcxJGN0bDMzJGN0bDAwBQlHcmlkVmlldzEPPCsADAEIAgFk7JSkoReBsQgw2SkxWNR+ZK90/WFiavMKL7o0SssGykE=" />
+</div>
+
+<div>
+
+    <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="253699AA" />
+    <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWJALTuL+BAwLCi9reAwLWmJqVAQK/mcLpBAKE1977DwLS78FFArWeicUOAvDg7LIDAquj0KAIAt7SldUOAqGol/wBAuXlr6YLAsiU96UJAoPX2pMOAr6ZvoEDAtHvvd0OAu/g6MoBArSehd0MAqqjzLgGAqCokxQC3dKR7QwC5eWrxgsCyJTzxQkCg9fWsw4Cvpm6oQMC0e+5/Q4CtJ6B/QwC7+Dk6gECqqPI2AYC3dKNjQ0CoKiPNALl5afmCwLIlO/lCQKD19LTDgK+mbbBAwKThojfBJcMGCy6ZA80qE/RWw/8hNRfoqrxzlS7L6+aWfL6rfCf" />
+</div>
+
+     <div style="padding:6px;">
+ 
+ 
+         <table style="width: 100%; background-color:Black;" cellpadding="4">
+             <tr>
+                 <td>
+                 </td>
+                 <td width="*">
+        <span class="HomepageColumnHeadings">
+        <span id="Label1">SAN BERNARD RIVER MID CHANNEL 60 M DOWNSTREAM OF FM 442 BRIDGE SW OF NEEDVILLE</span><br />
+        <span id="Label2">Monitored By: </span>&nbsp;</span><br />
+            <a class="WhiteLinks" href="http://tceq.state.tx.us/nav/eq/texcleanriver.html">Texas Commission on Environmental Quality         </a>__
+                 </td>
+                 <td width="5%"></td>
+                 <td width="35%">
+           <input type="checkbox" name="tabular" value="tabular" />&nbsp;<span class="HomepageColumnHeadings">List results (tabular is default)</span><br />
+           <input type="checkbox" name="profile" value="profile" />&nbsp;<span class="HomepageColumnHeadings">Include profile data (surface is default)</span>
+                 </td>
+                 <td width="10%">
+                    <center><input type="submit" name="btnSubmit" value="Submit" id="btnSubmit" /></center>
+                 </td>
+             </tr>
+         
+         </table> 
+
+        <br />
+
+  
+        <div>
+    <table cellspacing="0" cellpadding="1" border="0" id="GridView1" style="font-size:Smaller;width:100%;border-collapse:collapse;">
+        <tr style="color:White;font-size:Small;font-weight:bold;">
+            <th class="header" scope="col" style="width:150px;">&nbsp;</th><th class="header" scope="col" style="width:125px;">
+                          <span id="GridView1_ctl01_Label3">Select All: </span>
+                          <input id="GridView1_ctl01_ChkboxPMSelAll" type="checkbox" name="GridView1$ctl01$ChkboxPMSelAll" onclick="checkAll(document.form1.multiple,this.checked);checkAll(document.form1.SelectCategories,this.checked);" /></th><th class="header" scope="col" style="width:150px;">Parameter Code</th><th class="header" align="left" scope="col">Description</th>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td colspan="1" style="color:#FFFFFF;background-color:#033968;font-weight:bold;">Field and Flow</td><td align="center" style="background-color:#033968;"><input name="GridView1$ctl03$ctl00" type="checkbox" id="SelectCategories" onclick="checkCat(document.form1.multiple, this.checked,&#39;Field and Flow&#39;)" /></td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl02$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="72053" /></td><td align="center" style="width:150px;">72053</td><td align="left">DAYS SINCE PRECIPITATION EVENT (DAYS)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl04$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="82903" /></td><td align="center" style="width:150px;">82903</td><td align="left">DEPTH OF BOTTOM OF WATER BODY AT SAMPLE SITE MET</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl05$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="89979" /></td><td align="center" style="width:150px;">89979</td><td align="left">EVIDENCE OF PRIMARY CONTACT RECREATION</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl06$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="00061" /></td><td align="center" style="width:150px;">00061</td><td align="left">FLOW  STREAM, INSTANTANEOUS (CUBIC FEET PER SEC)</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl07$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="89835" /></td><td align="center" style="width:150px;">89835</td><td align="left">FLOW MTH 1=GAGE 2=ELEC 3=MECH 4=WEIR/FLU 5=DOPPL</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl08$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="01351" /></td><td align="center" style="width:150px;">01351</td><td align="left">FLOW:1=No Flow,2=Low,3=Normal,4=Flood,5=High,6=D</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl09$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="00300" /></td><td align="center" style="width:150px;">00300</td><td align="left">OXYGEN, DISSOLVED (MG/L)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl10$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="00400" /></td><td align="center" style="width:150px;">00400</td><td align="left">PH (STANDARD UNITS)</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl11$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="89978" /></td><td align="center" style="width:150px;">89978</td><td align="left">PRIMARY CONTACT RECREATION OBSERVED</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl12$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="00094" /></td><td align="center" style="width:150px;">00094</td><td align="left">SPECIFIC CONDUCTANCE,FIELD (UMHOS/CM @ 25C)</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl13$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="00010" /></td><td align="center" style="width:150px;">00010</td><td align="left">TEMPERATURE, WATER (DEGREES CENTIGRADE)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl14$ctl00" type="checkbox" id="multiple" title="Field and Flow" value="00078" /></td><td align="center" style="width:150px;">00078</td><td align="left">TRANSPARENCY, SECCHI DISC (METERS)</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td colspan="1" style="color:#FFFFFF;background-color:#033968;font-weight:bold;">Bacteria</td><td align="center" style="background-color:#033968;"><input name="GridView1$ctl16$ctl00" type="checkbox" id="SelectCategories" onclick="checkCat(document.form1.multiple, this.checked,&#39;Bacteria&#39;)" /></td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl15$ctl00" type="checkbox" id="multiple" title="Bacteria" value="31699" /></td><td align="center" style="width:150px;">31699</td><td align="left">E. COLI, COLILERT, IDEXX METHOD, MPN/100ML</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl17$ctl00" type="checkbox" id="multiple" title="Bacteria" value="31704" /></td><td align="center" style="width:150px;">31704</td><td align="left">E.COLI, COLILERT, IDEXX, HOLDING TIME</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td colspan="1" style="color:#FFFFFF;background-color:#033968;font-weight:bold;">Conventional Chemistry</td><td align="center" style="background-color:#033968;"><input name="GridView1$ctl19$ctl00" type="checkbox" id="SelectCategories" onclick="checkCat(document.form1.multiple, this.checked,&#39;Conventional Chemistry&#39;)" /></td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl18$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00410" /></td><td align="center" style="width:150px;">00410</td><td align="left">ALKALINITY, TOTAL (MG/L AS CACO3)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl20$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00680" /></td><td align="center" style="width:150px;">00680</td><td align="left">CARBON, TOTAL ORGANIC, NPOC (TOC), MG/L</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl21$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00940" /></td><td align="center" style="width:150px;">00940</td><td align="left">CHLORIDE (MG/L AS CL)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl22$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="70953" /></td><td align="center" style="width:150px;">70953</td><td align="left">CHLOROPHYLL-A, PHYTOPLANKTON UG/L, CHROMO-FLOURO</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl23$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00951" /></td><td align="center" style="width:150px;">00951</td><td align="left">FLUORIDE, TOTAL (MG/L AS F)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl24$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00630" /></td><td align="center" style="width:150px;">00630</td><td align="left">NITRITE PLUS NITRATE, TOTAL 1 DET. (MG/L AS N)</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl25$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00610" /></td><td align="center" style="width:150px;">00610</td><td align="left">NITROGEN, AMMONIA, TOTAL (MG/L AS N)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl26$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00625" /></td><td align="center" style="width:150px;">00625</td><td align="left">NITROGEN, KJELDAHL, TOTAL (MG/L AS N)</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl27$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00593" /></td><td align="center" style="width:150px;">00593</td><td align="left">NO2 PLUS NO3-N, TOTAL, WHATMAN GF/F FILT (MG/L)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl28$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00671" /></td><td align="center" style="width:150px;">00671</td><td align="left">ORTHPHOSPHATE PHOSPHORUS,DISS,MG/L,FLDFILT&lt;15MIN</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl29$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00665" /></td><td align="center" style="width:150px;">00665</td><td align="left">PHOSPHORUS, TOTAL, WET METHOD (MG/L AS P)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl30$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00530" /></td><td align="center" style="width:150px;">00530</td><td align="left">RESIDUE, TOTAL NONFILTRABLE (MG/L)</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl31$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00535" /></td><td align="center" style="width:150px;">00535</td><td align="left">RESIDUE, VOLATILE NONFILTRABLE (MG/L)</td>
+        </tr><tr style="color:Black;background-color:#EBEBEB;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl32$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="70300" /></td><td align="center" style="width:150px;">70300</td><td align="left">RESIDUE,TOTAL FILTRABLE (DRIED AT 180C) (MG/L)</td>
+        </tr><tr style="color:Black;background-color:Gainsboro;">
+            <td>&nbsp;</td><td align="center"><input name="GridView1$ctl33$ctl00" type="checkbox" id="multiple" title="Conventional Chemistry" value="00945" /></td><td align="center" style="width:150px;">00945</td><td align="left">SULFATE (MG/L AS SO4)</td>
+        </tr>
+    </table>
+</div>
+    
+    </div>
+    
+            <div id="DoesNothingButCenter" align="center">
+            <div id="OuterWrapper">
+            <div id="Footer">
+                <a class="WhiteLinks" href="http://www.lcra.org/about/doing_business/index.html" target="_new">Purchasing</a> | <a class="WhiteLinks" href="http://www.lcra.org/about/overview/openrecords.html" target="_new">Open Records</a> | <a class="WhiteLinks" href="http://www.lcra.org/asklcra/" target="_new">Ask LCRA</a> | <a class="WhiteLinks" href="http://www.lcra.org/sitemap.html" target="_new">Sitemap</a>
+                <br />
+                &copy; 1996-<script type="text/javascript">                                var d = new Date(); document.write(d.getFullYear());</script> Lower Colorado River Authority. All rights reserved.
+            </div> <!-- end "Footer" div -->
+            </div> <!-- end "OuterWrapper" div -->
+            </div> <!-- end "DoesNothingButCenter" div -->
+            
+    
+    
+    
+      
+<input type="hidden" name="site" id="site" value="12147" />
+<div id="photo" class="showImage"></div>     
+    </form>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+    _uacct = "UA-1180003-2";
+    urchinTracker();
+</script>
+</body>
+</html>
