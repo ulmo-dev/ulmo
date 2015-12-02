@@ -39,37 +39,37 @@ import pandas as pd
 #     import StringIO
 
 
-def get_stations():
-    """Fetches a list of station codes and descriptions.
+def get_sites():
+    """Fetches a list of site codes and descriptions.
     Returns
     -------
-    stations_dict : dict
-        a python dict with station codes mapped to station information
+    sites_dict : dict
+        a python dict with site codes mapped to site information
     """
-    stations_url = 'http://waterquality.lcra.org/sitelist.aspx'
-    path = op.join(LCRA_WATERQUALITY_DIR, 'stationids.htm')
+    sites_url = 'http://waterquality.lcra.org/sitelist.aspx'
+    path = op.join(LCRA_WATERQUALITY_DIR, 'siteids.htm')
 
-    response = requests.get(stations_url)
+    response = requests.get(sites_url)
 
     soup = BeautifulSoup(response.content, 'html.parser')
     gridview = soup.find(id="GridView1")
 
-    stations = [
+    sites = [
         (row.findAll('td')[0].string, row.findAll('td')[1].string)
         for row in gridview.findAll('tr')
         if len(row.findAll('td'))==2
     ]
 
-    return dict(stations)
+    return dict(sites)
 
 
-def get_station_data(station_code, date=None, as_dataframe=False):
-    """Fetches data for a station at a given date.
+def get_site_data(site_code, date=None, as_dataframe=False):
+    """Fetches data for a site at a given date.
     Parameters
     ----------
-    station_code: str
-        The station code to fetch data for. A list of stations can be retrieved with
-        ``get_stations()``
+    site_code: str
+        The site code to fetch data for. A list of sites can be retrieved with
+        ``get_sites()``
     date : ``None`` or date (see :ref:`dates-and-times`)
         The date of the data to be queried. If date is ``None`` (default), then
         all data will be returned.
@@ -82,23 +82,23 @@ def get_station_data(station_code, date=None, as_dataframe=False):
     Returns
     -------
     data_dict : dict
-        A dict containing station information and values.
+        A dict containing site information and values.
     """
 
 
-    if isinstance(station_code, (str)):
+    if isinstance(site_code, (str)):
         pass
-    elif isinstance(station_code, (int)):
-        station_code = str(station_code)
+    elif isinstance(site_code, (int)):
+        site_code = str(site_code)
     else:
-        log.error("Unsure of the station_code parameter type. \
+        log.error("Unsure of the site_code parameter type. \
                 Try string or int")
         raise
 
-    waterquality_url = "http://waterquality.lcra.org/parameter.aspx?qrySite=%s" %station_code
+    waterquality_url = "http://waterquality.lcra.org/parameter.aspx?qrySite=%s" %site_code
     waterquality_url2 = 'http://waterquality.lcra.org/events.aspx'
 
-    dir_path = op.join(LCRA_WATERQUALITY_DIR, str(station_code))
+    dir_path = op.join(LCRA_WATERQUALITY_DIR, str(site_code))
 
     resp_path = op.join(dir_path, "resp.html")
 
@@ -111,27 +111,27 @@ def get_station_data(station_code, date=None, as_dataframe=False):
     initial_request = requests.get(waterquality_url)
     initialsoup = BeautifulSoup(initial_request.content, 'html.parser')
 
-    stationvals = [ statag.get('value', None)
+    sitevals = [ statag.get('value', None)
         for statag in initialsoup.findAll(id="multiple")
         if statag.get('value', None)
     ]
 
     result = _make_next_request(waterquality_url2, 
                                 initial_request, 
-                                {'multiple': stationvals,
-                                'site': station_code})
+                                {'multiple': sitevals,
+                                'site': site_code})
 
     if op.exists(resp_path) and \
         util.misc._request_file_size_matches(result, resp_path)\
         and not os.environ.get('ULMO_TESTING', None):
         #means nothing has changed return cached pickle
-        log.info("%s was not processed because it is the same size"%station_code)
+        log.info("%s was not processed because it is the same size"%site_code)
         try:
             with open(pickle_path, 'rb') as f:
                 return pickle.load(f)
         except IOError:
             log.info("Couldn't find the pickle that should be there for \
-                    %s" %station_code)
+                    %s" %site_code)
             pass
 
 
@@ -166,10 +166,10 @@ def get_station_data(station_code, date=None, as_dataframe=False):
         try:
             datelim = dateutil.parser.parse(date)
         except ValueError:
-            log.warn("Could not parse the provided date %s" %date)
+            log.warn("Could not parse the provided date %s" % date)
             datelim = None
         if datelim:
-            df= _create_dataframe(results)
+            df = _create_dataframe(results)
             cut_df = df[df['Date'] > datelim]
             if as_dataframe:
                 return cut_df
