@@ -47,7 +47,7 @@ def get_sites(parameter_code):
     if parameter_code == 'winddir':
         parameter_code = 'windsp'
     if parameter_code == 'flow':
-        parameter_code == 'stage'
+        parameter_code = 'stage'
     if parameter_code == 'tds':
         parameter_code = 'cndvty'
 
