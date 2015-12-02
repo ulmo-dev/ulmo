@@ -90,7 +90,7 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
     """
     parameter_code = parameter_code.upper()
     if parameter_code.lower() not in PARAMETERS.keys():
-        log.info('%s is not an LCRA parameter')
+        log.info('%s is not an LCRA parameter' % parameter_code)
         return None
     initial_request = requests.get(data_url)
     if initial_request.status_code != 200:
@@ -126,6 +126,8 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
     if (end_date - start_date).days < 180:
         values_dict = _get_data(
             site_code[:4], parameter_code, list_request, start_date, end_date)
+        if not values_dict:
+            return None
     else:
         values_dict = []
         chunks = pandas.np.ceil((end_date - start_date).days / 180.)
@@ -153,6 +155,8 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
 
 
 def _values_dict_to_df(values_dict):
+    if not len(values_dict):
+        return pandas.DataFrame({})
     df = pandas.DataFrame(values_dict)
     df.index = df['Date - Time'].apply(util.convert_datetime)
     df.drop('Date - Time', axis=1, inplace=True)
