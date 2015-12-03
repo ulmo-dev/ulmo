@@ -27,50 +27,61 @@ PARAMETERS = {
     'winddir': 'wind direction in degrees azimuth'
 }
 
+# in the site list by parameter web page, in order to make distinction between
+# stage measurements in lake and stream, the LCRA uses 'stage' for stream sites
+# and 'lake' for lake sites
+site_types = PARAMETERS.copy()
+site_types.update({'lake': 'stage measurement in lakes'})
 
-def get_sites(parameter_code):
+# for this dam sites, stage is named head or tail
+dam_sites = ['1995', '1999', '2958', '2999', '3963', '3999']
+
+
+def get_sites(site_type):
     """Gets list of the hydromet site codes and description for site that have
     the parameter ``parameter_code``
     Parameters:
     -----------
-    parameter_code : str
-        LCRA parameter code. see ``PARAMETERS``
+    site_type : str
+        In all but lake sites, this is the parameter code collected at the site.
+        For lake sites, it is 'lake'. See ``site_types`` and ``PARAMETERS``
     Returns
     -------
     sites_dict: dict
-        a python dict with site codes mapped to site information
+        A python dict with four char long site codes mapped to site information.
     """
     sites_base_url = 'http://hydromet.lcra.org/navgagelist.asp?Stype=%s'
     # the url doesn't provide list of sites for the following parameters but
     # they are available with the paired parameter. e.g., flow is available
     #at stage sites.
-    if parameter_code == 'winddir':
-        parameter_code = 'windsp'
-    if parameter_code == 'flow':
-        parameter_code = 'stage'
-    if parameter_code == 'tds':
-        parameter_code = 'cndvty'
+    if site_type == 'winddir':
+        site_type = 'windsp'
+    if site_type == 'flow':
+        site_type = 'stage'
+    if site_type == 'tds':
+        site_type = 'cndvty'
 
-    if parameter_code not in PARAMETERS.keys():
+    if site_type not in site_types.keys():
         return {}
 
-    res = requests.get(sites_base_url % parameter_code)
+    res = requests.get(sites_base_url % site_type)
     soup = BeautifulSoup(res.content, 'html')
     sites_str = [
         site.text.replace('&nbsp', '').replace(u'\xa0', '') for site
         in soup.findAll('a')]
-    sites_dict = dict([(s[:6], s[7:]) for s in sites_str])
+    sites_dict = dict([(s[:4], s[7:]) for s in sites_str])
 
     return sites_dict
 
 
 def get_site_data(site_code, parameter_code, as_dataframe=True,
-                  start_date=None, end_date=None):
+                  start_date=None, end_date=None, dam_site_location='head'):
     """Fetches site's parameter data
     Parameters
     ----------
     site_code : str
-        The LCRA site code of the site you want to query data for.
+        The LCRA site code (four chars long) of the site you want to query data
+        for.
     parameter_code : str
         LCRA parameter code. see ``PARAMETERS``
     start_date : ``None`` or datetime
@@ -82,6 +93,8 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
         then the values will be a pandas.DataFrame object with the values
         timestamp as the index. If ``False``, the format will be Python
         dictionary.
+    dam_site_location : 'head' (default) or 'tail'
+        The site location relative to the dam.
 
     Returns
     -------
@@ -97,17 +110,15 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
         return None
     list_request_headers = {
         '__EVENTTARGET': 'DropDownList1',
-        'DropDownList1': site_code[:4],
+        'DropDownList1': site_code,
     }
     list_request = _make_next_request(data_url, initial_request, list_request_headers)
     if list_request.status_code != 200:
         return None
 
     if parameter_code == 'STAGE':
-        if site_code[-2:] == '05':
-            parameter_code = 'HEAD'
-        elif site_code[-2:] == '07':
-            parameter_code = 'TAIL'
+        if site_code in dam_sites:
+            parameter_code = dam_site_location.upper()
         else:
             parameter_code = 'STAGE'
     elif parameter_code == 'RHUMID':
@@ -115,7 +126,6 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
     #the parameter selection dropdown doesn't have flow. the data comes with stage.
     elif parameter_code == 'FLOW':
         parameter_code = 'STAGE'
-
     else:
         pass
 
