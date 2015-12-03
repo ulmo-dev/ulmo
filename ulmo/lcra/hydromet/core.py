@@ -38,8 +38,8 @@ dam_sites = ['1995', '1999', '2958', '2999', '3963', '3999']
 
 
 def get_sites(site_type):
-    """Gets list of the hydromet site codes and description for site that have
-    the parameter ``parameter_code``
+    """Gets list of the hydromet site codes and description for site that is of
+    site_type. site_type for all but lake sites is same as parameter code.
     Parameters:
     -----------
     site_type : str
