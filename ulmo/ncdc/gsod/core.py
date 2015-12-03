@@ -8,6 +8,9 @@
     .. _National Climatic Data Center: http://www.ncdc.noaa.gov
     .. _Global Summary of the Day: http://www.ncdc.noaa.gov/oa/gsod.html
 """
+from builtins import str
+from builtins import range
+from past.builtins import basestring
 from contextlib import contextmanager
 import csv
 import datetime
@@ -21,7 +24,7 @@ import numpy as np
 from ulmo import util
 
 NCDC_GSOD_DIR = os.path.join(util.get_ulmo_dir(), 'ncdc/gsod')
-NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'ish-history.csv')
+NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'isd-history.csv')
 NCDC_GSOD_START_DATE = datetime.date(1929, 1, 1)
 
 
@@ -69,7 +72,7 @@ def get_data(station_codes, start=None, end=None, parameters=None):
 
     for year in range(start_date.year, end_date.year + 1):
         tar_path = _get_gsod_file(year)
-        with _open_tarfile(tar_path, 'r:') as gsod_tar:
+        with tarfile.open(tar_path, 'r:') as gsod_tar:
             stations_in_file = [
                 name.split('./')[-1].rsplit('-', 1)[0]
                 for name in gsod_tar.getnames() if len(name) > 1]
@@ -97,21 +100,18 @@ def get_data(station_codes, start=None, end=None, parameters=None):
                         data_dict[station] = np.append(data_dict[station], year_data)
                     else:
                         data_dict[station] = year_data
-    for station, data_array in data_dict.iteritems():
+    for station, data_array in data_dict.items():
         if not data_dict[station] is None:
             data_dict[station] = _record_array_to_value_dicts(data_array)
     return data_dict
 
 
-def get_stations(fips=None, country=None, state=None, start=None, end=None, update=True):
+def get_stations(country=None, state=None, start=None, end=None, update=True):
     """Retrieve information on the set of available stations.
 
 
     Parameters
     ----------
-    fips : {``None``, str, or iterable}
-        If specified, results will be limited to stations with matching fips
-        codes.
     country : {``None``, str, or iterable}
         If specified, results will be limited to stations with matching country
         codes.
@@ -145,19 +145,16 @@ def get_stations(fips=None, country=None, state=None, start=None, end=None, upda
     else:
         end_date = None
 
-    if isinstance(fips, basestring):
-        fips = [fips]
     if isinstance(country, basestring):
         country = [country]
     if isinstance(state, basestring):
         state = [state]
 
-    stations_url = 'http://www1.ncdc.noaa.gov/pub/data/gsod/ish-history.csv'
+    stations_url = 'http://www1.ncdc.noaa.gov/pub/data/noaa/isd-history.csv'
     with util.open_file_for_url(stations_url, NCDC_GSOD_STATIONS_FILE) as f:
         reader = csv.DictReader(f)
 
-        if fips is None and country is None and state is None \
-                and start is None and end is None:
+        if country is None and state is None and start is None and end is None:
             rows = reader
         else:
             if start_date is None:
@@ -170,8 +167,8 @@ def get_stations(fips=None, country=None, state=None, start=None, end=None, upda
                 end_str = end_date.strftime('%Y%m%d')
             rows = [
                 row for row in reader
-                if _passes_row_filter(row, fips=fips, country=country,
-                    state=state, start_str=start_str, end_str=end_str)
+                if _passes_row_filter(row, country=country, state=state,
+                    start_str=start_str, end_str=end_str)
             ]
 
         stations = dict([
@@ -185,6 +182,9 @@ def _convert_date_string(date_string):
     if date_string == '':
         return None
 
+    if isinstance(date_string, bytes):
+        date_string = date_string.decode('utf-8')
+
     return datetime.datetime.strptime(date_string, '%Y%m%d').date()
 
 
@@ -196,34 +196,8 @@ def _get_gsod_file(year):
     return path
 
 
-@contextmanager
-def _open_gzip(gzip_path, mode):
-    """this is replicates the context manager protocol that was added to the
-    gzip module in python 2.7; it is here to support python 2.6
-    """
-    try:
-        f = gzip.open(gzip_path, mode)
-        yield f
-    finally:
-        f.close()
-
-
-@contextmanager
-def _open_tarfile(tar_path, mode):
-    """this is replicates the context manager protocol that was added to the
-    tarfile module in python 2.7; it is here to support python 2.6
-    """
-    try:
-        f = tarfile.open(tar_path, mode)
-        yield f
-    finally:
-        f.close()
-
-
-def _passes_row_filter(row, fips=None, country=None, state=None, start_str=None,
+def _passes_row_filter(row, country=None, state=None, start_str=None,
         end_str=None):
-    if not fips is None and row['FIPS'] not in fips:
-        return False
     if not country is None and row['CTRY'] not in country:
         return False
     if not state is None and row['STATE'] not in state:
@@ -239,15 +213,14 @@ def _process_station(station_row):
     """converts a csv row to a more human-friendly version"""
     station_dict = {
         'begin': _convert_date_string(station_row['BEGIN']),
-        'call': station_row['CALL'],
+        'icao': station_row['ICAO'],
         'country': station_row['CTRY'],
-        'elevation': round(float(station_row['ELEV(.1M)']) * .1, 1) \
-                if station_row['ELEV(.1M)'] not in ('', '-99999') else None,
+        'elevation': round(float(station_row['ELEV(M)']), 1) \
+                if station_row['ELEV(M)'] not in ('', '-99999') else None,
         'end': _convert_date_string(station_row['END']),
-        'FIPS': station_row['FIPS'],
-        'latitude': round(float(station_row['LAT']) * 0.001, 3) \
+        'latitude': round(float(station_row['LAT']), 3) \
                 if station_row['LAT'] not in ('', '-99999') else None,
-        'longitude': round(float(station_row['LON']) * 0.001, 3) \
+        'longitude': round(float(station_row['LON']), 3) \
                 if station_row['LON'] not in ('', '-999999') else None,
         'name': station_row['STATION NAME'],
         'state': station_row['STATE'],
@@ -269,11 +242,11 @@ def _read_gsod_file(gsod_tar, station, year):
     temp_path = os.path.join(ncdc_temp_dir, tar_station_filename)
 
     gsod_tar.extract('./' + tar_station_filename, ncdc_temp_dir)
-    with _open_gzip(temp_path, 'rb') as gunzip_f:
+    with gzip.open(temp_path, 'rb') as gunzip_f:
         columns = [
             # name, length, # of spaces separating previous column, dtype
-            ('USAF', 6, 0, 'S6'),
-            ('WBAN', 5, 1, 'S5'),
+            ('USAF', 6, 0, 'U6'),
+            ('WBAN', 5, 1, 'U5'),
             ('date', 8, 2, object),
             ('mean_temp', 6, 2, float),
             ('mean_temp_count', 2, 1, int),
@@ -290,13 +263,13 @@ def _read_gsod_file(gsod_tar, station, year):
             ('max_wind_speed', 5, 2, float),
             ('max_gust', 5, 2, float),
             ('max_temp', 6, 2, float),
-            ('max_temp_flag', 1, 0, 'S1'),
+            ('max_temp_flag', 1, 0, 'U1'),
             ('min_temp', 6, 1, float),
-            ('min_temp_flag', 1, 0, 'S1'),
+            ('min_temp_flag', 1, 0, 'U1'),
             ('precip', 5, 1, float),
-            ('precip_flag', 1, 0, 'S1'),
+            ('precip_flag', 1, 0, 'U1'),
             ('snow_depth', 5, 1, float),
-            ('FRSHTT', 6, 2, 'S6'),
+            ('FRSHTT', 6, 2, 'U6'),
         ]
 
         dtype = np.dtype([
@@ -305,7 +278,7 @@ def _read_gsod_file(gsod_tar, station, year):
 
         # note: ignore initial 0
         delimiter = itertools.chain(*[column[1:3][::-1] for column in columns])
-        usecols = range(1, len(columns) * 2, 2)
+        usecols = list(range(1, len(columns) * 2, 2))
 
         data = np.genfromtxt(gunzip_f, skip_header=1, delimiter=delimiter,
                 usecols=usecols, dtype=dtype, converters={5: _convert_date_string})

@@ -7,9 +7,12 @@
 
     .. _CUAHSI WaterOneFlow: http://his.cuahsi.org/wofws.html
 """
-import cStringIO as StringIO
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+import io
 
-import suds
+import suds.client
 import isodate
 
 from ulmo import util
@@ -49,16 +52,16 @@ def get_sites(wsdl_url, suds_cache=("default",)):
     waterml_version = _waterml_version(suds_client)
     if waterml_version == '1.0':
         response = suds_client.service.GetSitesXml('')
-        response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+        response_buffer = io.BytesIO(util.to_bytes(response))
         sites = waterml.v1_0.parse_site_infos(response_buffer)
     elif waterml_version == '1.1':
         response = suds_client.service.GetSites('')
-        response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+        response_buffer = io.BytesIO(util.to_bytes(response))
         sites = waterml.v1_1.parse_site_infos(response_buffer)
 
     return dict([
         (site['network'] + ':' + site['code'], site)
-        for site in sites.values()
+        for site in list(sites.values())
     ])
 
 
@@ -94,16 +97,16 @@ def get_site_info(wsdl_url, site_code, suds_cache=("default",)):
     waterml_version = _waterml_version(suds_client)
     if waterml_version == '1.0':
         response = suds_client.service.GetSiteInfo(site_code)
-        response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+        response_buffer = io.BytesIO(util.to_bytes(response))
         sites = waterml.v1_0.parse_sites(response_buffer)
     elif waterml_version == '1.1':
         response = suds_client.service.GetSiteInfo(site_code)
-        response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+        response_buffer = io.BytesIO(util.to_bytes(response))
         sites = waterml.v1_1.parse_sites(response_buffer)
 
     if len(sites) == 0:
         return {}
-    site_info = sites.values()[0]
+    site_info = list(sites.values())[0]
     series_dict = dict([
         (series['variable']['vocabulary'] + ':' + series['variable']['code'],
             series)
@@ -175,14 +178,14 @@ def get_values(wsdl_url, site_code, variable_code, start=None, end=None, suds_ca
         site_code, variable_code, startDate=start_dt_isostr,
         endDate=end_dt_isostr)
 
-    response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+    response_buffer = io.BytesIO(util.to_bytes(response))
     if waterml_version == '1.0':
         values = waterml.v1_0.parse_site_values(response_buffer)
     elif waterml_version == '1.1':
         values = waterml.v1_1.parse_site_values(response_buffer)
 
     if not variable_code is None:
-        return values.values()[0]
+        return list(values.values())[0]
     else:
         return values
 
@@ -222,7 +225,7 @@ def get_variable_info(wsdl_url, variable_code=None, suds_cache=("default",)):
 
     waterml_version = _waterml_version(suds_client)
     response = suds_client.service.GetVariableInfo(variable_code)
-    response_buffer = StringIO.StringIO(response.encode('utf8', 'ignore'))
+    response_buffer = io.BytesIO(util.to_bytes(response))
 
     if waterml_version == '1.0':
         variable_info = waterml.v1_0.parse_variables(response_buffer)
@@ -230,11 +233,11 @@ def get_variable_info(wsdl_url, variable_code=None, suds_cache=("default",)):
         variable_info = waterml.v1_1.parse_variables(response_buffer)
 
     if not variable_code is None and len(variable_info) == 1:
-        return variable_info.values()[0]
+        return list(variable_info.values())[0]
     else:
         return dict([
             ('%s:%s' % (var['vocabulary'], var['code']), var)
-            for var in variable_info.values()
+            for var in list(variable_info.values())
         ])
 
 

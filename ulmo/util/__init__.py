@@ -13,6 +13,14 @@ from .misc import (
         parse_fwf,
         raise_dependency_error,
         save_pretty_printed_xml,
+        to_bytes,
+    )
+
+from .raster import (
+        extract_from_zip,
+        mosaic_and_clip,
+        download_tiles,
+        generate_raster_uid,
     )
 
 try:

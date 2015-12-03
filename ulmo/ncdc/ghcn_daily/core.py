@@ -10,6 +10,9 @@
     .. _Global Historical Climate Network - Daily: http://www.ncdc.noaa.gov/oa/climate/ghcn-daily/
 
 """
+from builtins import str
+from builtins import range
+from past.builtins import basestring
 import itertools
 import os
 
@@ -68,7 +71,7 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
     columns = list(itertools.chain(start_columns, *[
         [(name + str(n), start + 13 + (8 * n), end + 13 + (8 * n), converter)
          for name, start, end, converter in value_columns]
-        for n in xrange(1, 32)
+        for n in range(1, 32)
     ]))
 
     station_file_path = _get_ghcn_file(
@@ -114,7 +117,7 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
     else:
         return dict([
             (key, util.dict_from_dataframe(dataframe))
-            for key, dataframe in dataframes.iteritems()
+            for key, dataframe in dataframes.items()
         ])
 
 
@@ -212,10 +215,10 @@ def get_stations(country=None, state=None, elements=None, start_year=None,
     # to do this but that stopped working in pandas 0.13.0 - fortunately a
     # regex-based helper method was added then, too
     if pandas.__version__ < '0.13.0':
-        stations['wm_oid'] = stations['wm_oid'].astype('|S5')
+        stations['wm_oid'] = stations['wm_oid'].astype('|U5')
         stations['wm_oid'][stations['wm_oid'] == 'nan'] = np.nan
     else:
-        stations['wm_oid'] = stations['wm_oid'].astype('|S5').map(lambda x: x[:-2])
+        stations['wm_oid'] = stations['wm_oid'].astype('|U5').map(lambda x: x[:-2])
         stations['wm_oid'][stations['wm_oid'] == 'n'] = np.nan
 
     if as_dataframe:

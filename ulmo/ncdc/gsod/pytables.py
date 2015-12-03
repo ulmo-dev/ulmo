@@ -1,3 +1,5 @@
+from builtins import range
+from past.builtins import basestring
 import datetime
 
 import tables
@@ -58,8 +60,8 @@ def update_data(station_codes=None, start_year=None, end_year=None, path=None):
     for year in range(start_year, end_year + 1):
         start = datetime.datetime(year, 1, 1)
         end = datetime.datetime(year, 12, 31)
-        data = core.get_data(stations.keys(), start=start, end=end)
-        for station_code, station_data in data.iteritems():
+        data = core.get_data(list(stations.keys()), start=start, end=end)
+        for station_code, station_data in data.items():
             station = stations.get(station_code)
             if not station_data is None:
                 _update_station_data(station, station_data, path)
@@ -108,7 +110,7 @@ def _update_station_data(station, station_data, path=None):
         path = HDF5_FILE_PATH
     with util.open_h5file(path, mode='a') as h5file:
         #XXX: assumes first dict is representative of all dicts
-        variables = station_data[0].keys()
+        variables = list(station_data[0].keys())
 
         for variable in variables:
             value_table = _get_value_table(h5file, station, variable)
@@ -120,7 +122,7 @@ if __name__ == '__main__':
     stations = get_stations(update=False, path=test_path)
     texas_stations = [
         code
-        for code, station in stations.iteritems()
+        for code, station in stations.items()
         if station['state'] == 'TX']
     update_data(texas_stations, 2012, 2012, path=test_path)
     import pdb; pdb.set_trace()

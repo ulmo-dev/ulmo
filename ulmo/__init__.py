@@ -4,9 +4,10 @@
 
     an open source library for clean, simple and fast access to public hydrology and climatology data
 """
-from __future__ import absolute_import
+from __future__ import (absolute_import, division, print_function)
 
-from .version import __version__
+# ulmo version PEP-0440
+__version__ = '0.8.2-dev'
 
 from . import cdec
 from . import cpc

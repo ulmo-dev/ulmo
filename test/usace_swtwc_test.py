@@ -53,7 +53,7 @@ def test_get_station_data():
         with test_util.mocked_urls(data_file):
             station_data = ulmo.usace.swtwc.get_station_data(code, date)
 
-        for key, value in test_data.iteritems():
+        for key, value in test_data.items():
             if key == 'values':
                 _compare_values(test_data['values'], station_data['values'])
             else:
@@ -81,5 +81,5 @@ def test_get_station_data_out_of_range():
 
 
 def _compare_values(test_values, station_values):
-    for key, test_value in test_values.iteritems():
+    for key, test_value in test_values.items():
         assert station_values[key] == test_value

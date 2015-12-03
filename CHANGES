@@ -1,5 +1,33 @@
 Changelog
 ---------
+**0.8.1 (released 2015-09-16)**
+
+- packaging fixes. 0.8.0 does not install correctly from pypi.
+
+**0.8.0 (released 2015-09-15)**
+
+- python 3 compatibility. ulmo is now compatible py python 2.7 and python 3.4.
+- ulmo is now being tested on Windows/Linux/MacOSX using AppVeyor and Travis CI.
+- the ioos conda channel is now the supported way to get ulmo.
+- added conda environment yaml files to make it easier to set up a development environment.
+
+**0.7.8 (released 2015-07-02)**
+
+- no changes, had to bump version number because of a corrupt file uploaded to pypi.
+
+**0.7.7 (released 2015-07-02)**
+
+- dropped python 2.6 support
+- fixed bug in extracting raster file from zip file on windows
+- fixes for cdec service
+- fix url_params kwarg typo for nwis service
+
+**0.7.6 (released 2015-04-27)**
+
+- fixed ncdc.gsod services to use new station list over depreciated list (thanks Victor)
+- added USGS National Elevation Dataset (NED) raster service
+- added USGS Earth Resources Observation Systems (EROS) raster services
+- allow passthrough of extra kwargs for USGS NWIS services
 
 
 **0.7.5 (released 2015-01-26)**

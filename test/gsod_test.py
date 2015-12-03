@@ -1,3 +1,4 @@
+from builtins import range
 import datetime
 import ulmo
 
@@ -7,25 +8,23 @@ import test_util
 def test_get_stations():
     test_stations = [
         ('999999-94645', {
-            'FIPS': 'US',
             'USAF': '999999',
             'WBAN': '94645',
             'begin': datetime.date(2002, 9, 20),
-            'call': 'E632',
+            'icao': '',
             'country': 'US',
             'elevation': 224.6,
-            'end': datetime.date(2012, 12, 13),
+            'end': datetime.date(2015, 3, 11),
             'latitude': 46.96,
             'longitude': -67.883,
             'name': 'LIMESTONE 4 NNW',
             'state': 'ME',
         }),
         ('999999-14896', {
-            'FIPS': 'US',
             'USAF': '999999',
             'WBAN': '14896',
             'begin': datetime.date(1952, 1, 1),
-            'call': '',
+            'icao': '',
             'country': 'US',
             'elevation': 323.1,
             'end': datetime.date(1957, 11, 30),
@@ -34,13 +33,25 @@ def test_get_stations():
             'name': 'AKRON NAS',
             'state': 'OH'
         }),
+        ('014881-99999', {
+            'USAF': '014881',
+            'WBAN': '99999',
+            'begin': datetime.date(2010, 11, 23),
+            'icao': 'ENFB',
+            'country': 'NO',
+            'elevation': 17.0,
+            'end': datetime.date(2015, 3, 11),
+            'latitude': 59.9,
+            'longitude': 10.617,
+            'name': 'OSLO/FORNEBU',
+            'state': ''
+        }),
         ('997944-99999', {
-            'FIPS': '',
             'USAF': '997944',
             'WBAN': '99999',
             'begin': datetime.date(2008, 7, 24),
-            'call': 'EB121',
-            'country': '',
+            'icao': '',
+            'country': 'US',
             'elevation': None,
             'end': datetime.date(2009, 9, 27),
             'latitude': None,
@@ -49,66 +60,53 @@ def test_get_stations():
             'state': '',
         }),
     ]
-    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/isd-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations()
 
-    assert 30000 < len(stations) < 35000
+    assert 27000 < len(stations) < 32000
 
     for test_code, test_station in test_stations:
         assert stations[test_code] == test_station
 
 
 def test_get_stations_with_country():
-    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
-        stations = ulmo.ncdc.gsod.get_stations(country='AH')
-        assert 250 <= len(stations) <= 300
-        assert '999032-99999' in stations
+    with test_util.mocked_urls('ncdc/gsod/isd-history.csv'):
+        stations = ulmo.ncdc.gsod.get_stations(country='AF')
+        assert 100 <= len(stations) <= 150
+        assert '409900-99999' in stations
 
-        stations = ulmo.ncdc.gsod.get_stations(country=['US', 'MX', 'CN'])
+        stations = ulmo.ncdc.gsod.get_stations(country=['US', 'MX', 'CA'])
         assert 9500 <= len(stations) <= 10000
         assert '768420-99999' in stations
-        assert '720025-99999' in stations
-        assert '729675-99999' in stations
-
-
-def test_get_stations_with_fips():
-    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
-        stations = ulmo.ncdc.gsod.get_stations(fips='SW')
-        assert 400 <= len(stations) <= 500
-        assert '026850-99999' in stations
-
-        stations = ulmo.ncdc.gsod.get_stations(fips=['US', 'MX', 'CA'])
-        assert 9500 <= len(stations) <= 10000
-        assert '768420-99999' in stations
-        assert '720025-99999' in stations
+        assert '911660-99999' in stations
         assert '729675-99999' in stations
 
 
 def test_get_stations_with_state():
-    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/isd-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations(state='TX')
-        assert 500 <= len(stations) <= 550
+        assert 450 <= len(stations) <= 500
         assert '999999-93987' in stations
 
         stations = ulmo.ncdc.gsod.get_stations(state=['TX', 'AR', 'LA'])
-        assert 800 <= len(stations) <= 850
+        assert 750 <= len(stations) <= 800
         assert '999999-93987' in stations
         assert '999999-13963' in stations
         assert '994780-99999' in stations
 
 
 def test_get_stations_with_start():
-    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/isd-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations(start='2011-3-2')
-    assert 16500 <= len(stations) <= 17000
+    assert 15000 <= len(stations) <= 15500
     assert '062390-99999' in stations
     assert '534780-99999' not in stations
 
 
 def test_get_stations_with_end():
-    with test_util.mocked_urls('ncdc/gsod/ish-history.csv'):
+    with test_util.mocked_urls('ncdc/gsod/isd-history.csv'):
         stations = ulmo.ncdc.gsod.get_stations(end='1960-11-5')
-    assert 12000 <= len(stations) <= 13000
+    assert 8500 <= len(stations) <= 9000
     assert '534780-99999' in stations
     assert '062390-99999' not in stations
 

@@ -1,3 +1,4 @@
+from builtins import range
 import os
 import shutil
 
@@ -9,12 +10,12 @@ from ulmo.usgs import nwis
 import test_util
 
 
-TEST_FILE_DIR = os.path.abspath('tmp/')
+TEST_FILE_DIR = os.path.abspath('tmp')
 
 
 @pytest.fixture
 def test_file_path(request):
-    return os.path.join(TEST_FILE_DIR, request.function.__name__ + '/')
+    return os.path.join(TEST_FILE_DIR, request.function.__name__)
 
 
 def setup_module(module):
@@ -28,7 +29,10 @@ def teardown_module(module):
 
 
 def test_update_site_list(test_file_path):
-    site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
+    site_files = [
+            os.path.join('usgs','nwis', 'RI_daily.xml'), 
+            os.path.join('usgs','nwis', 'RI_instantaneous.xml'),
+        ]
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
         nwis.hdf5.update_site_list(path=test_file_path,
@@ -109,13 +113,13 @@ def test_update_site_list(test_file_path):
         },
     }
 
-    for test_code, test_value in test_sites.iteritems():
+    for test_code, test_value in test_sites.items():
         assert sites[test_code] == test_value
 
 
 def test_update_site_list_with_changes(test_file_path):
     site_files = [
-        ('usgs/nwis/RI_daily.xml', {
+        (os.path.join('usgs','nwis', 'RI_daily.xml'), {
             'agency': 'USGS',
             'code': '01106000',
             'county': '44005',
@@ -131,7 +135,7 @@ def test_update_site_list_with_changes(test_file_path):
                 'default_tz': {'abbreviation': 'EST', 'offset': '-05:00'},
                 'dst_tz': {'abbreviation': 'EDT', 'offset': '-04:00'},
                 'uses_dst': True}}),
-        ('usgs/nwis/RI_daily_update.xml', {
+        (os.path.join('usgs','nwis', 'RI_daily_update.xml'), {
             'agency': 'USGS',
             'code': '01106000',
             'county': '44005',
@@ -158,8 +162,11 @@ def test_update_site_list_with_changes(test_file_path):
 
 
 def test_sites_table_remains_unique(test_file_path):
-    test_file_path = test_file_path + "test.h5"
-    site_files = ['usgs/nwis/RI_daily.xml', 'usgs/nwis/RI_instantaneous.xml']
+    test_file_path = os.path.join(test_file_path, "test.h5")
+    site_files = [
+            os.path.join('usgs','nwis', 'RI_daily.xml'), 
+            os.path.join('usgs','nwis', 'RI_instantaneous.xml'),
+        ]
     for site_file in site_files:
         test_site_file = test_util.get_test_file_path(site_file)
         nwis.hdf5.update_site_list(path=test_file_path,
@@ -172,7 +179,7 @@ def test_sites_table_remains_unique(test_file_path):
 
 def test_get_site(test_file_path):
     site_code = '08068500'
-    site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    site_data_file = os.path.join('usgs','nwis', 'site_%s_daily.xml' % site_code)
     input_file = test_util.get_test_file_path(site_data_file)
     nwis.hdf5.update_site_list(path=test_file_path,
             input_file=input_file, autorepack=False)
@@ -201,9 +208,9 @@ def test_get_site(test_file_path):
 
 
 def test_get_sites_isnt_cached_between_calls(test_file_path):
-    test_file_path = test_file_path + "test.h5"
+    test_file_path = os.path.join(test_file_path, "test.h5")
 
-    site_data_file = 'usgs/nwis/RI_daily.xml'
+    site_data_file = os.path.join('usgs', 'nwis', 'RI_daily.xml')
     input_file = test_util.get_test_file_path(site_data_file)
 
     nwis.hdf5.update_site_list(input_file=input_file, path=test_file_path,
@@ -219,7 +226,7 @@ def test_get_sites_isnt_cached_between_calls(test_file_path):
 
 def test_empty_update_list_doesnt_error(test_file_path):
     site_code = '98068500'
-    site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    site_data_file = os.path.join('usgs','nwis', 'site_%s_daily.xml' % site_code)
     input_file = test_util.get_test_file_path(site_data_file)
 
     sites = nwis.hdf5.get_sites(path=test_file_path)
@@ -233,7 +240,7 @@ def test_empty_update_list_doesnt_error(test_file_path):
 
 def test_get_site_for_missing_raises_lookup(test_file_path):
     site_code = '08068500'
-    site_data_file = 'usgs/nwis/site_%s_daily.xml' % site_code
+    site_data_file = os.path.join('usgs','nwis', 'site_%s_daily.xml' % site_code)
     input_file = test_util.get_test_file_path(site_data_file)
     nwis.hdf5.update_site_list(path=test_file_path,
         input_file=input_file, autorepack=False)
@@ -246,7 +253,7 @@ def test_get_site_for_missing_raises_lookup(test_file_path):
 def test_non_usgs_site(test_file_path):
     site_code = '07335390'
     site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_instantaneous.xml' % site_code)
+        os.path.join('usgs','nwis', 'site_%s_instantaneous.xml' % site_code))
     nwis.hdf5.update_site_data(site_code, period='all',
             path=test_file_path, input_file=site_data_file, autorepack=False)
 
@@ -263,7 +270,7 @@ def test_remove_values(test_file_path):
             '2012-10-30 15:00:00', datetime(2012, 11, 15, 13)]
     }
     site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_instantaneous.xml' % site_code)
+        os.path.join('usgs','nwis', 'site_%s_instantaneous.xml' % site_code))
     nwis.hdf5.update_site_data(site_code, period='all',
             path=test_file_path, input_file=site_data_file, autorepack=False)
     nwis.hdf5.remove_values(site_code, values_to_remove, path=test_file_path,
@@ -288,8 +295,8 @@ def test_remove_values_with_missing_code(test_file_path):
         '12345:0000': ['2010-01-01'],
         '00010:00002': ['2012-12-10']
     }
-    site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily.xml' % site_code)
+    site_data_file = test_util.get_test_file_path(os.path.join('usgs','nwis', 'site_%s_daily.xml' % site_code))
+
     nwis.hdf5.update_site_data(site_code, period='all', path=test_file_path,
             input_file=site_data_file, autorepack=False)
     nwis.hdf5.remove_values(site_code, values_to_remove, path=test_file_path,
@@ -304,8 +311,7 @@ def test_remove_values_with_missing_code(test_file_path):
 
 def test_site_data_is_sorted(test_file_path):
     site_code = '01117800'
-    site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily.xml' % site_code)
+    site_data_file = test_util.get_test_file_path(os.path.join('usgs','nwis', 'site_%s_daily.xml' % site_code))
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file, autorepack=False)
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
@@ -313,13 +319,12 @@ def test_site_data_is_sorted(test_file_path):
     values = site_data['00060:00003']['values']
     assert all(
         values[i]['datetime'] < values[i+1]['datetime']
-        for i in xrange(len(values) - 1))
+        for i in range(len(values) - 1))
 
 
 def test_update_site_data_basic_data_parsing(test_file_path):
     site_code = '01117800'
-    site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily.xml' % site_code)
+    site_data_file = test_util.get_test_file_path(os.path.join('usgs','nwis', 'site_%s_daily.xml' % site_code))
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file, autorepack=False)
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path)
@@ -362,7 +367,7 @@ def test_site_data_filter_by_multiple_parameter_codes(test_file_path):
     site_data = nwis.hdf5.get_site_data(site_code, parameter_code=parameter_code, path=test_file_path)
 
     for code in parameter_code:
-        if code in site_data.keys():
+        if code in list(site_data.keys()):
             assert site_data[code] == all_site_data[code]
 
 
@@ -382,8 +387,8 @@ def test_site_data_update_site_list_with_multiple_updates(test_file_path):
 
     assert first_timestamp == last_value['last_checked'] == last_value['last_modified']
 
-    update_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily_update.xml' % site_code)
+    update_data_file = test_util.get_test_file_path(os.path.join(
+        'usgs', 'nwis', 'site_%s_daily_update.xml' % site_code))
     with test_util.mocked_urls(update_data_file):
         with freezegun.freeze_time(second_timestamp):
             nwis.hdf5.update_site_data(site_code, path=test_file_path,
@@ -427,7 +432,7 @@ def test_site_data_update_site_list_with_multiple_updates(test_file_path):
 
 
 def test_last_refresh_gets_updated(test_file_path):
-    test_file_path = test_file_path + "test.h5"
+    test_file_path = os.path.join(test_file_path, "test.h5")
 
     first_timestamp = '2013-01-01T01:01:01'
     second_timestamp = '2013-02-02T02:02:02'
@@ -464,8 +469,8 @@ def test_last_refresh_gets_updated(test_file_path):
 
 def test_update_site_data_updates_site_list(test_file_path):
     site_code = '01117800'
-    site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily.xml' % site_code)
+    site_data_file = test_util.get_test_file_path(os.path.join(
+        'usgs', 'nwis', 'site_%s_daily_update.xml' % site_code))
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file, autorepack=False)
     site = nwis.hdf5.get_site(site_code, path=test_file_path)
@@ -496,10 +501,10 @@ def test_update_site_data_updates_site_list(test_file_path):
 
 def test_handles_empty_updates(test_file_path):
     site_code = '01117800'
-    site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily.xml' % site_code)
-    empty_site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily_empty.xml' % site_code)
+    site_data_file = test_util.get_test_file_path(os.path.join(
+        'usgs', 'nwis', 'site_%s_daily.xml' % site_code))
+    empty_site_data_file = test_util.get_test_file_path(os.path.join(
+        'usgs', 'nwis', 'site_%s_daily_empty.xml' % site_code))
 
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=empty_site_data_file, autorepack=False)
@@ -523,12 +528,12 @@ def test_handles_empty_updates(test_file_path):
 
 
 def test_file_size_doesnt_balloon_with_update_site_data(test_file_path):
-    test_file_path += 'test.h5'
+    test_file_path = os.path.join(test_file_path, "test.h5")
     site_code = '01117800'
-    site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily.xml' % site_code)
-    update_site_data_file = test_util.get_test_file_path(
-        'usgs/nwis/site_%s_daily_update.xml' % site_code)
+    site_data_file = test_util.get_test_file_path(os.path.join(
+        'usgs', 'nwis', 'site_%s_daily.xml' % site_code))
+    update_site_data_file = test_util.get_test_file_path(os.path.join(
+        'usgs', 'nwis', 'site_%s_daily_update.xml' % site_code))
 
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file)
@@ -544,9 +549,9 @@ def test_file_size_doesnt_balloon_with_update_site_data(test_file_path):
 
 
 def test_file_size_doesnt_balloon_with_update_site_list(test_file_path):
-    test_file_path += 'test.h5'
-    site_list_file = test_util.get_test_file_path('usgs/nwis/RI_daily.xml')
-    updated_site_list_file = test_util.get_test_file_path('usgs/nwis/RI_daily.xml')
+    test_file_path = os.path.join(test_file_path, "test.h5")
+    site_list_file = test_util.get_test_file_path(os.path.join('usgs', 'nwis', 'RI_daily.xml'))
+    updated_site_list_file = test_util.get_test_file_path(os.path.join('usgs', 'nwis', 'RI_daily.xml'))
     nwis.hdf5.update_site_list(path=test_file_path,
         input_file=site_list_file)
     nwis.hdf5.update_site_list(path=test_file_path,

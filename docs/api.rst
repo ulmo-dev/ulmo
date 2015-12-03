@@ -68,6 +68,18 @@ USGS Emergency Data Distribution Network services
    :members: get_data, decode
 
 
+USGS Earth Resources Observation Systems (EROS) services
+========================================================
+.. automodule:: ulmo.usgs.eros
+   :members: get_available_datasets, get_themes, get_attribute_list, get_available_formats, get_raster, get_raster_availability
+
+
+USGS National Elevation Dataset (NED) services
+========================================================
+.. automodule:: ulmo.usgs.ned
+   :members: get_available_layers, get_raster, get_raster_availability
+   
+
 .. _dates-and-times:
 
 note on dates and times

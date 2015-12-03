@@ -43,7 +43,7 @@ def parse_site_values(content_io, namespace, query_isodate=None):
                         underscored_tag)
                     for element in values_element.findall(namespace + tag)
                 ]
-                if len(filter(lambda x: len(x), collection)):
+                if len([x for x in collection if len(x)]):
                     collection_dict = dict([
                         (item[key], item)
                         for item in collection
@@ -139,7 +139,7 @@ def _element_dict(element, exclude_children=None, prepend_attributes=True):
     element_dict.update(dict([
         (_element_dict_attribute_name(key, element_name,
             prepend_element_name=prepend_attributes), value)
-        for key, value in element.attrib.iteritems()
+        for key, value in element.attrib.items()
         if value.split(':')[0] not in ['xsd', 'xsi']
     ]))
 

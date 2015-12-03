@@ -9,8 +9,12 @@
     .. _USGS National Water Information System: http://waterdata.usgs.gov/nwis
 
 """
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from past.builtins import basestring
 import contextlib
-import cStringIO as StringIO
+import io
 import datetime
 import logging
 
@@ -105,7 +109,7 @@ def get_sites(sites=None, state_code=None, huc=None, bounding_box=None,
                 )
             raise ValueError(error_msg)  
 
-        if len(filter(None, major_filters)) > 1:
+        if len([_f for _f in major_filters if _f]) > 1:
             error_msg = (
                     '*Only one* of the following major filters can be supplied:'
                     'sites, state_code, huc, bounding_box, country_code.'
@@ -130,7 +134,7 @@ def get_sites(sites=None, state_code=None, huc=None, bounding_box=None,
             url_params['countyCd'] = _as_str(county_code)
 
         if site_type:
-            url_param['siteType'] = _as_str(site_type)
+            url_params['siteType'] = _as_str(site_type)
 
         if parameter_code:
             url_params['parameterCd'] = _as_str(parameter_code)
@@ -151,14 +155,14 @@ def get_sites(sites=None, state_code=None, huc=None, bounding_box=None,
         req = requests.get(url, params=url_params)
         log.info("processing data from request: %s" % req.request.url)
         req.raise_for_status()        
-        input_file = StringIO.StringIO(str(req.content))
+        input_file = io.BytesIO(util.to_bytes(req.content))
 
     with _open_input_file(input_file) as content_io:
         return_sites = wml.parse_site_infos(content_io)
 
     return_sites = dict([
         (code, _extract_site_properties(site))
-        for code, site in return_sites.iteritems()
+        for code, site in return_sites.items()
     ])
 
     return return_sites
@@ -317,14 +321,14 @@ def _get_site_values(service, url_params, input_file=None):
 
         if req.status_code != 200:
             return {}
-        input_file = StringIO.StringIO(str(req.content))
+        input_file = io.BytesIO(util.to_bytes(req.content))
     else:
         query_isodate = None
 
     with _open_input_file(input_file) as content_io:
         data_dict = wml.parse_site_values(content_io, query_isodate)
 
-        for variable_dict in data_dict.values():
+        for variable_dict in list(data_dict.values()):
             variable_dict['site'] = _extract_site_properties(variable_dict['site'])
 
     return data_dict

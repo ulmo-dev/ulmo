@@ -1,3 +1,9 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import zip
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 from contextlib import contextmanager
 import datetime
 import email.utils
@@ -5,7 +11,7 @@ import ftplib
 import functools
 import os
 import re
-import urlparse
+import urllib.parse
 import warnings
 
 import appdirs
@@ -50,7 +56,7 @@ def dir_list(url):
     """given a path to a ftp directory, returns a list of files in that
     directory
     """
-    parsed = urlparse.urlparse(url)
+    parsed = urllib.parse.urlparse(url)
     ftp = ftplib.FTP(parsed.netloc, "anonymous")
     ftp.cwd(parsed.path)
     return ftp.nlst()
@@ -72,7 +78,7 @@ def dict_from_dataframe(dataframe):
     else:
         df_dict = dict([
             (k, _nans_to_nones(v))
-            for k, v in dataframe.T.to_dict().iteritems()
+            for k, v in dataframe.T.to_dict().items()
         ])
 
     return df_dict
@@ -83,7 +89,10 @@ def download_if_new(url, path, check_modified=True):
     it will only download if the url's last-modified header has a more recent
     date than the filesystem's last modified date for the file
     """
-    parsed = urlparse.urlparse(url)
+    parsed = urllib.parse.urlparse(url)
+
+    if os.path.exists(path) and not check_modified:
+        return
 
     if parsed.scheme.startswith('ftp'):
         _ftp_download_if_new(url, path, check_modified)
@@ -141,7 +150,7 @@ def module_with_deprecation_warnings(functions, warning_message):
 
 
 @contextmanager
-def open_file_for_url(url, path, check_modified=True, use_file=None):
+def open_file_for_url(url, path, check_modified=True, use_file=None, use_bytes=None):
     """Context manager that returns an open file handle for a data file;
     downloading if necessary or otherwise using a previously downloaded file.
     File downloading will be short-circuited if use_file is either a file path
@@ -152,16 +161,20 @@ def open_file_for_url(url, path, check_modified=True, use_file=None):
     leave_open = False
 
     if use_file is not None:
-        if isinstance(use_file, basestring):
-            open_path = use_file
         if hasattr(use_file, 'read'):
             leave_open = True
             yield use_file
+        else:
+            open_path = use_file
     else:
         download_if_new(url, path, check_modified)
         open_path = path
 
-    open_file = open(open_path, 'rb')
+    if use_bytes is None:
+        open_file = open(open_path, 'r')
+    else:
+        open_file = open(open_path, 'rb')
+
     yield open_file
 
     if not leave_open:
@@ -174,8 +187,8 @@ def parse_fwf(file_path, columns, na_values=None):
     Columns should be an iterable of lists/tuples with the format (column_name,
     start_value, end_value, converter). Returns a pandas dataframe.
     """
-    names, colspecs = zip(*[(name, (start, end))
-        for name, start, end, converter in columns])
+    names, colspecs = list(zip(*[(name, (start, end))
+        for name, start, end, converter in columns]))
 
     converters = dict([
         (name, converter)
@@ -203,8 +216,18 @@ def save_pretty_printed_xml(filename, response_buffer):
         response_buffer.seek(0)
 
 
+def to_bytes(s):
+    """convert str to bytes for py 2/3 compat
+    """
+
+    if isinstance(s, bytes):
+        return s
+
+    return s.encode('utf-8', 'ignore')
+
+
 def _ftp_download_if_new(url, path, check_modified=True):
-    parsed = urlparse.urlparse(url)
+    parsed = urllib.parse.urlparse(url)
     ftp = ftplib.FTP(parsed.netloc, "anonymous")
     directory, filename = parsed.path.rsplit('/', 1)
     ftp_last_modified = _ftp_last_modified(ftp, parsed.path)
@@ -253,7 +276,7 @@ def _nans_to_nones(nan_dict):
     None"""
     return dict([
         (k, v) if v is not np.nan else (k, None)
-        for k, v in nan_dict.iteritems()
+        for k, v in nan_dict.items()
     ])
 
 
