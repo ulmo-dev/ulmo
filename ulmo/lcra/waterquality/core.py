@@ -8,6 +8,7 @@
 """
 from bs4 import BeautifulSoup
 import logging
+from geojson import Point, Feature, FeatureCollection
 
 from ulmo import util
 
@@ -21,13 +22,19 @@ LCRA_WATERQUALITY_DIR = op.join(util.get_ulmo_dir(), 'lcra/waterquality')
 
 log = logging.getLogger(__name__)
 
-from bs4 import BeautifulSoup
 import requests
 
 
-import pandas as pd 
+import pandas as pd
 
-
+source_map = {
+    'LCRA': 'Lower Colorado River Authority',
+    'LCUC': 'Upper Colorado River Authority',
+    'LCCW': 'Colorado River Municipal Water District',
+    'CRMWD': 'Colorado River Municipal Water District',
+    'LCAU': 'City of Austin',
+    'WCFO': 'Texas Commission on Environmental Quality',
+}
 
 # try:
 #     import cStringIO as StringIO
@@ -35,27 +42,22 @@ import pandas as pd
 #     import StringIO
 
 
-def get_sites():
-    """Fetches a list of site codes and descriptions.
+def get_sites(organization=None):
+    """Fetches a list of sites with location and available metadata.
     Returns
     -------
-    sites_dict : dict
-        a python dict with site codes mapped to site information
+    sites_geojson : geojson FeatureCollection
     """
-    sites_url = 'http://waterquality.lcra.org/sitelist.aspx'
-
+    sites_url = 'http://waterquality.lcra.org/'
     response = requests.get(sites_url)
+    lines = response.content.split('\n')
+    sites_unprocessed = [
+        line.strip().strip('createMarker').strip("(").strip(")").split(',')
+        for line in lines if 'createMarker' in line]
+    sites = [_create_feature(site_info) for site_info in sites_unprocessed]
+    sites_geojson = FeatureCollection(sites)
 
-    soup = BeautifulSoup(response.content, 'html.parser')
-    gridview = soup.find(id="GridView1")
-
-    sites = [
-        (row.findAll('td')[0].string, row.findAll('td')[1].string)
-        for row in gridview.findAll('tr')
-        if len(row.findAll('td'))==2
-    ]
-
-    return dict(sites)
+    return sites_geojson
 
 
 def get_site_data(site_code, date=None, as_dataframe=False):
@@ -79,7 +81,6 @@ def get_site_data(site_code, date=None, as_dataframe=False):
     data_dict : dict
         A dict containing site information and values.
     """
-
 
     if isinstance(site_code, (str)):
         pass
@@ -148,6 +149,15 @@ def _create_dataframe(results):
     df.set_index(['Date'])
     return df
 
+def _create_feature(site_info_list):
+    geometry = Point((float(site_info_list[0].strip()), float(site_info_list[1].strip())))
+    site_type_code = site_info_list[3].replace('"', '').strip()
+    site_props = _parse_site_str(site_info_list[2])
+    site_props['parameter'] = _get_parameter(site_type_code)
+    site_props['source'] = _get_source(site_type_code)
+    site_props['water_body'] = _get_water_body(site_type_code)
+    site_props['real_time'] = _real_time(site_type_code)
+    return Feature(geometry=geometry, properties=site_props)
 
 def _extract_headers_for_next_request(request):
     payload = dict()
@@ -159,6 +169,26 @@ def _extract_headers_for_next_request(request):
         #some tags don't have a value and are used w/ JS to toggle a set of checkboxes
         payload[tag_dict['name']] = tag_dict.get('value')
     return payload
+
+
+def _get_source(site_type_code):
+    if site_type_code not in source_map.keys():
+        return None
+    return source_map[site_type_code]
+
+
+def _get_parameter(site_type_code):
+    if site_type_code == 'Salinity' or site_type_code == 'Conductivity':
+        return site_type_code
+    else:
+        return None
+
+
+def _get_water_body(site_type_code):
+    if site_type_code == 'Bay':
+        return 'Bay'
+    else:
+        return None
 
 
 def _make_next_request(url, previous_request, data):
@@ -174,3 +204,16 @@ def _parse_val(val):
     else:
         return val
 
+
+def _parse_site_str(site_str):
+    site_code = site_str.split('<br />')[0].replace('"', '')\
+        .replace('Site', '').replace('Number', '').replace(':', '').strip()
+    site_description = site_str.split('<br />')[1].strip('"')
+    return dict(site_code=site_code, site_description=site_description)
+
+
+def _real_time(site_type_code):
+    if site_type_code == 'Salinity' or site_type_code == 'Conductivity':
+        return True
+    else:
+        return False
