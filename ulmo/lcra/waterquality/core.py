@@ -11,11 +11,7 @@ import logging
 
 from ulmo import util
 
-
-
-import pickle
 import dateutil
-import os
 
 # import datetime
 import os.path as op
@@ -47,7 +43,6 @@ def get_sites():
         a python dict with site codes mapped to site information
     """
     sites_url = 'http://waterquality.lcra.org/sitelist.aspx'
-    path = op.join(LCRA_WATERQUALITY_DIR, 'siteids.htm')
 
     response = requests.get(sites_url)
 
@@ -95,55 +90,24 @@ def get_site_data(site_code, date=None, as_dataframe=False):
                 Try string or int")
         raise
 
-    waterquality_url = "http://waterquality.lcra.org/parameter.aspx?qrySite=%s" %site_code
+    waterquality_url = "http://waterquality.lcra.org/parameter.aspx?qrySite=%s" % site_code
     waterquality_url2 = 'http://waterquality.lcra.org/events.aspx'
-
-    dir_path = op.join(LCRA_WATERQUALITY_DIR, str(site_code))
-
-    resp_path = op.join(dir_path, "resp.html")
-
-    pickle_path = op.join(dir_path, "data.pickle")
-
-    util.mkdir_if_doesnt_exist(dir_path)
-
-
 
     initial_request = requests.get(waterquality_url)
     initialsoup = BeautifulSoup(initial_request.content, 'html.parser')
 
-    sitevals = [ statag.get('value', None)
+    sitevals = [statag.get('value', None)
         for statag in initialsoup.findAll(id="multiple")
-        if statag.get('value', None)
-    ]
+        if statag.get('value', None)]
 
     result = _make_next_request(waterquality_url2, 
                                 initial_request, 
                                 {'multiple': sitevals,
                                 'site': site_code})
 
-    if op.exists(resp_path) and \
-        util.misc._request_file_size_matches(result, resp_path)\
-        and not os.environ.get('ULMO_TESTING', None):
-        #means nothing has changed return cached pickle
-        log.info("%s was not processed because it is the same size"%site_code)
-        try:
-            with open(pickle_path, 'rb') as f:
-                return pickle.load(f)
-        except IOError:
-            log.info("Couldn't find the pickle that should be there for \
-                    %s" %site_code)
-            pass
-
-
-    if not os.environ.get('ULMO_TESTING', None):
-        with open(resp_path, 'wb') as wf:
-            wf.write(result.content)
-
-
     soup = BeautifulSoup(result.content, 'html.parser')
 
     gridview = soup.find(id="GridView1")
-
 
     results = []
 
@@ -157,10 +121,6 @@ def get_site_data(site_code, date=None, as_dataframe=False):
             continue
 
         results.append(dict(zip(headers, vals)))
-
-    if not os.environ.get('ULMO_TESTING', None):
-        with open(pickle_path, 'wb') as mf:
-            pickle.dump(results, mf)
 
     if date:
         try:
@@ -181,11 +141,13 @@ def get_site_data(site_code, date=None, as_dataframe=False):
     else:
         return results
 
+
 def _create_dataframe(results):
     df = pd.DataFrame.from_records(results)
     df['Date'] = df['Date'].apply(dateutil.parser.parse)
     df.set_index(['Date'])
     return df
+
 
 def _extract_headers_for_next_request(request):
     payload = dict()
