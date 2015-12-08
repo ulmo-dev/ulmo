@@ -136,6 +136,7 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
     if (end_date - start_date).days < 180:
         values_dict = _get_data(
             site_code[:4], parameter_code, list_request, start_date, end_date)
+        print values_dict
         if not values_dict:
             return None
     else:
@@ -171,12 +172,14 @@ def _values_dict_to_df(values_dict):
     df.index = df['Date - Time'].apply(util.convert_datetime)
     df.drop('Date - Time', axis=1, inplace=True)
     df.sort_index(inplace=True)
+    df.dropna(axis=1, how='all', inplace=True)
+    df.dropna(axis=0, how='all', inplace=True)
     return df
 
 
 def _get_row_values(row, columns):
     value_els = row.findAll('td')
-    values = [value_el.get_text() for value_el in value_els]
+    values = [_parse_val(value_el.get_text()) for value_el in value_els]
     return dict(zip(columns, values))
 
 
@@ -216,3 +219,11 @@ def _make_next_request(url, previous_request, data):
     data_headers = _extract_headers_for_next_request(previous_request)
     data_headers.update(data)
     return requests.post(url, cookies=previous_request.cookies, data=data_headers)
+
+
+def _parse_val(val):
+    #the &nsbp translates to the following unicode
+    if val == u'\xa0':
+        return None
+    else:
+        return val
