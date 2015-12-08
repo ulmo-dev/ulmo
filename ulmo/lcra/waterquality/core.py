@@ -29,11 +29,10 @@ import pandas as pd
 
 source_map = {
     'LCRA': 'Lower Colorado River Authority',
-    'LCUC': 'Upper Colorado River Authority',
-    'LCCW': 'Colorado River Municipal Water District',
+    'UCRA': 'Upper Colorado River Authority',
     'CRMWD': 'Colorado River Municipal Water District',
-    'LCAU': 'City of Austin',
-    'WCFO': 'Texas Commission on Environmental Quality',
+    'COA': 'City of Austin',
+    'TCEQ': 'Texas Commission on Environmental Quality',
 }
 
 # try:
@@ -42,8 +41,14 @@ source_map = {
 #     import StringIO
 
 
-def get_sites(organization=None):
+def get_sites(source_agency=None):
     """Fetches a list of sites with location and available metadata.
+    Parameters
+    ----------
+    source_agency : LCRA used code of the that collects the data. there
+    are sites whose sources are not listed so this filter may not return
+    all sites of a certain source. see
+    ``source_map``.
     Returns
     -------
     sites_geojson : geojson FeatureCollection
@@ -55,6 +60,13 @@ def get_sites(organization=None):
         line.strip().strip('createMarker').strip("(").strip(")").split(',')
         for line in lines if 'createMarker' in line]
     sites = [_create_feature(site_info) for site_info in sites_unprocessed]
+    if source_agency:
+        if not source_agency.upper() in source_map.keys():
+            log.info('the source %s is not recognized' % source_agency)
+            return {}
+        else:
+            sites = [site for site in sites if site['properties']['source'] ==
+            source_map[source_agency.upper()]]
     sites_geojson = FeatureCollection(sites)
 
     return sites_geojson
@@ -143,11 +155,19 @@ def get_site_data(site_code, date=None, as_dataframe=False):
         return results
 
 
+def get_site_info(site_code):
+    sites = get_sites()
+    site = [site for site in sites['features']
+            if site_code == site['properties']['site_code']]
+    return site
+
+
 def _create_dataframe(results):
     df = pd.DataFrame.from_records(results)
     df['Date'] = df['Date'].apply(dateutil.parser.parse)
     df.set_index(['Date'])
     return df
+
 
 def _create_feature(site_info_list):
     geometry = Point((float(site_info_list[0].strip()), float(site_info_list[1].strip())))
@@ -158,6 +178,7 @@ def _create_feature(site_info_list):
     site_props['water_body'] = _get_water_body(site_type_code)
     site_props['real_time'] = _real_time(site_type_code)
     return Feature(geometry=geometry, properties=site_props)
+
 
 def _extract_headers_for_next_request(request):
     payload = dict()
@@ -172,9 +193,16 @@ def _extract_headers_for_next_request(request):
 
 
 def _get_source(site_type_code):
-    if site_type_code not in source_map.keys():
+    internal_source_abbr = {
+        'LCLC': 'LCRA',
+        'LCUC': 'UCRA',
+        'LCCW': 'CRMWD',
+        'LCAU': 'COA',
+        'WCFO': 'TCEQ'
+    }
+    if site_type_code not in internal_source_abbr.keys():
         return None
-    return source_map[site_type_code]
+    return source_map.get(internal_source_abbr[site_type_code])
 
 
 def _get_parameter(site_type_code):

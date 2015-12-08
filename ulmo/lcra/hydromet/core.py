@@ -136,7 +136,6 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
     if (end_date - start_date).days < 180:
         values_dict = _get_data(
             site_code[:4], parameter_code, list_request, start_date, end_date)
-        print values_dict
         if not values_dict:
             return None
     else:
