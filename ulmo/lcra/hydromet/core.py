@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import datetime
 from dateutil.relativedelta import relativedelta
+from geojson import Point, Feature, FeatureCollection
 import logging
 import requests
 import pandas
@@ -13,8 +14,8 @@ logging.basicConfig(format=LOG_FORMAT)
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
-data_url = 'http://hydromet.lcra.org/chronhist.aspx'
-
+historical_data_url = 'http://hydromet.lcra.org/chronhist.aspx'
+current_data_url = 'http://hydrometdata.lcra.org'
 PARAMETERS = {
     'stage': 'the level of water above a benchmark in feet',
     'flow': 'streamflow in cubic feet per second',
@@ -27,6 +28,8 @@ PARAMETERS = {
     'winddir': 'wind direction in degrees azimuth'
 }
 
+current_data_services = ['GetLowerBasin', 'GetUpperBasin']
+
 # in the site list by parameter web page, in order to make distinction between
 # stage measurements in lake and stream, the LCRA uses 'stage' for stream sites
 # and 'lake' for lake sites
@@ -37,7 +40,7 @@ site_types.update({'lake': 'stage measurement in lakes'})
 dam_sites = ['1995', '1999', '2958', '2999', '3963', '3999']
 
 
-def get_sites(site_type):
+def get_sites_by_type(site_type):
     """Gets list of the hydromet site codes and description for site that is of
     site_type. site_type for all but lake sites is same as parameter code.
     Parameters:
@@ -74,6 +77,61 @@ def get_sites(site_type):
     return sites_dict
 
 
+def get_all_sites():
+    sites_url = 'http://hydromet.lcra.org/data/datafull.xml'
+    res = requests.get(sites_url)
+    soup = BeautifulSoup(res.content, 'xml')
+    rows = soup.findAll('row')
+    features = [_create_feature(row) for row in rows]
+    sites = FeatureCollection(features)
+    return sites
+
+
+def get_current_data(service, as_geojson=False):
+    request_body_template = (
+        '<?xml version="1.0" encoding="utf-8"?>\n'
+        '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+        'xmlns:xsd="http://www.w3.org/2001/XMLSchema" '
+        'xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">\n '
+        '  <soap12:Body>\n'
+        '    <%s xmlns="http://hydrometdata.lcra.org" />\n'
+        '  </soap12:Body> \n'
+        '</soap12:Envelope>'
+    )
+    if service.lower() == 'getupperbasin':
+        service = 'GetUpperBasin'
+    elif service.lower() == 'getlowerbasin':
+        service = 'GetLowerBasin'
+    else:
+        log.info('service %s not recognized' % service)
+        return {}
+    request_body = request_body_template % service
+    headers = {'Content-Type': 'text/xml; charset=utf-8'}
+    res = requests.post(current_data_url, data=request_body, headers=headers)
+    if res.status_code != 200:
+        log.info('http request failed with status code %s' % res.status_code)
+        return {}
+    soup = BeautifulSoup(res.content)
+    sites_els = soup.findAll('cls%s' % service.lower().replace('get', ''))
+    current_values_dicts = [_parse_current_values(site_el) for site_el in
+                            sites_els]
+    if as_geojson:
+        features = []
+        for value_dict in current_values_dicts:
+            feature = _feature_for_values_dict(value_dict)
+            if len(feature):
+                features.append(feature[0])
+        if len(features) != len(current_values_dicts):
+            log.warn("some of the sites did not location information")
+        if len(features):
+            current_values_geojson = FeatureCollection(features)
+            return current_values_geojson
+        else:
+            return {}
+    else:
+        return current_values_dicts
+
+
 def get_site_data(site_code, parameter_code, as_dataframe=True,
                   start_date=None, end_date=None, dam_site_location='head'):
     """Fetches site's parameter data
@@ -105,14 +163,14 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
     if parameter_code.lower() not in PARAMETERS.keys():
         log.info('%s is not an LCRA parameter' % parameter_code)
         return None
-    initial_request = requests.get(data_url)
+    initial_request = requests.get(historical_data_url)
     if initial_request.status_code != 200:
         return None
     list_request_headers = {
         '__EVENTTARGET': 'DropDownList1',
         'DropDownList1': site_code,
     }
-    list_request = _make_next_request(data_url, initial_request, list_request_headers)
+    list_request = _make_next_request(historical_data_url, initial_request, list_request_headers)
     if list_request.status_code != 200:
         return None
 
@@ -164,6 +222,41 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
         return df
 
 
+def _create_feature(row):
+    geometry = Point((float(row['e']), float(row['d'])))
+    site_props = dict(site_code=row['a'], site_description=row['c'])
+    site = Feature(geometry=geometry, properties=site_props)
+    return site
+
+
+def _feature_for_values_dict(site_values_dict):
+    sites = get_all_sites()['features']
+    site = [_update_feature_props(site, site_values_dict) for site in sites if
+        site['properties']['site_description'].lower() ==
+        site_values_dict['location'].lower()]
+    return site
+
+
+def _parse_current_values(site_el):
+    site_value_els = site_el.findChildren()
+    site_values = dict()
+    for value_el in site_value_els:
+        if value_el.name.lower() == 'datetime':
+            if value_el.get_text().strip() == '':
+                site_values[value_el.name.lower()] = None
+            else:
+                site_values[value_el.name.lower()] = util.convert_datetime(
+                    value_el.get_text())
+        elif value_el.name.lower() == 'location':
+            site_values[value_el.name.lower()] = value_el.get_text().strip()
+        else:
+            if value_el.get_text().strip() == '':
+                site_values[value_el.name.lower()] = None
+            else:
+                site_values[value_el.name.lower()] = float(value_el.get_text())
+    return site_values
+
+
 def _values_dict_to_df(values_dict):
     if not len(values_dict):
         return pandas.DataFrame({})
@@ -191,7 +284,7 @@ def _get_data(site_code, parameter_code, list_request, start, end):
 
     data_request_headers['DropDownList2'] = parameter_code
     data_request = _make_next_request(
-        data_url, list_request, data_request_headers)
+        historical_data_url, list_request, data_request_headers)
 
     if data_request.status_code != 200:
         return None
@@ -226,3 +319,12 @@ def _parse_val(val):
         return None
     else:
         return val
+
+
+def _update_feature_props(feature, props):
+    if 'datetime' in props.keys():
+        props['datetime'] = props['datetime'].strftime('%Y-%m-%d %H:%M:%S')
+    feature_props = feature['properties']
+    feature_props.update(props)
+    feature['properties'] = feature_props
+    return feature
