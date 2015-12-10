@@ -3,18 +3,11 @@ import test_util
 import os
 
 def test_get_sites():
-    service_info_url = 'http://waterquality.lcra.org/sitelist.aspx'
-    service_info_file = 'lcra/waterquality/sites.html'
-
-    url_files = {
-        (service_info_url, ('GET',)): service_info_file,
-    }
-
-    with test_util.mocked_urls(url_files):
+    data_file = 'lcra/waterquality/sites.xml'
+    with test_util.mocked_urls(data_file):
         sites = get_sites()
 
-    assert len(sites) == 6
-    assert "SH 35 SOUTHWEST" in sites['20460'] 
+    assert len(sites['features']) == 469
 
 def test_get_site_data():
     os.environ["ULMO_TESTING"] ="1"
