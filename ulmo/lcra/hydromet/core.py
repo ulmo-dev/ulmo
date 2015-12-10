@@ -1,3 +1,12 @@
+"""
+    ulmo.lcra.hydromet.core
+    ~~~~~~~~~~~~~~~~~~~~~~~
+    This module provides access to hydrologic and climate data in the Colorado
+    River Basin (Texas) provided by the `Lower Colorado River Authority`_
+    `Hydromet`_ web site and web service.
+    .. _Lower Colorado River Authority: http://www.lcra.org
+    .. _Hydromet: http://hydromet.lcra.org
+"""
 from bs4 import BeautifulSoup
 import datetime
 from dateutil.relativedelta import relativedelta
@@ -41,8 +50,7 @@ dam_sites = ['1995', '1999', '2958', '2999', '3963', '3999']
 
 
 def get_sites_by_type(site_type):
-    """Gets list of the hydromet site codes and description for site that is of
-    site_type. site_type for all but lake sites is same as parameter code.
+    """Gets list of the hydromet site codes and description for site.
     Parameters:
     -----------
     site_type : str
@@ -78,6 +86,8 @@ def get_sites_by_type(site_type):
 
 
 def get_all_sites():
+    """Returns list of all LCRA hydromet sites as geojson featurecollection.
+    """
     sites_url = 'http://hydromet.lcra.org/data/datafull.xml'
     res = requests.get(sites_url)
     soup = BeautifulSoup(res.content, 'xml')
@@ -88,6 +98,21 @@ def get_all_sites():
 
 
 def get_current_data(service, as_geojson=False):
+    """fetches the current (near real-time) river stage and flow values from
+    LCRA web service.
+    Parameters
+    ----------
+    service : str
+        The web service providing data. see `current_data_services`.
+        Currently we have GetUpperBasin and GetLowerBasin.
+    as_geojson : 'True' or 'False' (default)
+        If True the data is returned as geojson featurecollection and if False
+        data is returned as list of dicts.
+    Returns
+    -------
+    current_values_dicts : a list of dicts or
+    current_values_geojson : a geojson featurecollection.
+    """
     request_body_template = (
         '<?xml version="1.0" encoding="utf-8"?>\n'
         '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
@@ -156,8 +181,8 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
 
     Returns
     -------
-    df : pandas.DataFrame
-    values_dict : dict or
+    df : pandas.DataFrame or
+    values_dict : dict
     """
     parameter_code = parameter_code.upper()
     if parameter_code.lower() not in PARAMETERS.keys():
