@@ -163,7 +163,7 @@ def get_historical_data(site_code, date=None, as_dataframe=False):
         return results
 
 
-def get_real_time_data(site_code, as_dataframe=True):
+def get_real_time_data(site_code, as_dataframe=False):
     if site_code not in real_time_sites.keys():
         log.info('%s is not in the list of LCRA real time salinity sites' %
                  site_code)
@@ -171,7 +171,8 @@ def get_real_time_data(site_code, as_dataframe=True):
     data_url = 'http://waterquality.lcra.org/salinity.aspx?sNum=%s&name=%s' % (
         site_code, real_time_sites[site_code])
     data = pd.read_html(data_url, header=0)[1]
-    data.index = data['Date - Time'].apply(lambda x: pd.Timestamp(x))
+    data.index = data['Date - Time'].apply(lambda x: util.convert_datetime(
+        x))
     data.drop('Date - Time', axis=1, inplace=True)
     data = data.applymap(_nan_values)
     data.dropna(how='all', axis=0, inplace=True)
@@ -179,11 +180,12 @@ def get_real_time_data(site_code, as_dataframe=True):
     columns = dict([(column, _beautify_header(column)) for column in
                      data.columns])
     data.rename(columns=columns, inplace=True)
+    data = data.astype(float)
 
     if as_dataframe:
         return data
     else:
-        return data.to_dict()
+        return util.dict_from_dataframe(data)
 
 
 def _nan_values(value):
