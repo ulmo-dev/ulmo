@@ -9,6 +9,7 @@
 from bs4 import BeautifulSoup
 import logging
 from geojson import Point, Feature, FeatureCollection
+#import unicode
 
 from ulmo import util
 
@@ -33,6 +34,13 @@ source_map = {
     'CRMWD': 'Colorado River Municipal Water District',
     'COA': 'City of Austin',
     'TCEQ': 'Texas Commission on Environmental Quality',
+}
+
+real_time_sites = {
+    '6977': 'Matagorda 4SSW',
+    '6985': 'Matagorda 7 SW',
+    '6990': 'Matagorda 8 SSW',
+    '6996': 'Matagorda 9 SW'
 }
 
 # try:
@@ -72,7 +80,7 @@ def get_sites(source_agency=None):
     return sites_geojson
 
 
-def get_site_data(site_code, date=None, as_dataframe=False):
+def get_historical_data(site_code, date=None, as_dataframe=False):
     """Fetches data for a site at a given date.
     Parameters
     ----------
@@ -153,6 +161,42 @@ def get_site_data(site_code, date=None, as_dataframe=False):
         return _create_dataframe(results)
     else:
         return results
+
+
+def get_real_time_data(site_code, as_dataframe=True):
+    if site_code not in real_time_sites.keys():
+        log.info('%s is not in the list of LCRA real time salinity sites' %
+                 site_code)
+        return {}
+    data_url = 'http://waterquality.lcra.org/salinity.aspx?sNum=%s&name=%s' % (
+        site_code, real_time_sites[site_code])
+    data = pd.read_html(data_url, header=0)[1]
+    data.index = data['Date - Time'].apply(lambda x: pd.Timestamp(x))
+    data.drop('Date - Time', axis=1, inplace=True)
+    data = data.applymap(_nan_values)
+    data.dropna(how='all', axis=0, inplace=True)
+    data.dropna(how='all', axis=1, inplace=True)
+    columns = dict([(column, _beautify_header(column)) for column in
+                     data.columns])
+    data.rename(columns=columns, inplace=True)
+
+    if as_dataframe:
+        return data
+    else:
+        return data.to_dict()
+
+
+def _nan_values(value):
+    if value == -998. or value == '--':
+        return pd.np.nan
+    else:
+        return value
+
+
+def _beautify_header(str):
+    return unicode(str).replace(u'\xb0', 'deg').lower().replace(
+        '(', '').replace(')', '').replace(
+        u'%', u'percent').replace(' ', '_').replace(u'/', 'per')
 
 
 def get_site_info(site_code):
