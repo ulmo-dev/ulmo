@@ -1,13 +1,16 @@
-from ulmo.lcra.waterquality import get_sites, get_site_data
-import test_util
 import os
+import pandas
+from ulmo.lcra.waterquality import get_sites, get_historical_data, get_recent_data
+import test_util
+
 
 def test_get_sites():
-    data_file = 'lcra/waterquality/sites.xml'
+    data_file = 'lcra/waterquality/sites.html'
     with test_util.mocked_urls(data_file):
         sites = get_sites()
 
     assert len(sites['features']) == 469
+
 
 def test_get_site_data():
     os.environ["ULMO_TESTING"] ="1"
@@ -24,10 +27,36 @@ def test_get_site_data():
     }
 
     with test_util.mocked_urls(url_files):
-        results = get_site_data(12147)
+        results = get_historical_data(12147)
 
     assert len(results) == 12
     for data in results:
         assert data['Site'] == u'12147'
 
     del os.environ["ULMO_TESTING"]
+
+
+def test_get_recent_data():
+    data_file = 'lcra/waterquality/recent_data_site_6996.html'
+    test_values = pandas.DataFrame([
+        {'salinity_ppt': 15.46,
+          'ph': 7.84,
+          'depth_m': 1.17,
+          'do_mgperl': 8.15,
+          'do_sat_percent': 87.70,
+          'water_temp_deg_c': 14.36},
+        {'salinity_ppt': 15.72,
+         'ph': 7.82,
+         'depth_m': 1.12,
+         'do_mgperl': 7.97,
+         'do_sat_percent': 85.70,
+         'water_temp_deg_c': 14.28
+         },
+    ], index=[pandas.Timestamp('2015-12-04 03:25:00'),
+              pandas.Timestamp('2015-12-04 04:40:00')])
+    with test_util.mocked_urls(data_file):
+        site_data = get_recent_data('6996', as_dataframe=True)
+
+    are_equal = test_values == site_data.ix[test_values.index][test_values.columns]
+    assert pandas.np.all(are_equal)
+    assert site_data.shape[0] == 256
