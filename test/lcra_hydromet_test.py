@@ -36,14 +36,14 @@ def test_get_current_data():
         [{'datetime': datetime.datetime(2015, 12, 10, 14, 10),
           'location': 'Barton Creek at Loop 360, Austin',
           'stageft': 3.33,
-          'flowfs': 60.00,
+          'flowcfs': 60.00,
           'floodstageft': 8.00,
           'bankfullstageft': 8.00
           },
           {'datetime': datetime.datetime(2015, 12, 10, 14, 10),
            'location': 'Colorado River at Columbus',
            'stageft': 10.32,
-           'flowfs': 975.00,
+           'flowcfs': 975.00,
            'bankfullstageft': 30.00,
            'floodstageft': 34.00}])
     test_values.set_index('location', inplace=True)
@@ -52,6 +52,6 @@ def test_get_current_data():
         current_data = ulmo.lcra.hydromet.get_current_data('getlowerbasin')
         current_data_df = pandas.DataFrame(current_data)
         current_data_df.set_index('location', inplace=True)
-    are_equal = test_values.values == current_data_df.ix[test_values.index].values
-    assert are_equal.sum() == 10
+    are_equal = test_values == current_data_df.ix[test_values.index][test_values.columns]
+    assert pandas.np.all(are_equal)
     assert len(current_data) == 33
