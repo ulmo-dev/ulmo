@@ -140,9 +140,7 @@ def get_historical_data(site_code, date=None, as_dataframe=False):
         vals = [_parse_val(aux.text) for aux in row.findAll('td')]
         if len(vals) == 0:
             continue
-
         results.append(dict(zip(headers, vals)))
-
     if date:
         try:
             datelim = dateutil.parser.parse(date)
@@ -163,7 +161,7 @@ def get_historical_data(site_code, date=None, as_dataframe=False):
         return results
 
 
-def get_real_time_data(site_code, as_dataframe=False):
+def get_recent_data(site_code, as_dataframe=False):
     if site_code not in real_time_sites.keys():
         log.info('%s is not in the list of LCRA real time salinity sites' %
                  site_code)
