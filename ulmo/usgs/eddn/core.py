@@ -200,6 +200,12 @@ def get_data(
             data.to_hdf(tmp, dcp_address)
             shutil.move(tmp, dcp_data_path)
 
+    if data.empty:
+        if as_dataframe:
+            return data
+        else:
+            return {}
+
     if start:
         if start.startswith('P'):
             start = data['message_timestamp_utc'][-1] - isodate.parse_duration(start)
