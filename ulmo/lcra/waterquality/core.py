@@ -63,7 +63,7 @@ def get_sites(source_agency=None):
     """
     sites_url = 'http://waterquality.lcra.org/'
     response = requests.get(sites_url)
-    lines = response.content.split('\n')
+    lines = response.content.decode('utf-8').split('\n')
     sites_unprocessed = [
         line.strip().strip('createMarker').strip("(").strip(")").split(',')
         for line in lines if 'createMarker' in line]
@@ -203,7 +203,7 @@ def _nan_values(value):
 
 
 def _beautify_header(str):
-    return unicode(str).replace(u'\xb0', 'deg').lower().replace(
+    return str.replace(u'\xb0', 'deg').lower().replace(
         '(', '').replace(')', '').replace(
         u'%', u'percent').replace(' ', '_').replace(u'/', 'per')
 
