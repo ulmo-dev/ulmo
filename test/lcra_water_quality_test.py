@@ -12,7 +12,7 @@ def test_get_sites():
     assert len(sites['features']) == 469
 
 
-def test_get_site_data():
+def test_get_historical_data():
     os.environ["ULMO_TESTING"] ="1"
 
     service_info_url = 'http://waterquality.lcra.org/parameter.aspx?qrySite=12147'
