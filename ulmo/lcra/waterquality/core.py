@@ -80,7 +80,7 @@ def get_sites(source_agency=None):
     return sites_geojson
 
 
-def get_historical_data(site_code, date=None, as_dataframe=False):
+def get_historical_data(site_code, start=None, end=None, as_dataframe=False):
     """Fetches data for a site at a given date.
     Parameters
     ----------
@@ -141,24 +141,19 @@ def get_historical_data(site_code, date=None, as_dataframe=False):
         if len(vals) == 0:
             continue
         results.append(dict(zip(headers, vals)))
-    if date:
-        try:
-            datelim = dateutil.parser.parse(date)
-        except ValueError:
-            log.warn("Could not parse the provided date %s" % date)
-            datelim = None
-        if datelim:
-            df = _create_dataframe(results)
-            cut_df = df[df['Date'] > datelim]
-            if as_dataframe:
-                return cut_df
-            else:
-                return cut_df.to_dict('records')
+
+    data = _create_dataframe(results)
+
+    if start and not data.empty:
+        data = data.ix[util.convert_date(start):]
+
+    if end and not data.empty:
+        data = data.ix[:util.convert_date(end)]
 
     if as_dataframe:
-        return _create_dataframe(results)
+        return data
     else:
-        return results
+        return util.dict_from_dataframe(data)
 
 
 def get_recent_data(site_code, as_dataframe=False):
@@ -208,8 +203,10 @@ def get_site_info(site_code):
 
 def _create_dataframe(results):
     df = pd.DataFrame.from_records(results)
-    df['Date'] = df['Date'].apply(dateutil.parser.parse)
-    df.set_index(['Date'])
+    df['Date'] = df['Date'].apply(util.convert_date)
+    df.set_index(['Date'], inplace=True)
+    df.dropna(how='all', axis=0, inplace=True)
+    df.dropna(how='all', axis=1, inplace=True)
     return df
 
 
