@@ -153,10 +153,24 @@ def get_historical_data(site_code, start=None, end=None, as_dataframe=False):
     if as_dataframe:
         return data
     else:
-        return util.dict_from_dataframe(data)
+        return data.to_dict(orient='records')
 
 
 def get_recent_data(site_code, as_dataframe=False):
+    """fetches near real-time instantaneous water quality data for the LCRA
+    bay sites.
+    Parameters
+    ----------
+    site_code : str
+        The bay site to fetch data for. see `real_time_sites`
+    as_dataframe : bool
+        This determines what format values are returned as. If ``False``
+        (default), the values will be list of value dicts. If ``True`` then 
+        values are returned as pandas.DataFrame.
+    Returns
+    -------
+    list of values or dataframe.
+    """
     if site_code not in real_time_sites.keys():
         log.info('%s is not in the list of LCRA real time salinity sites' %
                  site_code)
