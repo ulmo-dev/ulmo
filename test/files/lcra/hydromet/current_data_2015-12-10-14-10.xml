@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope
+    xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <soap:Body>
+        <GetLowerBasinResponse
+            xmlns="http://hydrometdata.lcra.org">
+            <GetLowerBasinResult>
+                <clsLowerBasin>
+                    <Location>Lake Austin below Mansfield Dam                   </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>492.57</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Lake Austin at Quinlan Park                       </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>492.73</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Lake Austin at Cortana Shores                     </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>492.59</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Lake Austin at Bunny Run Farm                     </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>492.55</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Bull Creek at Loop 360, Austin                    </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>2.82</StageFT>
+                    <FlowCFS>7</FlowCFS>
+                    <BankFullStageFT>5.00</BankFullStageFT>
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Barton Creek at SH 71 near Oak Hill               </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>3.71</StageFT>
+                    <FlowCFS>64</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Barton Creek at Loop 360, Austin                  </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>3.33</StageFT>
+                    <FlowCFS>60</FlowCFS>
+                    <BankFullStageFT>8.00</BankFullStageFT>
+                    <FloodStageFT>8.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Lady Bird Lake near Longhorn Dam                  </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>428.44</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River at Austin                          </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>11.42</StageFT>
+                    <FlowCFS>118</FlowCFS>
+                    <BankFullStageFT>25.00</BankFullStageFT>
+                    <FloodStageFT>33.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Walnut Creek at Webberville Road, Austin          </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>4.20</StageFT>
+                    <FlowCFS>8</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Onion Creek at Buda                               </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>3.14</StageFT>
+                    <FlowCFS>1</FlowCFS>
+                    <BankFullStageFT>8.00</BankFullStageFT>
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Onion Creek at Hwy 183, Austin                    </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>5.66</StageFT>
+                    <FlowCFS>34</FlowCFS>
+                    <BankFullStageFT>15.00</BankFullStageFT>
+                    <FloodStageFT>17.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Gilleland Creek near Manor                        </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>6.14</StageFT>
+                    <FlowCFS>20</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Wilbarger Creek near Elgin                        </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>5.49</StageFT>
+                    <FlowCFS>12</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Big Sandy Creek near Elgin                        </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>4.50</StageFT>
+                    <FlowCFS>63</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River at Sim Gideon River Plant          </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>324.06</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Lake Bastrop at Sim Gideon Power Plant            </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>448.87</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River at Bastrop                         </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>2.99</StageFT>
+                    <FlowCFS>505</FlowCFS>
+                    <BankFullStageFT>14.00</BankFullStageFT>
+                    <FloodStageFT>23.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Cedar Creek near Bastrop                          </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>4.34</StageFT>
+                    <FlowCFS>0</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Cedar Creek below Bastrop                         </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>6.80</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River at Smithville                      </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>1.84</StageFT>
+                    <FlowCFS>663</FlowCFS>
+                    <BankFullStageFT>10.00</BankFullStageFT>
+                    <FloodStageFT>20.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River above La Grange                    </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>4.51</StageFT>
+                    <FlowCFS>843</FlowCFS>
+                    <BankFullStageFT>19.00</BankFullStageFT>
+                    <FloodStageFT>26.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Buckners Creek near Muldoon                       </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>4.15</StageFT>
+                    <FlowCFS>0</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Lake Fayette at Fayette Power Plant               </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>390.82</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Cummins Creek near Frelsburg                      </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>5.92</StageFT>
+                    <FlowCFS>47</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT>27.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River at Columbus                        </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>10.32</StageFT>
+                    <FlowCFS>975</FlowCFS>
+                    <BankFullStageFT>30.00</BankFullStageFT>
+                    <FloodStageFT>34.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River near Altair                        </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>9.20</StageFT>
+                    <FlowCFS>1190</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River near Glen Flora                    </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>78.47</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River at Wharton                         </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>9.86</StageFT>
+                    <FlowCFS>1146</FlowCFS>
+                    <BankFullStageFT>20.00</BankFullStageFT>
+                    <FloodStageFT>39.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River near Lane City                     </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>50.07</StageFT>
+                    <FlowCFS>1222</FlowCFS>
+                    <BankFullStageFT />
+                    <FloodStageFT />
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River at Bay City                        </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>4.46</StageFT>
+                    <FlowCFS>1531</FlowCFS>
+                    <BankFullStageFT>23.00</BankFullStageFT>
+                    <FloodStageFT>44.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>San Bernard River at East Bernard                 </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>7.03</StageFT>
+                    <FlowCFS>26</FlowCFS>
+                    <BankFullStageFT>13.00</BankFullStageFT>
+                    <FloodStageFT>17.00</FloodStageFT>
+                </clsLowerBasin>
+                <clsLowerBasin>
+                    <Location>Colorado River at Matagorda                       </Location>
+                    <DateTime>Dec 10 2015  2:10PM</DateTime>
+                    <StageFT>0.82</StageFT>
+                    <FlowCFS />
+                    <BankFullStageFT>4.80</BankFullStageFT>
+                    <FloodStageFT>8.80</FloodStageFT>
+                </clsLowerBasin>
+            </GetLowerBasinResult>
+        </GetLowerBasinResponse>
+    </soap:Body>
+</soap:Envelope>
