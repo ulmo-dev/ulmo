@@ -5,7 +5,7 @@ from lxml import etree
 from ulmo import util
 
 
-def parse_site_values(content_io, namespace, query_isodate=None):
+def parse_site_values(content_io, namespace, query_isodate=None, method=None):
     """parses values out of a waterml file; content_io should be a file-like object"""
     data_dict = {}
     metadata_elements = [
@@ -20,41 +20,79 @@ def parse_site_values(content_io, namespace, query_isodate=None):
     ]
     for (event, ele) in etree.iterparse(content_io):
         if ele.tag == namespace + "timeSeries":
+            methods = []
+            print 'namespace %s' % namespace
             source_info_element = ele.find(namespace + 'sourceInfo')
             site_info = _parse_site_info(source_info_element, namespace)
-            values_element = ele.find(namespace + 'values')
-            values = _parse_values(values_element, namespace)
             var_element = ele.find(namespace + 'variable')
             variable = _parse_variable(var_element, namespace)
-
+            values_elements = ele.findall(namespace + 'values')
             code = variable['code']
             if 'statistic' in variable:
                 code += ":" + variable['statistic']['code']
             data_dict[code] = {
                 'site': site_info,
-                'values': values,
                 'variable': variable,
             }
+            if not (method is None or method.lower() in methods):
+                raise ValueError(
+                    'need to specify method from one of %s or "ANY"' %
+                    ','.join(methods))
 
-            for tag, collection_name, key in metadata_elements:
-                underscored_tag = util.camel_to_underscore(tag)
-                collection = [
-                    _scrub_prefix(_element_dict(element, namespace),
-                        underscored_tag)
-                    for element in values_element.findall(namespace + tag)
-                ]
-                if len([x for x in collection if len(x)]):
-                    collection_dict = dict([
-                        (item[key], item)
-                        for item in collection
-                    ])
-                    data_dict[code][collection_name] = collection_dict
+            if method in methods:
+                for values_element in values_elements:
+                    if len(values_element.find(
+                        namespace + 'method[@methodID=%s' % method_id)):
+                        values = _parse_values(values_element, namespace)
+                        data_dict[code].update({'values': values})
+                        metadata = _parse_metadata(
+                            values_element, metadata_elements, namespace)
+                        metadata['methods'] = metadata['methods'].values()[0]
+                        data_dict[code].update({'values': values})
+                        data_dict[code].update(metadata)
+            elif method == 'ANY':
+                for values_element in values_elements:
+                    values = _parse_values(values_element, namespace)
+                    metadata = _parse_metadata(
+                            values_element, metadata_elements, namespace)
+                    metadata['methods'] = metadata['methods'].values()[0]
+                    code += ':' + str(metadata['methods']['id']).zfill(2)
+                    data_dict[code].update({'values': values})
+                    data_dict[code].update(metadata)
+            else:
+                if len(values_elements) > 1:
+                    raise ValueError(
+                        'more than one methods found for %s. need to'
+                        'need to specify one method or "ANY".' % variable['code'])
+                values_element = values_elements[0]
+                values = _parse_values(values_element, namespace)
+                data_dict[code].update({'values': values})
+                metadata = _parse_metadata(
+                        values_element, metadata_elements, namespace)
+                metadata['methods'] = metadata['methods'].values()[0]
 
             if query_isodate:
                 data_dict[code]['last_refresh'] = query_isodate
 
     return data_dict
 
+
+def _parse_metadata(values_element, metadata_elements, namespace):
+    metadata = {}
+    for tag, collection_name, key in metadata_elements:
+        underscored_tag = util.camel_to_underscore(tag)
+        collection = [
+            _scrub_prefix(_element_dict(element, namespace),
+                underscored_tag)
+            for element in values_element.findall(namespace + tag)
+        ]
+        if len([x for x in collection if len(x)]):
+            collection_dict = dict([
+                (item[key], item)
+                for item in collection
+            ])
+            metadata[collection_name] = collection_dict
+    return metadata
 
 def parse_site_infos(content_io, namespace, site_info_names):
     """parses information contained in site info elements out of a waterml file;
