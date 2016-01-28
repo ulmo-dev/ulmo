@@ -170,7 +170,7 @@ def get_sites(sites=None, state_code=None, huc=None, bounding_box=None,
 
 def get_site_data(site_code, service=None, parameter_code=None, statistic_code=None,
         start=None, end=None, period=None, modified_since=None, input_file=None,
-        **kwargs):
+        methods=None, **kwargs):
     """Fetches site data.
 
 
@@ -250,11 +250,12 @@ def get_site_data(site_code, service=None, parameter_code=None, statistic_code=N
 
     if service is not None:
         url_params.update(kwargs)
-        values = _get_site_values(service, url_params, input_file=input_file)
+        values = _get_site_values(service, url_params, input_file=input_file,
+                                  methods=methods)
     else:
         kw = dict(parameter_code=parameter_code, statistic_code=statistic_code,
                 start=start, end=end, period=period, modified_since=modified_since,
-                input_file=input_file)
+                input_file=input_file, methods=methods)
         kw.update(kwargs)
         values = get_site_data(site_code, service='daily', **kw)
         values.update(
@@ -303,7 +304,7 @@ def _get_service_url(service):
                 "'instantaneous' ('iv')")
 
 
-def _get_site_values(service, url_params, input_file=None):
+def _get_site_values(service, url_params, input_file=None, methods=None):
     """downloads and parses values for a site
 
     returns a values dict containing variable and data values
@@ -326,7 +327,8 @@ def _get_site_values(service, url_params, input_file=None):
         query_isodate = None
 
     with _open_input_file(input_file) as content_io:
-        data_dict = wml.parse_site_values(content_io, query_isodate)
+        data_dict = wml.parse_site_values(content_io, query_isodate,
+            methods=methods)
 
         for variable_dict in list(data_dict.values()):
             variable_dict['site'] = _extract_site_properties(variable_dict['site'])
