@@ -60,7 +60,7 @@ def parse_site_values(content_io, namespace, query_isodate=None, methods=None):
                             values_element, metadata_elements, namespace)
                     if len(values_elements) > 1:
                         updated_code = code + ':' + str(
-                            metadata['methods'].values()[0]['id']).zfill(2)
+                            list(metadata['methods'].values())[0]['id'])
                     else:
                         updated_code = code
                     data_dict[updated_code] = {
