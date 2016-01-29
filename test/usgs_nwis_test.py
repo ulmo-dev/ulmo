@@ -122,3 +122,12 @@ def test_get_sites_by_multiple_serving_parameter_code():
     with test_util.mocked_urls(sites_data_file):
         sites = ulmo.usgs.nwis.get_sites(sites=site_code, parameter_code=parameter_code_values, service='dv')
     assert len(sites) == 1
+
+def test_get_site_data_multiple_methods():
+    site_code = '08054500'
+    site_data_file = 'usgs/nwis/site_08054500_multiple_methods.xml'
+    with test_util.mocked_urls(site_data_file):
+        site_data = ulmo.usgs.nwis.get_site_data(site_code, methods={'00062': 'all'})
+        assert len(site_data['00062:00011:1']['values']) == 288
+        assert len(site_data['00062:00011:20']['values']) == 288
+        assert len(site_data.keys()) == 2
