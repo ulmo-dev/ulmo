@@ -206,6 +206,13 @@ def get_site_data(site_code, service=None, parameter_code=None, statistic_code=N
         If ``None`` (default), then the NWIS web services will be queried, but
         if a file is passed then this file will be used instead of requesting
         data from the NWIS web services.
+    methods: ``None``, str or Python dict
+        If ``None`` (default), it's assumed that there is a single method for
+        each parameter. This raises an error if more than one method ids are
+        encountered. If str, this is the method id for the requested
+        parameter/s and can use "all" if method ids are not known beforehand. If
+        dict, provide the parameter_code to method id mapping. Parameter's
+        method id is specific to site.
 
 
     Returns
