@@ -1,6 +1,7 @@
 import isodate
 
 from lxml import etree
+from past.builtins import basestring
 
 from ulmo import util
 
