@@ -74,7 +74,8 @@ def test_get_site_data_single_site_with_start_and_end():
     site_data_file = 'usgs/nwis/site_08068500_instantaneous_2011-11-05_2011-11-18.xml'
     with test_util.mocked_urls(site_data_file):
         site_data = ulmo.usgs.nwis.get_site_data(site_code, start='2011-11-05',
-                end='2011-11-18', service='instantaneous')
+                end='2011-11-18', service='instantaneous',
+                methods={'00065': '2'})
     assert len(site_data) == 7
     assert len(site_data['63680:00011']['values']) == 1250
 
@@ -121,3 +122,12 @@ def test_get_sites_by_multiple_serving_parameter_code():
     with test_util.mocked_urls(sites_data_file):
         sites = ulmo.usgs.nwis.get_sites(sites=site_code, parameter_code=parameter_code_values, service='dv')
     assert len(sites) == 1
+
+def test_get_site_data_multiple_methods():
+    site_code = '08054500'
+    site_data_file = 'usgs/nwis/site_08054500_multiple_methods.xml'
+    with test_util.mocked_urls(site_data_file):
+        site_data = ulmo.usgs.nwis.get_site_data(site_code, methods={'00062': 'all'})
+        assert len(site_data['00062:00011:1']['values']) == 288
+        assert len(site_data['00062:00011:20']['values']) == 288
+        assert len(site_data.keys()) == 2

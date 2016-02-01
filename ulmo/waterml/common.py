@@ -1,11 +1,12 @@
 import isodate
 
 from lxml import etree
+from past.builtins import basestring
 
 from ulmo import util
 
 
-def parse_site_values(content_io, namespace, query_isodate=None):
+def parse_site_values(content_io, namespace, query_isodate=None, methods=None):
     """parses values out of a waterml file; content_io should be a file-like object"""
     data_dict = {}
     metadata_elements = [
@@ -22,36 +23,70 @@ def parse_site_values(content_io, namespace, query_isodate=None):
         if ele.tag == namespace + "timeSeries":
             source_info_element = ele.find(namespace + 'sourceInfo')
             site_info = _parse_site_info(source_info_element, namespace)
-            values_element = ele.find(namespace + 'values')
-            values = _parse_values(values_element, namespace)
             var_element = ele.find(namespace + 'variable')
             variable = _parse_variable(var_element, namespace)
-
+            values_elements = ele.findall(namespace + 'values')
             code = variable['code']
+            if isinstance(methods, basestring):
+                method = methods
+            elif isinstance(methods, dict):
+                method = methods.get(code, None)
+            else:
+                method = None
             if 'statistic' in variable:
                 code += ":" + variable['statistic']['code']
-            data_dict[code] = {
-                'site': site_info,
-                'values': values,
-                'variable': variable,
-            }
 
-            for tag, collection_name, key in metadata_elements:
-                underscored_tag = util.camel_to_underscore(tag)
-                collection = [
-                    _scrub_prefix(_element_dict(element, namespace),
-                        underscored_tag)
-                    for element in values_element.findall(namespace + tag)
-                ]
-                if len([x for x in collection if len(x)]):
-                    collection_dict = dict([
-                        (item[key], item)
-                        for item in collection
-                    ])
-                    data_dict[code][collection_name] = collection_dict
-
-            if query_isodate:
-                data_dict[code]['last_refresh'] = query_isodate
+            if method is None:
+                if len(values_elements) > 1:
+                    raise ValueError(
+                        'found more than one method for %s. need to specify'
+                        'specify code or "all".' % variable['code'])
+                values_element = values_elements[0]
+                values = _parse_values(values_element, namespace)
+                data_dict[code] = {
+                    'site': site_info,
+                    'variable': variable,
+                }
+                data_dict[code].update({'values': values})
+                metadata = _parse_metadata(
+                        values_element, metadata_elements, namespace)
+                data_dict[code].update(metadata)
+                if query_isodate:
+                    data_dict[code]['last_refresh'] = query_isodate
+            elif method == 'all':
+                for values_element in values_elements:
+                    values = _parse_values(values_element, namespace)
+                    metadata = _parse_metadata(
+                            values_element, metadata_elements, namespace)
+                    if len(values_elements) > 1:
+                        updated_code = code + ':' + str(
+                            list(metadata['methods'].values())[0]['id'])
+                    else:
+                        updated_code = code
+                    data_dict[updated_code] = {
+                        'site': site_info.copy(),
+                        'variable': variable,
+                    }
+                    data_dict[updated_code].update({'values': values})
+                    data_dict[updated_code].update(metadata)
+                    if query_isodate:
+                        data_dict[updated_code]['last_refresh'] = query_isodate
+            else:
+                for values_element in values_elements:
+                    if values_element.find(
+                            namespace + 'method[@methodID="%s"]' % method)\
+                            is not None:
+                        values = _parse_values(values_element, namespace)
+                        metadata = _parse_metadata(
+                            values_element, metadata_elements, namespace)
+                        data_dict[code] = {
+                            'site': site_info,
+                            'variable': variable,
+                        }
+                        data_dict[code].update({'values': values})
+                        data_dict[code].update(metadata)
+                        if query_isodate:
+                            data_dict[code]['last_refresh'] = query_isodate
 
     return data_dict
 
@@ -189,6 +224,24 @@ def _parse_geog_location(geog_location, namespace):
         return_dict['srs'] = srs
 
     return return_dict
+
+
+def _parse_metadata(values_element, metadata_elements, namespace):
+    metadata = {}
+    for tag, collection_name, key in metadata_elements:
+        underscored_tag = util.camel_to_underscore(tag)
+        collection = [
+            _scrub_prefix(_element_dict(element, namespace),
+                underscored_tag)
+            for element in values_element.findall(namespace + tag)
+        ]
+        if len([x for x in collection if len(x)]):
+            collection_dict = dict([
+                (item[key], item)
+                for item in collection
+            ])
+            metadata[collection_name] = collection_dict
+    return metadata
 
 
 def _parse_method(method, namespace):
