@@ -219,7 +219,10 @@ def get_stations(country=None, state=None, elements=None, start_year=None,
         stations['wm_oid'][stations['wm_oid'] == 'nan'] = np.nan
     else:
         stations['wm_oid'] = stations['wm_oid'].astype('|U5').map(lambda x: x[:-2])
-        stations['wm_oid'][stations['wm_oid'] == 'n'] = np.nan
+        is_nan = stations['wm_oid'] == 'n'
+        is_empty = stations['wm_oid'] == ''
+        is_invalid = is_nan | is_empty
+        stations.loc[is_invalid, 'wm_oid'] = np.nan
 
     if as_dataframe:
         return stations
