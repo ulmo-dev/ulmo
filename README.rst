@@ -34,6 +34,7 @@ Currently, ulmo supports the following datasets / services:
 - California Department of Water Resources Historical Data
 - Climate Prediction Center Weekly Drought
 - CUAHSI WaterOneFlow
+- Lower Colorado River Authority Hydromet and Water Quality Data
 - National Climatic Data Center Climate Index Reference Sequential (CIRS)
 - National Climatic Data Center Global Historical Climate Network Daily
 - National Climatic Data Center Global Summary of the Day
