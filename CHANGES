@@ -1,11 +1,12 @@
 Changelog
 ---------
-**0.8.2 (released 2016-02-?)**
+**0.8.2 (released 2016-02-02)**
 
 - added modules for getting LCRA hydromet and water quality data
 - fixed waterml parser bug that was affecting USGS NWIS data when
   parameter data collected using multiple methods exist (e.g. water level
-  measured with RADAR and pressure transducer)
+  measured with RADAR and pressure transducer) through use of optional 'method'
+  kwarg
 - fixed ncdc.ghcn.get_stations() failing tests with pandas==0.17.0
 
 **0.8.1 (released 2015-09-16)**
