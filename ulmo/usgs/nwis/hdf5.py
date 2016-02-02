@@ -335,7 +335,8 @@ def update_site_list(sites=None, state_code=None, huc=None, bounding_box=None,
 
 
 def update_site_data(site_code, start=None, end=None, period=None, path=None,
-        input_file=None, complevel=None, complib=None, autorepack=True):
+        methods=None, input_file=None, complevel=None, complib=None,
+        autorepack=True):
     """Update cached site data.
 
     Parameters
@@ -359,6 +360,13 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
         Path to the hdf5 file to be queried, if ``None`` then the default path
         will be used. If a file path is a directory, then multiple hdf5 files
         will be kept so that file sizes remain small for faster repacking.
+    methods: ``None``, str or Python dict
+        If ``None`` (default), it's assumed that there is a single method for
+        each parameter. This raises an error if more than one method ids are
+        encountered. If str, this is the method id for the requested
+        parameter/s and can use "all" if method ids are not known beforehand. If
+        dict, provide the parameter_code to method id mapping. Parameter's
+        method id is specific to site.
     input_file: ``None``, file path or file object
         If ``None`` (default), then the NWIS web services will be queried, but
         if a file is passed then this file will be used instead of requesting
@@ -386,7 +394,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
             start = prior_last_refresh
 
     new_site_data = core.get_site_data(site_code, start=start, end=end,
-            period=period, input_file=input_file)
+            period=period, input_file=input_file, methods=methods)
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
 
