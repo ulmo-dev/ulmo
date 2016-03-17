@@ -397,6 +397,9 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
 
     new_site_data = core.get_site_data(site_code, start=start, end=end,
             period=period, input_file=input_file, methods=methods)
+    if not len(new_site_data):
+        core.log.info("No new data was found")
+        return None
 
     comp_kwargs = _compression_kwargs(complevel=complevel, complib=complib)
 
