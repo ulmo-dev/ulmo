@@ -1,6 +1,7 @@
 from builtins import range
 import os
 import shutil
+import datetime
 
 import freezegun
 import pandas
@@ -369,6 +370,33 @@ def test_site_data_filter_by_multiple_parameter_codes(test_file_path):
     for code in parameter_code:
         if code in list(site_data.keys()):
             assert site_data[code] == all_site_data[code]
+
+
+def test_site_data_filter_by_date_all_param(test_file_path):
+    site_code = '08068500'
+    parameter_code = '00065:00003'
+    date_str = '2000-01-01'
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=site_data_file, autorepack=False)
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path, start=date_str)
+    for par, data in site_data.iteritems():
+        first_value = data['values'][0]
+        assert datetime.datetime.strptime(first_value["datetime"], '%Y-%m-%dT%H:%M:%S') >= datetime.datetime.strptime(date_str, '%Y-%m-%d')
+
+
+def test_site_data_filter_by_date_single_param(test_file_path):
+    site_code = '08068500'
+    parameter_code = '00065:00003'
+    date_str = '2000-01-01'
+    site_data_file = test_util.get_test_file_path(
+        'usgs/nwis/site_%s_daily.xml' % site_code)
+    nwis.hdf5.update_site_data(site_code, path=test_file_path,
+            input_file=site_data_file, autorepack=False)
+    site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path, start=date_str)
+    first_value = site_data[parameter_code]['values'][0]
+    assert datetime.datetime.strptime(first_value["datetime"], '%Y-%m-%dT%H:%M:%S') >= datetime.datetime.strptime(date_str, '%Y-%m-%d')
 
 
 def test_site_data_update_site_list_with_multiple_updates(test_file_path):
