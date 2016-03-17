@@ -126,7 +126,7 @@ def get_site(site_code, path=None, complevel=None, complib=None):
 
 
 def get_site_data(site_code, agency_code=None, parameter_code=None, path=None,
-                  complevel=None, complib=None):
+                  complevel=None, complib=None, start=None):
     """Fetches previously-cached site data from an hdf5 file.
 
     Parameters
@@ -154,6 +154,8 @@ def get_site_data(site_code, agency_code=None, parameter_code=None, path=None,
         the best available compression library available on your system will be
         selected. If complevel argument is set to 0 then no compression will be
         used.
+    start: ``None`` or string formatted date like 2014-01-01
+        Filter the dataset to return only data later that the start date
 
 
     Returns
@@ -173,14 +175,14 @@ def get_site_data(site_code, agency_code=None, parameter_code=None, path=None,
         if parameter_code:
             site_data = dict([
                 (variable_group._v_pathname.rsplit('/', 1)[-1],
-                 _variable_group_to_dict(store, variable_group))
+                 _variable_group_to_dict(store, variable_group, start=start))
                 for variable_group in site_group
                 if variable_group._v_pathname.rsplit('/', 1)[-1] in parameter_code
             ])
         else:
             site_data = dict([
                 (variable_group._v_pathname.rsplit('/', 1)[-1],
-                 _variable_group_to_dict(store, variable_group))
+                 _variable_group_to_dict(store, variable_group, start=start))
                 for variable_group in site_group
             ])
     return site_data
@@ -622,7 +624,7 @@ def _values_df_to_dicts(values_df):
     return dicts
 
 
-def _variable_group_to_dict(store, variable_group):
+def _variable_group_to_dict(store, variable_group, start=None):
     _v_attrs = variable_group._v_attrs
     variable_dict = dict([
         (key, getattr(_v_attrs, key))
@@ -630,6 +632,8 @@ def _variable_group_to_dict(store, variable_group):
     ])
     values_path = variable_group._v_pathname + '/values'
     values_df = store[values_path]
+    if start:
+        values_df = values_df[values_df.index > start]
     variable_dict['values'] = _values_df_to_dicts(values_df)
 
     return variable_dict
