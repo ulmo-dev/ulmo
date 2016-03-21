@@ -381,7 +381,7 @@ def test_site_data_filter_by_date_all_param(test_file_path):
     nwis.hdf5.update_site_data(site_code, path=test_file_path,
             input_file=site_data_file, autorepack=False)
     site_data = nwis.hdf5.get_site_data(site_code, path=test_file_path, start=date_str)
-    for par, data in site_data.iteritems():
+    for par, data in site_data.items():
         first_value = data['values'][0]
         assert datetime.datetime.strptime(first_value["datetime"], '%Y-%m-%dT%H:%M:%S') >= datetime.datetime.strptime(date_str, '%Y-%m-%d')
 
