@@ -275,7 +275,7 @@ def repack(path, complevel=None, complib=None):
 
     temp_path = tempfile.NamedTemporaryFile().name
     _ptrepack(path, temp_path, **comp_kwargs)
-    shutil.copyfile(temp_path, path)
+    shutil.move(temp_path, path)
 
 
 def update_site_list(sites=None, state_code=None, huc=None, bounding_box=None, 
