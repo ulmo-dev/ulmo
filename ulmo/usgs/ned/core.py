@@ -138,6 +138,7 @@ def get_raster(layer, bbox, path=None, check_modified=False, mosaic=False):
             path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
 
         util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
+        xmin, ymin, xmax, ymax = [float(n) for n in bbox]
         uid = util.generate_raster_uid(layer, xmin, ymin, xmax, ymax)
         output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
 
