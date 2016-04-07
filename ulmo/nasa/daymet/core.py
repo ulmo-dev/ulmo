@@ -116,15 +116,17 @@ def get_daymet_singlepixel(latitude, longitude,
     req.raise_for_status()        
     input_file = io.BytesIO(util.to_bytes(req.content))
 
+    df = pd.read_csv(input_file, header=6)
+    df.index = pd.to_datetime(df.year.astype(unicode) + '-' + df.yday.astype(unicode), format="%Y-%j")
+    df.columns = [c[:c.index('(')].strip() if '(' in c else c for c in df.columns ]
     if as_dataframe:
-
-        df = pd.read_csv(input_file, header=6)
-        df.index = pd.to_datetime(df.year.astype(unicode) + '-' + df.yday.astype(unicode), format="%Y-%j")
-        df.columns = [c[:c.index('(')].strip() if '(' in c else c for c in df.columns ]
         return df
     else:
-        return input_file
-
+        results = {}
+        for key in df.columns:
+            if key not in ['yday', 'year']:
+                results[key] = dict(zip(df[key].index.format(), df[key]))
+        return results
 
 def _check_variables(variables):
     """make sure all variables are in list
