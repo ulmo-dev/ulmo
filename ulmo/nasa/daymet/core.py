@@ -171,6 +171,6 @@ def _get_service_url(url_params):
     """
     url = DAYMET_SINGLEPIXEL_URL.format(**url_params)
 
-    if url_params.has_key('years'):
+    if 'years' in url_params:
         url += "&year={}".format(url_params['years'])
     return url
