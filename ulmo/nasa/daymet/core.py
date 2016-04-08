@@ -117,7 +117,7 @@ def get_daymet_singlepixel(latitude, longitude,
     input_file = io.BytesIO(util.to_bytes(req.content))
 
     df = pd.read_csv(input_file, header=6)
-    df.index = pd.to_datetime(df.year.astype(unicode) + '-' + df.yday.astype(unicode), format="%Y-%j")
+    df.index = pd.to_datetime(df.year.astype('str') + '-' + df.yday.astype('str'), format="%Y-%j")
     df.columns = [c[:c.index('(')].strip() if '(' in c else c for c in df.columns ]
     if as_dataframe:
         return df
