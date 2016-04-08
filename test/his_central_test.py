@@ -27,7 +27,7 @@ def test_get_services():
          'min_x': -176.6633,
          'min_y': -14.3075,
          'network_name': 'NWISDV',
-         'organization': 'U.S. Geological Survey',
+         'organization': 'U.S. Geological Survey (USGS)',
          'organization_website': 'http://www.usgs.gov',
          'phone': '339-221-5400',
          'service_description_url': 'http://hiscentral.cuahsi.org/pub_network.aspx?n=1',
