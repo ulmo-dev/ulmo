@@ -106,7 +106,8 @@ def get_raster_availability(layer, bbox):
     return FeatureCollection(features)
 
 
-def get_raster(layer, bbox, path=None, check_modified=False, mosaic=False):
+def get_raster(layer, bbox, path=None, update_cache=False, 
+               check_modified=False, mosaic=False):
     """downloads National Elevation Dataset raster tiles that cover the given bounding box 
     for the specified data layer. 
 
@@ -119,6 +120,8 @@ def get_raster(layer, bbox, path=None, check_modified=False, mosaic=False):
         in the format (min longitude, min latitude, max longitude, max latitude)
     path : ``None`` or path
         if ``None`` default path will be used
+    update_cache: ``True`` or ``False`` (default)
+        if ``False`` and output file already exists use it.
     check_modified: ``True`` or ``False`` (default)
         if tile exists in path, check if newer file exists online and download if available.  
     mosaic: ``True`` or ``False`` (default)
