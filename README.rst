@@ -38,6 +38,7 @@ Currently, ulmo supports the following datasets / services:
 - National Climatic Data Center Climate Index Reference Sequential (CIRS)
 - National Climatic Data Center Global Historical Climate Network Daily
 - National Climatic Data Center Global Summary of the Day
+- NASA Daymet weather data
 - Texas Weather Connection Daily Keetch-Byram Drought Index (KBDI)
 - US Army Corps of Engineers - Tulsa District Water Control
 - USGS National Water Information System
