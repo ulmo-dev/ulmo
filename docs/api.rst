@@ -35,6 +35,12 @@ Lower Colorado River Authority (LCRA) Water Quality Data
    :members: get_sites, get_historical_data, get_recent_data, get_site_info
 
 
+NASA ORNL Daymet weather data services
+========================================================
+.. automodule:: ulmo.nasa.daymet
+   :members: get_variables, get_daymet_singlepixel
+   
+
 National Climatic Data Center Climate Index Reference Sequential (CIRS)
 =======================================================================
 .. automodule:: ulmo.ncdc.cirs
