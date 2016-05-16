@@ -133,6 +133,8 @@ def get_raster(layer, bbox, path=None, update_cache=False,
     raster_tiles : geojson FeatureCollection
         metadata as a FeatureCollection. local url of downloaded data is in feature['properties']['file']
     """
+    _check_layer(layer)
+
     raster_tiles = _download_tiles(get_raster_availability(layer, bbox), path=path, 
         check_modified=check_modified)
 
@@ -154,7 +156,16 @@ def get_raster(layer, bbox, path=None, update_cache=False,
 
     return raster_tiles
 
-
+def _check_layer(layer):
+    """
+    make sure the passed layer name is one of the handled options
+    """
+   
+    if not layer in get_available_layers():
+        err_msg = "The specified layer parameter ({})".format(layer)
+        err_msg += "\nis not in the available options:"
+        err_msg += "\n\t".join(get_available_layers())
+        raise ValueError(err_msg)
 
 def _get_file_index(path=None, update_cache=False):
     """Non webservice approach for caching file index
