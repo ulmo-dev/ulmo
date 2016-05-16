@@ -106,7 +106,8 @@ def get_raster_availability(layer, bbox):
     return FeatureCollection(features)
 
 
-def get_raster(layer, bbox, path=None, check_modified=False, mosaic=False):
+def get_raster(layer, bbox, path=None, update_cache=False, 
+               check_modified=False, mosaic=False):
     """downloads National Elevation Dataset raster tiles that cover the given bounding box 
     for the specified data layer. 
 
@@ -119,6 +120,8 @@ def get_raster(layer, bbox, path=None, check_modified=False, mosaic=False):
         in the format (min longitude, min latitude, max longitude, max latitude)
     path : ``None`` or path
         if ``None`` default path will be used
+    update_cache: ``True`` or ``False`` (default)
+        if ``False`` and output file already exists use it.
     check_modified: ``True`` or ``False`` (default)
         if tile exists in path, check if newer file exists online and download if available.  
     mosaic: ``True`` or ``False`` (default)
@@ -130,6 +133,8 @@ def get_raster(layer, bbox, path=None, check_modified=False, mosaic=False):
     raster_tiles : geojson FeatureCollection
         metadata as a FeatureCollection. local url of downloaded data is in feature['properties']['file']
     """
+    _check_layer(layer)
+
     raster_tiles = _download_tiles(get_raster_availability(layer, bbox), path=path, 
         check_modified=check_modified)
 
@@ -138,6 +143,7 @@ def get_raster(layer, bbox, path=None, check_modified=False, mosaic=False):
             path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
 
         util.mkdir_if_doesnt_exist(os.path.join(path, 'by_boundingbox'))
+        xmin, ymin, xmax, ymax = [float(n) for n in bbox]
         uid = util.generate_raster_uid(layer, xmin, ymin, xmax, ymax)
         output_path = os.path.join(path, 'by_boundingbox', uid + '.tif')
 
@@ -150,7 +156,16 @@ def get_raster(layer, bbox, path=None, check_modified=False, mosaic=False):
 
     return raster_tiles
 
-
+def _check_layer(layer):
+    """
+    make sure the passed layer name is one of the handled options
+    """
+   
+    if not layer in get_available_layers():
+        err_msg = "The specified layer parameter ({})".format(layer)
+        err_msg += "\nis not in the available options:"
+        err_msg += "\n\t".join(get_available_layers())
+        raise ValueError(err_msg)
 
 def _get_file_index(path=None, update_cache=False):
     """Non webservice approach for caching file index
