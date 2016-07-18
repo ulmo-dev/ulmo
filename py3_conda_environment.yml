@@ -9,11 +9,12 @@
 
 name: py3-ulmo
 
-channels: 
-    - ioos
+channels:
+    - conda-forge
+    - defaults
 
 dependencies:
-    - python=3.4
+    - python>=3.4
     - appdirs
     - beautifulsoup4
     - future
@@ -23,12 +24,10 @@ dependencies:
     - mock
     - numpy
     - pandas
-    - pytables <=3.1.1
+    - pytables
     - pytest
     - requests
     - suds-jurko
-    - pip:
-        - freezegun
-        - httpretty==0.8.6
-        - html5lib
-
+    - freezegun
+    - httpretty
+    - html5lib==0.9999999

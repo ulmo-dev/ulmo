@@ -9,8 +9,9 @@
 
 name: py2-ulmo
 
-channels: 
-    - ioos
+channels:
+    - conda-forge
+    - defaults
 
 dependencies:
     - python=2.7
@@ -27,7 +28,6 @@ dependencies:
     - pytest
     - requests
     - suds-jurko
-    - pip:
-        - freezegun
-        - httpretty==0.8.6
-        - html5lib
+    - freezegun
+    - httpretty
+    - html5lib<=0.9999999
