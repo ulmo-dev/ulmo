@@ -34,6 +34,9 @@ def version():
 __version__ = version()
 
 
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+
 setup(
     name='ulmo',
     version=__version__,
@@ -46,23 +49,7 @@ setup(
     keywords='his pyhis ulmo water waterml cuahsi wateroneflow usgs ned',
     packages=find_packages(),
     platforms='any',
-    install_requires=[
-        'appdirs>=1.2.0',
-        'beautifulsoup4>=4.1.3',
-        'geojson',
-        'isodate>=0.4.6',
-        'lxml>=2.3',
-        # mock is required for mocking pytables-related functionality when it doesn't exist
-        'mock>=1.0.0',
-        'numpy>=1.4.0',
-        'pandas>=0.11',
-        'requests>=1.1',
-        'suds-jurko',
-        'future',
-    ],
-    extras_require={
-        'pytables_caching': ['tables<=3.1.1']
-    },
+    install_requires=required,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
@@ -76,10 +63,10 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     tests_require=[
-        'freezegun>=0.1.4',
-        'pytest>=2.3.2',
-        'httpretty==0.8.6',
-        'html5lib',
+        'freezegun',
+        'pytest',
+        'httpretty',
+        'html5lib<=0.9999999',
     ],
     cmdclass={'test': PyTest},
 )

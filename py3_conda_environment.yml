@@ -30,4 +30,4 @@ dependencies:
     - suds-jurko
     - freezegun
     - httpretty
-    - html5lib==0.9999999
+    - html5lib<=0.9999999
