@@ -29,12 +29,12 @@ def test_get_available_format():
 
 
 test_sets = [
-    {'product_key': 'LC6',
-     'bbox': (-78, 32, -76, 36),
-     'number_of_tiles': 5,
-     #'fmt_file': 'usgs/eros/formats_l1l.json',
-     #'file': 'usgs/eros/availability_bbox_test_set_1.json',
-    },
+    #{'product_key': 'LC6',
+    # 'bbox': (-78, 32, -76, 36),
+    # 'number_of_tiles': 5,
+    #'fmt_file': 'usgs/eros/formats_l1l.json',
+    #'file': 'usgs/eros/availability_bbox_test_set_1.json',
+    #},
 ]
 
 
