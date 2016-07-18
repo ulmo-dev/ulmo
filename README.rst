@@ -13,14 +13,14 @@ Project Status
 .. image:: https://ci.appveyor.com/api/projects/status/mqo6rl0f2ocngxcu/branch/master?svg=true
         :target: https://ci.appveyor.com/project/dharhas/ulmo/branch/master
 
-.. image:: https://coveralls.io/repos/ulmo-dev/ulmo/badge.svg?branch=master&service=github 
+.. image:: https://coveralls.io/repos/ulmo-dev/ulmo/badge.svg?branch=master&service=github
         :target: https://coveralls.io/github/ulmo-dev/ulmo?branch=master
 
 
 Features
 --------
 
-- retrieves and parses datasets from the web 
+- retrieves and parses datasets from the web
 - returns simple python data structures that can be easily pulled into `more
   sophisticated tools`_ for analysis
 - caches datasets locally and harvests updates as needed
@@ -56,10 +56,10 @@ way to get things up and running is to use a scientific python distribution that
 will install everything together. A full list is available on the `scipy`_
 website but `Anaconda`_ / `Miniconda`_ is recommended as it is the easiest to set up.
 
-If you are using Anaconda/Miniconda then you can install ulmo from the `IOOS`_
+If you are using Anaconda/Miniconda then you can install ulmo from the `conda_forge`_
 channel with the following command:
 
-    conda install -c ioos ulmo
+    conda install -c conda-forge ulmo
 
 Otherwise, follow the instructions below:
 
@@ -75,9 +75,9 @@ code`_ and run setup.py from the root directory:
 To setup a development environment using conda:
 
     conda env create -n myenv --file py2_conda_environment.yml (or py3_conda_environment.yml if you want to work with python 3)
-    
+
     source activate myenv (use 'activate test_environment' on windows)
-    
+
     python setup.py develop
 
 
@@ -98,8 +98,8 @@ Links
 
 .. _more sophisticated tools: http://pandas.pydata.org
 .. _issue tracker: https://github.com/ulmo-dev/ulmo/issues?labels=new+dataset&state=open
-.. _Anaconda: http://continuum.io/downloads.html 
+.. _Anaconda: http://continuum.io/downloads.html
 .. _Miniconda: http://conda.pydata.org/miniconda.html
-.. _IOOS: https://conda.anaconda.org/ioos
+.. _conda-forge: https://conda-forge.github.io
 .. _scipy: http://scipy.org/install.html
-.. _source code: https://github.com/ulmo-dev/ulmo 
+.. _source code: https://github.com/ulmo-dev/ulmo
