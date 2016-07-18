@@ -17,10 +17,11 @@ os:
 
 env:
   - PYTHON_VERSION="2.7"
-  - PYTHON_VERSION="3.4" 
+  - PYTHON_VERSION="3.4"
+  - PYTHON_VERSION="3.5"
 
 # commands to install ulmo
-install: 
+install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       OS_VERSION="Linux";
     else
@@ -39,18 +40,18 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a
   # Create ulmo venv and install deps
-  - conda config --add channels ioos
-  - conda create -q -n test-environment python=$PYTHON_VERSION appdirs beautifulsoup4 future geojson isodate lxml mock numpy pandas pytables pytest requests suds-jurko
+  - conda config --add channels conda-forge
+  - conda create -q -n test-environment python=$PYTHON_VERSION appdirs beautifulsoup4 future geojson isodate lxml mock numpy pandas pytables pytest requests suds-jurko freezegun html5lib<=0.9999999
   - source activate test-environment
-  - pip install freezegun
-  - pip install httpretty==0.8.6
+  - conda install pip
+  - pip install httpretty<=0.8.10
   - pip install coveralls
   - python setup.py install
 
 # command to run tests
-script: 
+script:
   coverage run --source=ulmo setup.py test
 
-# generate test coverage information 
+# generate test coverage information
 after_success:
   coveralls
