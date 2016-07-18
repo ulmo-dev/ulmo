@@ -29,5 +29,6 @@ dependencies:
     - requests
     - suds-jurko
     - freezegun
-    - httpretty
     - html5lib<=0.9999999
+    - pip:
+        - httpretty<=0.8.10
