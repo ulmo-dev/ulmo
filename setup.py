@@ -63,6 +63,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     tests_require=[
+        'mock',
         'freezegun',
         'pytest',
         'httpretty',

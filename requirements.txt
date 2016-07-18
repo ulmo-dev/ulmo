@@ -4,13 +4,10 @@ future
 geojson
 isodate
 lxml
-mock
 numpy
 pandas
 tables
 pytest
 requests
 suds-jurko
-freezegun
-httpretty
 html5lib<=0.9999999
