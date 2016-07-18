@@ -42,7 +42,7 @@ Contributing
 If you'd like to contribute code or documentation, visit our `github`_
 repository. Bug reports, issues and especially pull Requests are welcome.
 
-.. _github: https://github.com/twdb/ulmo
+.. _github: https://github.com/ulmo-dev/ulmo
 
 
 

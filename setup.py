@@ -20,7 +20,7 @@ with open('README.rst') as f:
     # version
     long_description = ''.join([
         line for line in f.readlines()
-        if 'travis-ci' not in line])
+        ])
 
 
 # this sets __version__
