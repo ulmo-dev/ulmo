@@ -43,7 +43,7 @@ install:
   - conda create -q -c conda-forge --chan-pri -n test-environment python=$PYTHON_VERSION appdirs beautifulsoup4 future geojson isodate lxml mock numpy pandas pytables pytest requests suds-jurko freezegun html5lib=0.999
   - source activate test-environment
   - conda install pip
-  - pip install httpretty<=0.8.10
+  - pip install httpretty==0.8.10
   - pip install coveralls
   - python setup.py install
 
