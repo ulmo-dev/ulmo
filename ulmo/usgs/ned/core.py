@@ -14,34 +14,25 @@ from __future__ import print_function
 from past.builtins import basestring
 
 from geojson import Feature, FeatureCollection, Polygon
-import hashlib
 import json
 import logging
 import numpy as np
 import os
-import pandas as pd
 import requests
-import subprocess
 from ulmo import util
 
 
-
-# NED ftp url.  
+# NED ftp url.
 NED_FTP_URL = 'ftp://rockyftp.cr.usgs.gov/vdelivery/Datasets/Staged/NED/<layer>/IMG/'
-
-# ScienceBase webservice url for IMG format NED tiles
-# https://www.sciencebase.gov/catalog/items?fields=id,title,summary,body,tags,webLinks,dates,spatial&q=&filter=tags=National Elevation Dataset (NED) 1/9 arc-second&filter=spatialQuery=Polygon ((-95.26155638325938 40.07132704825149,-94.16292357075272 40.07132704825149,-94.16292357075272 40.594749211728654,-95.26155638325938 40.594749211728654,-95.26155638325938 40.07132704825149))&format=json
-NED_WS_URL = 'https://www.sciencebase.gov/catalog/items?fields=webLinks,spatial,title&q=&filter=tags=National Elevation Dataset (NED) %s&filter=tags=IMG&filter=spatialQuery=Polygon ((%s))&format=json&max=1000'
-SCIENCEBASE_ITEM_URL = 'https://www.sciencebase.gov/catalog/item/%s?format=json'
 
 # default file path (appended to default ulmo path)
 DEFAULT_FILE_PATH = 'usgs/ned/'
 
 layer_dict = {
-        'Alaska 2 arc-second': '2',
-        '1 arc-second': '1',
-        '1/3 arc-second': '13',
-        '1/9 arc-second': '19',
+        'Alaska 2 arc-second': '4f70aaece4b058caae3f8de9',
+        '1 arc-second': '4f70aa71e4b058caae3f8de1',
+        '1/3 arc-second': '4f70aa9fe4b058caae3f8de5',
+        '1/9 arc-second': '4f70aac4e4b058caae3f8de7',
     }
 
 # configure logging
@@ -57,41 +48,54 @@ def get_available_layers():
     return list(layer_dict.keys())
 
 
-def get_raster_availability(layer, bbox):
-    """retrieve metadata for raster tiles that cover the given bounding box 
-    for the specified data layer. 
+def get_raster_availability(layer, bbox=None):
+    """retrieve metadata for raster tiles that cover the given bounding box
+    for the specified data layer.
 
     Parameters
     ----------
     layer : str
         dataset layer name. (see get_available_layers for list)
     bbox : (sequence of float|str)
-        bounding box of in geographic coordinates of area to download tiles 
+        bounding box of in geographic coordinates of area to download tiles
         in the format (min longitude, min latitude, max longitude, max latitude)
-        
+
     Returns
     -------
     metadata : geojson FeatureCollection
         returns metadata including download urls as a FeatureCollection
     """
-    xmin, ymin, xmax, ymax = [float(n) for n in bbox]
-    polygon = ','.join([(repr(x) + ' ' + repr(y)) for x,y in [
-        (xmin, ymax),
-        (xmin, ymin), 
-        (xmax, ymin), 
-        (xmax, ymax), 
-        (xmin, ymax)]])
-    url = NED_WS_URL % (layer, polygon)
-    
+
+    base_url = 'https://www.sciencebase.gov/catalog/items'
+    params = [
+        ('parentId', layer_dict[layer]),
+        ('filter', 'tags=IMG'),
+        ('max', 1000),
+        ('fields', 'webLinks,spatial,title'),
+        ('format', 'json'),
+    ]
+
+    if bbox:
+        xmin, ymin, xmax, ymax = [float(n) for n in bbox]
+        polygon = 'POLYGON (({}))'.format(','.join([(repr(x) + ' ' + repr(y)) for x,y in [
+            (xmin, ymax),
+            (xmin, ymin),
+            (xmax, ymin),
+            (xmax, ymax),
+            (xmin, ymax)]]))
+        params.append(('filter', 'spatialQuery={{wkt:"{}",relation:"{}"}}'.format(polygon, 'intersects')))
+
     features = []
+    url = base_url
     while url:
-        print('retrieving raster availability from %s' % url)
-        r = requests.get(url)
+        r = requests.get(url, params)
+        print('retrieving raster availability from %s' % r.url)
+        params = []  # not needed after first request
         content = r.json()
         for item in content['items']:
-            feature = Feature(geometry=Polygon(_bbox2poly(item['spatial']['boundingBox'])), id=item['id'], 
+            feature = Feature(geometry=Polygon(_bbox2poly(item['spatial']['boundingBox'])), id=item['id'],
                         properties={
-                            'name': item['title'], 
+                            'name': item['title'],
                             'layer': layer,
                             'format': '.img',
                             'download url': [x for x in item['webLinks'] if x['type']=='download'][0]['uri']}
@@ -106,28 +110,28 @@ def get_raster_availability(layer, bbox):
     return FeatureCollection(features)
 
 
-def get_raster(layer, bbox, path=None, update_cache=False, 
+def get_raster(layer, bbox, path=None, update_cache=False,
                check_modified=False, mosaic=False):
-    """downloads National Elevation Dataset raster tiles that cover the given bounding box 
-    for the specified data layer. 
+    """downloads National Elevation Dataset raster tiles that cover the given bounding box
+    for the specified data layer.
 
     Parameters
     ----------
     layer : str
         dataset layer name. (see get_available_layers for list)
     bbox : (sequence of float|str)
-        bounding box of in geographic coordinates of area to download tiles 
+        bounding box of in geographic coordinates of area to download tiles
         in the format (min longitude, min latitude, max longitude, max latitude)
     path : ``None`` or path
         if ``None`` default path will be used
     update_cache: ``True`` or ``False`` (default)
         if ``False`` and output file already exists use it.
     check_modified: ``True`` or ``False`` (default)
-        if tile exists in path, check if newer file exists online and download if available.  
+        if tile exists in path, check if newer file exists online and download if available.
     mosaic: ``True`` or ``False`` (default)
         if ``True``, mosaic and clip downloaded tiles to the extents of the bbox provided. Requires
         rasterio package and GDAL.
-        
+
     Returns
     -------
     raster_tiles : geojson FeatureCollection
@@ -135,7 +139,7 @@ def get_raster(layer, bbox, path=None, update_cache=False,
     """
     _check_layer(layer)
 
-    raster_tiles = _download_tiles(get_raster_availability(layer, bbox), path=path, 
+    raster_tiles = _download_tiles(get_raster_availability(layer, bbox), path=path,
         check_modified=check_modified)
 
     if mosaic:
@@ -160,7 +164,7 @@ def _check_layer(layer):
     """
     make sure the passed layer name is one of the handled options
     """
-   
+
     if not layer in get_available_layers():
         err_msg = "The specified layer parameter ({})".format(layer)
         err_msg += "\nis not in the available options:"
@@ -228,7 +232,7 @@ def _update_file_index(filename):
         print('retrieving file index for NED layer - %s' % name)
         url = NED_FTP_URL.replace('<layer>', layer)
         index[name] = sorted([line for line in util.dir_list(url) if 'zip' in line])
-        
+
     with open(filename, 'wb') as outfile:
         json.dump(index, outfile)
         print('ned raster file index saved in %s' % filename)
@@ -278,4 +282,4 @@ def _download_tiles(tiles, path=None, check_modified=False):
         layer_path = os.path.join(path, layer_dict[metadata['layer']])
         tile['properties']['file'] = util.download_tiles(layer_path, metadata['download url'], metadata['format'], check_modified)[0]
 
-    return tiles  
+    return tiles
