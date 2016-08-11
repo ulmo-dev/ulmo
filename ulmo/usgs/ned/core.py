@@ -14,9 +14,7 @@ from __future__ import print_function
 from past.builtins import basestring
 
 from geojson import Feature, FeatureCollection, Polygon
-import json
 import logging
-import numpy as np
 import os
 import requests
 from ulmo import util
@@ -170,74 +168,6 @@ def _check_layer(layer):
         err_msg += "\nis not in the available options:"
         err_msg += "\n\t".join(get_available_layers())
         raise ValueError(err_msg)
-
-def _get_file_index(path=None, update_cache=False):
-    """Non webservice approach for caching file index
-
-    Experimental, not currently in use.
-    """
-    if path is None:
-        path = os.path.join(util.get_ulmo_dir(), DEFAULT_FILE_PATH)
-
-    filename = os.path.join(path, 'index.json')
-
-    if not os.path.exists(filename) or update_cache:
-        for dirname in layer_dict.values():
-            layer_path = os.path.join(path, dirname, 'zip')
-            if not os.path.exists(layer_path):
-                os.makedirs(layer_path)
-
-        _update_file_index(filename)
-
-    with open(filename) as f:
-        return json.load(f)
-
-
-def _get_tile_urls(layer, xmin, ymin, xmax, ymax, path=None):
-    """Non webservice approach to identify tile urls corresponding to the given layer and bounding box
-
-    Experimental, not currently in use.
-    """
-
-    base_url = NED_FTP_URL.replace('<layer>', layer_dict[layer])
-    file_index = _get_file_index(path=path)
-
-    if layer in ['1 arc-second', '1/3 arc-second', 'Alaska 2 arc-second']:
-        lats = np.arange(np.ceil(ymin), np.ceil(ymax)+1)
-        lons = np.arange(np.floor(xmin), np.floor(xmax)+1)
-        files = []
-        fmt_lat = lambda x: 's%0d' % np.abs(x) if x<0 else 'n%0d' % x
-        fmt_lon = lambda x: 'w%03d' % np.abs(x) if x<0 else 'e%03d' % x
-        fmt = '%s%s.zip'
-        for lat in lats:
-            for lon in lons:
-                files.append(fmt % (fmt_lat(lat), fmt_lon(lon)))
-
-        available_files = list(set(file_index[layer]).intersection(set(files)))
-
-        urls = [base_url + filename for filename in available_files]
-        return sorted(urls)
-
-    if layer=='1/9 arc-second':
-        raise NotImplementedError("1/9 arc-second NED local tile determination not implemented yet")
-
-
-def _update_file_index(filename):
-    """ Non webservice approach for caching file index
-
-    Experimental, not currently in use.
-    """
-    index = {}
-    for name, layer in layer_dict.items():
-        print('retrieving file index for NED layer - %s' % name)
-        url = NED_FTP_URL.replace('<layer>', layer)
-        index[name] = sorted([line for line in util.dir_list(url) if 'zip' in line])
-
-    with open(filename, 'wb') as outfile:
-        json.dump(index, outfile)
-        print('ned raster file index saved in %s' % filename)
-
-    return filename
 
 
 def _download_features(feature_ids, path=None, check_modified=False,):
