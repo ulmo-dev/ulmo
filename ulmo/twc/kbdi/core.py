@@ -17,6 +17,7 @@ import pandas
 
 from ulmo import util
 
+CSV_SWITCHOVER = pandas.tslib.Timestamp('2016-10-01')
 
 def get_data(county=None, start=None, end=None, as_dataframe=False, data_dir=None):
     """Retreives data.
@@ -92,9 +93,15 @@ def _as_data_dict(df):
 
 
 def _date_dataframe(date, data_dir):
-    url = _get_data_url(date)
-    with _open_data_file(url, data_dir) as data_file:
-        date_df = _parse_data_file(data_file)
+
+    if date.to_timestamp() < CSV_SWITCHOVER:
+        url = _get_data_url(date)
+        with _open_data_file(url, data_dir) as data_file:
+            date_df = _parse_data_file(data_file)
+    else:
+        url = _get_csv_url(date)
+        with _open_data_file(url, data_dir) as data_file:
+            date_df = _parse_csv_file(data_file)
 
     date_df['date'] = pandas.Period(date, freq='D')
 
@@ -371,6 +378,8 @@ def _fips_dataframe():
 def _get_data_url(date):
     return 'http://twc.tamu.edu/weather_images/summ/summ%s.txt' % date.strftime('%Y%m%d')
 
+def _get_csv_url(date):
+    return 'http://twc.tamu.edu/weather_images/summ/summ%s.csv' % date.strftime('%Y%m%d')
 
 def _parse_data_file(data_file):
     """
@@ -395,6 +404,20 @@ def _parse_data_file(data_file):
     dataframe = pandas.DataFrame(data_array)
     return dataframe
 
+def _parse_csv_file(data_file):
+    """
+    example:
+        County,Min,Max,Average,Change
+        Anderson,429,684,559,+5
+        Andrews,92,356,168,+7
+    """
+    dataframe = pandas.read_csv(data_file)
+    dataframe.columns = dataframe.columns.str.lower()
+    dataframe = dataframe.rename(columns={'average':'avg'})
+    dataframe.county = dataframe.county.str.upper()
+    dataframe = dataframe[['county','avg','max','min']]
+
+    return dataframe
 
 def _open_data_file(url, data_dir):
     """returns an open file handle for a data file; downloading if necessary or
