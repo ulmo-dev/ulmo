@@ -95,9 +95,9 @@ def _as_data_dict(df):
 def _date_dataframe(date, data_dir):
 
     if date.to_timestamp() < CSV_SWITCHOVER:
-        url = _get_data_url(date)
+        url = _get_text_url(date)
         with _open_data_file(url, data_dir) as data_file:
-            date_df = _parse_data_file(data_file)
+            date_df = _parse_text_file(data_file)
     else:
         url = _get_csv_url(date)
         with _open_data_file(url, data_dir) as data_file:
@@ -375,13 +375,13 @@ def _fips_dataframe():
     return df
 
 
-def _get_data_url(date):
+def _get_text_url(date):
     return 'http://twc.tamu.edu/weather_images/summ/summ%s.txt' % date.strftime('%Y%m%d')
 
 def _get_csv_url(date):
     return 'http://twc.tamu.edu/weather_images/summ/summ%s.csv' % date.strftime('%Y%m%d')
 
-def _parse_data_file(data_file):
+def _parse_text_file(data_file):
     """
     example:
         COUNTY                        KBDI_AVG   KBDI_MAX    KBDI_MIN
