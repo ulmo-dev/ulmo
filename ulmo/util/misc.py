@@ -63,8 +63,9 @@ def dir_list(url):
 
 
 def dict_from_dataframe(dataframe):
-    if isinstance(dataframe.index, pandas.PeriodIndex)\
-            or isinstance(dataframe.index, pandas.DatetimeIndex):
+    if isinstance(dataframe.index, pandas.PeriodIndex):
+        dataframe.index = dataframe.index.to_timestamp().astype('str')
+    if isinstance(dataframe.index, pandas.DatetimeIndex):
         dataframe.index = [str(i) for i in dataframe.index]
 
     # convert np.nan objects to None objects; prior to pandas 0.13.0 this could
@@ -76,10 +77,7 @@ def dict_from_dataframe(dataframe):
             dataframe[column_name][pandas.isnull(dataframe[column_name])] = None
         df_dict = dataframe.T.to_dict()
     else:
-        df_dict = dict([
-            (k, _nans_to_nones(v))
-            for k, v in dataframe.T.to_dict().items()
-        ])
+        df_dict = dataframe.where((pandas.notnull(dataframe)), None).to_dict(orient='index')
 
     return df_dict
 
