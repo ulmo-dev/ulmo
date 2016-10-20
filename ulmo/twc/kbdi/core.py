@@ -398,6 +398,10 @@ def _parse_text_file(data_file):
         ('min', 'i4'),
     ]
 
+    if not data_file.readline().lower().startswith('county'):
+        return pandas.DataFrame()
+    data_file.seek(0)
+
     data_array = np.genfromtxt(
         data_file, delimiter=[31, 11, 11, 11], dtype=dtype, skip_header=2,
         skip_footer=1, autostrip=True)
@@ -411,6 +415,11 @@ def _parse_csv_file(data_file):
         Anderson,429,684,559,+5
         Andrews,92,356,168,+7
     """
+
+    if not data_file.readline().lower().startswith('county'):
+        return pandas.DataFrame()
+    data_file.seek(0)
+
     dataframe = pandas.read_csv(data_file)
     dataframe.columns = dataframe.columns.str.lower()
     dataframe = dataframe.rename(columns={'average':'avg'})
