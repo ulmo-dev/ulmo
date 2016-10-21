@@ -398,7 +398,7 @@ def _parse_text_file(data_file):
         ('min', 'i4'),
     ]
 
-    if not data_file.readline().lower().startswith('county'):
+    if not data_file.readline().lower().startswith(b'county'):
         return pandas.DataFrame()
     data_file.seek(0)
 
@@ -416,7 +416,7 @@ def _parse_csv_file(data_file):
         Andrews,92,356,168,+7
     """
 
-    if not data_file.readline().lower().startswith('county'):
+    if not data_file.readline().lower().startswith(b'county'):
         return pandas.DataFrame()
     data_file.seek(0)
 
