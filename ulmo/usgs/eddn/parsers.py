@@ -2,17 +2,17 @@ from datetime import timedelta
 import pandas as pd
 
 
-def twdb_dot(dataframe, drop_dcp_metadata=True):
+def twdb_dot(df_row, drop_dcp_metadata=True):
     """Parser for twdb DOT dataloggers."""
-    return _twdb_stevens_or_dot(dataframe, reverse=False, drop_dcp_metadata=drop_dcp_metadata)
+    return _twdb_stevens_or_dot(df_row, reverse=False, drop_dcp_metadata=drop_dcp_metadata)
 
 
-def twdb_stevens(dataframe, drop_dcp_metadata=True):
+def twdb_stevens(df_row, drop_dcp_metadata=True):
     """Parser for twdb stevens dataloggers."""
-    return _twdb_stevens_or_dot(dataframe, reverse=True, drop_dcp_metadata=drop_dcp_metadata)
+    return _twdb_stevens_or_dot(df_row, reverse=True, drop_dcp_metadata=drop_dcp_metadata)
 
 
-def twdb_sutron(dataframe, drop_dcp_metadata=True):
+def twdb_sutron(df_row, drop_dcp_metadata=True):
     """Parser for twdb sutron dataloggers.
     Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour
     for the previous 12 hours and one battery voltage measurement for the current hour
@@ -27,8 +27,8 @@ def twdb_sutron(dataframe, drop_dcp_metadata=True):
     '"\r\n// \r\n// \r\n// \r\n// \r\n// \r\n-199.88 \r\n-199.92 \r\n-199.96 \r\n-199.98 \r\n-200.05 \r\n-200.09 \r\n-200.15'
     '":Sense01 60 #60 M M M M M M M M M M M M :BL 12.65'
     """
-    message = dataframe['dcp_message'].lower()
-    message_timestamp = dataframe['message_timestamp_utc']
+    message = df_row['dcp_message'].lower()
+    message_timestamp = df_row['message_timestamp_utc']
 
     lines = message.strip('":').split(':')
     if len(lines) == 1:
@@ -47,8 +47,8 @@ def twdb_sutron(dataframe, drop_dcp_metadata=True):
         df = pd.concat(data)
 
     if not drop_dcp_metadata:
-        for col in dataframe.index:
-            df[col] = dataframe[col]
+        for col in df_row.index:
+            df[col] = df_row[col]
 
     return df
 
@@ -107,7 +107,7 @@ def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, r
         return pd.DataFrame()
 
 
-def _twdb_stevens_or_dot(dataframe, reverse, drop_dcp_metadata=True):
+def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     """Parser for twdb stevens and DOT dataloggers - the only difference being
     that with stevens dataloggers, water level data needs to be reversed to be
     correctly interpretted.
@@ -122,8 +122,8 @@ def _twdb_stevens_or_dot(dataframe, reverse, drop_dcp_metadata=True):
     '"BV:12.2  Channel:5 Time:43 +441.48 +443.25 +440.23 +440.67 +441.26 +441.85 +442.66 +443.84 +445.24 +442.15 +442.88 +443.91 '
     '"BV:12.6  Channel:5 Time:28 +304.63 +304.63 +304.63 +304.56 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.71 Channel:6 Time:28 +310.51 +310.66 +310.59 +310.51 +310.51 +310.59 +310.59 +310.51 +310.66 +310.51 +310.66 +310.59 '
     """
-    message = dataframe['dcp_message'].lower()
-    message_timestamp = dataframe['message_timestamp_utc']
+    message = df_row['dcp_message'].lower()
+    message_timestamp = df_row['message_timestamp_utc']
 
     fields = message.split()
     battery_voltage = fields[0].split(':')[-1]
@@ -150,7 +150,7 @@ def _twdb_stevens_or_dot(dataframe, reverse, drop_dcp_metadata=True):
     df = pd.concat(df)
 
     if not drop_dcp_metadata:
-        for col in dataframe.index:
-            df[col] = dataframe[col]
+        for col in df_row.index:
+            df[col] = df_row[col]
 
     return df
