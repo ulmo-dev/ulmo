@@ -228,7 +228,7 @@ def _fetch_url(params):
     r = requests.get(EDDN_URL, params=params)
     log.info('data requested using url: %s\n' % r.url)
     soup = BeautifulSoup(r.text)
-    message = soup.find('pre').contents[0].strip('\n')
+    message = soup.find('pre').contents[0].replace('\n', '').replace('\r', ' ')
 
     data_limit_reached = False
     if 'Max data limit reached' in message:
