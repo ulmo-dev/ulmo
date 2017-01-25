@@ -149,12 +149,14 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
             df.append(data)
     else:
         fields = message.lstrip().replace(': ', ':').split()
+        print fields
         water_levels = [_parse_value(field.strip(fmt).lstrip()) for field in fields]
         if len(water_levels) and isinstance(water_levels[0], tuple):
             wells = list(set([val[0] for val in water_levels]))
             combined = pd.DataFrame()
             for well in wells:
-                values = [val[1] for val in water_levels if val[0] == well]
+                values = [val[1] for val in water_levels
+                          if isinstance(val, tuple) and val[0] == well]
                 data = _twdb_assemble_dataframe(
                     message_timestamp, battery_voltage, values, reverse=reverse)
                 data.rename(columns={'water_level': 'water_level_' + well},
@@ -181,9 +183,8 @@ def _parse_value(water_level_str):
         if well_val[1] == '':
             val = pd.np.nan
         else:
-            val = well_val[1]
+            val = well_val[1].strip('-')
         value_dict = (well_val[0], val)
         return value_dict
     else:
         return water_level_str
-
