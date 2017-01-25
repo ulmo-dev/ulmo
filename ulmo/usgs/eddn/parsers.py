@@ -126,8 +126,14 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     message_timestamp = df_row['message_timestamp_utc']
 
     fields = message.split()
-    battery_voltage = fields[0].split(':')[-1]
-    message = ' '.join(fields[1:])
+    if 'bv' in fields[0].split(':')[-1]:
+        battery_voltage = fields[0].split(':')[-1]
+        message = ' '.join(fields[1:])
+
+    else:
+        battery_voltage = None
+        message = ' '.join(fields)
+
     fmt = '$+-"\x7f '
 
     df = []
@@ -142,7 +148,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
             data['time'] = msg_time
             df.append(data)
     else:
-        fields = message.replace(': ', ':').split()
+        fields = message.lstrip().replace(': ', ':').split()
         water_levels = [_parse_value(field.strip(fmt).lstrip()) for field in fields]
         if len(water_levels) and isinstance(water_levels[0], tuple):
             wells = list(set([val[0] for val in water_levels]))
@@ -153,7 +159,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
                     message_timestamp, battery_voltage, values, reverse=reverse)
                 data.rename(columns={'water_level': 'water_level_' + well},
                             inplace=True)
-                combined = pd.concat([combined, data], axis=1)
+                combined = pd.concat([combined, data], axis=1).T.drop_duplicates().T
             df.append(combined)
         else:
             data = _twdb_assemble_dataframe(message_timestamp, battery_voltage,
@@ -172,7 +178,11 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
 def _parse_value(water_level_str):
     well_val = water_level_str.split(':')
     if len(water_level_str.split(':')) == 2:
-        value_dict = (well_val[0], well_val[1])
+        if well_val[1] == '':
+            val = pd.np.nan
+        else:
+            val = well_val[1]
+        value_dict = (well_val[0], val)
         return value_dict
     else:
         return water_level_str
