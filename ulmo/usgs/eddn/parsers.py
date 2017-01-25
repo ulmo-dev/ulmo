@@ -126,7 +126,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     message_timestamp = df_row['message_timestamp_utc']
 
     fields = message.split()
-    if 'bv' in fields[0].split(':')[-1]:
+    if 'bv' in fields[0]:
         battery_voltage = fields[0].split(':')[-1]
         message = ' '.join(fields[1:])
 
