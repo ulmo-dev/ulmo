@@ -73,6 +73,7 @@ def decode(dataframe, parser, **kwargs):
     df = []
     for timestamp, data in dataframe.iterrows():
         parsed = parser(data, **kwargs)
+        parsed.dropna(how='all', inplace=True)
         if not parsed.empty:
             df.append(parsed)
 
