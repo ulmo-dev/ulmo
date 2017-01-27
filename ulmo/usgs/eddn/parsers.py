@@ -124,7 +124,6 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     """
     message = df_row['dcp_message'].lower()
     message_timestamp = df_row['message_timestamp_utc']
-
     fields = message.split()
     if 'bv' in fields[0]:
         battery_voltage = fields[0].split(':')[-1]
@@ -148,8 +147,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
             data['time'] = msg_time
             df.append(data)
     else:
-        fields = message.lstrip().replace(': ', ':').split()
-        print fields
+        fields = message.strip(fmt).lstrip().replace(': ', ':').split()
         water_levels = [_parse_value(field.strip(fmt).lstrip()) for field in fields]
         if len(water_levels) and isinstance(water_levels[0], tuple):
             wells = list(set([val[0] for val in water_levels]))
