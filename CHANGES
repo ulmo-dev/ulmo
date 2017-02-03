@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+**0.8.4 (release 2017-02-03)**
+
+- added stevens dual well parser for eddn service
+- bugfixes for twc-kbdi service
+- optimize dict to dataframe conversion. This speeds up ncdc-ghcn by 10x
+
 **0.8.3.2 (released 2016-08-12)**
 
 - Fixed USGS NED services. Server changed spatial query format.
