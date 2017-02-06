@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-**0.8.4 (release 2017-02-03)**
+**0.8.4 (release 2017-02-06)**
 
 - added stevens dual well parser for eddn service
 - bugfixes for twc-kbdi service
