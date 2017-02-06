@@ -43,7 +43,7 @@ def test_get_raster():
 		zip_url: 'n61w150.zip',
 	}
 
-	test_file = test_util.get_test_file_path('usgs/ned/n61w150.img')
+	test_file = test_util.get_test_file_path('usgs/ned/USGS_NED_2_n61w150_IMG.img')
 	with test_util.temp_dir() as data_dir:
 		#with test_util.mocked_urls(url_files):
 		locs = ulmo.usgs.ned.get_raster(layer, bbox, path=data_dir)
