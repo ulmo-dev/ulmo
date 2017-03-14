@@ -78,7 +78,6 @@ STATE_CODES = {
     'WY': 48,
 }
 
-
 def get_data(state=None, climate_division=None, start=None, end=None,
              as_dataframe=False):
     """Retreives data.
@@ -134,10 +133,10 @@ def get_data(state=None, climate_division=None, start=None, end=None,
 
     data = None
     for year in range(start_year, end_year + 1):
-        url = _get_data_url(year)
+        url, current_year_flag = _get_data_url(year)
         format_type = _get_data_format(year)
         with _open_data_file(url) as data_file:
-            year_data = _parse_data_file(data_file, format_type, year)
+            year_data = _parse_data_file(data_file, format_type, year, current_year_flag)
 
         if state_code:
             year_data = year_data[year_data['state_code'] == state_code]
@@ -238,18 +237,20 @@ def _get_data_format(year):
 def _get_data_url(year):
     current_year, current_week = _week_number(datetime.date.today())
     if year == current_year:
-        return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data'
+        return ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data', True)
     elif year == current_year - 1:
-        url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:]
-        if not _url_exists(url):
-            url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data'
+        url = ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:],
+                False)
+        if not _url_exists(url[0]):
+            url = ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data', True)
         return url
     elif year <= 1985:
-        return 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer73-85'
+        return ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer73-85', False)
     else:
-        url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s' % str(year)[-2:]
-        if not _url_exists(url):
-            url = 'http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:]
+        url = ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s' % str(year)[-2:], False)
+        if not _url_exists(url[0]):
+            url = ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:],
+                    False)
         return url
 
 
@@ -260,7 +261,7 @@ def _open_data_file(url):
     return util.open_file_for_url(url, file_path, check_modified=True, use_bytes=True)
 
 
-def _parse_data_file(data_file, palmer_format, year):
+def _parse_data_file(data_file, palmer_format, year, current_year_flag):
     """
     based on the fortran format strings:
         format2: FORMAT(I4,3I2,F4.1,F4.0,10F6.2,4F6.4,F6.3,10F6.2,F4.0,12F6.2)
@@ -296,7 +297,8 @@ def _parse_data_file(data_file, palmer_format, year):
 
     decodef = lambda x: x.decode("utf-8")
     data_array = np.genfromtxt(data_file, dtype=dtype, delimiter=delim_sequence, usecols=use_columns)
-    data_array['year'] = year
+    if not current_year_flag:
+        data_array['year'] = year
     dataframe = pandas.DataFrame(data_array)
     return dataframe
 
