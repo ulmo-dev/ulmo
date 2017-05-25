@@ -1,0 +1,52 @@
+package:
+  name: ulmo
+  version: {{ environ.get('GIT_DESCRIBE_TAG', 'notag') }}
+
+source:
+  path: ..
+
+build:
+  number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0)|int }}
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - appdirs
+    - beautifulsoup4
+    - earthio
+    - freezegun
+    - future
+    - geojson
+    - html5lib <=0.9999999
+    - httpretty <=0.8.10
+    - isodate
+    - lxml
+    - mock
+    - numpy
+    - pandas
+    - pytables
+    - pytest
+    - requests
+    - suds-jurko
+
+  run:
+    - appdirs
+    - beautifulsoup4
+    - earthio
+    - freezegun
+    - future
+    - geojson
+    - html5lib <=0.9999999
+    - httpretty <=0.8.10
+    - isodate
+    - lxml
+    - mock
+    - numpy
+    - pandas
+    - pytables
+    - pytest
+    - python >=3.4
+    - requests
+    - suds-jurko
+
