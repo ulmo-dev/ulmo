@@ -193,7 +193,7 @@ def get_data(
     if not new_data.empty:
         new_data.index = new_data.message_timestamp_utc
         data = new_data.combine_first(data)
-        data.sort(inplace=True)
+        data.sort_index(inplace=True)
 
         if use_cache:
             #write to a tmp file and move to avoid ballooning h5 file
