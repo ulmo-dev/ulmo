@@ -151,7 +151,7 @@ def get_data(state=None, climate_division=None, start=None, end=None,
         else:
             # some data are duplicated (e.g. final data from 2011 stretches into
             # prelim data of 2012), so just take those that are new
-            append_index = year_data.index - data.index
+            append_index = year_data.index.difference(data.index)
             if len(append_index):
                 data = data.append(year_data.ix[append_index])
 
