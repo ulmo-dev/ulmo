@@ -285,6 +285,6 @@ def _assert(test_set, columns, parser):
         for channel in pd.np.unique(df['channel']):
             df_c = df[df['channel']==channel]
             expected_c = expected[expected['channel']==channel]
-            assert_frame_equal(df_c.sort(axis=1).sort(axis=0), expected_c.sort(axis=1).sort(axis=0))
+            assert_frame_equal(df_c.sort_index(axis=1).sort_index(axis=0), expected_c.sort_index(axis=1).sort_index(axis=0))
     else:
-        assert_frame_equal(df.sort(axis=1).sort(axis=0), expected.sort(axis=1).sort(axis=0))
+        assert_frame_equal(df.sort_index(axis=1).sort_index(axis=0), expected.sort_index(axis=1).sort_index(axis=0))

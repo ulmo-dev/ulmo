@@ -63,7 +63,7 @@ def get_data(county=None, start=None, end=None, as_dataframe=False, data_dir=Non
     if data_dir is None:
         data_dir = os.path.join(util.get_ulmo_dir(), 'twc/kbdi')
 
-    df = pandas.tools.merge.concat([
+    df = pandas.concat([
         _date_dataframe(date, data_dir)
         for date in pandas.period_range(start_date, end_date, freq='D')
     ], ignore_index=True)
