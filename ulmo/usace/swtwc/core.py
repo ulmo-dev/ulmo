@@ -68,6 +68,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
     filename = '%s.%s.html'% (station_code, date_str)
     data_url = 'http://www.swt-wc.usace.army.mil/webdata/gagedata/' + filename
+    print data_url
     path = os.path.join(USACE_SWTWC_DIR, filename)
 
     with util.open_file_for_url(data_url, path) as f:
@@ -90,6 +91,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
     second_line = sio.readline()
     station_dict['station_type'] = second_line.strip().split(':')[1].strip()
+    print station_dict
 
     notes = []
 
@@ -103,9 +105,9 @@ def get_station_data(station_code, date=None, as_dataframe=False):
     if len(notes):
         station_dict['notes'] = '\n'.join(notes)
 
-    variable_names = _split_line(sio.readline()[15:], 10)
-    variable_units = _split_line(sio.readline()[15:], 10)
-    variable_sources = _split_line(sio.readline()[15:], 10)
+    variable_names = _split_line(sio.readline()[11:], 10)
+    variable_units = _split_line(sio.readline()[11:], 10)
+    variable_sources = _split_line(sio.readline()[11:], 10)
 
     station_dict['variables'] = dict([
         (name, {'unit': unit, 'source': source})
@@ -115,7 +117,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
     station_dict['timezone'] = sio.readline().strip().strip('()')
     column_names = ['datetime'] + variable_names
-    widths = [15] + ([10] * len(variable_names))
+    widths = [14] + ([10] * len(variable_names))
     converters = dict([
         (variable_name, lambda x: float(x) if x != '----' else np.nan)
         for variable_name in variable_names
