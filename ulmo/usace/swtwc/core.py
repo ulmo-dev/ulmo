@@ -68,7 +68,6 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
     filename = '%s.%s.html'% (station_code, date_str)
     data_url = 'http://www.swt-wc.usace.army.mil/webdata/gagedata/' + filename
-    print data_url
     path = os.path.join(USACE_SWTWC_DIR, filename)
 
     with util.open_file_for_url(data_url, path) as f:
