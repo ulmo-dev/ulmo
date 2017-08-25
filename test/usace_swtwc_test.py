@@ -21,26 +21,27 @@ def test_get_stations():
 
 def test_get_station_data():
     test_station_data = [
-        ('MYST2', '2013-02-18', {
-            'code': 'MYST2',
-            'description': 'Pat Mayse Lake',
-            'station_type': 'RESERVOIR',
-            'timezone': 'Cen',
+        ('DSNT2', '2017-07-25', {
+            'code': 'DSNT2',
+            'description': 'Lake Texoma, Denison Dam',
+            'station_type': 'Reservoir',
+            'timezone': 'US/Central',
             'values': {
-                '2013-02-18 01:00:00': {
-                    'AIR-TEMP': 55.2,
-                    'BAT-LOAD': 12.83,
-                    'ELEVATION': 447.0,
-                    'INFLOW': 9.0,
+                '2017-07-25 01:00:00': {
+                    'AIR-TEMP': 80.10,
+                    'BAT-LOAD': 11.37,
+                    'ELEVATION': 617.73,
+                    'INFLOW': 564,
                     'PRECIP': 0.0,
-                    'PRECIP(2)': 0.0,
-                    'REL-HUMID': 56.37,
-                    'RELEASE': 0.0,
+                    'PRECIP(A)': 0.0,
+                    'REL-HUMID': 81.98,
+                    'RELEASE': 19,
                     'SOLAR-RAD': 0.0,
-                    'STORAGE': 96402.0,
-                    'VOLTAGE': 12.99,
-                    'WIND-DIR': 173.0,
-                    'WIND-SPEED': 18.02
+                    'STORAGE': 2572324.0,
+                    'VOLTAGE': 11.77,
+                    'WIND-DIR': 135.90,
+                    'WIND-SPEED': 1.42,
+                    'TW-ELEV': 501.87
                 },
             },
         }),
@@ -64,9 +65,9 @@ def test_get_station_data_current():
     # can't easily test current since it is a moving target changes, but mostly
     # just make sure it parses correctl: current will have '---' values where
     # previous days do not
-    data_file = 'usace/swtwc/MYST2.current.html'
+    data_file = 'usace/swtwc/DSNT2.current.html'
     with test_util.mocked_urls(data_file):
-        station_data = ulmo.usace.swtwc.get_station_data('MYST2')
+        station_data = ulmo.usace.swtwc.get_station_data('DSNT2')
     assert len(station_data.get('values')) > 0
 
 
