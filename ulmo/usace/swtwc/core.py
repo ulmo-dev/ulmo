@@ -90,7 +90,6 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
     second_line = sio.readline()
     station_dict['station_type'] = second_line.strip().split(':')[1].strip()
-    print station_dict
 
     notes = []
 
