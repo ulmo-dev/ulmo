@@ -27,6 +27,44 @@ NCDC_GSOD_DIR = os.path.join(util.get_ulmo_dir(), 'ncdc/gsod')
 NCDC_GSOD_STATIONS_FILE = os.path.join(NCDC_GSOD_DIR, 'isd-history.csv')
 NCDC_GSOD_START_DATE = datetime.date(1929, 1, 1)
 
+def get_parameters():
+    """
+    retrieve a list of parameter codes available.
+    Reference for GSOD parameters : https://www1.ncdc.noaa.gov/pub/data/gsod/readme.txt
+
+    Parameters
+    ----------
+        None
+
+    Returns
+    -------
+        dictionary of variables with parameter codes as keys
+        and GSOD codes as values.
+    """
+
+    VARIABLES = {'mean_temp' : 'TEMP',
+                'mean_temp_count' : 'TEMP',
+                'dew_point' : 'DEWP',
+                'dew_point_count' : 'DEWP',
+                'sea_level_pressure' : 'SLP     ',
+                'sea_level_pressure_count' : 'SLP     ',
+                'station_pressure' : 'STP',
+                'station_pressure_count' : 'STP',
+                'visibility' : 'VISIB',
+                'visibility_count' : 'VISIB',
+                'mean_wind_speed' : 'WDSP',
+                'mean_wind_speed_count' : 'WDSP',
+                'max_wind_speed' : 'MXSPD',
+                'max_gust' : 'GUST',
+                'max_temp' : 'MAX',
+                'max_temp_flag' : 'MAX',
+                'min_temp' : 'MIN',
+                'min_temp_flag' : 'MIN',
+                'precip' : 'PRCP',
+                'precip_flag' : 'PRCP',
+                'snow_depth' : 'SNDP',
+                'FRSHTT' : 'FRSHTT'}
+        return VARIABLES
 
 def get_data(station_codes, start=None, end=None, parameters=None):
     """Retrieves data for a set of stations.
