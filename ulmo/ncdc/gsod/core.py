@@ -64,7 +64,7 @@ def get_parameters():
                 'precip_flag' : 'PRCP',
                 'snow_depth' : 'SNDP',
                 'FRSHTT' : 'FRSHTT'}
-        return VARIABLES
+    return VARIABLES
 
 def get_data(station_codes, start=None, end=None, parameters=None):
     """Retrieves data for a set of stations.
