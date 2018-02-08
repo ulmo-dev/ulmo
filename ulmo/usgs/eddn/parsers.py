@@ -7,6 +7,22 @@ def twdb_dot(df_row, drop_dcp_metadata=True):
     return _twdb_stevens_or_dot(df_row, reverse=False, drop_dcp_metadata=drop_dcp_metadata)
 
 
+def twdb_fts(df_row, drop_dcp_metadata=True):
+    """Parser for twdb fts dataloggers
+
+    format examples:
+    C510D20018036133614G39-0NN170WXW00097  :WL 31 #60 -72.91 -72.89 -72.89 -72.89 -72.91 -72.92 -72.93 -72.96 -72.99 -72.97 -72.95 -72.95
+    """
+
+    message = df_row['dcp_message'].lower()
+    message_timestamp = df_row['message_timestamp_utc']
+
+    lines = message.split(':')[1]
+    water_levels = [field.strip('+- ') for field in lines.split()[3:]]
+    df = _twdb_assemble_dataframe(message_timestamp, None, water_levels, reverse=False)
+    return df
+
+
 def twdb_stevens(df_row, drop_dcp_metadata=True):
     """Parser for twdb stevens dataloggers."""
     return _twdb_stevens_or_dot(df_row, reverse=True, drop_dcp_metadata=drop_dcp_metadata)
@@ -29,7 +45,6 @@ def twdb_sutron(df_row, drop_dcp_metadata=True):
     """
     message = df_row['dcp_message'].lower()
     message_timestamp = df_row['message_timestamp_utc']
-
     lines = message.strip('":').split(':')
     if len(lines) == 1:
         water_levels = [field.strip('+- ') for field in lines[0].split()]
