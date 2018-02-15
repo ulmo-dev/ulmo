@@ -19,7 +19,8 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
 
     lines = message.split(':')[1]
     water_levels = [field.strip('+- ') for field in lines.split()[3:]]
-    df = _twdb_assemble_dataframe(message_timestamp, None, water_levels, reverse=False)
+    df = _twdb_assemble_dataframe(message_timestamp, None, water_levels,
+                                  reverse=False)
     return df
 
 
@@ -137,9 +138,9 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     '"BV:12.2  Channel:5 Time:43 +441.48 +443.25 +440.23 +440.67 +441.26 +441.85 +442.66 +443.84 +445.24 +442.15 +442.88 +443.91 '
     '"BV:12.6  Channel:5 Time:28 +304.63 +304.63 +304.63 +304.56 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.71 Channel:6 Time:28 +310.51 +310.66 +310.59 +310.51 +310.51 +310.59 +310.59 +310.51 +310.66 +310.51 +310.66 +310.59 '
     """
-    message = df_row['dcp_message'].lower()
+    message = df_row['dcp_message'].strip().lower()
     message_timestamp = df_row['message_timestamp_utc']
-    fields = message.split()
+    fields = message.strip().split()
     if 'bv' in fields[0]:
         battery_voltage = fields[0].split(':')[-1]
         message = ' '.join(fields[1:])
