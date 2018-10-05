@@ -23,7 +23,7 @@ dependencies:
     - lxml
     - mock
     - numpy
-    - pandas
+    - pandas<=0.22.0
     - pytables
     - pytest
     - requests
