@@ -30,10 +30,11 @@ dependencies:
     - suds-jurko
     - freezegun
     - html5lib<=0.9999999
-    - pip:
-        - httpretty<=0.8.10
 
     # test dependencies
     - pytest-runner
     - pytest-cov
     - coveralls
+
+    - pip:
+        - httpretty<=0.8.10
