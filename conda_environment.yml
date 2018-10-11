@@ -1,20 +1,20 @@
-# conda environment file for python 2, includes packages needed for testing
+# conda environment file for python 3, includes packages needed for testing
 # create a conda virtual env using:
-#   conda env create -n myenv --file py2_conda_environment.yml
+#   conda env create -n myenv --file py3_conda_environment.yml
 #   source activate myenv (use 'activate myenv' on windows)
 #   python setup.py develop
 #
 # optionally run tests:
 #   python setup.py test
 
-name: py2-ulmo
+name: py3-ulmo
 
 channels:
     - conda-forge
     - defaults
 
 dependencies:
-    - python=2.7
+    - python>=3.4
     - appdirs
     - beautifulsoup4
     - future
@@ -23,11 +23,18 @@ dependencies:
     - lxml
     - mock
     - numpy
-    - pandas
+    - pandas<=0.22.0
     - pytables
     - pytest
     - requests
     - suds-jurko
     - freezegun
-    - httpretty
     - html5lib<=0.9999999
+
+    # test dependencies
+    - pytest-runner
+    - pytest-cov
+    - coveralls
+
+    - pip:
+        - httpretty<=0.8.10
