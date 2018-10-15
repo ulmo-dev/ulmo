@@ -34,8 +34,37 @@ def version():
 __version__ = version()
 
 
-with open('requirements.txt') as f:
-    required = f.read().splitlines()
+def parse_requirement(requirement, excludes):
+    lib = requirement.strip().split('#')[0]  # strip new lines and comments
+    if lib:
+        lib_name = re.split(r'[[<>=! ]+', lib)[0]
+        if lib_name in excludes:
+            return ''
+        return lib.strip()
+    return ''
+
+
+def load_requirements(excludes=None):
+    if excludes is None:
+      excludes = []
+    requirements = []
+    with open('requirements.txt') as requirements_file:
+        line = requirements_file.readline()
+        while line:
+            line = line.strip()
+            while line.endswith('\\'):
+                line += requirements_file.readline().strip()
+            line = ' '.join(line.split('\\'))
+            requirement = parse_requirement(line, excludes)
+            if requirement:
+                requirements.append(requirement)
+            line = requirements_file.readline()
+    return requirements
+
+
+excludes = ['pytest']
+required = load_requirements(excludes)
+
 
 setup(
     name='ulmo',
