@@ -239,6 +239,7 @@ def _parse_metadata(values_element, metadata_elements, namespace):
             collection_dict = dict([
                 (item[key], item)
                 for item in collection
+                if key in item
             ])
             metadata[collection_name] = collection_dict
     return metadata
