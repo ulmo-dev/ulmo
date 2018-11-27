@@ -92,7 +92,9 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
 
         # here we're just using pandas' builtin resample logic to construct a daily
         # index for the timespan
-        daily_index = element_df.resample('D').index.copy()
+        # 2018/11/27 johanneshorak: hotfix to get ncdc ghcn_daily working again
+        # new resample syntax requires resample method to generate resampled index.
+        daily_index = element_df.resample('D').sum().index.copy()
 
         # XXX: hackish; pandas support for this sort of thing will probably be
         # added soon
