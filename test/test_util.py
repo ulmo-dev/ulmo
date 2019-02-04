@@ -64,7 +64,10 @@ def mocked_urls(url_files, methods=None):
         HTTP methods that will be mocked. If set to None (default) then the
         default methods are GET, POST and HEAD.
     """
-    if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
+    # if environment variable is set, then mock the tests otherwise just grab files
+    # over the network. Example:
+    #    env ULMO_MOCK_TESTS=1 py.test
+    if not os.environ.get('ULMO_MOCK_TESTS', False):
         yield
 
     else:
