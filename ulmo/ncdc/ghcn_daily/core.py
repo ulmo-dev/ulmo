@@ -191,7 +191,6 @@ def get_stations(country=None, state=None, elements=None, start_year=None,
 
     # set station id and index by it
     stations['id'] = stations[['country', 'network', 'network_id']].T.apply(''.join)
-    stations = stations.set_index('id', drop=False)
 
     if not elements is None or not start_year is None or not end_year is None:
         inventory = _get_inventory(update=update)
@@ -212,7 +211,8 @@ def get_stations(country=None, state=None, elements=None, start_year=None,
         ids = pandas.DataFrame(uniques, index=uniques, columns=['id'])
         stations = pandas.merge(stations, ids).set_index('id', drop=False)
 
-    # wm_oid gets converted as a float, so cast it to str manually
+    stations = stations.set_index('id', drop=False)
+    # wm_oid gets convertidsed as a float, so cast it to str manually
     # pandas versions prior to 0.13.0 could use numpy's fix-width string type
     # to do this but that stopped working in pandas 0.13.0 - fortunately a
     # regex-based helper method was added then, too
