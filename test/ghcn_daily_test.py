@@ -145,13 +145,13 @@ def test_get_stations_as_dataframe():
 def test_get_stations_by_country():
     with test_util.mocked_urls('ncdc/ghcnd/ghcnd-stations.txt'):
         stations = ghcn_daily.get_stations(country='US', as_dataframe=True)
-    assert 45000 < len(stations) < 47000
+    assert len(stations) > 45000
 
 
 def test_get_stations_by_state():
     with test_util.mocked_urls('ncdc/ghcnd/ghcnd-stations.txt'):
         stations = ghcn_daily.get_stations(state='TX', as_dataframe=True)
-    assert 3200 < len(stations) < 3500
+    assert len(stations) > 3200
 
 
 def test_get_stations_with_date_range():
