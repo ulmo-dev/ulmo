@@ -37,4 +37,4 @@ install:
   - "conda list"
   
 test_script:
-  - "%CMD_IN_ENV% pytest -vv"
+  - "%CMD_IN_ENV% pytest -vv -k 'not lcra and not hdf5 and not pytables'"

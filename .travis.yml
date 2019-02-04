@@ -60,7 +60,7 @@ install:
 
 # command to run tests
 script:
-  - pytest --cov=$COVERAGE -vv;
+  - pytest --cov=$COVERAGE -vv -k 'not lcra and not hdf5 and not pytables';
     
 # generate test coverage information
 after_success:
