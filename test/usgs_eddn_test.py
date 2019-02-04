@@ -33,7 +33,7 @@ message_test_sets = [
 def test_parse_dcp_message_number_of_lines():
     for test_set in message_test_sets:
         dcp_data_file = 'usgs/eddn/' + test_set['dcp_address'] + '.txt'
-        with test_util.mocked_urls(dcp_data_file):
+        with test_util.mocked_urls(dcp_data_file, force=True):
             data = ulmo.usgs.eddn.get_data(test_set['dcp_address'])
             assert len(data) == test_set['number_of_lines']
 
@@ -41,7 +41,7 @@ def test_parse_dcp_message_number_of_lines():
 def test_parse_dcp_message_timestamp():
     for test_set in message_test_sets:
         dcp_data_file = 'usgs/eddn/' + test_set['dcp_address'] + '.txt'
-        with test_util.mocked_urls(dcp_data_file):
+        with test_util.mocked_urls(dcp_data_file, force=True):
             data = ulmo.usgs.eddn.get_data(test_set['dcp_address'])
             assert data['message_timestamp_utc'][-1] == test_set['first_row_message_timestamp_utc']
 
@@ -64,7 +64,7 @@ multi_message_test_sets = [
 
 def test_multi_message_download():
     for test_set in multi_message_test_sets:
-        with test_util.mocked_urls(test_set['data_files']):
+        with test_util.mocked_urls(test_set['data_files'], force=True):
             data = ulmo.usgs.eddn.get_data(test_set['dcp_address'], start=test_set['start'])
             assert data['message_timestamp_utc'][-1] == test_set['first_row_message_timestamp_utc']
             assert data['message_timestamp_utc'][0] == test_set['last_row_message_timestamp_utc']
