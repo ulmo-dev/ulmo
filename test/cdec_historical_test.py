@@ -33,7 +33,7 @@ def test_get_station_sensors():
         with test_util.mocked_urls(stations_file):
             available_sensors = ulmo.cdec.historical.get_station_sensors([station_id])
 
-        assert list(available_sensors[station_id].sensor_id.to_dict().values()) == test_value
+        assert set(available_sensors[station_id].sensor_id.to_dict().values()) <= set(test_value)
 
 
 def test_get_station_data():
