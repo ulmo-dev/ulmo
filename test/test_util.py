@@ -19,10 +19,10 @@ def get_test_file_path(file_path):
 @contextlib.contextmanager
 def mocked_suds_client(waterml_version, mocked_service_calls):
     """mocks the suds library to return a given file's content"""
-    # if environment variable is set, then don't mock the tests just grab files
+    # if environment variable is set, then mock the tests otherwise just grab files
     # over the network. Example:
-    #    env ULMO_DONT_MOCK_TESTS=1 py.test
-    if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
+    #    env ULMO_MOCK_TESTS=1 py.test
+    if not os.environ.get('ULMO_MOCK_TESTS', False):
         yield
 
     else:
