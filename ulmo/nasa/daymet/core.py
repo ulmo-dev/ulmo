@@ -109,14 +109,9 @@ def get_daymet_singlepixel(latitude, longitude,
         url_params['years'] = _as_str(years)
 
     url = _get_service_url(url_params)
-
     log.info("making request for latitude, longitude: {}, {}".format(latitude, longitude))
-    req = requests.get(url, params=url_params)
-    log.info("processing data from request: %s" % req.request.url)
-    req.raise_for_status()        
-    input_file = io.BytesIO(util.to_bytes(req.content))
-
-    df = pd.read_csv(input_file, header=6)
+    df = pd.read_csv(url, header=6)
+    df.year, df.yday = df.year.astype('int'), df.yday.astype('int')
     df.index = pd.to_datetime(df.year.astype('str') + '-' + df.yday.astype('str'), format="%Y-%j")
     df.columns = [c[:c.index('(')].strip() if '(' in c else c for c in df.columns ]
     if as_dataframe:
