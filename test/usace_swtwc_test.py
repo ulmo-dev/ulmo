@@ -21,28 +21,14 @@ def test_get_stations():
 
 def test_get_station_data():
     test_station_data = [
-        ('MYST2', '2013-02-18', {
+        ('MYST2', '2018-02-03', {
             'code': 'MYST2',
             'description': 'Pat Mayse Lake',
             'station_type': 'RESERVOIR',
-            'timezone': 'Cen',
+            'timezone': 'US/Central',
             'values': {
-                '2013-02-18 01:00:00': {
-                    'AIR-TEMP': 55.2,
-                    'BAT-LOAD': 12.83,
-                    'ELEVATION': 447.0,
-                    'INFLOW': 9.0,
-                    'PRECIP': 0.0,
-                    'PRECIP(2)': 0.0,
-                    'REL-HUMID': 56.37,
-                    'RELEASE': 0.0,
-                    'SOLAR-RAD': 0.0,
-                    'STORAGE': 96402.0,
-                    'VOLTAGE': 12.99,
-                    'WIND-DIR': 173.0,
-                    'WIND-SPEED': 18.02
+                '2018-02-03 01:00:00': {'PRECIP PRE': 0.0, 'CIP(A) ELE': 0.0, 'VATION   S': 451.61, 'TORAGE': 121347.0, 'INFLOW   R': 0.0, 'ELEASE  AI': 59.0, 'R-TEMP  WI': 35.4, 'ND-DIRWIND': 75.0, '-SPEED REL': 5.36, '-HUMID SOL': 41.52, 'AR-RAD   V': -2.0, 'OLTAGE  BA': 12.37}
                 },
-            },
         }),
     ]
 
