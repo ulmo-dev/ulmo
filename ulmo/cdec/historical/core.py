@@ -111,7 +111,7 @@ def get_sensors(sensor_id=None):
     if sensor_id is None:
         return df
     else:
-        return df.ix[sensor_id]
+        return df.loc[sensor_id]
 
 
 def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
@@ -152,28 +152,27 @@ def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
         a python dict with site codes as keys with values containing pandas
         DataFrames of available sensor numbers and metadata.
     """
-
+    # PRA&SensorNums=76&dur_code=H&Start=2019-02-02&End=2019-02-04
     station_sensors = {}
 
     if station_ids is None:
         station_ids = get_stations().index
 
     for station_id in station_ids:
-        url = 'http://cdec.water.ca.gov/cgi-progs/queryCSV?station_id=%s' % (station_id)
+        url = 'http://cdec.water.ca.gov/dynamicapp/staMeta?station_id=%s' % (station_id)
 
-        sensor_list = pd.read_html(url)[0]
-        sensor_list.columns = ['sensor_id','variable','resolution','timerange']
-        v = list(sensor_list.variable.to_dict().values())
-
-        split = [re.split(r'[\(\)]+',x) for x in v]
-        var_names = [x[0] for x in split]
-        units = [x[1] for x in split]
-        var_resolution = [re.split(r'[\(\)]+',x)[1] for x in sensor_list.resolution]
-
-        sensor_list['resolution'] = var_resolution
-        sensor_list['variable'] = [x + y for x, y in zip(var_names, var_resolution)]
-        sensor_list['units'] = pd.Series(units,index=sensor_list.index)
-
+        try:
+            sensor_list = pd.read_html(url, match='Sensor Description')[0]
+        except:
+            sensor_list = pd.read_html(url)[0]
+    
+        try:
+            sensor_list.columns = ['sensor_id', 'variable', 'resolution','timerange']
+        except:
+            sensor_list.columns = ['variable', 'sensor_id', 'resolution', 'varcode', 'method', 'timerange']
+        sensor_list[['variable', 'units']] = sensor_list.variable.str.split(',', 1, expand=True)
+        sensor_list.resolution = sensor_list.resolution.str.strip('()')
+        
         station_sensors[station_id] = _limit_sensor_list(sensor_list, sensor_ids, resolutions)
 
     return station_sensors
@@ -235,11 +234,10 @@ def get_data(station_ids=None, sensor_ids=None, resolutions=None, start=None, en
         station_data = {}
 
         for index, row in sensor_list.iterrows():
-            res = row.ix['resolution']
-            var = row.ix['variable']
-            sensor_id = row.ix['sensor_id']
+            res = row.loc['resolution']
+            var = row.loc['variable']
+            sensor_id = row.loc['sensor_id']
             station_data[var] = _download_raw(station_id, sensor_id, _res_to_dur_code(res), start_date_str, end_date_str)
-
         d[station_id] = station_data
 
     return d
@@ -258,16 +256,15 @@ def _limit_sensor_list(sensor_list, sensor_ids, resolution):
 
 def _download_raw(station_id, sensor_num, dur_code, start_date, end_date):
 
-    url = 'http://cdec.water.ca.gov/cgi-progs/queryCSV' + \
-          '?station_id=' + station_id + \
+    url = 'http://cdec.water.ca.gov/dynamicapp/req/CSVDataServlet' + \
+          '?Stations=' + station_id + \
           '&dur_code=' + dur_code + \
-          '&sensor_num=' + str(sensor_num) + \
-          '&start_date=' + start_date + \
-          '&end_date=' + end_date
+          '&SensorNums=' + str(sensor_num) + \
+          '&Start=' + start_date + \
+          '&End=' + end_date
 
-    df = pd.read_csv(url, skiprows=2, header=None, parse_dates=[[0,1]], index_col=None, na_values='m')
-    df.columns = ['datetime', 'value']
-    df.set_index('datetime', inplace=True)
+    df = pd.read_csv(url, parse_dates=[4,5], index_col='DATE TIME', na_values='---')
+    df.columns = ['station_id', 'duration', 'sensor_number', 'sensor_type', 'obs_date', 'value', 'data_flag', 'units']
 
     return df
 
