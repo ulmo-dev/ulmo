@@ -22,7 +22,7 @@ from ulmo import waterml
 _suds_client = None
 
 
-def get_sites(wsdl_url, suds_cache=("default",)):
+def get_sites(wsdl_url, suds_cache=("default",), timeout=None):
     """
     Retrieves information on the sites that are available from a WaterOneFlow
     service using a GetSites request.  For more detailed information including
@@ -35,19 +35,22 @@ def get_sites(wsdl_url, suds_cache=("default",)):
         URL of a service's web service definition language (WSDL) description.
         All WaterOneFlow services publish a WSDL description and this url is the
         entry point to the service.
-    suds_cache: ``None`` or tuple
+    suds_cache : ``None`` or tuple
         SOAP local cache duration for WSDL description and client object.
         Pass a cache duration tuple like ('days', 3) to set a custom duration.
         Duration may be in months, weeks, days, hours, or seconds.
         If unspecified, the default duration (1 day) will be used.
         Use ``None`` to turn off caching.
+    timeout : int or float
+        suds SOAP URL open timeout (seconds).
+        If unspecified, the suds default (90 seconds) will be used.
 
     Returns
     -------
     sites_dict : dict
         a python dict with site codes mapped to site information
     """
-    suds_client = _get_client(wsdl_url, suds_cache)
+    suds_client = _get_client(wsdl_url, suds_cache, timeout)
 
     waterml_version = _waterml_version(suds_client)
     if waterml_version == '1.0':
@@ -65,7 +68,7 @@ def get_sites(wsdl_url, suds_cache=("default",)):
     ])
 
 
-def get_site_info(wsdl_url, site_code, suds_cache=("default",)):
+def get_site_info(wsdl_url, site_code, suds_cache=("default",), timeout=None):
     """
     Retrieves detailed site information from a WaterOneFlow service using a
     GetSiteInfo request.
@@ -80,19 +83,22 @@ def get_site_info(wsdl_url, site_code, suds_cache=("default",)):
         Site code of the site you'd like to get more information for. Site codes
         MUST contain the network and be of the form <network>:<site_code>, as is
         required by WaterOneFlow.
-    suds_cache: ``None`` or tuple
+    suds_cache : ``None`` or tuple
         SOAP local cache duration for WSDL description and client object.
         Pass a cache duration tuple like ('days', 3) to set a custom duration.
         Duration may be in months, weeks, days, hours, or seconds.
         If unspecified, the default duration (1 day) will be used.
         Use ``None`` to turn off caching.
+    timeout : int or float
+        suds SOAP URL open timeout (seconds).
+        If unspecified, the suds default (90 seconds) will be used.
 
     Returns
     -------
     site_info : dict
         a python dict containing site information
     """
-    suds_client = _get_client(wsdl_url, suds_cache)
+    suds_client = _get_client(wsdl_url, suds_cache, timeout)
 
     waterml_version = _waterml_version(suds_client)
     if waterml_version == '1.0':
@@ -116,7 +122,8 @@ def get_site_info(wsdl_url, site_code, suds_cache=("default",)):
     return site_info
 
 
-def get_values(wsdl_url, site_code, variable_code, start=None, end=None, suds_cache=("default",)):
+def get_values(wsdl_url, site_code, variable_code, start=None, end=None, 
+               suds_cache=("default",), timeout=None):
     """
     Retrieves site values from a WaterOneFlow service using a GetValues request.
 
@@ -140,19 +147,22 @@ def get_values(wsdl_url, site_code, variable_code, start=None, end=None, suds_ca
     end : ``None`` or datetime (see :ref:`dates-and-times`)
         End of a date range for a query. If both start and end parameters are
         omitted, the entire time series available will be returned.
-    suds_cache: ``None`` or tuple
+    suds_cache : ``None`` or tuple
         SOAP local cache duration for WSDL description and client object.
         Pass a cache duration tuple like ('days', 3) to set a custom duration.
         Duration may be in months, weeks, days, hours, or seconds.
         If unspecified, the default duration (1 day) will be used.
         Use ``None`` to turn off caching.
+    timeout : int or float
+        suds SOAP URL open timeout (seconds).
+        If unspecified, the suds default (90 seconds) will be used.
 
     Returns
     -------
     site_values : dict
         a python dict containing values
     """
-    suds_client = _get_client(wsdl_url, suds_cache)
+    suds_client = _get_client(wsdl_url, suds_cache, timeout)
 
     # Note from Emilio:
     #   Not clear if WOF servers really do handle time zones (time offsets or
@@ -190,7 +200,8 @@ def get_values(wsdl_url, site_code, variable_code, start=None, end=None, suds_ca
         return values
 
 
-def get_variable_info(wsdl_url, variable_code=None, suds_cache=("default",)):
+def get_variable_info(wsdl_url, variable_code=None, 
+                      suds_cache=("default",), timeout=None):
     """
     Retrieves site values from a WaterOneFlow service using a GetVariableInfo
     request.
@@ -207,12 +218,15 @@ def get_variable_info(wsdl_url, variable_code=None, suds_cache=("default",)):
         like to get more information on.  Variable codes MUST contain the
         network and be of the form <vocabulary>:<variable_code>, as is required
         by WaterOneFlow.
-    suds_cache: ``None`` or tuple
+    suds_cache : ``None`` or tuple
         SOAP local cache duration for WSDL description and client object.
         Pass a cache duration tuple like ('days', 3) to set a custom duration.
         Duration may be in months, weeks, days, hours, or seconds.
         If unspecified, the default duration (1 day) will be used.
         Use ``None`` to turn off caching.
+    timeout : int or float
+        suds SOAP URL open timeout (seconds).
+        If unspecified, the suds default (90 seconds) will be used.
 
     Returns
     -------
@@ -221,7 +235,7 @@ def get_variable_info(wsdl_url, variable_code=None, suds_cache=("default",)):
         `None` (default) then this will be a nested set of dicts keyed by
         <vocabulary>:<variable_code>
     """
-    suds_client = _get_client(wsdl_url, suds_cache)
+    suds_client = _get_client(wsdl_url, suds_cache, timeout)
 
     waterml_version = _waterml_version(suds_client)
     response = suds_client.service.GetVariableInfo(variable_code)
@@ -252,7 +266,7 @@ def _waterml_version(suds_client):
             "only WaterOneFlow 1.0 and 1.1 are currently supported")
 
 
-def _get_client(wsdl_url, cache_duration=("default",)):
+def _get_client(wsdl_url, suds_cache=("default",), suds_timeout=None):
     """
     Open and re-use (persist) a suds.client.Client instance _suds_client throughout
     the session, to minimize WOF server impact and improve performance.  _suds_client
@@ -264,12 +278,15 @@ def _get_client(wsdl_url, cache_duration=("default",)):
         URL of a service's web service definition language (WSDL) description.
         All WaterOneFlow services publish a WSDL description and this url is the
         entry point to the service.
-    cache_duration: ``None`` or tuple
+    suds_cache : ``None`` or tuple
         suds client local cache duration for WSDL description and client object.
         Pass a cache duration tuple like ('days', 3) to set a custom duration.
         Duration may be in months, weeks, days, hours, or seconds.
         If unspecified, the suds default (1 day) will be used.
         Use ``None`` to turn off caching.
+    suds_timeout : int or float
+        suds SOAP URL open timeout (seconds).
+        If unspecified, the suds default (90 seconds) will be used.
 
     Returns
     -------
@@ -279,16 +296,19 @@ def _get_client(wsdl_url, cache_duration=("default",)):
     global _suds_client
 
     # Handle new or changed client request (create new client)
-    if _suds_client is None or _suds_client.wsdl.url != wsdl_url:
+    if _suds_client is None or _suds_client.wsdl.url != wsdl_url or not suds_timeout is None:
         _suds_client = suds.client.Client(wsdl_url)
-        if cache_duration is None:
+        if suds_cache is None:
             _suds_client.set_options(cache=None)
         else:
             cache = _suds_client.options.cache
             # could add some error catching ...
-            if cache_duration[0] == "default":
+            if suds_cache[0] == "default":
                 cache.setduration(days=1)
             else:
-                cache.setduration(**dict([cache_duration]))
+                cache.setduration(**dict([suds_cache]))
+
+        if not suds_timeout is None:
+            _suds_client.set_options(timeout=suds_timeout)
 
     return _suds_client
