@@ -7,6 +7,23 @@ def twdb_dot(df_row, drop_dcp_metadata=True):
     return _twdb_stevens_or_dot(df_row, reverse=False, drop_dcp_metadata=drop_dcp_metadata)
 
 
+def twdb_fts(df_row, drop_dcp_metadata=True):
+    """Parser for twdb fts dataloggers
+
+    format examples:
+    C510D20018036133614G39-0NN170WXW00097  :WL 31 #60 -72.91 -72.89 -72.89 -72.89 -72.91 -72.92 -72.93 -72.96 -72.99 -72.97 -72.95 -72.95
+    """
+
+    message = df_row['dcp_message'].lower()
+    message_timestamp = df_row['message_timestamp_utc']
+
+    lines = message.split(':')[1]
+    water_levels = [field.strip('+- ') for field in lines.split()[3:]]
+    df = _twdb_assemble_dataframe(message_timestamp, None, water_levels,
+                                  reverse=False)
+    return df
+
+
 def twdb_stevens(df_row, drop_dcp_metadata=True):
     """Parser for twdb stevens dataloggers."""
     return _twdb_stevens_or_dot(df_row, reverse=True, drop_dcp_metadata=drop_dcp_metadata)
@@ -29,7 +46,6 @@ def twdb_sutron(df_row, drop_dcp_metadata=True):
     """
     message = df_row['dcp_message'].lower()
     message_timestamp = df_row['message_timestamp_utc']
-
     lines = message.strip('":').split(':')
     if len(lines) == 1:
         water_levels = [field.strip('+- ') for field in lines[0].split()]
@@ -122,9 +138,9 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     '"BV:12.2  Channel:5 Time:43 +441.48 +443.25 +440.23 +440.67 +441.26 +441.85 +442.66 +443.84 +445.24 +442.15 +442.88 +443.91 '
     '"BV:12.6  Channel:5 Time:28 +304.63 +304.63 +304.63 +304.56 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.71 Channel:6 Time:28 +310.51 +310.66 +310.59 +310.51 +310.51 +310.59 +310.59 +310.51 +310.66 +310.51 +310.66 +310.59 '
     """
-    message = df_row['dcp_message'].lower()
+    message = df_row['dcp_message'].strip().lower()
     message_timestamp = df_row['message_timestamp_utc']
-    fields = message.split()
+    fields = message.strip().split()
     if 'bv' in fields[0]:
         battery_voltage = fields[0].split(':')[-1]
         message = ' '.join(fields[1:])

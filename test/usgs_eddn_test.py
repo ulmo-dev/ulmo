@@ -273,6 +273,33 @@ def test_parser_twdb_texuni():
         columns = ['timestamp_utc', 'battery_voltage', 'water_level']
         _assert(test_set, columns, 'twdb_texuni')
 
+twdb_fts_test_sets = [
+    {
+        'message_timestamp_utc': datetime(2018, 2, 6, 13, 36, 14),
+        'dcp_message': ':WL 31 #60 -72.90 -72.88 -72.87 -72.87 -72.87 -72.87 -72.88 -72.88 -72.87 -72.87 -72.87 -72.85 ',
+        'return_value': [
+            ['2018-02-06 13:00:00', pd.np.nan, 72.90],
+            ['2018-02-06 12:00:00', pd.np.nan, 72.88],
+            ['2018-02-06 11:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 10:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 09:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 08:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 07:00:00', pd.np.nan, 72.88],
+            ['2018-02-06 06:00:00', pd.np.nan, 72.88],
+            ['2018-02-06 05:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 04:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 03:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 02:00:00', pd.np.nan, 72.85],
+        ]
+    },
+]
+
+def test_parser_twdb_fts():
+    for test_set in twdb_fts_test_sets:
+        print('testing twdb_fts parser')
+        columns = ['timestamp_utc', 'battery_voltage', 'water_level']
+        _assert(test_set, columns, 'twdb_fts')
+
 
 def _assert(test_set, columns, parser):
     expected = pd.DataFrame(test_set['return_value'], columns=columns)
