@@ -17,7 +17,7 @@ import pandas
 
 from ulmo import util
 
-CSV_SWITCHOVER = pandas.tslib.Timestamp('2016-10-01')
+CSV_SWITCHOVER = pandas.Timestamp('2016-10-01')
 
 def get_data(county=None, start=None, end=None, as_dataframe=False, data_dir=None):
     """Retreives data.

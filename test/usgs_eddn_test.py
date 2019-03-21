@@ -33,7 +33,7 @@ message_test_sets = [
 def test_parse_dcp_message_number_of_lines():
     for test_set in message_test_sets:
         dcp_data_file = 'usgs/eddn/' + test_set['dcp_address'] + '.txt'
-        with test_util.mocked_urls(dcp_data_file):
+        with test_util.mocked_urls(dcp_data_file, force=True):
             data = ulmo.usgs.eddn.get_data(test_set['dcp_address'])
             assert len(data) == test_set['number_of_lines']
 
@@ -41,7 +41,7 @@ def test_parse_dcp_message_number_of_lines():
 def test_parse_dcp_message_timestamp():
     for test_set in message_test_sets:
         dcp_data_file = 'usgs/eddn/' + test_set['dcp_address'] + '.txt'
-        with test_util.mocked_urls(dcp_data_file):
+        with test_util.mocked_urls(dcp_data_file, force=True):
             data = ulmo.usgs.eddn.get_data(test_set['dcp_address'])
             assert data['message_timestamp_utc'][-1] == test_set['first_row_message_timestamp_utc']
 
@@ -64,7 +64,7 @@ multi_message_test_sets = [
 
 def test_multi_message_download():
     for test_set in multi_message_test_sets:
-        with test_util.mocked_urls(test_set['data_files']):
+        with test_util.mocked_urls(test_set['data_files'], force=True):
             data = ulmo.usgs.eddn.get_data(test_set['dcp_address'], start=test_set['start'])
             assert data['message_timestamp_utc'][-1] == test_set['first_row_message_timestamp_utc']
             assert data['message_timestamp_utc'][0] == test_set['last_row_message_timestamp_utc']
@@ -272,6 +272,33 @@ def test_parser_twdb_texuni():
         print('testing twdb_texuni parser')
         columns = ['timestamp_utc', 'battery_voltage', 'water_level']
         _assert(test_set, columns, 'twdb_texuni')
+
+twdb_fts_test_sets = [
+    {
+        'message_timestamp_utc': datetime(2018, 2, 6, 13, 36, 14),
+        'dcp_message': ':WL 31 #60 -72.90 -72.88 -72.87 -72.87 -72.87 -72.87 -72.88 -72.88 -72.87 -72.87 -72.87 -72.85 ',
+        'return_value': [
+            ['2018-02-06 13:00:00', pd.np.nan, 72.90],
+            ['2018-02-06 12:00:00', pd.np.nan, 72.88],
+            ['2018-02-06 11:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 10:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 09:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 08:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 07:00:00', pd.np.nan, 72.88],
+            ['2018-02-06 06:00:00', pd.np.nan, 72.88],
+            ['2018-02-06 05:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 04:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 03:00:00', pd.np.nan, 72.87],
+            ['2018-02-06 02:00:00', pd.np.nan, 72.85],
+        ]
+    },
+]
+
+def test_parser_twdb_fts():
+    for test_set in twdb_fts_test_sets:
+        print('testing twdb_fts parser')
+        columns = ['timestamp_utc', 'battery_voltage', 'water_level']
+        _assert(test_set, columns, 'twdb_fts')
 
 
 def _assert(test_set, columns, parser):

@@ -1,38 +1,47 @@
-# We set the language to c because python isn't supported on the MacOS X nodes
-# on Travis. However, the language ends up being irrelevant anyway, since we
-# install Python ourselves using conda.
 language: c
 
 # Setting sudo to false opts in to Travis-CI container-based builds.
 sudo: false
 
-# Trun off email notifications
+# Turn off email notifications
 notifications:
   email: false
 
+matrix:
+  include:
+    - os: linux
+      env: PYTHON_VERSION="3.5"
+    - os: linux
+      env: PYTHON_VERSION="3.6"
+    - os: linux
+      env: PYTHON_VERSION="3.7"
+    - os: osx
+      osx_image: xcode9.4
+      env: PYTHON_VERSION="3.5"
+    - os: osx
+      osx_image: xcode9.4
+      env: PYTHON_VERSION="3.6"
+    - os: osx
+      osx_image: xcode9.4
+      env: PYTHON_VERSION="3.7"
 
-os:
-  - linux
-  - osx
+cache:
+  directories:
+    - $TRAVIS_BUILD_DIR/ulmo_test_cache
+    - $HOME/ulmo
 
-env:
-  - PYTHON_VERSION="2.7"
-  - PYTHON_VERSION="3.4"
-  - PYTHON_VERSION="3.5"
-  - PYTHON_VERSION="3.6"
-
-# commands to install ulmo
+# commands to install quest
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       OS_VERSION="Linux";
+      SED_OPTIONS="-i";
     else
       OS_VERSION="MacOSX";
+      SED_OPTIONS="-i ''";
     fi
-  - if [[ "$PYTHON_VERSION" == "2.7" ]]; then
-      wget https://repo.continuum.io/miniconda/Miniconda2-latest-${OS_VERSION}-x86_64.sh -O miniconda.sh;
-    else
-      wget https://repo.continuum.io/miniconda/Miniconda3-latest-${OS_VERSION}-x86_64.sh -O miniconda.sh;
-    fi
+  # We do this conditionally because it saves us some downloading if the
+  # version is the same.
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-${OS_VERSION}-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
@@ -40,18 +49,19 @@ install:
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
-  # Create ulmo venv and install deps
-  - conda create -q -c conda-forge --chan-pri -n test-environment python=$PYTHON_VERSION appdirs beautifulsoup4 future geojson isodate lxml mock numpy pandas pytables pytest requests suds-jurko freezegun html5lib=0.999
+  # Create quest conda env and install deps
+  - sed $SED_OPTIONS "s/python=3/python=$PYTHON_VERSION/" conda_environment.yml
+  - conda env create -q -n test-environment -f conda_environment.yml
   - source activate test-environment
-  - conda install pip
-  - pip install httpretty==0.8.10
-  - pip install coveralls
   - python setup.py install
+  - conda list
+  - export ULMO_CACHE_DIR=$TRAVIS_BUILD_DIR/ulmo_test_cache
+  - export COVERAGE=$HOME/miniconda/envs/test-environment/lib/python$PYTHON_VERSION/site-packages/ulmo
 
 # command to run tests
 script:
-  coverage run --source=ulmo setup.py test
-
+  - pytest --cov=$COVERAGE -vv -k 'not lcra and not hdf5 and not pytables';
+    
 # generate test coverage information
 after_success:
   coveralls

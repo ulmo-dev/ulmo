@@ -17,12 +17,12 @@ def get_test_file_path(file_path):
 
 
 @contextlib.contextmanager
-def mocked_suds_client(waterml_version, mocked_service_calls):
+def mocked_suds_client(waterml_version, mocked_service_calls, force=False):
     """mocks the suds library to return a given file's content"""
-    # if environment variable is set, then don't mock the tests just grab files
+    # if environment variable is set, then mock the tests otherwise just grab files
     # over the network. Example:
-    #    env ULMO_DONT_MOCK_TESTS=1 py.test
-    if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
+    #    env ULMO_MOCK_TESTS=1 py.test
+    if not os.environ.get('ULMO_MOCK_TESTS', False) and not force:
         yield
 
     else:
@@ -43,7 +43,7 @@ def mocked_suds_client(waterml_version, mocked_service_calls):
 
 
 @contextlib.contextmanager
-def mocked_urls(url_files, methods=None):
+def mocked_urls(url_files, methods=None, force=False):
     """mocks the underlying python sockets library to return a given file's
     content. Note: that this function checks for an environment variable named
     ULMO_DONT_MOCK_TESTS; if that environment variable is set then urls will
@@ -64,7 +64,10 @@ def mocked_urls(url_files, methods=None):
         HTTP methods that will be mocked. If set to None (default) then the
         default methods are GET, POST and HEAD.
     """
-    if os.environ.get('ULMO_DONT_MOCK_TESTS', False):
+    # if environment variable is set, then mock the tests otherwise just grab files
+    # over the network. Example:
+    #    env ULMO_MOCK_TESTS=1 py.test
+    if not os.environ.get('ULMO_MOCK_TESTS', False) and not force:
         yield
 
     else:

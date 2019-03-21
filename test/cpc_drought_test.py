@@ -78,24 +78,6 @@ test_sets = [
             'temperature': 77.6
         }]
     },
-    {
-        'filename': 'cpc/drought/current.data',
-        'start': '2016-2-28',
-        'end': '2017-03-04',
-        'state': 'TX',
-        'climate_division': 10,
-        'values': [{
-            'cmi': -0.53,
-            'pdsi': -1.53,
-            'period': '2017-02-26/2017-03-04',
-            'potential_evap': 0.72,
-            'precipitation': 1.35,
-            'runoff': 0.0,
-            'soil_moisture_lower': 0.07,
-            'soil_moisture_upper': 0.63,
-            'temperature': 71.9
-        }]
-    },
 ]
 
 

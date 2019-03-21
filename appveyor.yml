@@ -3,33 +3,38 @@ environment:
     # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
-    PYTHON: "C:\\conda"
-    MINICONDA_VERSION: "latest"
-    CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\.continuous-integration\\appveyor\\windows_sdk.cmd"
-    PYTHON_ARCH: "64" # needs to be set for CMD_IN_ENV to succeed. If a mix
-                  # of 32 bit and 64 bit builds are needed, move this
-                  # to the matrix section.
-
+    CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\.continuous-integration\\appveyor\\run_with_env.cmd"
+#    QUEST_CACHE_DIR: quest_test_cache
   matrix:
-    - PYTHON_VERSION: "2.7"
-    - PYTHON_VERSION: "3.4"
-    - PYTHON_VERSION: "3.5"
-    - PYTHON_VERSION: "3.6"
+    - PYTHON_VERSION: 3.5
+      PYTHON_BUILD: 35
+      MINICONDA: C:\Miniconda3-x64
+    - PYTHON_VERSION: 3.6
+      MINICONDA: C:\Miniconda3-x64
+      PYTHON_BUILD: 36
+    - PYTHON_VERSION: 3.7
+      MINICONDA: C:\Miniconda3-x64
+      PYTHON_BUILD: 37
 
-install:
-  # Install miniconda using a powershell script.
-  - "powershell .continuous-integration/appveyor/install-miniconda.ps1"
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  - "conda config --set always_yes yes --set changeps1 no"
-  - "conda info -a"
-  - "conda update -q conda"
-  - "conda create -q -c conda-forge --chan-pri -n test-environment python=%PYTHON_VERSION% appdirs beautifulsoup4 future geojson isodate lxml mock numpy pandas pytables pytest requests suds-jurko freezegun html5lib=0.999"
-  - "activate test-environment"
-  - pip install httpretty==0.8.10
-  - "conda install pip"
-  - "python setup.py install"
+init:
+  - "ECHO %PYTHON_VERSION% %MINICONDA%"
+
+cache:
+  - "%ULMO_CACHE_DIR%"
 
 build: false
 
+install:
+  # Install miniconda using a powershell script.
+  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - "conda config --set always_yes yes --set changeps1 no"
+#  - "conda update -q conda"
+  - "conda info -a"
+  - ps: "(Get-Content conda_environment.yml).replace('python=3', \"python=$env:PYTHON_VERSION\") | Set-Content conda_environment.yml"
+  - "conda env create -q -n test-environment -f conda_environment.yml"
+  - "activate test-environment"
+  - "python setup.py install"
+  - "conda list"
+  
 test_script:
-  - "%CMD_IN_ENV% python setup.py test"
+  - "%CMD_IN_ENV% pytest -vv -k \"not lcra and not hdf5 and not pytables\""

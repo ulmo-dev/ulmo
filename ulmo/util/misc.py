@@ -49,7 +49,7 @@ def convert_datetime(datetime):
     """returns a datetime.date object from either a string representation or
     datetime-like object (datetime.date, datetime.datetime, or pandas.Timestamp)
     """
-    return pandas.Timestamp(datetime).to_datetime()
+    return pandas.Timestamp(datetime).to_pydatetime()
 
 
 def dir_list(url):

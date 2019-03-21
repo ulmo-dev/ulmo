@@ -145,13 +145,13 @@ def test_get_stations_as_dataframe():
 def test_get_stations_by_country():
     with test_util.mocked_urls('ncdc/ghcnd/ghcnd-stations.txt'):
         stations = ghcn_daily.get_stations(country='US', as_dataframe=True)
-    assert 45000 < len(stations) < 47000
+    assert len(stations) > 45000
 
 
 def test_get_stations_by_state():
     with test_util.mocked_urls('ncdc/ghcnd/ghcnd-stations.txt'):
         stations = ghcn_daily.get_stations(state='TX', as_dataframe=True)
-    assert 3200 < len(stations) < 3500
+    assert len(stations) > 3200
 
 
 def test_get_stations_with_date_range():
@@ -237,27 +237,7 @@ def test_get_stations_with_elements():
                 'WA006567710',
                 'VQC00672823',
             ],
-            'excludes': [
-                'AR000870470',
-                'AR000875850',
-                'BC000068234',
-                'GME00111464',
-                'UY000864400',
-            ],
-        }, {
-            'elements': 'PRCP',
-            'includes': [
-                'ASN00008230',
-                'WA006567710',
-                'VQC00672823',
-            ],
-            'excludes': [
-                'AR000870470',
-                'AR000875850',
-                'BC000068234',
-                'GME00111464',
-                'UY000864400',
-            ],
+            'excludes': ['SWE00136141', 'USR0000OHOR', 'USC00450935', 'USR0000THEN', 'USR0000MDRY'],
         }, {
             'elements': ['SNOW', 'TMAX'],
             'includes': [
@@ -266,12 +246,7 @@ def test_get_stations_with_elements():
                 'VQW00011640',
                 'ZI000067991',
             ],
-            'excludes': [
-                'BR00B4-0010',
-                'IN003070101',
-                'KZ000038223',
-                'ZA000067753',
-            ],
+            'excludes': ['BR037642870', 'BR00C8-0100', 'BR048519530', 'BR002548070', 'IN009081600']
         },
     ]
     url_files = {

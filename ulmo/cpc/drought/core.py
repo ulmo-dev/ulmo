@@ -152,7 +152,7 @@ def get_data(state=None, climate_division=None, start=None, end=None,
             # prelim data of 2012), so just take those that are new
             append_index = year_data.index.difference(data.index)
             if len(append_index):
-                data = data.append(year_data.ix[append_index])
+                data = data.append(year_data.loc[append_index])
 
     # restrict results to date range
     period_index = pandas.PeriodIndex(data['period'])

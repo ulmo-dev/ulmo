@@ -1,5 +1,5 @@
 # ignore egginfo file
-pyhis.egg-info/
+ulmo.egg-info/
 
 # ignore build, dist dir
 dist/
