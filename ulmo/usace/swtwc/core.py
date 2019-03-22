@@ -19,6 +19,7 @@ import os.path
 
 from bs4 import BeautifulSoup
 import numpy as np
+import requests
 import pandas
 
 from ulmo import util
@@ -68,19 +69,22 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
     filename = '{}.{}.html'.format(station_code, date_str)
     data_url = 'http://www.swt-wc.usace.army.mil/webdata/gagedata/' + filename
-    path = os.path.join(USACE_SWTWC_DIR, filename)
 
-    with util.open_file_for_url(data_url, path) as f:
-        soup = BeautifulSoup(f)
-        pre = soup.find('pre')
-        if pre is None:
-            error_msg = 'no data could be found for station code %(station_code)s and date %(date)s (url: %(data_url)s)' % {
-                'date': date,
-                'data_url': data_url,
-                'station_code': station_code,
-            }
-            raise ValueError(error_msg)
-        sio = StringIO.StringIO(str(pre.text.strip()))
+    # requests without User-Agent header get rejected
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36'
+    }
+    resp = requests.get(data_url, headers=headers)
+    soup = BeautifulSoup(resp.content)
+    pre = soup.find('pre')
+    if pre is None:
+        error_msg = 'no data could be found for station code %(station_code)s and date %(date)s (url: %(data_url)s)' % {
+            'date': date,
+            'data_url': data_url,
+            'station_code': station_code,
+        }
+        raise ValueError(error_msg)
+    sio = StringIO.StringIO(str(pre.text.strip()))
 
     first_line = sio.readline()
     split = first_line[8:].strip().split()
