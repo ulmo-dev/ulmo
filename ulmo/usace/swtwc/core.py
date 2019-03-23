@@ -150,15 +150,17 @@ def get_stations():
         a python dict with station codes mapped to station information
     """
     stations_url = 'http://www.swt-wc.usace.army.mil/shefids.htm'
-    path = os.path.join(USACE_SWTWC_DIR, 'shefids.htm')
 
-    with util.open_file_for_url(stations_url, path) as f:
-        soup = BeautifulSoup(f)
-        pre = soup.find('pre')
-        links = pre.find_all('a')
-        stations = [
-            _parse_station_link(link) for link in links
-        ]
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36'
+    }
+    resp = requests.get(stations_url, headers=headers)
+    soup = BeautifulSoup(resp.content)
+    pre = soup.find('pre')
+    links = pre.find_all('a')
+    stations = [
+        _parse_station_link(link) for link in links
+    ]
 
     return dict([
         (station['code'], station)
