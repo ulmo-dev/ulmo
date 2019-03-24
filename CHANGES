@@ -1,6 +1,18 @@
 Changelog
 ---------
 
+**0.8.5 (release 2019-03-22)**
+
+- Bug fixes and some small enhancements for multiple plugins:
+  CDEC, CPC, CUAHSI WaterML/WOF, NASA ORNL Daymet, NCDC GSOD and GHCN,
+  USACE and USGS EDDN.
+- Removed USGS EROS plugin (service is no longer available)
+- LCRA plugins are experiencing problems. Removed from CI testing,
+  until fixes are applied.
+- Pandas API updates and error handling
+- Continuous Integration and test infrastructure, including
+  Python 3.6 and 3.7 builds
+
 **0.8.4 (release 2017-02-06)**
 
 - added stevens dual well parser for eddn service
