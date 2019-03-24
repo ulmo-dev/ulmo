@@ -19,6 +19,7 @@ import os.path
 
 from bs4 import BeautifulSoup
 import numpy as np
+import requests
 import pandas
 
 from ulmo import util
@@ -66,21 +67,24 @@ def get_station_data(station_code, date=None, as_dataframe=False):
         date_str = date.strftime('%Y%m%d')
         year = date.year
 
-    filename = '%s.%s.html'% (station_code, date_str)
+    filename = '{}.{}.html'.format(station_code, date_str)
     data_url = 'http://www.swt-wc.usace.army.mil/webdata/gagedata/' + filename
-    path = os.path.join(USACE_SWTWC_DIR, filename)
 
-    with util.open_file_for_url(data_url, path) as f:
-        soup = BeautifulSoup(f)
-        pre = soup.find('pre')
-        if pre is None:
-            error_msg = 'no data could be found for station code %(station_code)s and date %(date)s (url: %(data_url)s)' % {
-                'date': date,
-                'data_url': data_url,
-                'station_code': station_code,
-            }
-            raise ValueError(error_msg)
-        sio = StringIO.StringIO(str(pre.text.strip()))
+    # requests without User-Agent header get rejected
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36'
+    }
+    resp = requests.get(data_url, headers=headers)
+    soup = BeautifulSoup(resp.content)
+    pre = soup.find('pre')
+    if pre is None:
+        error_msg = 'no data could be found for station code %(station_code)s and date %(date)s (url: %(data_url)s)' % {
+            'date': date,
+            'data_url': data_url,
+            'station_code': station_code,
+        }
+        raise ValueError(error_msg)
+    sio = StringIO.StringIO(str(pre.text.strip()))
 
     first_line = sio.readline()
     split = first_line[8:].strip().split()
@@ -103,9 +107,9 @@ def get_station_data(station_code, date=None, as_dataframe=False):
     if len(notes):
         station_dict['notes'] = '\n'.join(notes)
 
-    variable_names = _split_line(sio.readline()[15:], 10)
-    variable_units = _split_line(sio.readline()[15:], 10)
-    variable_sources = _split_line(sio.readline()[15:], 10)
+    variable_names = _split_line(sio.readline()[11:], 10)
+    variable_units = _split_line(sio.readline()[11:], 10)
+    variable_sources = _split_line(sio.readline()[11:], 10)
 
     station_dict['variables'] = dict([
         (name, {'unit': unit, 'source': source})
@@ -115,7 +119,7 @@ def get_station_data(station_code, date=None, as_dataframe=False):
 
     station_dict['timezone'] = sio.readline().strip().strip('()')
     column_names = ['datetime'] + variable_names
-    widths = [15] + ([10] * len(variable_names))
+    widths = [14] + ([10] * len(variable_names))
     converters = dict([
         (variable_name, lambda x: float(x) if x != '----' else np.nan)
         for variable_name in variable_names
@@ -146,15 +150,17 @@ def get_stations():
         a python dict with station codes mapped to station information
     """
     stations_url = 'http://www.swt-wc.usace.army.mil/shefids.htm'
-    path = os.path.join(USACE_SWTWC_DIR, 'shefids.htm')
 
-    with util.open_file_for_url(stations_url, path) as f:
-        soup = BeautifulSoup(f)
-        pre = soup.find('pre')
-        links = pre.find_all('a')
-        stations = [
-            _parse_station_link(link) for link in links
-        ]
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36'
+    }
+    resp = requests.get(stations_url, headers=headers)
+    soup = BeautifulSoup(resp.content)
+    pre = soup.find('pre')
+    links = pre.find_all('a')
+    stations = [
+        _parse_station_link(link) for link in links
+    ]
 
     return dict([
         (station['code'], station)
