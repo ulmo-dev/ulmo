@@ -45,6 +45,9 @@ def decode(dataframe, parser, **kwargs):
     if isinstance(parser, basestring):
         parser = getattr(parsers, parser)
 
+    if dataframe.empty:
+        return dataframe
+    
     df = []
     for timestamp, data in dataframe.iterrows():
         parsed = parser(data, **kwargs)

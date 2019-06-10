@@ -104,11 +104,13 @@ def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, r
 
     for hrs, water_level in enumerate(water_levels):
         timestamp = base_timestamp - timedelta(hours=hrs)
+
         try:
-            water_level = float(water_level)
+            if isinstance(water_level, str):
+                water_level = float(water_level)
+
         except:
             water_level = pd.np.nan
-
         if hrs==0 and battery_voltage:
             data.append([timestamp, battery_voltage, water_level])
         else:
@@ -144,11 +146,9 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     if 'bv' in fields[0]:
         battery_voltage = fields[0].split(':')[-1]
         message = ' '.join(fields[1:])
-
     else:
         battery_voltage = None
         message = ' '.join(fields)
-
     fmt = '$+-"\x7f '
 
     df = []
@@ -162,6 +162,8 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
             data['channel'] = msg_channel
             data['time'] = msg_time
             df.append(data)
+    if 'dadds' in message:
+        return pd.DataFrame()
     else:
         fields = message.strip(fmt).lstrip().replace(': ', ':').split()
         water_levels = [_parse_value(field.strip(fmt).lstrip()) for field in fields]
@@ -181,7 +183,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
             data = _twdb_assemble_dataframe(message_timestamp, battery_voltage,
                                             water_levels, reverse=reverse)
             df.append(data)
-
+            
     df = pd.concat(df)
 
     if not drop_dcp_metadata:
