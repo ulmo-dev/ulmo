@@ -15,7 +15,7 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
     """
 
     message = df_row['dcp_message'].lower()
-    print(message)
+    
     if 'dadds' in message:
         return pd.DataFrame()
     if 'operator' in message:
@@ -185,7 +185,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
                 data.rename(columns={'water_level': 'water_level_' + well},
                             inplace=True)
                 if not data.empty:
-                    combined = pd.concat([combined, data], axis=1).drop_duplicates(axis=1)
+                    combined = pd.concat([combined, data], axis=1).T.drop_duplicates().T
                 else:
                     combined = pd.concat([combined, data], axis=1)
             df.append(combined)
