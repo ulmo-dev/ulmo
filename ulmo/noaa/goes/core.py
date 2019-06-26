@@ -52,8 +52,10 @@ def decode(dataframe, parser, **kwargs):
     for timestamp, data in dataframe.iterrows():
         parsed = parser(data, **kwargs)
         parsed.dropna(how='all', inplace=True)
-        if not parsed.empty:
-            df.append(parsed)
+        if parsed.empty:
+            empty_df = pd.DataFrame()
+            df.append(empty_df)
+        df.append(parsed)
 
     df = pd.concat(df)
     return df
