@@ -15,7 +15,6 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
     """
 
     message = df_row['dcp_message'].lower()
-
     if 'dadds' in message:
         return pd.DataFrame()
     if 'operator' in message:
@@ -177,22 +176,17 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
         if len(water_levels) and isinstance(water_levels[0], tuple):
             wells = list(set([val[0] for val in water_levels]))
             combined = pd.DataFrame()
-            if not len(wells)==0:
-                for well in wells:
-                    values = [val[1] for val in water_levels
-                              if isinstance(val, tuple) and val[0] == well]
-                    data = _twdb_assemble_dataframe(
-                        message_timestamp, battery_voltage, values, reverse=reverse)
-                    data.rename(columns={'water_level': 'water_level_' + well},
-                                inplace=True)
-
-                    if not data.empty:
-                        combined = pd.concat([combined, data], axis=1).drop_duplicates(axis=1)
-                    else:
-                        combined = pd.concat([combined, data], axis=1)
-
-                    combined = pd.concat([combined, data], axis=1).drop_duplicates(axis=1)
-
+            for well in wells:
+                values = [val[1] for val in water_levels
+                          if isinstance(val, tuple) and val[0] == well]
+                data = _twdb_assemble_dataframe(
+                    message_timestamp, battery_voltage, values, reverse=reverse)
+                data.rename(columns={'water_level': 'water_level_' + well},
+                            inplace=True)
+                if not data.empty:
+                    combined = pd.concat([combined, data], axis=1).T.drop_duplicates().T
+                else:
+                    combined = pd.concat([combined, data], axis=1)
             df.append(combined)
         else:
             data = _twdb_assemble_dataframe(message_timestamp, battery_voltage,
