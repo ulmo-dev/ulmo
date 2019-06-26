@@ -159,8 +159,8 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     fmt = '$+-"\x7f '
 
     df = []
-    if 'dadds' in message:
-        df.append(pd.DataFrame())
+    # if 'dadds' in message:
+    #     df.append(pd.DataFrame())
     if 'channel' in message:
         for channel_msg in message.strip('channel:').split('channel:'):
             fields = channel_msg.split()
