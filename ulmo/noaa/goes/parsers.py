@@ -15,10 +15,10 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
     """
 
     message = df_row['dcp_message'].lower()
-    if 'dadds' in message:
-        return pd.DataFrame()
-    if 'operator' in message:
-        return pd.DataFrame()
+    invalid_messages = ['dadds', 'operator', 'no']
+    for invalid in invalid_messages:
+        if invalid in message:
+            return pd.DataFrame()
     message_timestamp = df_row['message_timestamp_utc']
     lines = message.split(':')[1]
     water_levels = [field.strip('+- ') for field in lines.split()[3:]]
@@ -158,9 +158,11 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     fmt = '$+-"\x7f '
 
     df = []
-    if 'dadds' in message:
-        df.append(pd.DataFrame())
-    elif 'channel' in message:
+    invalid_messages = ['dadds', 'operator', 'no']
+    for invalid in invalid_messages:
+        if invalid in message:
+            df.append(pd.DataFrame())
+    if 'channel' in message:
         for channel_msg in message.strip('channel:').split('channel:'):
             fields = channel_msg.split()
             msg_channel = fields[0].split(':')[-1]
