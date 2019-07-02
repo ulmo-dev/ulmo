@@ -158,11 +158,11 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     fmt = '$+-"\x7f '
 
     df = []
-    invalid_messages = ['dadds', 'operator', 'no']
-    for invalid in invalid_messages:
-        if invalid in message:
-            df.append(pd.DataFrame())
-    if 'channel' in message:
+    if 'dadds' in message or 'operator' in message or 'no' in message:
+        water_levels = [pd.np.nan] * 12
+        data = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels)
+        df.append(data)
+    elif 'channel' in message:
         for channel_msg in message.strip('channel:').split('channel:'):
             fields = channel_msg.split()
             msg_channel = fields[0].split(':')[-1]
@@ -175,6 +175,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     else:
         fields = message.strip(fmt).lstrip().replace(': ', ':').split()
         water_levels = [_parse_value(field.strip(fmt).lstrip()) for field in fields]
+
         if len(water_levels) and isinstance(water_levels[0], tuple):
             wells = list(set([val[0] for val in water_levels]))
             combined = pd.DataFrame()
@@ -186,7 +187,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
                 data.rename(columns={'water_level': 'water_level_' + well},
                             inplace=True)
                 if not data.empty:
-                    combined = pd.concat([combined, data], axis=1).T.drop_duplicates().T
+                    combined = pd.concat([combined, data], axis=1).drop_duplicates(axis=1)
                 else:
                     combined = pd.concat([combined, data], axis=1)
             df.append(combined)
