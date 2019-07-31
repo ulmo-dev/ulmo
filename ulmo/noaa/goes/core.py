@@ -47,7 +47,7 @@ def decode(dataframe, parser, **kwargs):
 
     if dataframe.empty:
         return dataframe
-    
+
     df = []
     for timestamp, data in dataframe.iterrows():
         parsed = parser(data, **kwargs)
@@ -129,7 +129,7 @@ def get_data(dcp_address, hours, use_cache=False, cache_path=None,
 
 
 def _fetch_url(params):
-    r = requests.post(dcs_url, params=params)
+    r = requests.post(dcs_url, params=params, timeout=10)
     messages = r.json()
     return messages
 
