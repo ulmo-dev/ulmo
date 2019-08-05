@@ -186,7 +186,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
                     message_timestamp, battery_voltage, values, reverse=reverse)
                 data.rename(columns={'water_level': 'water_level_' + well},
                             inplace=True)
-                print(data)
+
                 if not data.empty:
                     combined = pd.concat([combined, data], axis=1).T.drop_duplicates().T
                 else:

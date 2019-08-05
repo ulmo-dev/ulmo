@@ -96,20 +96,17 @@ def get_data(dcp_address, hours, use_cache=False, cache_path=None,
         dcp_data_path = _get_store_path(cache_path, dcp_address + '.h5')
         if os.path.exists(dcp_data_path):
             data = pd.read_hdf(dcp_data_path, dcp_address)
-
     params = {}
     params['addr'] = dcp_address,
     params['hours'] = hours,
 
     messages = _fetch_url(params)
-
     new_data = pd.DataFrame([_parse(row) for row in messages])
 
     if not new_data.empty:
         new_data.index = new_data.message_timestamp_utc
         data = new_data.combine_first(data)
         data.sort_index(inplace=True)
-
         if use_cache:
             # write to a tmp file and move to avoid ballooning h5 file
             tmp = dcp_data_path + '.tmp'
@@ -124,12 +121,11 @@ def get_data(dcp_address, hours, use_cache=False, cache_path=None,
 
     if not as_dataframe:
         data = data.T.to_dict()
-
     return data
 
 
 def _fetch_url(params):
-    r = requests.post(dcs_url, params=params, timeout=10)
+    r = requests.post(dcs_url, params=params, timeout=60)
     messages = r.json()
     return messages
 
