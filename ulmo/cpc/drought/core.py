@@ -237,19 +237,19 @@ def _get_data_format(year):
 def _get_data_url(year):
     current_year, current_week = _week_number(datetime.date.today())
     if year == current_year:
-        return ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data', True)
+        return ('https://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data', True)
     elif year == current_year - 1:
-        url = ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:],
+        url = ('https://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:],
                 False)
         if not _url_exists(url[0]):
-            url = ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data', True)
+            url = ('https://ftp.cpc.ncep.noaa.gov/htdocs/temp4/current.data', True)
         return url
     elif year <= 1985:
-        return ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer73-85', False)
+        return ('https://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer73-85', False)
     else:
-        url = ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s' % str(year)[-2:], False)
+        url = ('https://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s' % str(year)[-2:], False)
         if not _url_exists(url[0]):
-            url = ('http://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:],
+            url = ('https://ftp.cpc.ncep.noaa.gov/htdocs/temp2/palmer%s-PRELIM' % str(year)[-2:],
                     False)
         return url
 
