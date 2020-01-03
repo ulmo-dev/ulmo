@@ -1,5 +1,4 @@
-.. _api:
-
+.. title:: ulmo readers (API)
 
 ulmo Readers
 ============
@@ -18,6 +17,8 @@ and datetime objects from python's datetime standard library module.  For
 strings, the ISO 8061 format ('YYYY-mm-dd HH:MM:SS' or some abbreviated version)
 is accepted, as well dates in 'mm/dd/YYYY' format.
 
+
+.. _api:
 
 California Department of Water Resources Historical Data
 ========================================================

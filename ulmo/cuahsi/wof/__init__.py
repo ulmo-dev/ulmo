@@ -1,8 +1,7 @@
 """
-    ulmo.cuahsi.wof
-    ~~~~~~~~~~~~~~~
-
-    `CUAHSI WaterOneFlow`_ web services
+    CUAHSI WaterOneFlow
+    ~~~~~~~~~~~~~~~~~~~
+    `CUAHSI WaterOneFlow`_ web data access services
 
     .. _CUAHSI WaterOneFlow: http://his.cuahsi.org/wofws.html
 """

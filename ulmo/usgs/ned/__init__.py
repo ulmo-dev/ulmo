@@ -1,6 +1,5 @@
 """
-    `National Elevation Dataset`_ services (Raster)
-
+    `National Elevation Dataset (NED)`_ services (Raster)
 
     .. _National Elevation Dataset (NED): http://ned.usgs.gov
 """

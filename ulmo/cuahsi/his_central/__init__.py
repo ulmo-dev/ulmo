@@ -1,8 +1,7 @@
 """
-    ulmo.cuahsi.his_central
-    ~~~~~~~~~~~~~~~~~~~~~~~
-
-    `CUAHSI HIS Central`_ web services
+    CUAHSI HIS Central
+    ~~~~~~~~~~~~~~~~~~
+    `CUAHSI HIS Central`_ catalog web services
 
     .. _CUAHSI HIS Central: http://his.cuahsi.org/hiscentral.html
 """

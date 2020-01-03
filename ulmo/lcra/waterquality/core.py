@@ -1,15 +1,16 @@
 """
     ulmo.lcra.waterquality.core
-    ~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
     This module provides access to data provided by the `Lower Colorado 
     River Authority`_ `Water Quality`_ web site.
+
     .. _Lower Colorado River Authority: http://www.lcra.org
     .. _Water Quality: http://waterquality.lcra.org/
 """
 from bs4 import BeautifulSoup
 import logging
 from geojson import Point, Feature, FeatureCollection
-#import unicode
+# import unicode
 
 from ulmo import util
 
@@ -51,12 +52,14 @@ real_time_sites = {
 
 def get_sites(source_agency=None):
     """Fetches a list of sites with location and available metadata.
+
     Parameters
     ----------
-    source_agency : LCRA used code of the that collects the data. there
-    are sites whose sources are not listed so this filter may not return
-    all sites of a certain source. see
-    ``source_map``.
+    source_agency : str
+        LCRA used code of the that collects the data. There are sites whose
+        sources are not listed so this filter may not return all sites of a certain source.
+        See ``source_map``.
+
     Returns
     -------
     sites_geojson : geojson FeatureCollection
@@ -82,9 +85,10 @@ def get_sites(source_agency=None):
 
 def get_historical_data(site_code, start=None, end=None, as_dataframe=False):
     """Fetches data for a site at a given date.
+
     Parameters
     ----------
-    site_code: str
+    site_code : str
         The site code to fetch data for. A list of sites can be retrieved with
         ``get_sites()``
     date : ``None`` or date (see :ref:`dates-and-times`)
@@ -96,6 +100,7 @@ def get_historical_data(site_code, start=None, end=None, as_dataframe=False):
         to a dict of gauge variables and values. If ``True`` then the values
         dict will be a pandas.DataFrame object containing the equivalent
         information.
+
     Returns
     -------
     data_dict : dict
@@ -134,7 +139,7 @@ def get_historical_data(site_code, start=None, end=None, as_dataframe=False):
 
     headers = [head.text for head in gridview.findAll('th')]
 
-    #uses \xa0 for blank
+    # uses \xa0 for blank
 
     for row in gridview.findAll('tr'):
         vals = [_parse_val(aux.text) for aux in row.findAll('td')]
@@ -159,6 +164,7 @@ def get_historical_data(site_code, start=None, end=None, as_dataframe=False):
 def get_recent_data(site_code, as_dataframe=False):
     """fetches near real-time instantaneous water quality data for the LCRA
     bay sites.
+
     Parameters
     ----------
     site_code : str
@@ -167,9 +173,11 @@ def get_recent_data(site_code, as_dataframe=False):
         This determines what format values are returned as. If ``False``
         (default), the values will be list of value dicts. If ``True`` then 
         values are returned as pandas.DataFrame.
+
     Returns
     -------
-    list of values or dataframe.
+    list
+        list of values or dataframe.
     """
     if site_code not in real_time_sites.keys():
         log.info('%s is not in the list of LCRA real time salinity sites' %
@@ -242,7 +250,7 @@ def _extract_headers_for_next_request(request):
         if tag_dict.get('value', None) == 'tabular':
             #
             continue
-        #some tags don't have a value and are used w/ JS to toggle a set of checkboxes
+        # some tags don't have a value and are used w/ JS to toggle a set of checkboxes
         payload[tag_dict['name']] = tag_dict.get('value')
     return payload
 
@@ -281,7 +289,7 @@ def _make_next_request(url, previous_request, data):
 
 
 def _parse_val(val):
-    #the &nsbp translates to the following unicode
+    # the &nsbp translates to the following unicode
     if val == u'\xa0':
         return None
     else:
