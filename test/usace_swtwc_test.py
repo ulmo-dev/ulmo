@@ -21,14 +21,29 @@ def test_get_stations():
 
 def test_get_station_data():
     test_station_data = [
-        ('MYST2', '2018-02-03', {
-            'code': 'MYST2',
-            'description': 'Pat Mayse Lake',
-            'station_type': 'RESERVOIR',
+        ('DSNT2', '2017-07-25', {
+            'code': 'DSNT2',
+            'description': 'Lake Texoma, Denison Dam',
+            'station_type': 'Reservoir',
             'timezone': 'US/Central',
             'values': {
-                '2018-02-03 01:00:00': {'PRECIP PRE': 0.0, 'CIP(A) ELE': 0.0, 'VATION   S': 451.61, 'TORAGE': 121347.0, 'INFLOW   R': 0.0, 'ELEASE  AI': 59.0, 'R-TEMP  WI': 35.4, 'ND-DIRWIND': 75.0, '-SPEED REL': 5.36, '-HUMID SOL': 41.52, 'AR-RAD   V': -2.0, 'OLTAGE  BA': 12.37}
-                },
+                '2017-07-25 01:00:00': {
+                    'AIR-TEMP': 80.10,
+                    'BAT-LOAD': 11.37,
+                    'ELEVATION': 617.73,
+                    'INFLOW': 564,
+                    'PRECIP': 0.0,
+                    'PRECIP(A)': 0.0,
+                    'REL-HUMID': 81.98,
+                    'RELEASE': 19,
+                    'SOLAR-RAD': 0.0,
+                    'STORAGE': 2572324.0,
+                    'VOLTAGE': 11.77,
+                    'WIND-DIR': 135.90,
+                    'WIND-SPEED': 1.42,
+                    'TW-ELEV': 501.87
+                }
+            },
         }),
     ]
 
