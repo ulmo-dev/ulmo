@@ -1,15 +1,20 @@
 # ignore egginfo file
 ulmo.egg-info/
 
-# ignore build, dist dir
+# ignore build, dist, ulmo_test_cache, .pytest_cache dir
 dist/
 build/
+ulmo_test_cache/
+.pytest_cache/
 
 # ignore sphinx build dir
 docs/_build/
 
 # ignore compiled python files
 *.pyc
+
+# ignore .coverage
+.coverage
 
 # Ignore checkpoints created (especially for the examples)
 .ipynb_checkpoints

@@ -52,7 +52,7 @@ API Reference
 Documentation for ulmo readers.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    api
 
