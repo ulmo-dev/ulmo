@@ -4,6 +4,7 @@
     This module provides access to hydrologic and climate data in the Colorado
     River Basin (Texas) provided by the `Lower Colorado River Authority`_
     `Hydromet`_ web site and web service.
+
     .. _Lower Colorado River Authority: http://www.lcra.org
     .. _Hydromet: http://hydromet.lcra.org
 """
@@ -51,11 +52,13 @@ dam_sites = ['1995', '1999', '2958', '2999', '3963', '3999']
 
 def get_sites_by_type(site_type):
     """Gets list of the hydromet site codes and description for site.
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
     site_type : str
         In all but lake sites, this is the parameter code collected at the site.
         For lake sites, it is 'lake'. See ``site_types`` and ``PARAMETERS``
+
     Returns
     -------
     sites_dict: dict
@@ -64,7 +67,7 @@ def get_sites_by_type(site_type):
     sites_base_url = 'http://hydromet.lcra.org/navgagelist.asp?Stype=%s'
     # the url doesn't provide list of sites for the following parameters but
     # they are available with the paired parameter. e.g., flow is available
-    #at stage sites.
+    # at stage sites.
     if site_type == 'winddir':
         site_type = 'windsp'
     if site_type == 'flow':
@@ -100,6 +103,7 @@ def get_all_sites():
 def get_current_data(service, as_geojson=False):
     """fetches the current (near real-time) river stage and flow values from
     LCRA web service.
+
     Parameters
     ----------
     service : str
@@ -108,10 +112,11 @@ def get_current_data(service, as_geojson=False):
     as_geojson : 'True' or 'False' (default)
         If True the data is returned as geojson featurecollection and if False
         data is returned as list of dicts.
+
     Returns
     -------
-    current_values_dicts : a list of dicts or
-    current_values_geojson : a geojson featurecollection.
+        current_values_dicts : a list of dicts or
+        current_values_geojson : a geojson featurecollection.
     """
     request_body_template = (
         '<?xml version="1.0" encoding="utf-8"?>\n'
@@ -160,6 +165,7 @@ def get_current_data(service, as_geojson=False):
 def get_site_data(site_code, parameter_code, as_dataframe=True,
                   start_date=None, end_date=None, dam_site_location='head'):
     """Fetches site's parameter data
+
     Parameters
     ----------
     site_code : str
@@ -206,7 +212,7 @@ def get_site_data(site_code, parameter_code, as_dataframe=True,
             parameter_code = 'STAGE'
     elif parameter_code == 'RHUMID':
         parameter_code = 'Rhumid'
-    #the parameter selection dropdown doesn't have flow. the data comes with stage.
+    # the parameter selection dropdown doesn't have flow. the data comes with stage.
     elif parameter_code == 'FLOW':
         parameter_code = 'STAGE'
     else:
@@ -327,7 +333,7 @@ def _extract_headers_for_next_request(request):
         if tag_dict.get('value', None) == 'tabular':
             #
             continue
-        #some tags don't have a value and are used w/ JS to toggle a set of checkboxes
+        # some tags don't have a value and are used w/ JS to toggle a set of checkboxes
         payload[tag_dict['name']] = tag_dict.get('value')
     return payload
 
@@ -339,7 +345,7 @@ def _make_next_request(url, previous_request, data):
 
 
 def _parse_val(val):
-    #the &nsbp translates to the following unicode
+    # the &nsbp translates to the following unicode
     if val == u'\xa0':
         return None
     else:

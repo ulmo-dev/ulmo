@@ -25,7 +25,7 @@ code`_ and run setup.py from the root directory:
 
 To setup a development environment using conda:
 
-    conda env create -n myenv --file py2_conda_environment.yml #(or py3_conda_environment.yml if you want to work with python 3)
+    conda env create -n myenv --file conda_environment.yml
 
     source activate myenv #(use 'activate test_environment' on windows)
 

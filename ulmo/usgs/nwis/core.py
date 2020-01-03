@@ -35,65 +35,66 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-def get_sites(sites=None, state_code=None, huc=None, bounding_box=None, 
-        county_code=None, parameter_code=None, site_type=None, service=None, 
-        input_file=None, **kwargs):
-    """Fetches site information from USGS services. See the `USGS Site Service`_
-    documentation for a detailed description of options. For convenience, major
-    options have been included with pythonic names. Options that are not listed 
+def get_sites(service=None, input_file=None,  sites=None, state_code=None,
+              huc=None, bounding_box=None, county_code=None, parameter_code=None,
+              site_type=None, **kwargs):
+    """Fetches site information from USGS services.
+    See the `USGS Site Service`_ documentation for a detailed description of options.
+    For convenience, major options have been included with pythonic names.
+    At least one major filter must be specified. Options that are not listed
     below may be provided as extra kwargs (i.e. keyword='argument') and will be 
     passed along with the web services request. These extra keywords must match 
     the USGS names exactly. The `USGS Site Service`_ website describes available
     keyword names and argument formats. 
 
-    .. USGS Site Service:http://waterservices.usgs.gov/rest/Site-Service.html
+    .. _USGS Site Service: http://waterservices.usgs.gov/rest/Site-Service.html
 
     .. note::
         Only the options listed below have been tested and you may have mixed 
         results retrieving data with extra options specified. Currently ulmo 
-        requests and parses data in the waterml format. Some options are not 
+        requests and parses data in the WaterML 1.x format. Some options are not
         available in this format.
 
     Parameters
-    ==========
-    service : {``None``, 'instantaneous', 'iv', 'daily', 'dv'}
-        The service to use, either "instantaneous", "daily", or ``None``
-        (default).  If set to ``None``, then both services are used.  The
+    ----------
+    service : {`None`, 'instantaneous', 'iv', 'daily', 'dv'}
+        The service to use, either "instantaneous", "daily", or `None`
+        (default).  If set to `None`, then both services are used.  The
         abbreviations "iv" and "dv" can be used for "instantaneous" and "daily",
         respectively.
-    input_file: ``None``, file path or file object
-        If ``None`` (default), then the NWIS web services will be queried, but
+    input_file : `None`, file path or file object
+        If `None` (default), then the NWIS web services will be queried, but
         if a file is passed then this file will be used instead of requesting
         data from the NWIS web services.
-
-    Major Filters (At least one filter must be specified)
-    -----------------------------------------------------
-        sites : str, iterable of strings or ``None``
-            The site(s) to use; lists will be joined by a ','. 
-        state_code : str or ``None``
-            Two-letter state code used in stateCd parameter.
-        county_code : str, iterable of strings or ``None``
-            The 5 digit FIPS county code(s) used in the countyCd parameter; lists 
-            will be joined by a ','.
-        huc : str, iterable of strings or ``None``
-            The hydrologic unit code(s) to use; lists will be joined by a ','.
-        bounding_box : str, iterable of strings or ``None``
-            This bounding box used in the bBox parameter. The format is westernmost 
-            longitude, southernmost latitude, easternmost longitude, northernmost 
-            latitude; lists will be joined by a ','.
-
-    Optional Filters Provided
-    -------------------------
-        parameter_code : str, iterable of strings or ``None``
-            Parameter code(s) that will be passed as the parameterCd parameter; lists will be joined by a ','.   
-            This parameter represents the following usgs website input: Sites serving parameter codes
-        site_types : str, iterable of strings or ``None``
-            The type(s) of site used in siteType parameter; lists will be joined by a ','.
-
+    sites : str, iterable of strings or ``None``
+        A major filter. The site(s) to use; lists will be joined by a ','.
+        At least one major filter must be specified.
+    state_code : str or ``None``
+        A major filter. Two-letter state code used in ``stateCd`` parameter.
+        At least one major filter must be specified.
+    county_code : str, iterable of strings or ``None``
+        A major filter. The 5 digit FIPS county code(s) used in the countyCd parameter;
+        lists will be joined by a ','.
+        At least one major filter must be specified.
+    huc : str, iterable of strings or ``None``
+        A major filter. The hydrologic unit code(s) to use; lists will be joined by a ','.
+        At least one major filter must be specified.
+    bounding_box : str, iterable of strings or ``None``
+        A major filter. This bounding box used in the bBox parameter. The format is
+        westernmost longitude, southernmost latitude, easternmost longitude, northernmost
+        latitude; lists will be joined by a ','.
+        At least one major filter must be specified.
+    parameter_code : str, iterable of strings or ``None``
+        Optional filter. Parameter code(s) that will be passed as the ``parameterCd`` parameter;
+        lists will be joined by a ','. This parameter represents the following USGS website
+        input: Sites serving parameter codes
+    site_type : str, iterable of strings or ``None``
+        Optional filter. The type(s) of site used in ``siteType`` parameter;
+        lists will be joined by a ','.
 
     Returns
     -------
-    sites_dict : dict
+    return_sites : dict
         a python dict with site codes mapped to site information
     """
     

@@ -46,25 +46,25 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
 
     Parameters
     ----------
-    elements : ``None`, str or list
+    elements : ``None``, str or list
         The element(s) for which to get data for. If ``None`` (default), then
         all elements are used. An individual element is a string, but a list or
         tuple of them can be used to specify a set of elements.  Elements are:
-          * 'cddc': Cooling Degree Days
-          * 'hddc': Heating Degree Days
-          * 'pcpn': Precipitation
-          * 'pdsi': Palmer Drought Severity Index
-          * 'phdi': Palmer Hydrological Drought Index
-          * 'pmdi': Modified Palmer Drought Severity Index
-          * 'sp01': 1-month Standardized Precipitation Index
-          * 'sp02': 2-month Standardized Precipitation Index
-          * 'sp03': 3-month Standardized Precipitation Index
-          * 'sp06': 6-month Standardized Precipitation Index
-          * 'sp09': 9-month Standardized Precipitation Index
-          * 'sp12': 12-month Standardized Precipitation Index
-          * 'sp24': 24-month Standardized Precipitation Index
-          * 'tmpc': Temperature
-          * 'zndx': ZNDX
+            * 'cddc': Cooling Degree Days
+            * 'hddc': Heating Degree Days
+            * 'pcpn': Precipitation
+            * 'pdsi': Palmer Drought Severity Index
+            * 'phdi': Palmer Hydrological Drought Index
+            * 'pmdi': Modified Palmer Drought Severity Index
+            * 'sp01': 1-month Standardized Precipitation Index
+            * 'sp02': 2-month Standardized Precipitation Index
+            * 'sp03': 3-month Standardized Precipitation Index
+            * 'sp06': 6-month Standardized Precipitation Index
+            * 'sp09': 9-month Standardized Precipitation Index
+            * 'sp12': 12-month Standardized Precipitation Index
+            * 'sp24': 24-month Standardized Precipitation Index
+            * 'tmpc': Temperature
+            * 'zndx': ZNDX
     by_state : bool
         If False (default), divisional data will be retrieved. If True, then
         regional data will be retrieved.
@@ -86,7 +86,6 @@ def get_data(elements=None, by_state=False, location_names='abbr', as_dataframe=
         the web. If a file-like object or a file path string, then the file will
         be used to read data from. This is intended to be used for reading in
         previously-downloaded versions of the dataset.
-
 
     Returns
     -------
@@ -202,15 +201,15 @@ def _parse_values(file_handle, by_state, location_names, element):
     if by_state:
         id_columns = [
             ('location_code', 0, 3, None),
-            #('division', 3, 3, None), # ignored in state files
-            #('element', 4, 6, None),  # element is redundant
+            # ('division', 3, 3, None), # ignored in state files
+            # ('element', 4, 6, None),  # element is redundant
             ('year', 6, 10, None),
         ]
     else:
         id_columns = [
             ('location_code', 0, 2, None),
             ('division', 2, 4, None),
-            #('element', 4, 6, None),  # element is redundant
+            # ('element', 4, 6, None),  # element is redundant
             ('year', 6, 10, None),
         ]
 
@@ -264,10 +263,10 @@ def _resolve_location_names(df, location_names, by_state):
 
 def _states_regions_dataframe():
     """returns a dataframe indexed by state/region code with columns for the
-    name and abbrevitation (abbr) to use
+    name and abbreviation (abbr) to use
     """
     STATES_REGIONS = {
-        # code: (full name, abbrevation)
+        # code: (full name, abbreviation)
         1: ("Alabama", "AL"),
         2: ("Arizona", "AZ"),
         3: ("Arkansas", "AR"),

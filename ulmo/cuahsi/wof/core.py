@@ -35,7 +35,7 @@ def get_sites(wsdl_url, suds_cache=("default",), timeout=None):
         URL of a service's web service definition language (WSDL) description.
         All WaterOneFlow services publish a WSDL description and this url is the
         entry point to the service.
-    suds_cache : ``None`` or tuple
+    suds_cache : `None` or tuple
         SOAP local cache duration for WSDL description and client object.
         Pass a cache duration tuple like ('days', 3) to set a custom duration.
         Duration may be in months, weeks, days, hours, or seconds.

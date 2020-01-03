@@ -49,8 +49,10 @@ repository. Bug reports, issues and especially pull Requests are welcome.
 API Reference
 -------------
 
+Documentation for ulmo readers.
+
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
    api
 

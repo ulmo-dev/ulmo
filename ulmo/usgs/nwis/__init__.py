@@ -7,9 +7,7 @@
 from __future__ import absolute_import
 
 from . import core
-
 from .core import (get_sites, get_site_data)
-
 from ulmo import util
 
 try:
