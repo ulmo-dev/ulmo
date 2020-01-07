@@ -4,8 +4,7 @@
 
     This module provides direct access to the `CUAHSI HIS Central`_ web service.
 
-
-    .. _CUAHSI HIS Central: http://his.cuahsi.org/hiscentral.html
+    .. _CUAHSI HIS Central: http://hiscentral.cuahsi.org/
 """
 from builtins import str
 import suds.client
@@ -19,7 +18,6 @@ HIS_CENTRAL_WSDL_URL = 'http://hiscentral.cuahsi.org/webservices/hiscentral.asmx
 def get_services(bbox=None):
     """Retrieves a list of services.
 
-
     Parameters
     ----------
     bbox : ``None`` or 4-tuple
@@ -28,7 +26,6 @@ def get_services(bbox=None):
         min_latitude, max_longitude, and max_latitude) with these values in
         decimal degrees. If not provided then the full set of services will be
         queried from HIS Central.
-
 
     Returns
     -------
@@ -67,7 +64,7 @@ def _cast_if_text(obj):
 def _service_dict(service_info):
     """converts a ServiceInfo etree object into a service info dict"""
     change_keys = [
-        #(old_key, new_key)
+        # (old_key, new_key)
         ('aabstract', 'abstract'),
         ('maxx', 'max_x'),
         ('maxy', 'max_y'),
