@@ -237,7 +237,7 @@ def get_site_data(site_code, service=None, parameter_code=None, statistic_code=N
         if isinstance(period, basestring):
             if period == 'all':
                 if service in ('iv', 'instantaneous'):
-                    start = datetime.datetime(2007, 10, 1)
+                    start = datetime.datetime(1910, 1, 1)
                 elif service in ('dv', 'daily'):
                     start = datetime.datetime(1851, 1, 1)
             else:
