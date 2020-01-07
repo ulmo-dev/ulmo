@@ -5,7 +5,6 @@
     This module provides direct access to `USGS National Water Information
     System`_ web services.
 
-
     .. _USGS National Water Information System: http://waterdata.usgs.gov/nwis
 
 """
@@ -57,13 +56,13 @@ def get_sites(service=None, input_file=None,  sites=None, state_code=None,
 
     Parameters
     ----------
-    service : {`None`, 'instantaneous', 'iv', 'daily', 'dv'}
+    service : {``None``, 'instantaneous', 'iv', 'daily', 'dv'}
         The service to use, either "instantaneous", "daily", or `None`
-        (default).  If set to `None`, then both services are used.  The
+        (default).  If set to ``None``, then both services are used.  The
         abbreviations "iv" and "dv" can be used for "instantaneous" and "daily",
         respectively.
-    input_file : `None`, file path or file object
-        If `None` (default), then the NWIS web services will be queried, but
+    input_file : ``None``, file path or file object
+        If ``None`` (default), then the NWIS web services will be queried, but
         if a file is passed then this file will be used instead of requesting
         data from the NWIS web services.
     sites : str, iterable of strings or ``None``
@@ -174,7 +173,6 @@ def get_site_data(site_code, service=None, parameter_code=None, statistic_code=N
         methods=None, **kwargs):
     """Fetches site data.
 
-
     Parameters
     ----------
     site_code : str
@@ -186,35 +184,35 @@ def get_site_data(site_code, service=None, parameter_code=None, statistic_code=N
         respectively.
     parameter_code : str
         Parameter code(s) that will be passed as the parameterCd parameter.
-    statistic_code: str
+    statistic_code : str
         Statistic code(s) that will be passed as the statCd parameter
     start : ``None`` or datetime (see :ref:`dates-and-times`)
         Start of a date range for a query. This parameter is mutually exclusive
-        with period (you cannot use both).
+        with period (you cannot use both). It should not be older than
+        1910-1-1 for 'iv' and 1851-1-1 for 'dv' services.
     end : ``None`` or datetime (see :ref:`dates-and-times`)
         End of a date range for a query. This parameter is mutually exclusive
         with period (you cannot use both).
     period : {``None``, str, datetime.timedelta}
         Period of time to use for requesting data. This will be passed along as
         the period parameter. This can either be 'all' to signal that you'd like
-        the entire period of record, or string in ISO 8601 period format (e.g.
-        'P1Y2M21D' for a period of one year, two months and 21 days) or it can
-        be a datetime.timedelta object representing the period of time. This
-        parameter is mutually exclusive with start/end dates.
+        the entire period of record (down to 1910-1-1 for 'iv', 1851-1-1 for 'dv'),
+        or string in ISO 8601 period format (e.g. 'P1Y2M21D' for a period of one year,
+        two months and 21 days) or it can be a datetime.timedelta object representing
+        the period of time. This parameter is mutually exclusive with start/end dates.
     modified_since : ``None`` or datetime.timedelta
         Passed along as the modifiedSince parameter.
-    input_file: ``None``, file path or file object
+    input_file : ``None``, file path or file object
         If ``None`` (default), then the NWIS web services will be queried, but
         if a file is passed then this file will be used instead of requesting
         data from the NWIS web services.
-    methods: ``None``, str or Python dict
+    methods : ``None``, str or Python dict
         If ``None`` (default), it's assumed that there is a single method for
         each parameter. This raises an error if more than one method ids are
         encountered. If str, this is the method id for the requested
         parameter/s and can use "all" if method ids are not known beforehand. If
         dict, provide the parameter_code to method id mapping. Parameter's
         method id is specific to site.
-
 
     Returns
     -------
