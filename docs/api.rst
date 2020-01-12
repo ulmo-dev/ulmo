@@ -20,7 +20,6 @@ is accepted, as well dates in 'mm/dd/YYYY' format.
 
 .. _api:
 
-
 Readers for Global to USA-national data
 =======================================
 
@@ -33,9 +32,13 @@ Climate Prediction Center (CPC) Weekly Drought
 CUAHSI Hydrologic Information System (HIS)
 ------------------------------------------
 
+CUAHSI HIS Central
+^^^^^^^^^^^^^^^^^^
 .. automodule:: ulmo.cuahsi.his_central
    :members: get_services
 
+CUAHSI WaterOneFlow
+^^^^^^^^^^^^^^^^^^^
 .. automodule:: ulmo.cuahsi.wof
    :members: get_sites, get_site_info, get_values, get_variable_info
 
