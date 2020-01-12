@@ -12,9 +12,8 @@ channel with the following command:
 
 Otherwise, follow the instructions below:
 
-Once the requisite scientific python libraries are installed are installed, the
-most recent release of ulmo can be installed from pypi. Pip is a good way to do
-that:
+Once the requisite scientific python libraries are installed, the most recent release
+of ulmo can be installed from pypi. Pip is a good way to do that:
 
     pip install ulmo
 

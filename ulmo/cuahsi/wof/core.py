@@ -1,9 +1,7 @@
 """
     ulmo.wof.core
     ~~~~~~~~~~~~~
-
     This module provides direct access to `CUAHSI WaterOneFlow`_ web services.
-
 
     .. _CUAHSI WaterOneFlow: http://his.cuahsi.org/wofws.html
 """
@@ -124,8 +122,7 @@ def get_site_info(wsdl_url, site_code, suds_cache=("default",), timeout=None):
 
 def get_values(wsdl_url, site_code, variable_code, start=None, end=None, 
                suds_cache=("default",), timeout=None):
-    """
-    Retrieves site values from a WaterOneFlow service using a GetValues request.
+    """Retrieves site values from a WaterOneFlow service using a GetValues request.
 
     Parameters
     ----------
@@ -142,11 +139,13 @@ def get_values(wsdl_url, site_code, variable_code, start=None, end=None,
         codes MUST contain the network and be of the form
         <vocabulary>:<variable_code>, as is required by WaterOneFlow.
     start : ``None`` or datetime (see :ref:`dates-and-times`)
-        Start of a date range for a query. If both start and end parameters are
-        omitted, the entire time series available will be returned.
+        Start of the query datetime range. If omitted, data from the start of
+        the time series to the ``end`` timestamp will be returned (but see caveat,
+        in note below).
     end : ``None`` or datetime (see :ref:`dates-and-times`)
-        End of a date range for a query. If both start and end parameters are
-        omitted, the entire time series available will be returned.
+        End of the query datetime range. If omitted, data from the ``start``
+        timestamp to end of the time series will be returned (but see caveat,
+        in note below).
     suds_cache : ``None`` or tuple
         SOAP local cache duration for WSDL description and client object.
         Pass a cache duration tuple like ('days', 3) to set a custom duration.
@@ -161,6 +160,16 @@ def get_values(wsdl_url, site_code, variable_code, start=None, end=None,
     -------
     site_values : dict
         a python dict containing values
+
+    Notes
+    -----
+    If both ``start`` and ``end`` parameters are omitted, the entire time series
+    available will typically be returned. However, some service providers will return
+    an error if either start or end are omitted; this is specially true for services
+    hosted or redirected by CUAHSI via the CUAHSI HydroPortal, which have a 'WSDL' url
+    using the domain http://hydroportal.cuahsi.org. For HydroPortal, a start datetime
+    of '1753-01-01' has been known to return valid results while catching the oldest
+    start times, though the response may be broken up into chunks ('paged').
     """
     suds_client = _get_client(wsdl_url, suds_cache, timeout)
 

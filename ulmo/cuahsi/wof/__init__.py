@@ -1,9 +1,5 @@
 """
-    CUAHSI WaterOneFlow
-    ~~~~~~~~~~~~~~~~~~~
-    `CUAHSI WaterOneFlow`_ web data access services
-
-    .. _CUAHSI WaterOneFlow: http://his.cuahsi.org/wofws.html
+    .. include:: ../ulmo/cuahsi/wof/README.rst
 """
 from __future__ import absolute_import
 
