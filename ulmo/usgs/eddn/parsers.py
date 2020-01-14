@@ -26,6 +26,7 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
                 water_levels = [
                     field.strip('+- ') for field in line[3:]
                 ]
+                battery_voltage = None
             # grab battery voltage
             if line[0] == 'vb':
                 battery_voltage = line[3].strip('+- ')
