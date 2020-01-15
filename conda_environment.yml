@@ -37,6 +37,7 @@ dependencies:
     - numpydoc>=0.4
     - python-dateutil
     - sphinx>=1.1.3
+    - setuptools
 
     # test dependencies
     - pytest-runner
