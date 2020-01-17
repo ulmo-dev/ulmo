@@ -273,10 +273,12 @@ def test_parser_twdb_texuni():
         columns = ['timestamp_utc', 'battery_voltage', 'water_level']
         _assert(test_set, columns, 'twdb_texuni')
 
+
 twdb_fts_test_sets = [
     {
         'message_timestamp_utc': datetime(2018, 2, 6, 13, 36, 14),
-        'dcp_message': ':WL 31 #60 -72.90 -72.88 -72.87 -72.87 -72.87 -72.87 -72.88 -72.88 -72.87 -72.87 -72.87 -72.85 ',
+        'dcp_message': ':WL 31 #60 -72.90 -72.88 -72.87 -72.87 -72.87 ' +
+                       '-72.87 -72.88 -72.88 -72.87 -72.87 -72.87 -72.85 ',
         'return_value': [
             ['2018-02-06 13:00:00', pd.np.nan, 72.90],
             ['2018-02-06 12:00:00', pd.np.nan, 72.88],
@@ -294,7 +296,9 @@ twdb_fts_test_sets = [
     },
     {
         'message_timestamp_utc': datetime(2020, 1, 14, 13, 36, 14),
-        'dcp_message': '":vb 119 #720 13.00 :wl 59 #60 -217.66 -217.66 -217.64 -217.60 -217.56 -217.51 -217.45 -217.40 -217.38 -217.39 -217.41 -217.47',
+        'dcp_message': '":vb 119 #720 13.00 :wl 59 #60 -217.66 -217.66 ' +
+                       '-217.64 -217.60 -217.56 -217.51 -217.45 -217.40 ' +
+                       '-217.38 -217.39 -217.41 -217.47',
         'return_value': [
             ['2020-01-14 13:00:00', 13.0, 217.66],
             ['2020-01-14 12:00:00', pd.np.nan, 217.66],
@@ -310,7 +314,22 @@ twdb_fts_test_sets = [
             ['2020-01-14 02:00:00', pd.np.nan, 217.47],
         ]
     },
+    {
+        'message_timestamp_utc': datetime(2019, 12, 6, 1, 0, 0),
+        'dcp_message': '"Operator Initiated Test Transmission: Operator' +
+                       'Initiated Test Transmission: Operator Initiated Test' +
+                       'Transmission: Operator Initiated Test Transmission: ' +
+                       'Operator Initiated Test Transmission: Operator ' +
+                       'Initiated Test Transmission: Operator Initiated ' +
+                       'Test Transmission: Operator Initiated Test ' +
+                       'Transmission: Operator Initiated Test Transmission: ' +
+                       'Operator Initiated Test Transmission:',
+        'return_value': [
+            ['2019-12-06 01:00:00', pd.np.nan, pd.np.nan],
+        ]
+    },
 ]
+
 
 def test_parser_twdb_fts():
     for test_set in twdb_fts_test_sets:

@@ -17,6 +17,7 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
     message = df_row['dcp_message'].lower()
     message_timestamp = df_row['message_timestamp_utc']
 
+    water_levels = [pd.np.nan]
     battery_voltage = pd.np.nan
     for line in message.split(':'):
         if line.split() != []:
