@@ -236,7 +236,6 @@ def _fetch_url(params):
         data_limit_reached = True
         log.info('Max data limit reached, making new request for older data\n')
 
-    print(message)
     if not message:
         log.info('No data found\n')
         message = []
@@ -244,7 +243,6 @@ def _fetch_url(params):
         # message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M | re.S)]
         message = [msg[0].strip() for msg in re.findall('(C.*?)(  )', message, re.M | re.S)]
 
-    print(message)
     return message, data_limit_reached
 
 
