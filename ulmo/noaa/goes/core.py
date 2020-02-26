@@ -42,7 +42,7 @@ def decode(dataframe, parser, **kwargs):
         depend wholly on the parser used
 
     """
-    if isinstance(parser, basestring):
+    if isinstance(parser, str):
         parser = getattr(parsers, parser)
 
     if dataframe.empty:
@@ -69,8 +69,8 @@ def get_data(dcp_address, hours, use_cache=False, cache_path=None,
     Parameters
     ----------
     dcp_address : str, iterable of strings
-        DCP address or list of DCP addresses to be fetched; lists will be joined
-        by a ','.
+        DCP address or list of DCP addresses to be fetched; lists will be
+        joined by a ','.
     use_cache : bool,
         If True (default) use hdf file to cache data and retrieve new data on
         subsequent requests
@@ -131,7 +131,8 @@ def _fetch_url(params):
 
 
 def _format_period(period):
-    days, hours, minutes = period.days, period.seconds // 3600, (period.seconds // 60) % 60
+    days, hours, minutes = period.days, period.seconds // 3600, \
+                           (period.seconds // 60) % 60
 
     if minutes:
         return 'now -%s minutes' % period.seconds / 60
@@ -145,7 +146,7 @@ def _format_period(period):
 
 def _format_time(timestamp):
 
-    if isinstance(timestamp, basestring):
+    if isinstance(timestamp, str):
         if timestamp.startswith('P'):
             timestamp = isodate.parse_duration(timestamp)
         else:
@@ -170,7 +171,9 @@ def _get_store_path(path, default_file_name):
 def _parse(entry):
     return {
         'dcp_address': entry['TblDcpDataAddrCorr'],
-        'message_timestamp_utc': datetime.fromtimestamp(int(entry['TblDcpDataDtMsgCar'].strip('/Date()'))/1000),
+        'message_timestamp_utc': datetime.fromtimestamp(
+            int(entry['TblDcpDataDtMsgCar'].strip('/Date()'))/1000
+        ),
         'failure_code': entry['TblDcpDataProcessInfo'],
         'signal_strength': entry['TblDcpDataSigStrength'],
         'goes_receive_channel': entry['TblDcpDataChan'],
