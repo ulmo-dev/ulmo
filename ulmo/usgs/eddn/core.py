@@ -241,7 +241,9 @@ def _fetch_url(params):
         message = []
     else:
         # message = [msg[1].strip() for msg in re.findall('(//START)(.*?)(//END)', message, re.M | re.S)]
-        message = [msg[0].strip() for msg in re.findall('(C.*?)(  )', message, re.M | re.S)]
+        m1 = re.findall("C[A-Z0-9]{21}", message, re.M | re.S)
+        m2 = re.compile("C[A-Z0-9]{21}", re.M | re.S).split(message)[1:]
+        message = [_m1+_m2 for _m1, _m2 in zip(m1, m2)]
 
     return message, data_limit_reached
 
