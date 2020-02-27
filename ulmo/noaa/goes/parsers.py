@@ -1,5 +1,6 @@
 from datetime import timedelta
 import pandas as pd
+import numpy as np
 
 
 def twdb_dot(df_row, drop_dcp_metadata=True):
@@ -19,10 +20,13 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
     invalid_messages = ['dadds', 'operator', 'no']
     for invalid in invalid_messages:
         if invalid in message:
-            return pd.DataFrame()
+            df = _twdb_assemble_dataframe(
+                df_row['message_timestamp_utc'], [np.nan], [np.nan]
+            )
+            return(df)
     message_timestamp = df_row['message_timestamp_utc']
-    water_levels = [pd.np.nan]
-    battery_voltage = pd.np.nan
+    water_levels = [np.nan]
+    battery_voltage = np.nan
     for line in message.split(':'):
         if line.split() != []:
             line = line.split()
@@ -134,7 +138,7 @@ def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels,
     try:
         battery_voltage = float(battery_voltage)
     except Exception:
-        battery_voltage = pd.np.nan
+        battery_voltage = np.nan
 
     for hrs, water_level in enumerate(water_levels):
         timestamp = base_timestamp - timedelta(hours=hrs)
@@ -144,11 +148,11 @@ def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels,
                 water_level = float(water_level)
 
         except Exception:
-            water_level = pd.np.nan
+            water_level = np.nan
         if hrs == 0 and battery_voltage:
             data.append([timestamp, battery_voltage, water_level])
         else:
-            data.append([timestamp, pd.np.nan, water_level])
+            data.append([timestamp, np.nan, water_level])
     if len(data) > 0:
         df = pd.DataFrame(
             data, columns=['timestamp_utc', 'battery_voltage', 'water_level']
@@ -188,7 +192,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
 
     df = []
     if 'dadds' in message or 'operator' in message or 'no' in message:
-        water_levels = [pd.np.nan] * 12
+        water_levels = [np.nan] * 12
         data = _twdb_assemble_dataframe(
             message_timestamp, battery_voltage, water_levels
         )
@@ -248,7 +252,7 @@ def _parse_value(water_level_str):
     well_val = water_level_str.split(':')
     if len(water_level_str.split(':')) == 2:
         if well_val[1] == '':
-            val = pd.np.nan
+            val = np.nan
         else:
             val = well_val[1].strip('-')
         value_dict = (well_val[0], val)
