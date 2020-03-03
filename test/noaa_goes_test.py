@@ -5,7 +5,6 @@ import numpy as np
 from pandas.testing import assert_frame_equal
 import ulmo
 import test_util
-import os
 
 message_test_sets = [
     {
