@@ -49,7 +49,7 @@ def mocked_urls(url_files, methods=None, force=False):
     ULMO_DONT_MOCK_TESTS; if that environment variable is set then urls will
     not be mocked and the HTTP requests will go over the network. For example,
     this could be used to to run the whole test suite without mocking files:
-    #    env ULMO_DONT_MOCK_TESTS=1 py.test
+    #    env ulmo_dont_mock_tests=1 py.test
 
     Parameters
     ----------

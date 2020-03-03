@@ -4,8 +4,8 @@ import pandas as pd
 import numpy as np
 from pandas.testing import assert_frame_equal
 import ulmo
-import ulmo.noaa.goes.parsers as parsers
 import test_util
+import os
 
 message_test_sets = [
     {
@@ -31,7 +31,12 @@ def test_parse_dcp_message_timestamp():
         dcp_data_file = 'noaa/goes/' + test_set['dcp_address'] + '.txt'
         with test_util.mocked_urls(dcp_data_file, force=True):
             data = ulmo.noaa.goes.get_data(test_set['dcp_address'], hours=12)
-            assert data['message_timestamp_utc'][-1] == datetime.fromtimestamp(int(test_set['message_timestamp'].strip('/Date()'))/1000)
+            assert data['message_timestamp_utc'][-1] == datetime.fromtimestamp(
+                int(test_set['message_timestamp'].strip('/Date()'))/1000
+            )
+        assert data['message_timestamp_utc'][-1] == datetime.fromtimestamp(
+            int(test_set['message_timestamp'].strip('/Date()'))/1000
+        )
 
 
 twdb_stevens_test_sets = [
@@ -88,7 +93,7 @@ twdb_stevens_test_sets = [
         'dcp_message': '"BV:12.6 ',
         'return_value': pd.DataFrame()
     },
-        {
+    {
         'message_timestamp_utc': datetime(2013, 10, 30, 15, 28, 18),
         'dcp_message': """79."$}X^pZBF8iB~i>>Xmj[bvr^Zv%JXl,DU=l{uu[ t(
 |@2q^sjS!
@@ -103,14 +108,15 @@ def test_parser_twdb_stevens():
         print('testing twdb_stevens parser')
 
         if isinstance(test_set['return_value'], pd.DataFrame):
-            parser = getattr(parsers, 'twdb_stevens')
+            parser = getattr(ulmo.noaa.goes.parsers, 'twdb_stevens')
             assert_frame_equal(pd.DataFrame(), parser(test_set))
             return
 
         if len(test_set['return_value'][0]) == 3:
             columns = ['timestamp_utc', 'battery_voltage', 'water_level']
         else:
-            columns = ['timestamp_utc', 'channel', 'time', 'battery_voltage', 'water_level']
+            columns = ['timestamp_utc', 'channel', 'time', 'battery_voltage',
+                       'water_level']
 
         _assert(test_set, columns, 'twdb_stevens')
 
@@ -191,7 +197,8 @@ def test_parser_twdb_sutron():
         if len(test_set['return_value'][0]) == 3:
             columns = ['timestamp_utc', 'battery_voltage', 'water_level']
         else:
-            columns = ['timestamp_utc', 'channel', 'battery_voltage', 'water_level']
+            columns = ['timestamp_utc', 'channel', 'battery_voltage',
+                       'water_level']
 
         _assert(test_set, columns, 'twdb_sutron')
 
@@ -305,13 +312,19 @@ def _assert(test_set, columns, parser):
     expected = pd.DataFrame(test_set['return_value'], columns=columns)
     expected.index = pd.to_datetime(expected['timestamp_utc'])
     del expected['timestamp_utc']
-    parser = getattr(parsers, parser)
+    parser = getattr(ulmo.noaa.goes.parsers, parser)
     df = parser(test_set)
     # to compare pandas dataframes, columns must be in same order
     if 'channel' in df.columns:
         for channel in np.unique(df['channel']):
             df_c = df[df['channel'] == channel]
             expected_c = expected[expected['channel'] == channel]
-            assert_frame_equal(df_c.sort_index(axis=1).sort_index(axis=0), expected_c.sort_index(axis=1).sort_index(axis=0))
+            assert_frame_equal(
+                df_c.sort_index(axis=1).sort_index(axis=0),
+                expected_c.sort_index(axis=1).sort_index(axis=0)
+            )
     else:
-        assert_frame_equal(df.sort_index(axis=1).sort_index(axis=0), expected.sort_index(axis=1).sort_index(axis=0))
+        assert_frame_equal(
+            df.sort_index(axis=1).sort_index(axis=0),
+            expected.sort_index(axis=1).sort_index(axis=0)
+        )

@@ -211,7 +211,8 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
             data['time'] = msg_time
             df.append(data)
     else:
-        fields = message.strip(fmt).lstrip().replace(': ', ':').split()
+        fields = message.strip(fmt).lstrip().rstrip('"\x00')\
+                                            .replace(': ', ':').split()
         water_levels = [_parse_value(field.strip(fmt).lstrip()) for
                         field in fields]
 
