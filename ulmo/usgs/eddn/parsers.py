@@ -2,12 +2,12 @@ from datetime import timedelta
 import pandas as pd
 
 
-def twdb_dot(df_row, drop_dcp_metadata=True):
+def twdb_dot(df_row, drop_dcp_metadata=True, **kwargs):
     """Parser for twdb DOT dataloggers."""
     return _twdb_stevens_or_dot(df_row, reverse=False, drop_dcp_metadata=drop_dcp_metadata)
 
 
-def twdb_fts(df_row, drop_dcp_metadata=True):
+def twdb_fts(df_row, drop_dcp_metadata=True, **kwargs):
     """Parser for twdb fts dataloggers
 
     format examples:
@@ -37,12 +37,12 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
     return df
 
 
-def twdb_stevens(df_row, drop_dcp_metadata=True):
+def twdb_stevens(df_row, drop_dcp_metadata=True, **kwargs):
     """Parser for twdb stevens dataloggers."""
     return _twdb_stevens_or_dot(df_row, reverse=True, drop_dcp_metadata=drop_dcp_metadata)
 
 
-def twdb_sutron(df_row, drop_dcp_metadata=True):
+def twdb_sutron(df_row, drop_dcp_metadata=True, **kwargs):
     """Parser for twdb sutron dataloggers.
     Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour
     for the previous 12 hours and one battery voltage measurement for the current hour
@@ -60,20 +60,17 @@ def twdb_sutron(df_row, drop_dcp_metadata=True):
     message = df_row['dcp_message'].lower()
     message_timestamp = df_row['message_timestamp_utc']
     lines = message.strip('":').split(':')
-    if len(lines) == 1:
-        water_levels = [field.strip('+- ') for field in lines[0].split()]
-        df = _twdb_assemble_dataframe(message_timestamp, None, water_levels, reverse=False)
-    else:
-        data = []
-        battery_voltage = lines[-1].split('bl')[-1].strip()
-        for line in lines[:-1]:
-            channel = line[:7]
-            split = line[7:].split()
-            water_levels = [field.strip('+-" ') for field in split[2:]]
-            df = _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels, reverse=False)
-            df['channel'] = channel
-            data.append(df)
-        df = pd.concat(data)
+    data = []
+    # battery_voltage = lines[-1].split('bl')[-1].strip()
+    for line in lines:
+        split = line.split(' ')
+        channel = split[0]
+        print(channel)
+        channel_data = [field.strip('+-" ') for field in split[3:]]
+        df = _twdb_assemble_dataframe(message_timestamp, battery_voltage, channel_data, reverse=False)
+        df['channel'] = channel
+        data.append(df)
+    df = pd.concat(data)
 
     if not drop_dcp_metadata:
         for col in df_row.index:
@@ -82,7 +79,7 @@ def twdb_sutron(df_row, drop_dcp_metadata=True):
     return df
 
 
-def twdb_texuni(dataframe, drop_dcp_metadata=True):
+def twdb_texuni(dataframe, drop_dcp_metadata=True, **kwargs):
     """Parser for twdb texuni dataloggers.
     Data is transmitted every 12 hours and each message contains 12 water level measurements on the hour
     for the previous 12 hours

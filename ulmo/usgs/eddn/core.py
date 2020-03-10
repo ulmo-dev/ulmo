@@ -78,6 +78,34 @@ def decode(dataframe, parser, **kwargs):
             df.append(parsed)
 
     df = pd.concat(df)
+    print(df['channel'].unique())
+    # shouldn't be additional parsing in groundwater
+    # have decode pass back a df with all the channels as columns
+    # then check that the column names match the respective API Channels
+    # then rename to something consistent
+    groups = df.groupby('channel')
+    if not pd.isnull(kwargs['dual_channel']) and kwargs['dual_channel'] != '':
+        df['channel'] = df['channel'].str.strip().str.lower()
+        water_level_channel = kwargs['dual_channel'].lower().split('channel:')[-1].strip().lower()
+        df[water_level_channel] = groups.get_group(water_level_channel).water_level
+    if not pd.isnull(kwargs['temp_channel']):
+        temperature_channel = kwargs['temp_channel'].lower().split('channel:')[-1].strip()
+        if temperature_channel in list(groups.groups.keys()):
+            df['temperature(C)'] = groups.get_group(
+                temperature_channel).water_level
+    if not pd.isnull(kwargs['conduct_channel']):
+        conductivity_channel = kwargs['conduct_channel'].lower().split('channel:')[-1].strip()
+        if conductivity_channel in list(groups.groups.keys()):
+            df['conductivity(us/cm)'] = groups.get_group(
+                conductivity_channel).water_level
+
+    if not pd.isnull(kwargs['channel_start_date']):
+        start_date = datetime.strptime(kwargs['channel_start_date'], '%m/%d/%Y')
+        df.sort_index(ascending=True, inplace=True)
+        df = df[start_date:]
+
+    print(df.pivot(index=df.index, columns='channel').head())
+
     return df
 
 
