@@ -3,13 +3,13 @@ import pandas as pd
 import numpy as np
 
 
-def twdb_dot(df_row, drop_dcp_metadata=True, **kwargs):
+def twdb_dot(df_row, drop_dcp_metadata=True):
     """Parser for twdb DOT dataloggers."""
     return _twdb_stevens_or_dot(df_row, reverse=False,
                                 drop_dcp_metadata=drop_dcp_metadata)
 
 
-def twdb_fts(df_row, drop_dcp_metadata=True, **kwargs):
+def twdb_fts(df_row, drop_dcp_metadata=True):
     """Parser for twdb fts dataloggers
 
     format examples:
@@ -42,16 +42,21 @@ def twdb_fts(df_row, drop_dcp_metadata=True, **kwargs):
     df = _twdb_assemble_dataframe(
         message_timestamp, battery_voltage, water_levels, reverse=False
     )
+
+    if not drop_dcp_metadata:
+        for col in df_row.index:
+            df[col] = df_row[col]
+
     return df
 
 
-def twdb_stevens(df_row, drop_dcp_metadata=True, **kwargs):
+def twdb_stevens(df_row, drop_dcp_metadata=True):
     """Parser for twdb stevens dataloggers."""
     return _twdb_stevens_or_dot(df_row, reverse=True,
                                 drop_dcp_metadata=drop_dcp_metadata)
 
 
-def twdb_sutron(df_row, drop_dcp_metadata=True, **kwargs):
+def twdb_sutron(df_row, drop_dcp_metadata=True):
     """Parser for twdb sutron dataloggers.
     Data is transmitted every 12 hours and each message contains 12 water level
     measurements on the hour for the previous 12 hours and one battery voltage
@@ -68,26 +73,26 @@ def twdb_sutron(df_row, drop_dcp_metadata=True, **kwargs):
     '":Sense01 60 #60 M M M M M M M M M M M M :BL 12.65'
     """
     message = df_row['dcp_message'].lower()
+    battery_names = ['bl', 'vb', 'bv']
     if 'dadds' in message:
         return pd.DataFrame()
     else:
         message_timestamp = df_row['message_timestamp_utc']
         lines = message.strip('":').split(':')
-        if len(lines) == 1:
-            water_levels = [field.strip('+- ') for field in lines[0].split()]
-            df = _twdb_assemble_dataframe(message_timestamp, None, water_levels, reverse=False)
-        else:
-            data = []
-            # battery_voltage = lines[-1].split('bl')[-1].strip()
-            for line in lines:
-                split = line.split(' ')
-                channel = split[0]
-                print(channel)
+        data = []
+        for line in lines:
+            split = line.split(' ')
+            channel = split[0]
+            if channel.lower() in battery_names:
+                channel_data = [field.strip('+-" ') for field in split]
+            else:
                 channel_data = [field.strip('+-" ') for field in split[3:]]
-                df = _twdb_assemble_dataframe(message_timestamp, battery_voltage, channel_data, reverse=False)
-                df['channel'] = channel
-                data.append(df)
-            df = pd.concat(data)
+
+            df = _twdb_assemble_dataframe(
+                message_timestamp, channel, channel_data, reverse=False
+            )
+            data.append(df)
+        df = pd.concat(data)
 
     if not drop_dcp_metadata:
         for col in df_row.index:
@@ -96,7 +101,7 @@ def twdb_sutron(df_row, drop_dcp_metadata=True, **kwargs):
     return df
 
 
-def twdb_texuni(dataframe, drop_dcp_metadata=True, **kwargs):
+def twdb_texuni(dataframe, drop_dcp_metadata=True):
     """Parser for twdb texuni dataloggers.
     Data is transmitted every 12 hours and each message contains 12 water level
     measurements on the hour for the previous 12 hours
@@ -122,33 +127,27 @@ def twdb_texuni(dataframe, drop_dcp_metadata=True, **kwargs):
     return df
 
 
-def _twdb_assemble_dataframe(message_timestamp, battery_voltage, water_levels,
+def _twdb_assemble_dataframe(message_timestamp, channel, channel_data,
                              reverse=False):
     data = []
     base_timestamp = message_timestamp.replace(
         minute=0, second=0, microsecond=0
     )
     if reverse:
-        water_levels.reverse()
-    try:
-        battery_voltage = float(battery_voltage)
-    except Exception:
-        battery_voltage = np.nan
+        data.reverse()
 
-    for hrs, water_level in enumerate(water_levels):
+    for hrs, value in enumerate(channel_data):
         timestamp = base_timestamp - timedelta(hours=hrs)
         try:
-            water_level = float(water_level)
+            value = float(value)
         except Exception:
-            water_level = np.nan
+            value = np.nan
 
-        if hrs == 0 and battery_voltage:
-            data.append([timestamp, battery_voltage, water_level])
-        else:
-            data.append([timestamp, np.nan, water_level])
+        data.append([timestamp, channel, value])
+
     if len(data) > 0:
         df = pd.DataFrame(
-            data, columns=['timestamp_utc', 'battery_voltage', 'water_level']
+            data, columns=['timestamp_utc', 'channel', 'channel_data']
         )
         df.index = pd.to_datetime(df['timestamp_utc'])
         del df['timestamp_utc']

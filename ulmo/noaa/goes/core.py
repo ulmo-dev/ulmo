@@ -58,6 +58,12 @@ def decode(dataframe, parser, **kwargs):
         df.append(parsed)
 
     df = pd.concat(df)
+    # preserve metadata in df if it exists, since pivot will lose it
+    df_save = df.drop(['channel', 'channel_data'], axis=1)
+    df = df.pivot_table(
+        index=df.index, columns='channel', values='channel_data'
+    ).join(df_save)
+
     return df
 
 
