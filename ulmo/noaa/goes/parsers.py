@@ -2,6 +2,8 @@ from datetime import timedelta
 import pandas as pd
 import numpy as np
 
+battery_names = ['bl', 'vb', 'bv']
+
 
 def twdb_dot(df_row, drop_dcp_metadata=True):
     """Parser for twdb DOT dataloggers."""
@@ -72,27 +74,26 @@ def twdb_sutron(df_row, drop_dcp_metadata=True):
     '"\r\n// \r\n// \r\n// \r\n// \r\n// \r\n-199.88 \r\n-199.92 \r\n-199.96 \r\n-199.98 \r\n-200.05 \r\n-200.09 \r\n-200.15'
     '":Sense01 60 #60 M M M M M M M M M M M M :BL 12.65'
     """
-    message = df_row['dcp_message'].lower()
-    battery_names = ['bl', 'vb', 'bv']
+    message = df_row['dcp_message'].strip().lower()
     if 'dadds' in message:
         return pd.DataFrame()
-    else:
-        message_timestamp = df_row['message_timestamp_utc']
-        lines = message.strip('":').split(':')
-        data = []
-        for line in lines:
-            split = line.split(' ')
-            channel = split[0]
-            if channel.lower() in battery_names:
-                channel_data = [field.strip('+-" ') for field in split]
-            else:
-                channel_data = [field.strip('+-" ') for field in split[3:]]
 
-            df = _twdb_assemble_dataframe(
-                message_timestamp, channel, channel_data, reverse=False
-            )
-            data.append(df)
-        df = pd.concat(data)
+    message_timestamp = df_row['message_timestamp_utc']
+    lines = message.strip('":').split(':')
+    data = []
+    for line in lines:
+        split = line.split(' ')
+        channel = split[0]
+        if channel.lower() in battery_names:
+            channel_data = [field.strip('+-" ') for field in split]
+        else:
+            channel_data = [field.strip('+-" ') for field in split[3:]]
+
+        df = _twdb_assemble_dataframe(
+            message_timestamp, channel, channel_data, reverse=False
+        )
+        data.append(df)
+    df = pd.concat(data)
 
     if not drop_dcp_metadata:
         for col in df_row.index:
@@ -144,7 +145,6 @@ def _twdb_assemble_dataframe(message_timestamp, channel, channel_data,
             value = np.nan
 
         data.append([timestamp, channel, value])
-
     if len(data) > 0:
         df = pd.DataFrame(
             data, columns=['timestamp_utc', 'channel', 'channel_data']
@@ -172,67 +172,78 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     '"BV:12.6  Channel:5 Time:28 +304.63 +304.63 +304.63 +304.56 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.71 Channel:6 Time:28 +310.51 +310.66 +310.59 +310.51 +310.51 +310.59 +310.59 +310.51 +310.66 +310.51 +310.66 +310.59 '
     """
     message = df_row['dcp_message'].strip().lower()
-    message_timestamp = df_row['message_timestamp_utc']
-    fields = message.strip().split()
-    if 'bv' in fields[0]:
-        battery_voltage = fields[0].split(':')[-1]
-        message = ' '.join(fields[1:])
-    else:
-        battery_voltage = None
-        message = ' '.join(fields)
-    fmt = '$+-"\x7f '
-
-    df = []
     if 'dadds' in message or 'operator' in message or 'no' in message:
-        water_levels = [np.nan] * 12
-        data = _twdb_assemble_dataframe(
-            message_timestamp, battery_voltage, water_levels
-        )
-        df.append(data)
-    elif 'channel' in message:
-        for channel_msg in message.strip('channel:').split('channel:'):
-            fields = channel_msg.split()
-            msg_channel = fields[0].split(':')[-1]
-            msg_time = fields[1].split(':')[-1]
-            water_levels = [field.strip(fmt) for field in fields[2:]]
-            data = _twdb_assemble_dataframe(
-                message_timestamp, battery_voltage, water_levels,
+        return(pd.DataFrame())
+
+    message_timestamp = df_row['message_timestamp_utc']
+
+    data = []
+    # this should really be it's own parser...
+    if df_row['dcp_address'] in ['C51CB67A']:
+        fields = message.strip('" \x10\x00').split('\r')
+        channel_data = {}
+        channel_data['bv'] = [fields[0].split(':')[1].split()[0]]
+        for field in fields[1:]:
+            df = pd.DataFrame()
+            try:
+                channel, channel_datum = field.strip('\n').split(': ')
+                if channel in channel_data:
+                    channel_data[channel].append(channel_datum.strip('+-'))
+                else:
+                    channel_data[channel] = [channel_datum.strip('+-')]
+            except Exception:
+                pass
+
+        for channel in channel_data:
+            df = _twdb_assemble_dataframe(
+                message_timestamp, channel, channel_data[channel],
                 reverse=reverse
             )
-            data['channel'] = msg_channel
-            data['time'] = msg_time
-            df.append(data)
-    else:
-        fields = message.strip(fmt).lstrip().rstrip('"\x00')\
-                                            .replace(': ', ':').split()
-        water_levels = [_parse_value(field.strip(fmt).lstrip()) for
-                        field in fields]
+            data.append(df)
 
-        if len(water_levels) and isinstance(water_levels[0], tuple):
-            wells = list(set([val[0] for val in water_levels]))
-            combined = pd.DataFrame()
-            for well in wells:
-                values = [val[1] for val in water_levels
-                          if isinstance(val, tuple) and val[0] == well]
-                data = _twdb_assemble_dataframe(
-                    message_timestamp, battery_voltage, values, reverse=reverse
-                )
-                data.rename(columns={'water_level': 'water_level_' + well},
-                            inplace=True)
+        df = pd.concat(data)
+        if not drop_dcp_metadata:
+            for col in df_row.index:
+                df[col] = df_row[col]
 
-                if not data.empty:
-                    combined = pd.concat(
-                        [combined, data], axis=1
-                    ).T.drop_duplicates().T
-                else:
-                    combined = pd.concat([combined, data], axis=1)
-            df.append(combined)
+        return df
+
+    fields = message.strip('" ').split()
+
+    water_channel = 'wl'
+    water_data = {}
+    for field in fields:
+        df = pd.DataFrame()
+        if field[:2].lower() in battery_names:
+            channel, channel_data = field.lower().split(':')
+            channel_data = [channel_data]
+            df = _twdb_assemble_dataframe(
+                message_timestamp, channel, channel_data, reverse=reverse
+            )
+        elif 'time' in field.lower():
+            channel, channel_data = field.lower().split(':')
+            channel_data = [channel_data]
+            df = _twdb_assemble_dataframe(
+                message_timestamp, channel, channel_data, reverse=reverse
+            )
+        elif 'channel' in field.lower():
+            cnum = field.lower().split(':')[1]
+            if cnum not in water_data:
+                water_data[cnum] = []
         else:
-            data = _twdb_assemble_dataframe(message_timestamp, battery_voltage,
-                                            water_levels, reverse=reverse)
-            df.append(data)
+            try:
+                water_data[cnum].append(float(field.strip('+-$')))
+            except Exception:
+                pass
+        data.append(df)
 
-    df = pd.concat(df)
+    for channel in water_data: 
+        data.append(
+            _twdb_assemble_dataframe(
+                message_timestamp, channel, water_data[channel], reverse=reverse
+            )
+        )
+    df = pd.concat(data)
 
     if not drop_dcp_metadata:
         for col in df_row.index:

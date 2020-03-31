@@ -64,6 +64,9 @@ def decode(dataframe, parser, **kwargs):
         index=df.index, columns='channel', values='channel_data'
     ).join(df_save)
 
+    # to properly drop duplicate rows, need to include index; unfortunately,
+    df['idx'] = df.index.values
+    df = df.drop_duplicates().drop('idx', axis=1)
     return df
 
 
