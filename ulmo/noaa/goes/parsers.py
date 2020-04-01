@@ -19,31 +19,26 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
     """
 
     message = df_row['dcp_message'].lower()
-    invalid_messages = ['dadds', 'operator', 'no']
-    for invalid in invalid_messages:
-        if invalid in message:
-            df = _twdb_assemble_dataframe(
-                df_row['message_timestamp_utc'], [np.nan], [np.nan]
-            )
-            return(df)
     message_timestamp = df_row['message_timestamp_utc']
-    water_levels = [np.nan]
-    battery_voltage = np.nan
-    for line in message.split(':'):
-        if line.split() != []:
-            line = line.split()
-            # grab water level data
-            if line[0] == 'wl':
-                water_levels = [
-                    field.strip('+- ') for field in line[3:]
-                ]
-            # grab battery voltage
-            if line[0] == 'vb':
-                battery_voltage = line[3].strip('+- ')
+    if _invalid_message_check(message):
+        return(_empty_df(message_timestamp))
 
-    df = _twdb_assemble_dataframe(
-        message_timestamp, battery_voltage, water_levels, reverse=False
-    )
+    data = []
+    for line in message.strip('"').split(':'):
+        try:
+            channel = line[:2]
+            channel_data = [
+                float(val.strip('+-')) for val in line[10:].split()
+            ]
+            df = _twdb_assemble_dataframe(
+                message_timestamp, channel, channel_data, reverse=False
+            )
+            data.append(df)
+        except Exception as e:
+            print('Warning: Could not parse values for channel ' +
+                  f'"{channel}": {e}')
+
+    df = pd.concat(data)
 
     if not drop_dcp_metadata:
         for col in df_row.index:
@@ -75,24 +70,36 @@ def twdb_sutron(df_row, drop_dcp_metadata=True):
     '":Sense01 60 #60 M M M M M M M M M M M M :BL 12.65'
     """
     message = df_row['dcp_message'].strip().lower()
-    if 'dadds' in message:
-        return pd.DataFrame()
-
     message_timestamp = df_row['message_timestamp_utc']
+    if _invalid_message_check(message):
+        return(_empty_df(message_timestamp))
+
     lines = message.strip('":').split(':')
     data = []
     for line in lines:
         split = line.split(' ')
         channel = split[0]
         if channel.lower() in battery_names:
-            channel_data = [field.strip('+-" ') for field in split]
+            try:
+                channel_data = [field.strip('+-" ') for field in split]
+                df = _twdb_assemble_dataframe(
+                    message_timestamp, channel, channel_data, reverse=False
+                )
+                data.append(df)
+            except Exception as e:
+                print('Warning: Could not parse values for channel ' +
+                      f'{channel}: {e}')
         else:
-            channel_data = [field.strip('+-" ') for field in split[3:]]
+            try:
+                channel_data = [field.strip('+-" ') for field in split[3:]]
+                df = _twdb_assemble_dataframe(
+                    message_timestamp, channel, channel_data, reverse=False
+                )
+                data.append(df)
+            except Exception as e:
+                print('Warning: Could not parse values for channel ' +
+                      f'{channel}: {e}')
 
-        df = _twdb_assemble_dataframe(
-            message_timestamp, channel, channel_data, reverse=False
-        )
-        data.append(df)
     df = pd.concat(data)
 
     if not drop_dcp_metadata:
@@ -172,14 +179,15 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
     '"BV:12.6  Channel:5 Time:28 +304.63 +304.63 +304.63 +304.56 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.63 +304.71 Channel:6 Time:28 +310.51 +310.66 +310.59 +310.51 +310.51 +310.59 +310.59 +310.51 +310.66 +310.51 +310.66 +310.59 '
     """
     message = df_row['dcp_message'].strip().lower()
-    if 'dadds' in message or 'operator' in message or 'no' in message:
-        return(pd.DataFrame())
-
     message_timestamp = df_row['message_timestamp_utc']
+    if _invalid_message_check(message):
+        return(_empty_df(message_timestamp))
 
     data = []
-    # this should really be it's own parser...
-    if df_row['dcp_address'] in ['C51CB67A']:
+    # this should really be it's own parser
+    # these are dual wells, or at least formatted as such, and only a subset
+    if df_row['dcp_address'] in ['C51CB67A', 'C51A60DC', 'C517152A',
+                                 'C51A832E']:
         fields = message.strip('" \x10\x00').split('\r')
         channel_data = {}
         channel_data['bv'] = [fields[0].split(':')[1].split()[0]]
@@ -210,37 +218,52 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
 
     fields = message.strip('" ').split()
 
-    water_channel = 'wl'
     water_data = {}
+    channel_name = 'wl'
+    water_data[channel_name] = []
     for field in fields:
         df = pd.DataFrame()
-        if field[:2].lower() in battery_names:
-            channel, channel_data = field.lower().split(':')
-            channel_data = [channel_data]
-            df = _twdb_assemble_dataframe(
-                message_timestamp, channel, channel_data, reverse=reverse
-            )
-        elif 'time' in field.lower():
-            channel, channel_data = field.lower().split(':')
-            channel_data = [channel_data]
-            df = _twdb_assemble_dataframe(
-                message_timestamp, channel, channel_data, reverse=reverse
-            )
-        elif 'channel' in field.lower():
-            cnum = field.lower().split(':')[1]
-            if cnum not in water_data:
-                water_data[cnum] = []
+        field = field.lower().strip('\x10\x00')
+        if field[:2] in battery_names:
+            try:
+                channel, channel_data = field.split(':')
+                channel_data = [channel_data]
+                df = _twdb_assemble_dataframe(
+                    message_timestamp, channel, channel_data, reverse=reverse
+                )
+            except Exception as e:
+                print('Warning: Could not parse values for channel ' +
+                      f'"{field[:2]}": {e}')
+        elif 'time' in field:
+            try:
+                channel, channel_data = field.split(':')
+                channel_data = [channel_data]
+                df = _twdb_assemble_dataframe(
+                    message_timestamp, channel, channel_data, reverse=reverse
+                )
+            except Exception as e:
+                print('Warning: Could not parse values for channel ' +
+                      f'"{field.split(":")[0]}": {e}')
+        elif 'channel' in field:
+            try:
+                channel_name = field.split(':')[1]
+                if channel_name not in water_data:
+                    water_data[channel_name] = []
+            except Exception as e:
+                print('Warning: Could not parse values for channel ' +
+                      f'"{field.split(":")[1]}": {e}')
         else:
             try:
-                water_data[cnum].append(float(field.strip('+-$')))
+                water_data[channel_name].append(float(field.strip('+-$')))
             except Exception:
                 pass
         data.append(df)
 
-    for channel in water_data: 
+    for channel in water_data:
         data.append(
             _twdb_assemble_dataframe(
-                message_timestamp, channel, water_data[channel], reverse=reverse
+                message_timestamp, channel, water_data[channel],
+                reverse=reverse
             )
         )
     df = pd.concat(data)
@@ -263,3 +286,19 @@ def _parse_value(water_level_str):
         return value_dict
     else:
         return water_level_str
+
+
+def _invalid_message_check(message):
+    is_invalid = False
+    invalid_messages = ['dadds', 'operator', 'no']
+    for invalid in invalid_messages:
+        if invalid in message:
+            is_invalid = True
+    return(is_invalid)
+
+
+def _empty_df(message_timestamp):
+    df = _twdb_assemble_dataframe(
+        message_timestamp, np.nan, [np.nan]
+    )
+    return(df)
