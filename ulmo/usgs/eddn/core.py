@@ -196,7 +196,7 @@ def get_data(
         data.sort_index(inplace=True)
 
         if use_cache:
-            #write to a tmp file and move to avoid ballooning h5 file
+            # write to a tmp file and move to avoid ballooning h5 file
             tmp = dcp_data_path + '.tmp'
             data.to_hdf(tmp, dcp_address)
             shutil.move(tmp, dcp_data_path)
@@ -208,14 +208,15 @@ def get_data(
             return {}
 
     if start:
-        if start.startswith('P'):
-            start = data['message_timestamp_utc'][-1] - isodate.parse_duration(start)
-
+        if isinstance(start, str) and start.startswith('P'):
+            start = data['message_timestamp_utc'][-1] - \
+                    isodate.parse_duration(start)
         data = data[start:]
 
     if end:
-        if end.startswith('P'):
-            end = data['message_timestamp_utc'][-1] - isodate.parse_duration(end)
+        if isinstance(end, str) and end.startswith('P'):
+            end = data['message_timestamp_utc'][-1] - \
+                  isodate.parse_duration(end)
 
         data = data[:end]
 
