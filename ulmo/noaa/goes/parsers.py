@@ -77,11 +77,11 @@ def twdb_sutron(df_row, drop_dcp_metadata=True):
     lines = message.strip('":').split(':')
     data = []
     for line in lines:
-        split = line.split(' ')
-        channel = split[0]
+        lsplit = line.split(' ')
+        channel = lsplit[0]
         if channel.lower() in battery_names:
             try:
-                channel_data = [field.strip('+-" ') for field in split]
+                channel_data = [field.strip('+-" ') for field in lsplit]
                 df = _twdb_assemble_dataframe(
                     message_timestamp, channel, channel_data, reverse=False
                 )
@@ -91,7 +91,7 @@ def twdb_sutron(df_row, drop_dcp_metadata=True):
                       f'{channel}: {e}')
         else:
             try:
-                channel_data = [field.strip('+-" ') for field in split[3:]]
+                channel_data = [field.strip('+-" ') for field in lsplit[3:]]
                 df = _twdb_assemble_dataframe(
                     message_timestamp, channel, channel_data, reverse=False
                 )
@@ -121,11 +121,12 @@ def twdb_texuni(dataframe, drop_dcp_metadata=True):
 
     message = dataframe['dcp_message']
     message_timestamp = dataframe['message_timestamp_utc']
-    water_levels = [row.split(',')[1].strip('+- ') for
+    channel = 'wl'
+    channel_data = [row.split(',')[1].strip('+- ') for
                     row in message.strip('" \r\n').splitlines()[:-1]]
 
     df = _twdb_assemble_dataframe(
-        message_timestamp, None, water_levels, reverse=True
+        message_timestamp, channel, channel_data, reverse=True
     )
 
     if not drop_dcp_metadata:
