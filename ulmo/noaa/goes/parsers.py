@@ -5,13 +5,13 @@ import numpy as np
 battery_names = ['bl', 'vb', 'bv']
 
 
-def twdb_dot(df_row, drop_dcp_metadata=True):
+def twdb_dot(df_row, dual_well=False, drop_dcp_metadata=True):
     """Parser for twdb DOT dataloggers."""
-    return _twdb_stevens_or_dot(df_row, reverse=False,
+    return _twdb_stevens_or_dot(df_row, reverse=False, dual_well=dual_well,
                                 drop_dcp_metadata=drop_dcp_metadata)
 
 
-def twdb_fts(df_row, drop_dcp_metadata=True):
+def twdb_fts(df_row, drop_dcp_metadata=True, dual_well=False):
     """Parser for twdb fts dataloggers
 
     format examples:
@@ -47,13 +47,13 @@ def twdb_fts(df_row, drop_dcp_metadata=True):
     return df
 
 
-def twdb_stevens(df_row, drop_dcp_metadata=True):
+def twdb_stevens(df_row, dual_well=False, drop_dcp_metadata=True):
     """Parser for twdb stevens dataloggers."""
-    return _twdb_stevens_or_dot(df_row, reverse=True,
+    return _twdb_stevens_or_dot(df_row, reverse=True, dual_well=dual_well,
                                 drop_dcp_metadata=drop_dcp_metadata)
 
 
-def twdb_sutron(df_row, drop_dcp_metadata=True):
+def twdb_sutron(df_row, drop_dcp_metadata=True, dual_well=False):
     """Parser for twdb sutron dataloggers.
     Data is transmitted every 12 hours and each message contains 12 water level
     measurements on the hour for the previous 12 hours and one battery voltage
@@ -109,7 +109,7 @@ def twdb_sutron(df_row, drop_dcp_metadata=True):
     return df
 
 
-def twdb_texuni(dataframe, drop_dcp_metadata=True):
+def twdb_texuni(dataframe, drop_dcp_metadata=True, dual_well=False):
     """Parser for twdb texuni dataloggers.
     Data is transmitted every 12 hours and each message contains 12 water level
     measurements on the hour for the previous 12 hours
@@ -164,7 +164,8 @@ def _twdb_assemble_dataframe(message_timestamp, channel, channel_data,
         return pd.DataFrame()
 
 
-def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
+def _twdb_stevens_or_dot(df_row, reverse, dual_well=False,
+                         drop_dcp_metadata=True):
     """Parser for twdb stevens and DOT dataloggers - the only difference being
     that with stevens dataloggers, water level data needs to be reversed to be
     correctly interpretted.
@@ -185,10 +186,7 @@ def _twdb_stevens_or_dot(df_row, reverse, drop_dcp_metadata=True):
         return(_empty_df(message_timestamp))
 
     data = []
-    # this should really be it's own parser
-    # these are dual wells, or at least formatted as such, and only a subset
-    if df_row['dcp_address'] in ['C51CB67A', 'C51A60DC', 'C517152A',
-                                 'C51A832E']:
+    if dual_well:
         fields = message.strip('" \x10\x00').split('\r')
         channel_data = {}
         channel_data['bv'] = [fields[0].split(':')[1].split()[0]]
