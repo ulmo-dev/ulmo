@@ -221,8 +221,10 @@ def get_site_data(site_code, service=None, parameter_code=None, statistic_code=N
     """
     url_params = {'format': 'waterml',
                   'site': site_code}
-    if parameter_code:
+    if type(parameter_code) is str:
         url_params['parameterCd'] = parameter_code
+    elif type(parameter_code) is list:
+        url_params['parameterCd'] = ",".join(parameter_code)
     if statistic_code:
         url_params['statCd'] = statistic_code
     if modified_since:
