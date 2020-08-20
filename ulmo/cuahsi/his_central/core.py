@@ -6,8 +6,11 @@
 
     .. _CUAHSI HIS Central: http://hiscentral.cuahsi.org/
 """
+import os
 from builtins import str
+
 import suds.client
+from suds.cache import ObjectCache
 
 from ulmo import util
 
@@ -15,7 +18,7 @@ from ulmo import util
 HIS_CENTRAL_WSDL_URL = 'http://hiscentral.cuahsi.org/webservices/hiscentral.asmx?WSDL'
 
 
-def get_services(bbox=None):
+def get_services(bbox=None, user_cache=False):
     """Retrieves a list of services.
 
     Parameters
@@ -26,13 +29,22 @@ def get_services(bbox=None):
         min_latitude, max_longitude, and max_latitude) with these values in
         decimal degrees. If not provided then the full set of services will be
         queried from HIS Central.
+    user_cache : bool
+        If False (default), use the system temp location to store cache WSDL and
+        other files. Use the default user ulmo directory if True.
 
     Returns
     -------
     services_dicts : list
         A list of dicts that each contain information on an individual service.
     """
-    suds_client = suds.client.Client(HIS_CENTRAL_WSDL_URL)
+    if user_cache:
+        cache_dir = os.path.join(util.get_ulmo_dir(), 'suds')
+        util.mkdir_if_doesnt_exist(cache_dir)
+        suds_client = suds.client.Client(HIS_CENTRAL_WSDL_URL,
+                                          cache=ObjectCache(location=cache_dir))
+    else:
+        suds_client = suds.client.Client(HIS_CENTRAL_WSDL_URL)
 
     if bbox is None:
         services = suds_client.service.GetWaterOneFlowServiceInfo()
