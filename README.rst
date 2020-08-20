@@ -16,6 +16,10 @@ Project Status
 .. image:: https://coveralls.io/repos/ulmo-dev/ulmo/badge.svg?branch=master&service=github
         :target: https://coveralls.io/github/ulmo-dev/ulmo?branch=master
 
+.. image:: https://readthedocs.org/projects/ulmo/badge/?version=latest
+        :target: https://ulmo.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
 
 Features
 --------
