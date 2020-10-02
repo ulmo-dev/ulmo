@@ -173,7 +173,7 @@ def test_sites_table_remains_unique(test_file_path):
         nwis.hdf5.update_site_list(path=test_file_path,
             input_file=test_site_file, autorepack=False)
 
-    with pandas.io.pytables.get_store(test_file_path) as store:
+    with pandas.HDFStore(test_file_path) as store:
         sites_df = store.select('sites')
     assert len(sites_df) == len(set(sites_df.index))
 

@@ -389,7 +389,7 @@ def update_site_data(site_code, start=None, end=None, period=None, path=None,
         if prior_last_refresh is None:
             period = 'all'
         else:
-            start = prior_last_refresh
+            start = prior_last_refresh.decode()
 
     new_site_data = core.get_site_data(site_code, start=start, end=end,
             period=period, input_file=input_file, methods=methods)
@@ -502,7 +502,7 @@ def _get_store(path, **kwargs):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
-    with pandas.io.pytables.get_store(path, **kwargs) as store:
+    with pandas.HDFStore(path, **kwargs) as store:
         with _filter_warnings():
             yield store
 
@@ -612,7 +612,8 @@ def _values_dicts_to_df(values_dicts):
         df = pandas.DataFrame(columns=['datetime', 'value', 'qualifiers', 'last_checked',
             'last_modified'])
     else:
-        df = df.set_index(pandas.DatetimeIndex(pandas.to_datetime(df['datetime'])))
+        df = df.set_index(
+            pandas.DatetimeIndex(pandas.to_datetime(df['datetime'], utc=True)))
     return df
 
 
