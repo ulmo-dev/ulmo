@@ -110,7 +110,7 @@ def get_data(station_id, elements=None, update=True, as_dataframe=False):
             months = pandas.PeriodIndex([pandas.Period(date, 'M') for date in dates])
             for column_name in dataframe.columns:
                 col = column_name + str(day_of_month)
-                dataframe[column_name][dates] = element_df[col][months]
+                dataframe[column_name][dates] = element_df[col][months].values
 
         dataframes[element_name] = dataframe
 

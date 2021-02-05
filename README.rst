@@ -16,13 +16,17 @@ Project Status
 .. image:: https://coveralls.io/repos/ulmo-dev/ulmo/badge.svg?branch=master&service=github
         :target: https://coveralls.io/github/ulmo-dev/ulmo?branch=master
 
+.. image:: https://readthedocs.org/projects/ulmo/badge/?version=latest
+        :target: https://ulmo.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
 
 Features
 --------
 
 - retrieves and parses datasets from the web
-- returns simple python data structures that can be easily pulled into `more
-  sophisticated tools`_ for analysis
+- returns simple python data structures that can be easily pulled into more
+  sophisticated tools such as Pandas for analysis
 - caches datasets locally and harvests updates as needed
 
 
@@ -56,7 +60,7 @@ way to get things up and running is to use a scientific python distribution that
 will install everything together. A full list is available on the `scipy`_
 website but `Anaconda`_ / `Miniconda`_ is recommended as it is the easiest to set up.
 
-If you are using Anaconda/Miniconda then you can install ulmo from the `conda_forge`_
+If you are using Anaconda/Miniconda then you can install ulmo from the `conda-forge`_
 channel with the following command:
 
     conda install -c conda-forge ulmo

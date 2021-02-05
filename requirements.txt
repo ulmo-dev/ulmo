@@ -5,7 +5,7 @@ geojson
 isodate
 lxml
 numpy
-pandas
+pandas<1.1
 tables
 pytest
 requests
