@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 from pandas.testing import assert_frame_equal
-import ulmo
+from ulmo.noaa import goes
 import test_util
 
 message_test_sets = [
@@ -29,7 +29,7 @@ def test_parse_dcp_message_timestamp():
     for test_set in message_test_sets:
         dcp_data_file = 'noaa/goes/' + test_set['dcp_address'] + '.txt'
         with test_util.mocked_urls(dcp_data_file, force=True):
-            data = ulmo.noaa.goes.get_data(test_set['dcp_address'], hours=12)
+            data = goes.get_data(test_set['dcp_address'], hours=12)
             assert data['message_timestamp_utc'][-1] == datetime.fromtimestamp(
                 int(test_set['message_timestamp'].strip('/Date()'))/1000
             )
@@ -115,7 +115,7 @@ def test_parser_twdb_stevens():
         print('testing twdb_stevens parser')
 
         if isinstance(test_set['return_value'], pd.DataFrame):
-            parser = getattr(ulmo.noaa.goes.parsers, 'twdb_stevens')
+            parser = getattr(goes.parsers, 'twdb_stevens')
             assert_frame_equal(pd.DataFrame(), parser(test_set))
             return
         else:
@@ -300,7 +300,7 @@ def _assert(test_set, columns, parser):
     expected = pd.DataFrame(test_set['return_value'], columns=columns)
     expected.index = pd.to_datetime(expected['timestamp_utc'])
     del expected['timestamp_utc']
-    parser = getattr(ulmo.noaa.goes.parsers, parser)
+    parser = getattr(goes.parsers, parser)
     df = parser(test_set)
     print('Expected:')
     print(expected)
