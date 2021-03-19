@@ -6,7 +6,5 @@ isodate
 lxml
 numpy
 pandas
-tables
-pytest
 requests
 suds-jurko
