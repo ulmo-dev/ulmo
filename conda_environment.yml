@@ -8,40 +8,38 @@
 # optionally run tests:
 #   python setup.py test
 
-name: py3-ulmo
+name: ulmo
 
 channels:
     - conda-forge
     - defaults
 
 dependencies:
-    - python>=3.4
-    - pip
+    - python>=3.5
     - appdirs
     - beautifulsoup4
     - future
     - geojson
     - isodate
     - lxml
-    - mock
     - numpy
-    - pandas<1.1
+    - pandas
     - pytables
-    - pytest
     - requests
     - suds-jurko
-    - freezegun
-    - html5lib<=0.9999999
-    
+
     # Specifically for building Sphinx docs
     - numpydoc>=0.4
     - python-dateutil
     - sphinx>=1.1.3
 
     # test dependencies
-    - pytest-runner
-    - pytest-cov
+    - pip
     - coveralls
-
-    - pip:
-        - httpretty<=0.8.10
+    - freezegun
+    - html5lib
+    - mock
+    - pytest
+    - pytest-cov
+    - pytest-runner
+    - httpretty

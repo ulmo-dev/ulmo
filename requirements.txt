@@ -5,9 +5,8 @@ geojson
 isodate
 lxml
 numpy
-pandas<1.1
+pandas
 tables
 pytest
 requests
 suds-jurko
-html5lib<=0.9999999
