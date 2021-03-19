@@ -10,20 +10,25 @@ notifications:
 matrix:
   include:
     - os: linux
-      env: PYTHON_VERSION="3.5"
-    - os: linux
       env: PYTHON_VERSION="3.6"
     - os: linux
       env: PYTHON_VERSION="3.7"
-    - os: osx
-      osx_image: xcode9.4
-      env: PYTHON_VERSION="3.5"
+    - os: linux
+      env: PYTHON_VERSION="3.8"
+    - os: linux
+      env: PYTHON_VERSION="3.9"
     - os: osx
       osx_image: xcode9.4
       env: PYTHON_VERSION="3.6"
     - os: osx
       osx_image: xcode9.4
       env: PYTHON_VERSION="3.7"
+    - os: osx
+      osx_image: xcode9.4
+      env: PYTHON_VERSION="3.8"
+    - os: osx
+      osx_image: xcode9.4
+      env: PYTHON_VERSION="3.9"
 
 cache:
   directories:
@@ -50,8 +55,9 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a
   # Create quest conda env and install deps
-  - sed $SED_OPTIONS "s/python=3/python=$PYTHON_VERSION/" conda_environment.yml
-  - conda env create -q -n test-environment -f conda_environment.yml
+  # - sed $SED_OPTIONS "s/python=3/python=$PYTHON_VERSION/" conda_environment.yml
+  # - conda env create -q -n test-environment -f conda_environment.yml
+  - conda create -n test-environment -c conda-forge python=$PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
   - source activate test-environment
   - python setup.py install
   - conda list

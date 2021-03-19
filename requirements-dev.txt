@@ -1,0 +1,14 @@
+python-dateutil
+numpydoc
+sphinx
+pip
+coveralls
+freezegun
+html5lib
+httpretty
+mock
+pytest
+pytest-cov
+pytest-runner
+twine
+wheel

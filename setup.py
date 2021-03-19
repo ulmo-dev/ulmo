@@ -76,7 +76,7 @@ setup(
     description='clean, simple and fast access to public hydrology and climatology data',
     long_description=long_description,
     url='https://github.com/ulmo-dev/ulmo/',
-    keywords='his pyhis ulmo water waterml cuahsi wateroneflow usgs ned',
+    keywords='his ulmo water waterml cuahsi wateroneflow usgs ned',
     packages=find_packages(),
     platforms='any',
     install_requires=required,
@@ -92,6 +92,8 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     tests_require=[
@@ -99,7 +101,7 @@ setup(
         'freezegun',
         'pytest',
         'httpretty',
-        'html5lib<=0.9999999',
+        'html5lib',
     ],
     cmdclass={'test': PyTest},
 )

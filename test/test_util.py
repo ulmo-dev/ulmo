@@ -7,7 +7,7 @@ import re
 import shutil
 import tempfile
 
-from httpretty import HTTPretty
+import httpretty as httpretty
 import mock
 
 
@@ -74,7 +74,7 @@ def mocked_urls(url_files, methods=None, force=False):
         if isinstance(url_files, basestring):
             url_files = {'.*': url_files}
 
-        HTTPretty.enable()
+        httpretty.enable()
         for url_match, url_file in url_files.items():
             if not isinstance(url_match, basestring) and len(url_match) == 2:
                 url_match, methods = url_match
@@ -89,11 +89,11 @@ def mocked_urls(url_files, methods=None, force=False):
                 methods = ['GET', 'POST', 'HEAD']
 
             for method in methods:
-                request_class = getattr(HTTPretty, method)
-                HTTPretty.register_uri(request_class, url_re, match_querystring=True, body=callback)
+                request_class = getattr(httpretty, method)
+                httpretty.register_uri(request_class, url_re, match_querystring=True, body=callback)
         yield
-        HTTPretty.disable()
-        HTTPretty.reset()
+        httpretty.disable()
+        httpretty.reset()
 
 
 @contextlib.contextmanager
