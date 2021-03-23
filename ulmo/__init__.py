@@ -15,6 +15,7 @@ from . import cuahsi
 from . import lcra
 from . import nasa
 from . import ncdc
+from . import noaa
 from . import twc
 from . import usace
 from . import usgs

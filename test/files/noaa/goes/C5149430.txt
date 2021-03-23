@@ -1,0 +1,28 @@
+[
+  {
+    "TblDcpDataAddrCorr": "C5149430",
+    "TblDcpDataGroup": "TEXWDB",
+    "TblDcpDataChan": 166,
+    "TblDcpDataBaud": 300,
+    "TblDcpDataSigStrength": 48.4,
+    "TblDcpDataPhsNoise": 1.41,
+    "TblDcpDataGoodPhs": 100,
+    "TblDcpDataFreqDev1": 0.4,
+    "TblDcpDataDtMsgCar": "/Date(1559316497303)/",
+    "TblDcpDataDtMsgEnd": "/Date(1559316501353)/",
+    "TblDcpDataTimeMsg": 4.05,
+    "TblDcpDataProcessInfo": "G",
+    "TblDcpDataScid": 17,
+    "TblDcpDataFrameChar": "CS1",
+    "TblDcpDataDataLen": 123,
+    "TblDcpDataData": "\":Sense01 60 #60 -193.03 -191.62 -186.87 -186.87 -186.86 -186.87 -186.91 -186.94 -187.02 -187.07 -187.10 -187.13 :BL 12.81 ",
+    "TblDcpDataTimeMsgCar": 43616.64464472222,
+    "TblDcpDataTimeMsgEnd": 43616.64469159722,
+    "Id": 61981915,
+    "EntityIsActive": false,
+    "UpdateId": null,
+    "UpdateNo": 0,
+    "UpdateTime": null,
+    "DateCreated": "/Date(-62135596800000)/"
+  }
+]
