@@ -44,6 +44,7 @@ Currently, ulmo supports the following datasets / services:
 - USGS Earth Resources Observation Systems (EROS) services
 - USGS National Elevation Dataset (NED) services
 
+
 Installation
 ------------
 
@@ -62,8 +63,7 @@ channel with the following command:
 Otherwise, follow the instructions below:
 
 Once the requisite scientific python libraries are installed, the
-most recent release of ulmo can be installed from pypi. Pip is a good way to do
-that:
+most recent release of ulmo can be installed from PyPI using ``pip``:
 
     pip install ulmo
 
@@ -72,32 +72,25 @@ code`_ and run setup.py from the root directory:
 
 To setup a development environment using conda:
 
-    conda env create -n myenv --file py2_conda_environment.yml (or py3_conda_environment.yml if you want to work with python 3)
+    conda env create -n myenv --file conda_environment.yml
 
-    source activate myenv (use 'activate test_environment' on windows)
+    # use 'activate myenv' on windows
+    source activate myenv
 
-    python setup.py develop
-
-
-Future
-------
-
-A list of future datasets is kept in on the `issue tracker`_. If there's a dataset
-you'd like to see added, please open an issue about it.
-
+    pip install -e .
 
 
 Links
 -----
 
 * Documentation: http://ulmo.readthedocs.org
-* Repository: https://github.com/ulmo-dev/ulmo
+* Repository: `source code`_
 
 
-.. _more sophisticated tools: http://pandas.pydata.org
-.. _issue tracker: https://github.com/ulmo-dev/ulmo/issues?labels=new+dataset&state=open
-.. _Anaconda: http://continuum.io/downloads.html
-.. _Miniconda: http://conda.pydata.org/miniconda.html
-.. _conda-forge: https://conda-forge.github.io
-.. _scipy: http://scipy.org/install.html
 .. _source code: https://github.com/ulmo-dev/ulmo
+.. _issue tracker: https://github.com/ulmo-dev/ulmo/issues?labels=new+dataset&state=open
+.. _more sophisticated tools: http://pandas.pydata.org
+.. _scipy: http://scipy.org/install.html
+.. _Anaconda: http://continuum.io/downloads.html
+.. _Miniconda: https://docs.conda.io/en/latest/miniconda.html
+.. _conda-forge: https://conda-forge.org
