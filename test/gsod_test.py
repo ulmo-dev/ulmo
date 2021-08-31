@@ -79,7 +79,9 @@ def test_get_stations_with_country():
         assert '409900-99999' in stations
 
         stations = ulmo.ncdc.gsod.get_stations(country=['US', 'MX', 'CA'])
-        assert len(stations) > 9500
+        # Live service now (2021-8-30) returns 9437 stations
+        # assert len(stations) > 9500
+        assert len(stations) > 9400
         assert '768420-99999' in stations
         assert '911660-99999' in stations
         assert '729675-99999' in stations

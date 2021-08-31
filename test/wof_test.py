@@ -3,7 +3,7 @@ import test_util
 
 
 def test_core_get_sites_waterml_1_0():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_sites_file = 'cuahsi/wof/get_sites_muddyriver_1_0.xml'
     with test_util.mocked_suds_client('1.0', dict(GetSitesXml=get_sites_file)):
         sites = ulmo.cuahsi.wof.get_sites(WSDL_URL)
@@ -11,7 +11,7 @@ def test_core_get_sites_waterml_1_0():
 
 
 def test_core_get_sites_waterml_1_1():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     get_sites_file = 'cuahsi/wof/get_sites_ipswich_1_1.xml'
     with test_util.mocked_suds_client('1.1', dict(GetSites=get_sites_file)):
         sites = ulmo.cuahsi.wof.get_sites(WSDL_URL)
@@ -19,7 +19,7 @@ def test_core_get_sites_waterml_1_1():
 
 
 def test_core_get_site_info_waterml_1_0():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     site_info_file = 'cuahsi/wof/get_site_info_muddyriver_14_1_0.xml'
     with test_util.mocked_suds_client('1.0', dict(GetSiteInfo=site_info_file)):
         site_info = ulmo.cuahsi.wof.get_site_info(WSDL_URL, 'MuddyRiver:MuddyRiver_14')
@@ -38,7 +38,7 @@ def test_core_get_site_info_waterml_1_0():
 
 
 def test_core_get_site_info_waterml_1_1():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     site_info_file = 'cuahsi/wof/get_site_info_ipswich_MMB_1_1.xml'
     with test_util.mocked_suds_client('1.1', dict(GetSiteInfo=site_info_file)):
         site_info = ulmo.cuahsi.wof.get_site_info(WSDL_URL, 'ipswich:MMB')
@@ -56,7 +56,7 @@ def test_core_get_site_info_waterml_1_1():
 
 
 def test_core_get_values_waterml_1_0():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_values_file = 'cuahsi/wof/get_values_1_0_MuddyRiver_MuddyRiver_14_MR_MuddyRiver_ACID.xml'
     with test_util.mocked_suds_client('1.0', dict(GetValues=get_values_file)):
         values = ulmo.cuahsi.wof.get_values(
@@ -84,7 +84,7 @@ def test_core_get_values_waterml_1_0():
 
 
 def test_core_get_values_start_and_end_parsing():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     file_template = 'cuahsi/wof/get_values_1_0_MuddyRiver_MuddyRiver_14_MR_MuddyRiver_ACID_%(start)s_%(end)s.xml'
 
     start_ends = [
@@ -112,7 +112,7 @@ def test_core_get_values_start_and_end_parsing():
 
 
 def test_core_get_values_waterml_1_1():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     get_values_file = 'cuahsi/wof/get_values_1_1_ipswich_MMB_ipswich_Temp.xml'
     with test_util.mocked_suds_client('1.1', dict(GetValues=get_values_file)):
         values = ulmo.cuahsi.wof.get_values(WSDL_URL, 'ipswich:MMB', 'ipswich:Temp')
@@ -138,7 +138,7 @@ def test_core_get_values_waterml_1_1():
 
 
 def test_core_get_variable_info_waterml_single_1_0():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_variable_info_file = 'cuahsi/wof/get_variable_info_1_0_MR_MuddyRiver_ACID.xml'
     with test_util.mocked_suds_client('1.0', dict(GetVariableInfo=get_variable_info_file)):
         variable_info = ulmo.cuahsi.wof.get_variable_info(WSDL_URL, 'MR:MuddyRiver_ACID')
@@ -164,7 +164,7 @@ def test_core_get_variable_info_waterml_single_1_0():
 
 
 def test_core_get_variable_info_waterml_all_1_0():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/muddyriver/cuahsi_1_0.asmx?WSDL'
     get_variable_info_file = 'cuahsi/wof/get_variable_info_1_0_MR_all.xml'
     with test_util.mocked_suds_client('1.0', dict(GetVariableInfo=get_variable_info_file)):
         variable_info = ulmo.cuahsi.wof.get_variable_info(WSDL_URL)
@@ -201,7 +201,7 @@ def test_core_get_variable_info_waterml_all_1_0():
 
 
 def test_core_get_variable_info_waterml_single_1_1():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     get_variable_info_file = 'cuahsi/wof/get_variable_info_1_1_ipswich_Temp.xml'
     with test_util.mocked_suds_client('1.1', dict(GetVariableInfo=get_variable_info_file)):
         variable_info = ulmo.cuahsi.wof.get_variable_info(WSDL_URL, 'ipswich:Temp')
@@ -210,7 +210,7 @@ def test_core_get_variable_info_waterml_single_1_1():
 
 
 def test_core_get_variable_info_waterml_all_1_1():
-    WSDL_URL = 'http://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
+    WSDL_URL = 'https://hydroportal.cuahsi.org/ipswich/cuahsi_1_1.asmx?WSDL'
     get_variable_info_file = 'cuahsi/wof/get_variable_info_1_1_ipswich_all.xml'
     with test_util.mocked_suds_client('1.1', dict(GetVariableInfo=get_variable_info_file)):
         variable_info = ulmo.cuahsi.wof.get_variable_info(WSDL_URL)
