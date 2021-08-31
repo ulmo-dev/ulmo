@@ -75,6 +75,7 @@ To setup a development environment using conda:
     conda env create -n myenv --file conda_environment.yml
 
     # use 'activate myenv' on windows
+
     source activate myenv
 
     pip install -e .
@@ -84,7 +85,7 @@ Links
 -----
 
 * Documentation: http://ulmo.readthedocs.org
-* Repository: `source code`_
+* Repository: https://github.com/ulmo-dev/ulmo
 
 
 .. _source code: https://github.com/ulmo-dev/ulmo
