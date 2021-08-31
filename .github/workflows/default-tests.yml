@@ -13,7 +13,7 @@ jobs:
         python-version: ["3.6", "3.7", "3.8", "3.9"]
         # Just ubuntu, for now
         # os: [windows-latest, ubuntu-latest, macos-latest]
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
       fail-fast: false
 
     steps:
@@ -43,4 +43,4 @@ jobs:
       shell: bash -l {0}
       run: |
         source activate TEST
-        pytest -s -rxs -vv -k "not lcra"
+        pytest -s -rxs -vv -k "not lcra and not cpc_drought and not usace_rivergages and not usgs_ned"

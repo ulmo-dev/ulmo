@@ -7,12 +7,6 @@ ulmo
 Project Status
 --------------
 
-.. image:: https://secure.travis-ci.org/ulmo-dev/ulmo.png?branch=master
-        :target: https://travis-ci.org/ulmo-dev/ulmo
-
-.. image:: https://ci.appveyor.com/api/projects/status/mqo6rl0f2ocngxcu/branch/master?svg=true
-        :target: https://ci.appveyor.com/project/dharhas/ulmo/branch/master
-
 .. image:: https://coveralls.io/repos/ulmo-dev/ulmo/badge.svg?branch=master&service=github
         :target: https://coveralls.io/github/ulmo-dev/ulmo?branch=master
 
