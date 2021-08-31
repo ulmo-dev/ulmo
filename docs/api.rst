@@ -68,6 +68,12 @@ NCDC Global Summary of the Day (GSoD)
    :members: get_data, get_stations
 
 
+NOAA GOES Data Collection System (DCS) services
+-----------------------------------------------
+.. automodule:: ulmo.noaa.goes
+   :members: get_data, decode
+
+
 USGS National Water Information System (NWIS)
 ---------------------------------------------
 .. automodule:: ulmo.usgs.nwis
@@ -75,12 +81,6 @@ USGS National Water Information System (NWIS)
 
 .. automodule:: ulmo.usgs.nwis.hdf5
    :members:
-
-
-USGS Emergency Data Distribution Network (EDDN) services
---------------------------------------------------------
-.. automodule:: ulmo.usgs.eddn
-   :members: get_data, decode
 
 
 USGS National Elevation Dataset (NED) raster services
