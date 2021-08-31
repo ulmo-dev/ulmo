@@ -129,5 +129,4 @@ def test_get_site_data_multiple_methods():
     with test_util.mocked_urls(site_data_file):
         site_data = ulmo.usgs.nwis.get_site_data(site_code, methods={'62614': 'all', '45592': 'all'})
         assert len(site_data['00054:00003']['values']) == 1
-        print(site_data.keys())
         assert len(site_data.keys()) == 13
