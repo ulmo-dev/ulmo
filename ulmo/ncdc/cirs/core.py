@@ -11,7 +11,7 @@
 from builtins import str
 from builtins import range
 from past.builtins import basestring
-import distutils
+import distutils.version
 import os.path
 
 import pandas
