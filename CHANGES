@@ -1,7 +1,15 @@
 Changelog
 ---------
 
-**0.8.7 (released 2020-09-01)**
+**0.8.8 (released 2021-09-02)**
+
+Patch release. Added `python-dateutil` dependency back to `requirements.txt`. 
+It's only used in the LCRA reader, which seems to be broken. But adding it
+just in case and to enable conda-forge package build tests to complete cleanly.
+It's otherwise identical to 0.8.7. 0.8.7 PyPI package will be "yanked".
+
+
+**0.8.7 (released 2021-09-01, but "yanked" from PyPI 2021-09-02)**
 
 - This release focused primarily on two improvements:
     1. Added new NOAA GOES reader for GOES DSC/DCP data ingest. This new reader 
