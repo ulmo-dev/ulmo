@@ -6,5 +6,6 @@ isodate
 lxml
 numpy
 pandas
+python-dateutil
 requests
 suds-jurko

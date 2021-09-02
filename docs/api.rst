@@ -37,8 +37,8 @@ CUAHSI HIS Central
 .. automodule:: ulmo.cuahsi.his_central
    :members: get_services
 
-CUAHSI WaterOneFlow
-^^^^^^^^^^^^^^^^^^^
+CUAHSI WaterOneFlow (WOF)
+^^^^^^^^^^^^^^^^^^^^^^^^^
 .. automodule:: ulmo.cuahsi.wof
    :members: get_sites, get_site_info, get_values, get_variable_info
 
@@ -114,7 +114,7 @@ Texas Weather Connection Daily Keetch-Byram Drought Index (KBDI)
    :members: get_data
 
 
-US Army Corps of Engineers - Tulsa District Water Control
----------------------------------------------------------
+US Army Corps of Engineers (USACE) - Tulsa District Water Control
+-----------------------------------------------------------------
 .. automodule:: ulmo.usace.swtwc
    :members: get_stations, get_station_data

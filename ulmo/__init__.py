@@ -7,7 +7,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 # ulmo version PEP-0440
-__version__ = '0.8.7'
+__version__ = '0.8.8'
 
 from . import cdec
 from . import cpc
