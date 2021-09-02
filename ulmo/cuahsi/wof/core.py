@@ -3,7 +3,7 @@
     ~~~~~~~~~~~~~
     This module provides direct access to `CUAHSI WaterOneFlow`_ web services.
 
-    .. _CUAHSI WaterOneFlow: http://his.cuahsi.org/wofws.html
+    .. _CUAHSI WaterOneFlow: https://his.cuahsi.org/wofws.html
 """
 from future import standard_library
 standard_library.install_aliases()
@@ -179,7 +179,7 @@ def get_values(wsdl_url, site_code, variable_code, start=None, end=None,
     available will typically be returned. However, some service providers will return
     an error if either start or end are omitted; this is specially true for services
     hosted or redirected by CUAHSI via the CUAHSI HydroPortal, which have a 'WSDL' url
-    using the domain http://hydroportal.cuahsi.org. For HydroPortal, a start datetime
+    using the domain https://hydroportal.cuahsi.org. For HydroPortal, a start datetime
     of '1753-01-01' has been known to return valid results while catching the oldest
     start times, though the response may be broken up into chunks ('paged').
     """

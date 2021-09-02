@@ -12,6 +12,6 @@ The notes below provides additional usage details for some data sources.
   response are in PST (UTC-8).
 
 
-.. _CUAHSI WaterOneFlow: http://his.cuahsi.org/wofws.html
-.. _CUAHSI HIS Central: http://hiscentral.cuahsi.org/
-.. _NRCS SNOTEL: http://hiscentral.cuahsi.org/pub_network.aspx?n=241
+.. _CUAHSI WaterOneFlow: https://his.cuahsi.org/wofws.html
+.. _CUAHSI HIS Central: https://hiscentral.cuahsi.org
+.. _NRCS SNOTEL: https://hiscentral.cuahsi.org/pub_network.aspx?n=241
