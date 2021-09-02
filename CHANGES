@@ -1,7 +1,31 @@
 Changelog
 ---------
 
-**0.8.6 (release 2020-08-20)**
+**0.8.7 (released 2020-09-01)**
+
+- This release focused primarily on two improvements:
+    1. Added new NOAA GOES reader for GOES DSC/DCP data ingest. This new reader 
+       replaces the USGS EDDN reader, which is no longer functional 
+       (web service is inaccessible) and was removed in this release.
+    2. Overhauled the dependencies (requirements files) and test and continuous 
+       integration (CI) infrastructure to enable support for more recent Python 3 versions
+       (3.7, 3.8 and 3.9) and reestablish the CI tests. Previously only 3.6 was supported,
+       due to dependency pinning that was no longer necessary.
+- ulmo readers
+    - New NOAA GOES reader
+    - Fixed GHCN Daily get_data compatibility bug with newer (1.1 and higher) Pandas versions
+    - Update to https in documentation and test references to http://hydroportal.cuahsi.org
+- Builds, dependencies, tests and continuous integration
+    - Removed broken Travis CI and AppVeyor integration, and replaced them with
+      new GitHub Action
+    - Split `requirements.txt` file into `requirements.txt` and `requirements-dev.txt`
+    - Removed pytables dependencies that's no longer used and removed
+      all dependency version pinning
+    - Removed hdf5 and pytables tests (no longer used)
+    - Fixed some failing tests
+
+
+**0.8.6 (released 2020-08-20)**
 
 - The largest change was to the ReadTheDocs documentation system. It had not
   been updated in a long time, and the auto-update CI was broken. Many sections
@@ -11,20 +35,20 @@ Changelog
   formatting works well. Additional documentation was added for CUAHSI readers.
 - Bug fixes and small enhancements for multiple readers:
   cpc, cuahsi.his_central, cuahsi.wof, usgs.eddn, usgs.nwis
-- cuahsi.wof and cuahsi.his_central: added optional `user_cache` argument to
-  service requests, to direct WSDL caching files to user app directory.
-  Avoids problems with the user not having permission to write cache files
-  to the system tmp space (the default)
-- usgs.eddn: generalized twdb_fts parser to accept batter_voltage and
-  water_level data in any order
-- usgs.nwis:
-    - `get_site_data` can now accept a list of parameter codes as an argument
-       instead of a string of comma separated values
-    - enabled retrieval of iv data prior to 2007
-- Fixed or updated several tests
+    - cuahsi.wof and cuahsi.his_central: added optional `user_cache` argument to
+      service requests, to direct WSDL caching files to user app directory.
+      Avoids problems with the user not having permission to write cache files
+      to the system tmp space (the default)
+    - usgs.eddn: generalized twdb_fts parser to accept batter_voltage and
+      water_level data in any order
+    - usgs.nwis:
+        - `get_site_data` can now accept a list of parameter codes as an argument
+          instead of a string of comma separated values
+        - enabled retrieval of iv data prior to 2007
+    - Fixed or updated several tests
 
 
-**0.8.5 (release 2019-03-22)**
+**0.8.5 (released 2019-03-22)**
 
 - Bug fixes and some small enhancements for multiple plugins:
   CDEC, CPC, CUAHSI WaterML/WOF, NASA ORNL Daymet, NCDC GSOD and GHCN,
@@ -36,7 +60,7 @@ Changelog
 - Continuous Integration and test infrastructure, including
   Python 3.6 and 3.7 builds
 
-**0.8.4 (release 2017-02-06)**
+**0.8.4 (released 2017-02-06)**
 
 - added stevens dual well parser for eddn service
 - bugfixes for twc-kbdi service
