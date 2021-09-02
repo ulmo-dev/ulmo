@@ -1,11 +1,19 @@
 ulmo
 ====
 
-**clean, simple and fast access to public hydrology and climatology data**
+**Clean, simple and fast access to public hydrology and climatology data**
 
 
 Project Status
 --------------
+
+.. image:: https://github.com/ulmo-dev/ulmo/actions/workflows/default-tests.yml/badge.svg
+        :target: https://github.com/ulmo-dev/ulmo/actions/workflows/default-tests.yml
+        :alt: GitHub Action CI tests
+
+.. image:: https://img.shields.io/conda/vn/conda-forge/ulmo.svg
+        :target: https://anaconda.org/conda-forge/ulmo
+        :alt: Latest conda package
 
 .. image:: https://coveralls.io/repos/ulmo-dev/ulmo/badge.svg?branch=master&service=github
         :target: https://coveralls.io/github/ulmo-dev/ulmo?branch=master
