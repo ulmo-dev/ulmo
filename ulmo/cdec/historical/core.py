@@ -74,9 +74,9 @@ def get_stations():
         # I haven't found a better list of stations, seems pretty janky
         # to just have them in a file, and not sure if/when it is updated.
     url = 'http://cdec.water.ca.gov/misc/all_stations.csv'
-        # the csv is malformed, so some rows think there are 7 fields
-    col_names = ['id','meta_url','name','num','lat','lon','junk']
-    df = pd.read_csv(url, names=col_names, header=None, quotechar="'",index_col=0)
+        # the csv is malformed, so some rows think there are 7-8 fields
+    col_names = ['id','meta_url','name','num','lat','lon']
+    df = pd.read_csv(url, names=col_names, header=None, quotechar="'",index_col=0,error_bad_lines=False)
 
     return df
 

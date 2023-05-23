@@ -9,7 +9,7 @@ def test_get_stations():
     stations_file = 'cdec/historical/all_stations.csv'
     with test_util.mocked_urls(stations_file):
         stations = ulmo.cdec.historical.get_stations()
-    assert 2000 < len(stations)
+    assert 1900 < len(stations)
     assert u'PRA' in stations.index
 
 

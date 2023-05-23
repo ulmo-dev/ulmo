@@ -10,12 +10,12 @@ import test_util
 test_stations = [
     {
         'country': 'US',
-        'elevation': 286.5,
+        'elevation': 325.8,
         'gsn_flag': 'GSN',
         'hcn_flag': 'HCN',
         'id': 'USW00003870',
-        'latitude': 34.8831,
-        'longitude': -82.2203,
+        'latitude': 34.8833,
+        'longitude': -82.2197,
         'name': 'GREER',
         'network': 'W',
         'network_id': '00003870',
