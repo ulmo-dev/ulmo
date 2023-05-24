@@ -3,13 +3,13 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     This module provides access to data provided by the `California Department
-    of Water Resources`_ `California Data Exchange Center`_ web site.
+    of Water Resources`_ `California Data Exchange Center`_ website.
 
     .. _California Department of Water Resources: http://www.water.ca.gov/
     .. _California Data Exchange Center: http://cdec.water.ca.gov
 
 
-    SELECTED CDEC SENSOR NUMBERS (these are not be available for all sites):
+    SELECTED CDEC SENSOR NUMBERS (these are not available for all sites):
 
     1    river stage [ft]
     2    precipitation, accumulated [in]
@@ -52,10 +52,8 @@
 
 """
 from builtins import str
-from builtins import zip
 
 import pandas as pd
-import re
 
 from ulmo import util
 
@@ -71,12 +69,14 @@ def get_stations():
     df : pandas DataFrame
         a pandas DataFrame (indexed on site id) with station information.
     """
-        # I haven't found a better list of stations, seems pretty janky
-        # to just have them in a file, and not sure if/when it is updated.
+    # I haven't found a better list of stations, seems pretty janky
+    # to just have them in a file, and not sure if/when it is updated.
     url = 'http://cdec.water.ca.gov/misc/all_stations.csv'
-        # the csv is malformed, so some rows think there are 7-8 fields
-    col_names = ['id','meta_url','name','num','lat','lon']
-    df = pd.read_csv(url, names=col_names, header=None, quotechar="'",index_col=0,error_bad_lines=False)
+    # the csv is malformed, so some rows think there are 7-8 fields
+    col_names = ['id', 'meta_url', 'name', 'num', 'lat', 'lon']
+    df = pd.read_csv(
+        url, names=col_names, header=None, quotechar="'", index_col=0, on_bad_lines='skip'
+    )
 
     return df
 
@@ -96,7 +96,7 @@ def get_sensors(sensor_id=None):
 
     Parameters
     ----------
-    sites : iterable of integers or ``None``
+    sensor_id : iterable of integers or ``None``
 
     Returns
     -------
@@ -159,7 +159,7 @@ def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
         station_ids = get_stations().index
 
     for station_id in station_ids:
-        url = 'http://cdec.water.ca.gov/dynamicapp/staMeta?station_id=%s' % (station_id)
+        url = 'http://cdec.water.ca.gov/dynamicapp/staMeta?station_id=%s' % station_id
 
         try:
             sensor_list = pd.read_html(url, match='Sensor Description')[0]
@@ -167,7 +167,7 @@ def get_station_sensors(station_ids=None, sensor_ids=None, resolutions=None):
             sensor_list = pd.read_html(url)[0]
     
         try:
-            sensor_list.columns = ['sensor_id', 'variable', 'resolution','timerange']
+            sensor_list.columns = ['sensor_id', 'variable', 'resolution', 'timerange']
         except:
             sensor_list.columns = ['variable', 'sensor_id', 'resolution', 'varcode', 'method', 'timerange']
         sensor_list[['variable', 'units']] = sensor_list.variable.str.split(',', 1, expand=True)
@@ -208,7 +208,7 @@ def get_data(station_ids=None, sensor_ids=None, resolutions=None, start=None, en
     -------
     dict : a python dict
         a python dict with site codes as keys. Values will be nested dicts
-        containing all of the sensor/resolution combinations.
+        containing all the sensor/resolution combinations.
     """
 
     if start is None:
@@ -256,28 +256,29 @@ def _limit_sensor_list(sensor_list, sensor_ids, resolution):
 
 def _download_raw(station_id, sensor_num, dur_code, start_date, end_date):
 
-    url = 'http://cdec.water.ca.gov/dynamicapp/req/CSVDataServlet' + \
+    url = 'https://cdec.water.ca.gov/dynamicapp/req/CSVDataServlet' + \
           '?Stations=' + station_id + \
           '&dur_code=' + dur_code + \
           '&SensorNums=' + str(sensor_num) + \
           '&Start=' + start_date + \
           '&End=' + end_date
 
-    df = pd.read_csv(url, parse_dates=[4,5], index_col='DATE TIME', na_values='---')
+    df = pd.read_csv(url, parse_dates=[4, 5], index_col='DATE TIME', na_values='---')
     df.columns = ['station_id', 'duration', 'sensor_number', 'sensor_type', 'obs_date', 'value', 'data_flag', 'units']
 
     return df
 
 
 def _res_to_dur_code(res):
-    map = {
-        'hourly':'H',
-        'daily':'D',
-        'monthly':'M',
-        'event':'E'}
+    code_map = {
+        'hourly': 'H',
+        'daily': 'D',
+        'monthly': 'M',
+        'event': 'E'
+    }
 
-    return map[res]
+    return code_map[res]
 
 
 def _format_date(date):
-    return '%s/%s/%s' % (date.month, date.day, date.year)
+    return '{:02}/{:02}/{}'.format(date.month, date.day, date.year)
