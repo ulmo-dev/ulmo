@@ -256,7 +256,7 @@ def _limit_sensor_list(sensor_list, sensor_ids, resolution):
 
 def _download_raw(station_id, sensor_num, dur_code, start_date, end_date):
 
-    url = 'http://cdec.water.ca.gov/dynamicapp/req/CSVDataServlet' + \
+    url = 'https://cdec.water.ca.gov/dynamicapp/req/CSVDataServlet' + \
           '?Stations=' + station_id + \
           '&dur_code=' + dur_code + \
           '&SensorNums=' + str(sensor_num) + \
@@ -270,14 +270,15 @@ def _download_raw(station_id, sensor_num, dur_code, start_date, end_date):
 
 
 def _res_to_dur_code(res):
-    map = {
-        'hourly':'H',
-        'daily':'D',
-        'monthly':'M',
-        'event':'E'}
+    code_map = {
+        'hourly': 'H',
+        'daily': 'D',
+        'monthly': 'M',
+        'event': 'E'
+    }
 
-    return map[res]
+    return code_map[res]
 
 
 def _format_date(date):
-    return '%s/%s/%s' % (date.month, date.day, date.year)
+    return '{:02}/{:02}/{}'.format(date.month, date.day, date.year)
