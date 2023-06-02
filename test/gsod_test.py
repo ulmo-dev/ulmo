@@ -39,11 +39,11 @@ def test_get_stations():
             'begin': datetime.date(2010, 11, 23),
             'icao': 'ENFB',
             'country': 'NO',
-            'elevation': 142.0,
+            'elevation': 17.0,
             'end': datetime.date(2015, 3, 11),
-            'latitude': 61.206,
-            'longitude': 1.829,
-            'name': 'STATFJORD B OIL PLATFORM',
+            'latitude': 59.9,
+            'longitude': 10.617,
+            'name': 'OSLO/FORNEBU',
             'state': ''
         }),
         ('997944-99999', {
