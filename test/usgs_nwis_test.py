@@ -30,7 +30,7 @@ def test_get_sites_by_county_code():
 
 
 def test_get_sites_by_huc():
-    huc='02070010'
+    huc = '02070010'
     sites_data_file = 'usgs/nwis/sites_huc_%s_daily.xml' % huc
     with test_util.mocked_urls(sites_data_file):
         sites = ulmo.usgs.nwis.get_sites(huc=huc, service='dv')
@@ -40,7 +40,7 @@ def test_get_sites_by_huc():
 def test_get_sites_with_extra_kwarg():
     sites_data_file = 'usgs/nwis/sites_kwarg_agencyCD.xml'
     with test_util.mocked_urls(sites_data_file):
-        sites = ulmo.usgs.nwis.get_sites(state_code='TX', agencyCD='USCE', service='dv')
+        sites = ulmo.usgs.nwis.get_sites(state_code='TX', agencyCD='USCE')
     assert len(sites) == 1
 
 
