@@ -16,7 +16,10 @@ import sys, os
 
 # HACKS: pytables is a difficult dependency to build, so just mock it when
 # generating docs - this makes sure the docs build fully for ulmo.readthedocs.org
-import mock
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 sys.modules['tables'] = mock.MagicMock()
 sys.modules['tables.scripts'] = mock.MagicMock()
 
