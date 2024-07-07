@@ -11,7 +11,7 @@
 from builtins import str
 from builtins import range
 from past.builtins import basestring
-import distutils.version
+from packaging.version import Version
 import os.path
 
 import pandas
@@ -194,7 +194,7 @@ def _most_recent(files, element, by_state):
 
 def _file_key(filename):
     version_str = filename.split('-')[2][1:]
-    return distutils.version.StrictVersion(version_str)
+    return Version(version_str)
 
 
 def _parse_values(file_handle, by_state, location_names, element):
