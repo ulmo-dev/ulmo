@@ -8,4 +8,4 @@ numpy<1.24
 pandas<2
 python-dateutil
 requests
-suds-jurko
+suds-community
